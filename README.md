@@ -21,22 +21,28 @@ agree to what they will actually do, and only report what really happened.**
 
 ## Features
 
-**Companions that look like players**
-- All nine default player skins shipped with the game (Steve, Alex, Ari, Efe, Kai, Makena, Noor,
-  Sunny, Zuri), each with both wide (4 px) and slim (3 px) arms - 18 looks.
-- Rendered with the game's own player model and skin textures, read at runtime; no Mojang art is
-  copied into this repository. Armour and held items show as on players.
+**A cast of original characters**
+
+![The Hearthbound cast](docs/images/cast/group-1.png)
+
+- Twelve named adventurers with hand-designed fantasy skins - Bram, Hilde, Wren, Tobias, Cass,
+  Marlo, Isolde, Aldric, Pip, Tilly, Sable and Ashe - two per personality, one woman and one man
+  each. Meet them all in [the cast](docs/CAST.md).
+- Wanderers can also use any of the nine default player skins shipped with the game (Steve, Alex,
+  Ari, Efe, Kai, Makena, Noor, Sunny, Zuri), with wide (4 px) or slim (3 px) arms - 18 looks, read
+  from the game at runtime; no Mojang art is copied into this repository.
+- Rendered with the game's own player model; armour and held items show as on players.
 
 **Six real personalities** - not just different names ([details](docs/PERSONALITIES.md)):
 
-| Archetype | Voice | Helps by |
+| Archetype (cast) | Voice | Helps by |
 |---|---|---|
-| Sellsword | Terse, deadpan soldier | Charges any hostile nearby; retreats only at 20 % health |
-| Naturalist | Curious, punny scholar | Spots ores and biomes; fights only when attacked |
-| Rogue | Teasing treasure hunter | Flanks mobs that target you; points out chests and loot |
-| Guardian | Formal, earnest protector | Stays closest; defends you; refuses to harm villagers or pets |
-| Farmhand | Nervous, kind farm kid | Warns early, retreats early; won't hurt farm animals |
-| Mystic | Dry, cryptic wanderer | Aggressive at night, aloof by day; warns about lava |
+| Sellsword (Bram, Hilde) | Terse, deadpan soldier | Charges any hostile nearby; retreats only at 20 % health |
+| Naturalist (Wren, Tobias) | Curious, punny scholar | Spots ores and biomes; fights only when attacked |
+| Rogue (Cass, Marlo) | Teasing treasure hunter | Flanks mobs that target you; points out chests and loot |
+| Guardian (Isolde, Aldric) | Formal, earnest protector | Stays closest; defends you; refuses to harm villagers or pets |
+| Farmhand (Pip, Tilly) | Nervous, kind farm kid | Warns early, retreats early; won't hurt farm animals |
+| Mystic (Sable, Ashe) | Dry, cryptic wanderer | Aggressive at night, aloof by day; warns about lava |
 
 Each archetype has around 90 situations of scripted dialogue (orders, refusals, progress, combat,
 weather, biomes, small talk), with no-repeat selection so lines don't loop.
@@ -128,8 +134,9 @@ More detail: [Architecture](docs/ARCHITECTURE.md), [AI design](docs/AI_DESIGN.md
 ### Getting a companion
 
 - In Creative, use the **Companion Spawn Egg** (Spawn Eggs tab), or with cheats run
-  `/companion summon [archetype] [name] [skin] [wide|slim]`, e.g. `/companion summon guardian Seren noor slim`.
-- Walk up, right-click to say hello, then say `@Seren will you join me?`.
+  `/companion summon wren` for a cast member, or `/companion summon [archetype] [name] [skin] [wide|slim]`
+  for a wanderer, e.g. `/companion summon guardian Aveline noor slim`.
+- Walk up, right-click to say hello, then say `@Wren will you join me?`.
 
 ### Talking and commands
 
@@ -223,6 +230,8 @@ What has been verified and what still needs testing is tracked honestly in [docs
 | All nine default skins, wide arms | ...and slim arms |
 | ![Slim vs wide arms](docs/images/slim-vs-wide.png) | ![A companion gathering logs](docs/images/gathering.png) |
 | Same skin, both models | Gathering logs from real trees |
+| ![Cast group 2](docs/images/cast/group-2.png) | ![Cast group 3](docs/images/cast/group-3.png) |
+| Cass, Marlo, Isolde, Aldric | Pip, Tilly, Sable, Ashe |
 
 ## Known limitations
 
@@ -243,8 +252,9 @@ What has been verified and what still needs testing is tracked honestly in [docs
 - Skins, models and textures are Minecraft's own, used at runtime; Minecraft is a trademark of Mojang/Microsoft. This mod is not affiliated with Mojang or Microsoft.
 - Inspired by the RPG companions I've always liked, and the companion mods that came before this one.
 - Prior art studied: CreatureChat, Mindcraft, MCA Reborn, Human Companions, Villager Recruits and others (see [research](docs/RESEARCH.md)).
+- Original cast skins drawn procedurally by [`tools/skins/cast.py`](tools/skins/cast.py).
 - Developed by Tekless with AI assistance (Claude).
 
 ## License
 
-[MIT](LICENSE) for the code and the original assets in this repository (icon, spawn egg texture, dialogue text).
+[MIT](LICENSE) for the code and the original assets in this repository (cast skins, icon, spawn egg texture, dialogue text).

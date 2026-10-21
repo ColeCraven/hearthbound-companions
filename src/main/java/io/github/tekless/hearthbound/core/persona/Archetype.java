@@ -13,7 +13,7 @@ import java.util.Set;
 public enum Archetype {
 	SELLSWORD(
 			"Sellsword",
-			List.of("Bram", "Hilde", "Torvald", "Greta", "Osric", "Ragna", "Wulf", "Sigrun"),
+			List.of("Torvald", "Greta", "Osric", "Ragna", "Wulf", "Sigrun"),
 			3.0, 4.5, CombatStance.AGGRESSIVE, 12, 0.20f, Chattiness.LOW,
 			Set.of(Interest.HOSTILES, Interest.GEAR), Set.of(),
 			"A blunt, battle-scarred mercenary. Speaks in short, clipped sentences with soldier's slang and deadpan understatement. Loves weapons, armour and a good fight; despises cowardice and creepers. Protective in a gruff way, never sentimental out loud.",
@@ -21,7 +21,7 @@ public enum Archetype {
 			List.of("Oh my gosh", "Fascinating!", "I'm so excited")),
 	NATURALIST(
 			"Naturalist",
-			List.of("Wren", "Elowen", "Tobias", "Linnea", "Corwin", "Fennel", "Hazel", "Basil"),
+			List.of("Elowen", "Linnea", "Corwin", "Fennel", "Hazel", "Basil"),
 			4.0, 6.0, CombatStance.DEFENSIVE, 0, 0.50f, Chattiness.HIGH,
 			Set.of(Interest.ORES, Interest.BIOMES, Interest.ANIMALS), Set.of(),
 			"An endlessly curious scholar of the natural world. Speaks in long, excited sentences full of questions, trivia and gentle puns. Loves biomes, plants, animals, rocks and the stars; dislikes needless destruction. Brave only when someone needs protecting.",
@@ -29,7 +29,7 @@ public enum Archetype {
 			List.of("Handled.", "Whatever.", "Shut up")),
 	ROGUE(
 			"Rogue",
-			List.of("Marlo", "Cass", "Jory", "Nim", "Lark", "Sasha", "Vesper", "Fitch"),
+			List.of("Jory", "Nim", "Lark", "Sasha", "Vesper", "Fitch"),
 			3.0, 5.0, CombatStance.OPPORTUNIST, 8, 0.40f, Chattiness.MEDIUM_HIGH,
 			Set.of(Interest.LOOT, Interest.CHESTS), Set.of(),
 			"A quick-witted treasure hunter and occasional thief. Teases, quips and calls the player 'partner' or 'boss'. Obsessed with emeralds, loot and a good deal; hates being broke and following rules. Loyal to partners underneath the sarcasm.",
@@ -37,7 +37,7 @@ public enum Archetype {
 			List.of("It is my honour", "Forgive me", "As you command")),
 	GUARDIAN(
 			"Guardian",
-			List.of("Isolde", "Aldric", "Seren", "Gareth", "Maren", "Cedric", "Rowena", "Tristan"),
+			List.of("Aveline", "Gareth", "Maren", "Cedric", "Lenore", "Tristan"),
 			2.0, 3.0, CombatStance.PROTECTIVE, 10, 0.25f, Chattiness.MEDIUM,
 			Set.of(Interest.PLAYER_HEALTH, Interest.HOSTILES), Set.of(TargetRefusal.VILLAGERS_AND_PETS),
 			"A devout, honour-bound protector. Formal, sincere and old-fashioned in speech ('my friend', 'it shall be done'), with gentle, earnest humour. Cares about the player's wellbeing, villagers and oaths; hates cruelty and the undead. Refuses to harm the innocent.",
@@ -45,7 +45,7 @@ public enum Archetype {
 			List.of("boss", "partner", "lol", "whatever")),
 	FARMHAND(
 			"Farmhand",
-			List.of("Pip", "Tilly", "Odo", "Bess", "Rowan", "Clem", "Dora", "Merry"),
+			List.of("Odo", "Bess", "Rowan", "Clem", "Dora", "Merry"),
 			2.0, 4.0, CombatStance.CAUTIOUS, 0, 0.60f, Chattiness.HIGH,
 			Set.of(Interest.HOSTILES, Interest.ANIMALS), Set.of(TargetRefusal.FARM_ANIMALS),
 			"A nervous but kind-hearted young farm worker who rambles, worries and says 'oh crumbs'. Uses homely sayings about crops, animals and gran. Loves bees, bread and rain; scared of the dark, caves and creepers, but brave when a friend is in trouble.",
@@ -53,7 +53,7 @@ public enum Archetype {
 			List.of("Handled.", "As foretold", "partner")),
 	MYSTIC(
 			"Mystic",
-			List.of("Sable", "Morwen", "Ashe", "Corvin", "Nyx", "Isra", "Thorne", "Vale"),
+			List.of("Nyx", "Thorne", "Vale", "Orrin", "Mirelle", "Ember"),
 			5.0, 7.0, CombatStance.NOCTURNAL, 12, 0.35f, Chattiness.LOW,
 			Set.of(Interest.DANGER, Interest.MYSTERIES), Set.of(),
 			"A sardonic, cryptic wanderer who studies the Nether, the End, enchanting and the night sky. Speaks in short, dry, slightly poetic lines with dark humour. Aloof but quietly loyal; prefers night to day and silence to chatter.",

@@ -25,7 +25,8 @@ public final class PromptBuilder {
 			List<String> events,
 			int affinity,
 			String currentTask,
-			boolean recruited) {
+			boolean recruited,
+			String background) {
 	}
 
 	public record Prompt(String system, String user) {
@@ -65,8 +66,11 @@ public final class PromptBuilder {
 
 	public static String user(Context context, String playerMessage) {
 		StringBuilder out = new StringBuilder();
-		out.append("<data name=\"you\">\nName: ").append(safe(context.companionName()))
-				.append("\nTravelling with the player: ").append(context.recruited() ? "yes" : "no (they are a stranger to you)")
+		out.append("<data name=\"you\">\nName: ").append(safe(context.companionName()));
+		if (context.background() != null && !context.background().isBlank()) {
+			out.append("\nWho you are: ").append(safe(context.background()));
+		}
+		out.append("\nTravelling with the player: ").append(context.recruited() ? "yes" : "no (they are a stranger to you)")
 				.append("\nCurrent task: ").append(safe(context.currentTask()))
 				.append("\nAffinity towards the player (-100..100): ").append(context.affinity())
 				.append("\n</data>\n");

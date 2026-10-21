@@ -9,6 +9,8 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.tekless.hearthbound.core.intent.Intent;
 import io.github.tekless.hearthbound.core.intent.IntentType;
 import io.github.tekless.hearthbound.core.persona.Archetype;
+import io.github.tekless.hearthbound.core.persona.CastMember;
+import java.util.stream.Stream;
 import io.github.tekless.hearthbound.dialogue.Conversations;
 import io.github.tekless.hearthbound.entity.CompanionEntity;
 import io.github.tekless.hearthbound.entity.CompanionSkin;
@@ -50,7 +52,8 @@ public final class CompanionCommands {
 				.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 				.executes(ctx -> summon(ctx, null, null, null, null))
 				.then(Commands.argument("archetype", StringArgumentType.word())
-						.suggests((c, b) -> SharedSuggestionProvider.suggest(Arrays.stream(Archetype.values()).map(Archetype::id), b))
+						.suggests((c, b) -> SharedSuggestionProvider.suggest(Stream.concat(Arrays.stream(CastMember.values()).map(CastMember::id),
+								Arrays.stream(Archetype.values()).map(Archetype::id)), b))
 						.executes(ctx -> summon(ctx, StringArgumentType.getString(ctx, "archetype"), null, null, null))
 						.then(Commands.argument("name", StringArgumentType.word())
 								.executes(ctx -> summon(ctx, StringArgumentType.getString(ctx, "archetype"), StringArgumentType.getString(ctx, "name"), null, null))
@@ -84,10 +87,12 @@ public final class CompanionCommands {
 		root.then(Commands.literal("skin")
 				.then(Commands.argument("name", StringArgumentType.word()).suggests(NEARBY_NAMES)
 						.then(Commands.argument("skin", StringArgumentType.word())
-								.suggests((c, b) -> SharedSuggestionProvider.suggest(Arrays.stream(CompanionSkin.values()).map(CompanionSkin::id), b))
+								.suggests((c, b) -> SharedSuggestionProvider.suggest(Stream.concat(Arrays.stream(CompanionSkin.values()).map(CompanionSkin::id),
+										Arrays.stream(CastMember.values()).map(CastMember::id)), b))
+								.executes(ctx -> skin(ctx, null))
 								.then(Commands.argument("model", StringArgumentType.word())
 										.suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("wide", "slim"), b))
-										.executes(CompanionCommands::skin)))));
+										.executes(ctx -> skin(ctx, StringArgumentType.getString(ctx, "model")))))));
 		dispatcher.register(root);
 	}
 
@@ -101,11 +106,15 @@ public final class CompanionCommands {
 		}
 		companion.snapTo(player.getX() + player.getLookAngle().x * 2, player.getY(), player.getZ() + player.getLookAngle().z * 2, player.getYRot() + 180, 0);
 		companion.finalizeSpawn(level, level.getCurrentDifficultyAt(companion.blockPosition()), EntitySpawnReason.COMMAND, null);
-		if (archetypeId != null) {
+		CastMember castMember = archetypeId == null ? null : CastMember.byName(archetypeId).orElse(null);
+		if (castMember != null) {
+			companion.initIdentity(castMember);
+		} else if (archetypeId != null) {
 			Archetype archetype = Archetype.byId(archetypeId).orElse(null);
 			if (archetype == null) {
-				ctx.getSource().sendFailure(Component.literal("Unknown archetype. Try: " + String.join(", ",
-						Arrays.stream(Archetype.values()).map(Archetype::id).toList())));
+				ctx.getSource().sendFailure(Component.literal("Unknown character or archetype. Try a name (" + String.join(", ",
+						Arrays.stream(CastMember.values()).map(CastMember::displayName).toList()) + ") or an archetype ("
+						+ String.join(", ", Arrays.stream(Archetype.values()).map(Archetype::id).toList()) + ")."));
 				return 0;
 			}
 			String chosenName = name != null ? capitalise(name) : archetype.names().get(level.getRandom().nextInt(archetype.names().size()));
@@ -156,7 +165,7 @@ public final class CompanionCommands {
 		return 1;
 	}
 
-	private static int skin(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+	private static int skin(CommandContext<CommandSourceStack> ctx, String model) throws CommandSyntaxException {
 		ServerPlayer player = ctx.getSource().getPlayerOrException();
 		CompanionEntity companion = find(ctx, player);
 		if (companion == null) {
@@ -166,15 +175,23 @@ public final class CompanionCommands {
 			ctx.getSource().sendFailure(Component.literal("That companion travels with someone else."));
 			return 0;
 		}
-		CompanionSkin skin = CompanionSkin.byId(StringArgumentType.getString(ctx, "skin")).orElse(null);
-		if (skin == null) {
-			ctx.getSource().sendFailure(Component.literal("Unknown skin. Try: " + String.join(", ",
-					Arrays.stream(CompanionSkin.values()).map(CompanionSkin::id).toList())));
-			return 0;
+		String skinId = StringArgumentType.getString(ctx, "skin");
+		int variant;
+		CastMember outfit = CastMember.byName(skinId).orElse(null);
+		if (outfit != null) {
+			variant = outfit.skinVariant();
+		} else {
+			CompanionSkin skin = CompanionSkin.byId(skinId).orElse(null);
+			if (skin == null) {
+				ctx.getSource().sendFailure(Component.literal("Unknown skin. Try a default skin (" + String.join(", ",
+						Arrays.stream(CompanionSkin.values()).map(CompanionSkin::id).toList()) + ") or a cast outfit ("
+						+ String.join(", ", Arrays.stream(CastMember.values()).map(CastMember::id).toList()) + ")."));
+				return 0;
+			}
+			variant = skin.encode(model != null && model.equalsIgnoreCase("slim"));
 		}
-		boolean slim = StringArgumentType.getString(ctx, "model").equalsIgnoreCase("slim");
-		companion.setSkinVariant(skin.encode(slim));
-		ctx.getSource().sendSuccess(() -> Component.literal(companion.companionName() + " now uses " + skin.id() + " (" + (slim ? "slim" : "wide") + ")."), false);
+		companion.setSkinVariant(variant);
+		ctx.getSource().sendSuccess(() -> Component.literal(companion.companionName() + " now wears " + CompanionSkin.describe(variant) + "."), false);
 		return 1;
 	}
 

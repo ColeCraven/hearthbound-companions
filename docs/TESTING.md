@@ -18,7 +18,7 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 
 ## Automated tests
 
-### Unit tests (JUnit 5): 102 passing
+### Unit tests (JUnit 5): 106 passing
 
 | Suite | Covers |
 |---|---|
@@ -27,6 +27,7 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 | `MovementPolicyTest` (5) | Follow band, hysteresis, hurry and teleport thresholds, dimension/cliff/stuck teleport, stuck detection windows |
 | `LineBankTest` (16) | Every personality has lines for every situation the game uses; placeholders match what code supplies; frequent situations have 3+ variants; personalities don't share lines; selector cycles through all variants and never repeats back-to-back |
 | `AiContractTest` (7) | Model JSON parsing, intent allow-list, count clamping, formatting-code stripping, promise guard, prompt-injection containment (player text can't close a data block), schema validity |
+| `CastMemberTest` (4) | Cast names unique and not reused by wanderers; one woman and one man per personality; every cast member has a valid 64x64 skin; skin variants round-trip |
 | `HttpModelsTest` (7) | Ollama / OpenAI-compatible / Anthropic request shapes and response parsing against a local fake server; refusal, HTTP 401, timeout and unreachable server all fail cleanly |
 
 ### Server GameTests: 14 passing (plus a smoke test)
@@ -80,6 +81,12 @@ own position); companions said "I'm hurt" lines while being killed by commands.
 
 Types `@Bram join me` into the real chat box (recruits him), then presses the Talk key, which
 pre-fills `@Bram `, and asks "what are you doing?" (correct follow status).
+
+### Cast showcase (client): passing
+
+`CastShowcase` renders the twelve cast members in the real client - front and back line-ups,
+close-ups of each group of four, and three of them running - for visual review of seams, outer
+layers and motion. Results are in [docs/images/cast](images/cast) and [CAST.md](CAST.md).
 
 ## Manual playtests
 

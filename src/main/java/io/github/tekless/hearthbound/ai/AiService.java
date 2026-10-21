@@ -240,6 +240,7 @@ public final class AiService {
 		List<CompanionMemory.Line> recent = lines.subList(Math.max(0, lines.size() - 8), lines.size());
 		String playerName = sharePlayerName ? player.getName().getString() : "the player";
 		return new PromptBuilder.Context(companion.companionName(), companion.archetype(), playerName, world, recent,
-				companion.memory().events(), companion.memory().affinity(), companion.order().describe(), companion.isRecruited());
+				companion.memory().events(), companion.memory().affinity(), companion.order().describe(), companion.isRecruited(),
+				companion.castMember().map(member -> companion.companionName() + " (" + member.pronouns() + "), " + member.background()).orElse(null));
 	}
 }

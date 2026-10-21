@@ -6,7 +6,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"fabric-gametest": ["io.github.tekless.hearthbound.test.SmokeGameTest", "io.github.tekless.hearthbound.test.CompanionGameTests"],
-		"fabric-client-gametest": ["io.github.tekless.hearthbound.test.CompanionClientGameTest", "io.github.tekless.hearthbound.test.AdventurePlaytest", "io.github.tekless.hearthbound.test.ChatPathPlaytest"]
+		"fabric-client-gametest": ["io.github.tekless.hearthbound.test.CompanionClientGameTest", "io.github.tekless.hearthbound.test.AdventurePlaytest", "io.github.tekless.hearthbound.test.ChatPathPlaytest", "io.github.tekless.hearthbound.test.CastShowcase"]
 	},
 	"depends": {
 		"hearthbound": "*"

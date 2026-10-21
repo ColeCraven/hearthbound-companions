@@ -42,7 +42,8 @@ public class CompanionRenderer extends HumanoidMobRenderer<CompanionEntity, Comp
 	public void extractRenderState(CompanionEntity entity, CompanionRenderState state, float partialTicks) {
 		super.extractRenderState(entity, state, partialTicks);
 		int variant = entity.skinVariant();
-		state.texture = Identifier.withDefaultNamespace(CompanionSkin.texturePath(variant));
+		String[] texture = CompanionSkin.texture(variant);
+		state.texture = Identifier.fromNamespaceAndPath(texture[0], texture[1]);
 		state.slim = CompanionSkin.decodeSlim(variant);
 		state.downed = entity.isDowned();
 		if (state.downed) {

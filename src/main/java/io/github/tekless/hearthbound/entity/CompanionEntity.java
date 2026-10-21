@@ -374,10 +374,25 @@ public class CompanionEntity extends PathfinderMob {
 	// ------------------------------------------------------------------ identity
 
 	public void initIdentity(Archetype archetype, String name, CompanionSkin skin, boolean slim) {
+		initIdentity(archetype, name, skin.encode(slim));
+	}
+
+	public void initIdentity(Archetype archetype, String name, int skinVariant) {
 		setArchetype(archetype);
 		setCustomName(Component.literal(name));
 		setCustomNameVisible(true);
-		setSkinVariant(skin.encode(slim));
+		setSkinVariant(skinVariant);
+	}
+
+	/** Makes this companion one of the named cast characters (name, personality and outfit). */
+	public void initIdentity(io.github.tekless.hearthbound.core.persona.CastMember member) {
+		initIdentity(member.archetype(), member.displayName(), member.skinVariant());
+	}
+
+	/** The cast character this companion is, if it is one (matched by name and outfit). */
+	public java.util.Optional<io.github.tekless.hearthbound.core.persona.CastMember> castMember() {
+		return io.github.tekless.hearthbound.core.persona.CastMember.bySkinVariant(skinVariant())
+				.filter(member -> member.displayName().equals(companionName()));
 	}
 
 	public Archetype archetype() {
@@ -403,7 +418,7 @@ public class CompanionEntity extends PathfinderMob {
 	}
 
 	public void setSkinVariant(int encoded) {
-		entityData.set(DATA_SKIN, Math.floorMod(encoded, CompanionSkin.VARIANTS));
+		entityData.set(DATA_SKIN, CompanionSkin.sanitize(encoded));
 	}
 
 	public boolean isRecruited() {
@@ -826,10 +841,25 @@ public class CompanionEntity extends PathfinderMob {
 			@Nullable SpawnGroupData groupData) {
 		SpawnGroupData data = super.finalizeSpawn(level, difficulty, reason, groupData);
 		if (getCustomName() == null) {
-			Archetype rolled = Archetype.values()[random.nextInt(Archetype.values().length)];
-			String name = rolled.names().get(random.nextInt(rolled.names().size()));
-			CompanionSkin skin = CompanionSkin.values()[random.nextInt(CompanionSkin.values().length)];
-			initIdentity(rolled, name, skin, random.nextBoolean());
+			// Usually one of the named cast who isn't already around; sometimes a wanderer in a default skin.
+			java.util.List<io.github.tekless.hearthbound.core.persona.CastMember> free = new java.util.ArrayList<>();
+			java.util.Set<String> taken = new java.util.HashSet<>();
+			for (CompanionEntity other : level.getLevel().getEntitiesOfClass(CompanionEntity.class, getBoundingBox().inflate(512), e -> e != this)) {
+				taken.add(other.companionName());
+			}
+			for (io.github.tekless.hearthbound.core.persona.CastMember member : io.github.tekless.hearthbound.core.persona.CastMember.values()) {
+				if (!taken.contains(member.displayName())) {
+					free.add(member);
+				}
+			}
+			if (!free.isEmpty() && random.nextInt(4) != 0) {
+				initIdentity(free.get(random.nextInt(free.size())));
+			} else {
+				Archetype rolled = Archetype.values()[random.nextInt(Archetype.values().length)];
+				String name = rolled.names().get(random.nextInt(rolled.names().size()));
+				CompanionSkin skin = CompanionSkin.values()[random.nextInt(CompanionSkin.values().length)];
+				initIdentity(rolled, name, skin, random.nextBoolean());
+			}
 			giveStarterGear();
 		}
 		home = blockPosition();

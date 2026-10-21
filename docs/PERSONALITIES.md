@@ -1,8 +1,9 @@
 # Personalities
 
-Each companion is built from one of six **archetypes**, a name, and one of the 18 default skins.
-Two companions of the same archetype share a voice and a way of helping, but not a name, skin or
-memories.
+Each companion is built from one of six **archetypes**, a name and a look: either one of the
+twelve named [cast](CAST.md) characters with their own outfit, or a wanderer in one of the 18
+default skins. Two companions of the same archetype share a voice and a way of helping, but not a
+name, look or memories.
 
 An archetype is **not just flavour text**. It changes three separate things:
 
@@ -15,7 +16,8 @@ An archetype is **not just flavour text**. It changes three separate things:
 
 | | Sellsword | Naturalist | Rogue | Guardian | Farmhand | Mystic |
 |---|---|---|---|---|---|---|
-| **Example names** | Bram, Hilde, Torvald | Wren, Elowen, Tobias | Marlo, Cass, Jory | Isolde, Aldric, Seren | Pip, Tilly, Odo | Sable, Morwen, Ashe |
+| **Cast** ([see them](CAST.md)) | Bram, Hilde | Wren, Tobias | Cass, Marlo | Isolde, Aldric | Pip, Tilly | Sable, Ashe |
+| **Wanderer names** | Torvald, Greta, Osric | Elowen, Linnea, Hazel | Jory, Lark, Vesper | Aveline, Gareth, Tristan | Odo, Bess, Clem | Nyx, Thorne, Orrin |
 | **Voice** | Terse, blunt, soldier's slang | Long, excited sentences, asks questions | Quick quips, teasing, "partner" | Formal, sincere, old-fashioned courtesy | Rambling, nervous, homely sayings | Dry, cryptic, short poetic lines |
 | **Humour** | Deadpan understatement | Puns and trivia | Sarcasm and teasing | Earnest, gentle | Self-deprecating, accidental | Dark, gallows humour |
 | **Interests** | Weapons, armour, a good fight | Biomes, plants, animals, rocks | Emeralds, loot, chests, trades | Villagers, oaths, keeping you alive | Crops, animals, cooking, home | The Nether, the End, enchanting, night |
