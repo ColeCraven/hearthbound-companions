@@ -64,24 +64,10 @@ regenerate. They're original art, MIT-licensed with the rest of the repo.
 The twelve cast names are reserved for these characters. Wanderers use separate name pools per
 personality, cleaned up so no two names are easy to confuse in chat.
 
-### Renamed in 0.4
+### Older worlds
 
-Eight of the cast got new names (and some new roles and voices) in 0.4. Existing worlds carry on
-without any fuss: a companion saved under an old name loads as the new character with the same
-skin, memories and pack, and old names still work in `/companion summon`, `@Name` addresses and
-the server config files that are keyed by cast name (such as `hearthbound-skins.json` and
-`server.hub.residents`).
-
-| Before | Now |
-|---|---|
-| Bram | Charlie |
-| Freya | Dasha |
-| Conoby | Cole |
-| Lucas | AJ |
-| Cass | Maddie |
-| Emmett | Birintan |
-| Casper | Luke |
-| Rosie | Honey |
+Companions saved by an older version of the mod load as the current cast automatically,
+with the same skin, memories and pack.
 
 ## Commands
 
