@@ -780,6 +780,74 @@
     "role.weak": [
       "I'm not the best at this, but I'll try my hardest.",
       "Bear with me, it's not my strength to {task}."
+    ],
+    "exchange.weather.open": [
+      "Isn't {thing} something? Every sort has its own smell.",
+      "I do rather like {thing}, don't you?"
+    ],
+    "exchange.weather.reply": [
+      "I'd say so. It changes how everything moves.",
+      "It's grown on me, truly."
+    ],
+    "exchange.weather.close": [
+      "Funny what you notice when you stop to look.",
+      "Well, lovely. In its way."
+    ],
+    "exchange.road.open": [
+      "Look at the {thing}. We walk through such lovely places.",
+      "I could study this {thing} for a month."
+    ],
+    "exchange.road.reply": [
+      "We'd never finish. There's too much of it.",
+      "Please don't suggest it. I'd agree."
+    ],
+    "exchange.road.close": [
+      "Just a short pause, then?",
+      "Another day, maybe."
+    ],
+    "exchange.food.open": [
+      "I'd happily trade a notebook for {thing}.",
+      "Do you ever dream about {thing}? I do."
+    ],
+    "exchange.food.reply": [
+      "Constantly. With honey.",
+      "Warm, with herbs. Perfect."
+    ],
+    "exchange.food.close": [
+      "We'll find something. We always do.",
+      "Soon, I hope."
+    ],
+    "exchange.teasing.open": [
+      "{other}, you have a leaf in your hair. Has for an hour.",
+      "{other}, I think a bird nested on you."
+    ],
+    "exchange.teasing.reply": [
+      "It's decorative. Very fashionable.",
+      "Free rent for the bird. I'm generous."
+    ],
+    "exchange.teasing.close": [
+      "It does suit you, honestly.",
+      "Ha! Fair enough."
+    ],
+    "routine.gather": [
+      "I'll just gather a little {item} while we wait.",
+      "{item}, just nearby. Won't be a moment."
+    ],
+    "routine.farm": [
+      "Oh, the {item} is ripe! I'll pick it.",
+      "Harvest time for the {item}."
+    ],
+    "routine.hunt": [
+      "A {mob}! Stay behind me, I'll see to it.",
+      "That {mob} is too close. I'll move it along."
+    ],
+    "routine.torch": [
+      "It's rather dark here. A torch will do.",
+      "A little light, there."
+    ],
+    "fail.camp_campfire": [
+      "I'd love to set up camp, but I haven't a campfire. Could you give me one?",
+      "Oh, no campfire in my pack. I can't make camp without one."
     ]
   }
 }

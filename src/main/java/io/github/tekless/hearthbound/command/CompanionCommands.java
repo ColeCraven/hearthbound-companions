@@ -17,6 +17,8 @@ import io.github.tekless.hearthbound.entity.CompanionEntity;
 import io.github.tekless.hearthbound.entity.CompanionSkin;
 import io.github.tekless.hearthbound.registry.ModEntities;
 import io.github.tekless.hearthbound.world.CompanionRoster;
+import io.github.tekless.hearthbound.Hearthbound;
+import io.github.tekless.hearthbound.config.HearthboundConfig;
 import io.github.tekless.hearthbound.world.CompanionTracker;
 import io.github.tekless.hearthbound.world.HubResidents;
 import java.util.Arrays;
@@ -96,6 +98,28 @@ public final class CompanionCommands {
 								.then(Commands.argument("model", StringArgumentType.word())
 										.suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("wide", "slim"), b))
 										.executes(ctx -> skin(ctx, StringArgumentType.getString(ctx, "model")))))));
+		root.then(Commands.literal("tell")
+				.then(Commands.argument("who", StringArgumentType.word())
+						.suggests((c, b) -> {
+							ServerPlayer p = c.getSource().getPlayer();
+							if (p != null) {
+								CompanionTracker.ownedBy(p).forEach(x -> b.suggest(x.companionName().split(" ")[0]));
+							}
+							return SharedSuggestionProvider.suggest(List.of("party", "everyone"), b);
+						})
+						.then(Commands.argument("message", StringArgumentType.greedyString()).executes(CompanionCommands::tell))));
+		root.then(Commands.literal("chattiness")
+				.requires(CompanionCommands::mayConfigure)
+				.executes(ctx -> chattiness(ctx, null))
+				.then(Commands.argument("level", StringArgumentType.word())
+						.suggests((c, b) -> SharedSuggestionProvider.suggest(HearthboundConfig.CHATTINESS.keySet(), b))
+						.executes(ctx -> chattiness(ctx, StringArgumentType.getString(ctx, "level")))));
+		root.then(Commands.literal("autonomy")
+				.requires(CompanionCommands::mayConfigure)
+				.executes(ctx -> autonomy(ctx, null))
+				.then(Commands.argument("mode", StringArgumentType.word())
+						.suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("on", "off"), b))
+						.executes(ctx -> autonomy(ctx, StringArgumentType.getString(ctx, "mode")))));
 		root.then(Commands.literal("hub")
 				.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 				.then(Commands.literal("list").executes(CompanionCommands::hubList))
@@ -104,6 +128,60 @@ public final class CompanionCommands {
 						.then(Commands.argument("name", StringArgumentType.word()).suggests(NEARBY_NAMES)
 								.executes(CompanionCommands::hubHome))));
 		dispatcher.register(root);
+	}
+
+	/** In single-player the host can always change these; on a server it takes operator rights. */
+	private static boolean mayConfigure(CommandSourceStack source) {
+		return source.getServer().isSingleplayer() || Commands.hasPermission(Commands.LEVEL_GAMEMASTERS).test(source);
+	}
+
+	/** {@code /companion tell <name|party|everyone> <message>}: the same as typing @name message in chat. */
+	private static int tell(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+		ServerPlayer player = ctx.getSource().getPlayerOrException();
+		String who = StringArgumentType.getString(ctx, "who");
+		Conversations.onChat(player, "@" + who + " " + StringArgumentType.getString(ctx, "message"));
+		return 1;
+	}
+
+	private static int chattiness(CommandContext<CommandSourceStack> ctx, String level) {
+		HearthboundConfig config = Hearthbound.config();
+		if (level != null) {
+			Double value = HearthboundConfig.CHATTINESS.get(level.toLowerCase(Locale.ROOT));
+			if (value == null) {
+				try {
+					value = Math.max(0.0, Math.min(2.0, Double.parseDouble(level)));
+				} catch (NumberFormatException e) {
+					ctx.getSource().sendFailure(Component.literal("Pick off, low, normal or high (or a number from 0 to 2)."));
+					return 0;
+				}
+			}
+			config.ambientChatter = value;
+			config.save();
+		}
+		String name = config.chattinessName();
+		ctx.getSource().sendSuccess(() -> Component.literal("Chattiness is " + name + String.format(Locale.ROOT, " (%.1f). ", config.ambientChatter) + switch (name) {
+			case "off" -> "No unprompted chatter. They still answer you, confirm orders and warn you about danger.";
+			case "low" -> "Only now and then. Replies, confirmations and warnings are unchanged.";
+			case "high" -> "They'll chat plenty, and talk to each other more.";
+			default -> "The default: comments now and then, and the odd chat between them.";
+		} + " Options: off, low, normal, high."), false);
+		return 1;
+	}
+
+	private static int autonomy(CommandContext<CommandSourceStack> ctx, String mode) {
+		HearthboundConfig config = Hearthbound.config();
+		if (mode != null) {
+			if (!mode.equalsIgnoreCase("on") && !mode.equalsIgnoreCase("off")) {
+				ctx.getSource().sendFailure(Component.literal("Say on or off."));
+				return 0;
+			}
+			config.routines = mode.equalsIgnoreCase("on");
+			config.save();
+		}
+		ctx.getSource().sendSuccess(() -> Component.literal(config.routines
+				? "Autonomy is on. While they follow you and you stand still, collectors gather logs and stone, farmers harvest and replant, guardians hunt hostile mobs and builders light dark spots. Your orders always come first, and they leave protected areas and your builds alone."
+				: "Autonomy is off. Companions only do what you ask. Turn it on with /companion autonomy on."), false);
+		return 1;
 	}
 
 	/** Lists every cast member the world knows about: at the hub, or travelling with someone. */

@@ -26,6 +26,9 @@ public final class HearthboundConfig {
 	public int partyLimit = 3;
 	/** 0 = never comment unprompted, 1 = normal, 2 = chatty. */
 	public double ambientChatter = 1.0;
+	/** Idle companions pick their own jobs (gather logs, harvest crops, hunt, light torches) while following. Off unless you turn it on. */
+	public boolean routines = false;
+	private transient Path file;
 	/** How often companions do things of their own accord while you stand still: 0 = never, 1 = normal, 2 = often. */
 	public double autonomy = 1.0;
 	public Ai ai = new Ai();
@@ -103,6 +106,37 @@ public final class HearthboundConfig {
 		return essentialCompanions;
 	}
 
+	/** Writes the settings back to the file they were loaded from (used by the in-game commands). */
+	public void save() {
+		if (file != null) {
+			write(file, this);
+		}
+	}
+
+	/** The named chattiness levels and what they mean as an {@link #ambientChatter} value. */
+	public static final java.util.Map<String, Double> CHATTINESS = new java.util.LinkedHashMap<>(java.util.Map.of());
+
+	static {
+		CHATTINESS.put("off", 0.0);
+		CHATTINESS.put("low", 0.4);
+		CHATTINESS.put("normal", 1.0);
+		CHATTINESS.put("high", 1.8);
+	}
+
+	/** The level name closest to the current setting. */
+	public String chattinessName() {
+		String best = "normal";
+		double distance = Double.MAX_VALUE;
+		for (java.util.Map.Entry<String, Double> level : CHATTINESS.entrySet()) {
+			double d = Math.abs(level.getValue() - ambientChatter);
+			if (d < distance) {
+				distance = d;
+				best = level.getKey();
+			}
+		}
+		return best;
+	}
+
 	public int partyLimit() {
 		return Math.max(1, partyLimit);
 	}
@@ -127,6 +161,7 @@ public final class HearthboundConfig {
 					if (config.server.hub.residents == null) {
 						config.server.hub.residents = new ArrayList<>();
 					}
+					config.file = file;
 					write(file, config); // adds settings introduced since the file was written
 					return config;
 				}
@@ -136,6 +171,7 @@ public final class HearthboundConfig {
 			}
 		}
 		HearthboundConfig defaults = new HearthboundConfig();
+		defaults.file = file;
 		write(file, defaults);
 		return defaults;
 	}

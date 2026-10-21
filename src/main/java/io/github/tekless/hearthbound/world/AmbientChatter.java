@@ -83,21 +83,27 @@ public final class AmbientChatter {
 			}
 			return true;
 		});
+		Exchanges.tick(now);
 		boolean someoneSpoke = false;
 		java.util.List<CompanionEntity> party = Conversations.party(player);
 		for (CompanionEntity companion : party) {
 			State state = STATES.computeIfAbsent(companion, c -> initialState(c));
 			state.cooldown -= 20;
 			state.warningCooldown -= 20;
-			if (companion.isDowned() || chatter <= 0 || someoneSpoke) {
+			if (companion.isDowned() || someoneSpoke) {
 				continue;
 			}
+			// Warnings always get through; everything else waits for a pause in the conversation and respects chattiness.
 			if (warn(player, companion, state)) {
 				someoneSpoke = true;
-			} else if (suggest(player, companion, state) || comment(player, companion, state, chatter)) {
+			} else if (chatter > 0 && !Conversations.isChatting(player)
+					&& (suggest(player, companion, state) || comment(player, companion, state, chatter))) {
 				someoneSpoke = true;
 				maybeBanter(companion, party, now, chatter);
 			}
+		}
+		if (!someoneSpoke) {
+			Exchanges.maybeStartFor(player, party, chatter);
 		}
 	}
 

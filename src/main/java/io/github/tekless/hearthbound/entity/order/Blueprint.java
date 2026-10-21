@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public final class Blueprint {
 	public enum Kind {
-		SHELTER("a shelter"), WALL("a wall"), BRIDGE("a bridge");
+		SHELTER("a shelter"), WALL("a wall"), BRIDGE("a bridge"), CAMP("a camp");
 
 		private final String label;
 
@@ -30,6 +30,9 @@ public final class Blueprint {
 
 		public static Optional<Kind> byPhrase(String phrase) {
 			String p = phrase == null ? "" : phrase.toLowerCase(Locale.ROOT).trim();
+			if (p.matches(".*\\b(camp|campsite|campfire|bonfire)s?\\b.*")) {
+				return Optional.of(CAMP);
+			}
 			if (p.matches(".*\\b(shelter|hut|house|cabin|home|shack|base|cottage|hideout|tent|room)s?\\b.*")) {
 				return Optional.of(SHELTER);
 			}
@@ -48,6 +51,8 @@ public final class Blueprint {
 	}
 
 	private final Kind kind;
+	/** Where a camp's fire goes (null for everything else). */
+	private BlockPos centre;
 	private final List<Spot> spots;
 	private final List<BlockPos> mustBeClear;
 	private final List<BlockPos> needsGround;
@@ -61,6 +66,11 @@ public final class Blueprint {
 
 	public Kind kind() {
 		return kind;
+	}
+
+	/** The campfire spot, or null if this isn't a camp. */
+	public BlockPos centre() {
+		return centre;
 	}
 
 	public List<Spot> spots() {
@@ -113,6 +123,22 @@ public final class Blueprint {
 						}
 					}
 				}
+			}
+			case CAMP -> {
+				// A campfire three blocks ahead with three seats around it (the fourth side is where you stand).
+				BlockPos centre = feet.relative(facing, 3);
+				List<BlockPos> seats = List.of(centre.relative(right, 2), centre.relative(right, -2), centre.relative(facing, 2));
+				for (BlockPos seat : seats) {
+					spots.add(new Spot(seat, false));
+					clear.add(seat.above());
+					ground.add(seat.below());
+				}
+				clear.add(centre);
+				clear.add(centre.above());
+				ground.add(centre.below());
+				Blueprint blueprint = new Blueprint(kind, spots, clear, ground);
+				blueprint.centre = centre;
+				return blueprint;
 			}
 			case BRIDGE -> {
 				// A walkway at the level the player stands on, out to the first solid ground (32 at most).

@@ -397,7 +397,7 @@ public final class CommandParser {
 		Matcher build = BUILD.matcher(c);
 		if (build.matches()) {
 			String thing = build.group("thing");
-			boolean known = thing != null && thing.matches(".*\\b(shelter|hut|house|cabin|home|shack|base|cottage|hideout|tent|room|wall|barrier|barricade|bridge|walkway)s?\\b.*");
+			boolean known = thing != null && thing.matches(".*\\b(shelter|hut|house|cabin|home|shack|base|cottage|hideout|tent|room|wall|barrier|barricade|bridge|walkway|camp|campsite|campfire)s?\\b.*");
 			// "make" is mostly crafting ("make a sword"), so it only counts for things we can build.
 			if (known || !c.startsWith("make") && !c.startsWith("knock")) {
 				return command(Intent.build(thing));

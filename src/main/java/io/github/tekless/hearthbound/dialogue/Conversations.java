@@ -89,7 +89,7 @@ public final class Conversations {
 	private static final double TRAVEL_FIRST = 24;
 	/** "Other players nearby" for deciding whether plain chat might be meant for them instead. */
 	private static final double COMPANY_RANGE = 24;
-	private static final String BUILD_THINGS = "a shelter, a wall or a bridge";
+	private static final String BUILD_THINGS = "a shelter, a wall, a bridge or a camp";
 	private static final Map<UUID, Chat> CHATS = new HashMap<>();
 	/** The short thread of each conversation, so "why?" and "tell me more" have something to lean on. */
 	private static final Map<UUID, Context> CONTEXTS = new HashMap<>();
@@ -923,7 +923,7 @@ public final class Conversations {
 	private static Outcome build(ServerPlayer player, CompanionEntity companion, Intent intent) {
 		Optional<Blueprint.Kind> kind = Blueprint.Kind.byPhrase(intent.item());
 		if (kind.isEmpty()) {
-			return Outcome.no("fail.build_unknown", Map.of("things", "a shelter, a wall or a bridge"));
+			return Outcome.no("fail.build_unknown", Map.of("things", BUILD_THINGS));
 		}
 		String thing = kind.get().label();
 		ServerLevel level = (ServerLevel) player.level();
@@ -947,6 +947,14 @@ public final class Conversations {
 				default -> "there's nothing to bridge here";
 			};
 			return Outcome.no("fail.build_site", Map.of("thing", thing, "why", why));
+		}
+		if (kind.get() == Blueprint.Kind.CAMP) {
+			if (WorldRules.isProtected(level, blueprint.centre())) {
+				return Outcome.no("fail.protected", Map.of());
+			}
+			if (companion.countCarried(s -> s.is(net.minecraft.world.item.Items.CAMPFIRE) || s.is(net.minecraft.world.item.Items.SOUL_CAMPFIRE)) == 0) {
+				return Outcome.no("fail.camp_campfire", Map.of());
+			}
 		}
 		int need = blueprint.openSpots(level).size();
 		int have = BuildOrder.countBuildingBlocks(companion);

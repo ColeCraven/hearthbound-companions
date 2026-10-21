@@ -780,6 +780,74 @@
     "role.weak": [
       "I'm not great at that, but I'll try!",
       "Uh, that's not really what I'm good at. But okay!"
+    ],
+    "exchange.weather.open": [
+      "Ooh, {thing}! Back home we'd have said it's a good omen!",
+      "{thing}! I love it! Mostly!"
+    ],
+    "exchange.weather.reply": [
+      "Ha, I always think about the crops!",
+      "Same! Well, not the crops. But same!"
+    ],
+    "exchange.weather.close": [
+      "Good for the soil, anyway!",
+      "I'll take it!"
+    ],
+    "exchange.road.open": [
+      "Isn't the {thing} pretty? Not like home though!",
+      "The {thing} is so big! Everything's big out here!"
+    ],
+    "exchange.road.reply": [
+      "Right? I keep staring!",
+      "I miss the fields, but this is nice too!"
+    ],
+    "exchange.road.close": [
+      "Stay close, we don't want to get lost!",
+      "Okay! Okay!"
+    ],
+    "exchange.food.open": [
+      "I'm daydreaming about {thing}!",
+      "Oh, {thing}! My stomach's rumbling!"
+    ],
+    "exchange.food.reply": [
+      "Me too! With butter!",
+      "I could eat a whole pie!"
+    ],
+    "exchange.food.close": [
+      "We'll find some, promise!",
+      "Soon! I hope!"
+    ],
+    "exchange.teasing.open": [
+      "{other}, you walk funny! Is it the boots?",
+      "{other}, you look like a scarecrow when you stand still!"
+    ],
+    "exchange.teasing.reply": [
+      "Ha! That's what my mum said!",
+      "Hey! I'm dignified!"
+    ],
+    "exchange.teasing.close": [
+      "Sorry! Love you really!",
+      "Okay, okay, fair!"
+    ],
+    "routine.gather": [
+      "I'll just grab a bit of {item} while we wait!",
+      "{item}! There's loads here!"
+    ],
+    "routine.farm": [
+      "The {item} is ready! I know this one!",
+      "Oh! Ripe {item}! I'll pick it!"
+    ],
+    "routine.hunt": [
+      "A {mob}! Scary! But I'll go!",
+      "Eek, a {mob}! I'll try to be brave!"
+    ],
+    "routine.torch": [
+      "It's so dark! Torch!",
+      "A light! Much better!"
+    ],
+    "fail.camp_campfire": [
+      "Aw, I don't have a campfire! Can you give me one?",
+      "I can't do a camp without a campfire! Sorry!"
     ]
   }
 }

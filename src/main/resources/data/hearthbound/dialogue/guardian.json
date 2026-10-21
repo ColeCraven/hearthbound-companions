@@ -770,6 +770,74 @@
     "role.weak": [
       "It is not my greatest skill to {task}, but I will do it faithfully.",
       "I am no master at this. I will be careful and slow."
+    ],
+    "exchange.weather.open": [
+      "{thing} is upon us. Stay close, friend.",
+      "The watch is harder in {thing}, but the vigil holds."
+    ],
+    "exchange.weather.reply": [
+      "We have weathered worse together.",
+      "Aye. We stand regardless."
+    ],
+    "exchange.weather.close": [
+      "Then we stand together.",
+      "Well said."
+    ],
+    "exchange.road.open": [
+      "A fine road through the {thing}. Safe, I trust.",
+      "The {thing} is quiet. I mistrust a quiet road."
+    ],
+    "exchange.road.reply": [
+      "Wise. Quiet roads hide the most.",
+      "Caution is no sin. Keep watch."
+    ],
+    "exchange.road.close": [
+      "Then we keep our eyes open.",
+      "I shall."
+    ],
+    "exchange.food.open": [
+      "I confess I dream of {thing}.",
+      "It has been long since {thing}. I miss it."
+    ],
+    "exchange.food.reply": [
+      "As do I. A warm table is a rare gift.",
+      "Soon, I hope, and with good company."
+    ],
+    "exchange.food.close": [
+      "Aye. Soon.",
+      "Well, we shall see."
+    ],
+    "exchange.teasing.open": [
+      "{other}, you stride like a knight and talk like a farmhand.",
+      "{other}, your armour squeaks. It spoils the stealth."
+    ],
+    "exchange.teasing.reply": [
+      "I shall oil it tonight, with great dignity.",
+      "My squeak is a mark of honour."
+    ],
+    "exchange.teasing.close": [
+      "A noble answer.",
+      "Ha. Touche."
+    ],
+    "routine.gather": [
+      "While we rest, I will gather some {item}.",
+      "A little {item}, nearby. It will not take long."
+    ],
+    "routine.farm": [
+      "The {item} is ripe. It would be a waste to leave it.",
+      "I will bring in the {item}."
+    ],
+    "routine.hunt": [
+      "A {mob} approaches. I shall deal with it.",
+      "Stay behind me. The {mob} will not pass."
+    ],
+    "routine.torch": [
+      "It is too dark here. A torch will serve.",
+      "Light against the shadows."
+    ],
+    "fail.camp_campfire": [
+      "I would make camp gladly, but I carry no campfire.",
+      "A camp needs a hearth. I have no campfire. Could you provide one?"
     ]
   }
 }

@@ -770,6 +770,74 @@
     "role.weak": [
       "Not my speciality, boss, but I'll give it a go.",
       "I can {task}. Doesn't mean I like it. Or that it'll be quick."
+    ],
+    "exchange.weather.open": [
+      "{thing}. Perfect for a quiet job, terrible for a nap.",
+      "Not keen on {thing}. Ruins a good hat."
+    ],
+    "exchange.weather.reply": [
+      "Cover for sneaking, at least.",
+      "Look on the bright side, it hides footprints."
+    ],
+    "exchange.weather.close": [
+      "You always think like that, don't you?",
+      "Fair. Not a bad point."
+    ],
+    "exchange.road.open": [
+      "Long way through the {thing}. Anything worth lifting out there?",
+      "Any trouble waiting in the {thing}, d'you think?"
+    ],
+    "exchange.road.reply": [
+      "Always. That's what makes it worth walking.",
+      "If there isn't, we'll make some."
+    ],
+    "exchange.road.close": [
+      "Ha. I like your thinking.",
+      "Mm. Eyes open, everyone."
+    ],
+    "exchange.food.open": [
+      "I'd pay good coin for {thing}.",
+      "Thinking about {thing}. It's all I've got."
+    ],
+    "exchange.food.reply": [
+      "I'd steal it. For the boss, of course.",
+      "Same. No pockets deep enough for that appetite."
+    ],
+    "exchange.food.close": [
+      "Shh, don't tell them.",
+      "Next stop, then. I'll find a way."
+    ],
+    "exchange.teasing.open": [
+      "{other}, you couldn't pick a pocket if it was open.",
+      "{other}, your sneaking sounds like a herd of cows."
+    ],
+    "exchange.teasing.reply": [
+      "I'll have you know, I've never been caught. Once.",
+      "Rude. Accurate, but rude."
+    ],
+    "exchange.teasing.close": [
+      "Practice makes perfect, friend.",
+      "Ha. Round to you."
+    ],
+    "routine.gather": [
+      "Might as well earn my keep. {item}.",
+      "A little {item} on the side. Nobody mind?"
+    ],
+    "routine.farm": [
+      "Ripe {item}. Free pickings.",
+      "Free {item}. Don't mind if I do."
+    ],
+    "routine.hunt": [
+      "A {mob}. Hold my coat.",
+      "{mob}. Not on my watch."
+    ],
+    "routine.torch": [
+      "Too dark to work in. Torch.",
+      "A light. For safety. Mine, mostly."
+    ],
+    "fail.camp_campfire": [
+      "No campfire, no camp, boss. Find me one.",
+      "A camp without a fire? Bad idea. I need a campfire."
     ]
   }
 }

@@ -776,6 +776,74 @@
     "role.weak": [
       "It is not my craft to {task}. I will manage.",
       "Not my gift. I'll do it anyway."
+    ],
+    "exchange.weather.open": [
+      "{thing}. The world is thinking aloud.",
+      "I like {thing}. It feels honest."
+    ],
+    "exchange.weather.reply": [
+      "Honest, and a little cruel.",
+      "Everything feels honest at night."
+    ],
+    "exchange.weather.close": [
+      "Hm. Perhaps.",
+      "Quiet, now. Listen."
+    ],
+    "exchange.road.open": [
+      "The {thing} has a mood today.",
+      "I feel the {thing} watching us. Gently."
+    ],
+    "exchange.road.reply": [
+      "It always is.",
+      "That is its habit. Mind it."
+    ],
+    "exchange.road.close": [
+      "Hm.",
+      "We shall see."
+    ],
+    "exchange.food.open": [
+      "I find myself thinking about {thing}. Strange, for me.",
+      "Even sages dream of {thing}."
+    ],
+    "exchange.food.reply": [
+      "Not strange. Wise.",
+      "A hungry mystic is a poor one."
+    ],
+    "exchange.food.close": [
+      "Then the stars agree.",
+      "Eat well when you can."
+    ],
+    "exchange.teasing.open": [
+      "{other}, you give off a very loud aura.",
+      "{other}, your shadow is smaller than you. Odd."
+    ],
+    "exchange.teasing.reply": [
+      "Loud is a colour. I like it.",
+      "It keeps secrets, unlike you."
+    ],
+    "exchange.teasing.close": [
+      "Ha. Clever.",
+      "Hm. Fair."
+    ],
+    "routine.gather": [
+      "A little {item}. The stars approve.",
+      "I will fetch some {item}. It won't take long."
+    ],
+    "routine.farm": [
+      "The {item} is ripe. The soil agrees.",
+      "I'll bring in the {item}."
+    ],
+    "routine.hunt": [
+      "A {mob}. It will not trouble us long.",
+      "Stay still. The {mob} is mine."
+    ],
+    "routine.torch": [
+      "Darkness is only waiting for light. Here.",
+      "A torch. Small, honest magic."
+    ],
+    "fail.camp_campfire": [
+      "A camp needs a flame. I carry no campfire.",
+      "No campfire. No camp. Bring me fire."
     ]
   }
 }

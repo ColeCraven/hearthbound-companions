@@ -107,6 +107,11 @@ public final class Pastimes {
 				options.add(new Patrol(owner));
 			}
 		}
+		// With autonomy on, a job suited to their role is twice as likely as the other things they might do.
+		io.github.tekless.hearthbound.entity.order.Routines.pick(companion, owner).ifPresent(job -> {
+			options.add(job);
+			options.add(job);
+		});
 		if (options.isEmpty()) {
 			return Optional.empty();
 		}

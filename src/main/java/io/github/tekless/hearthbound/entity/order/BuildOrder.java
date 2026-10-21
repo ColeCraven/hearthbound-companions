@@ -58,6 +58,7 @@ public final class BuildOrder implements CompanionOrder {
 			case SHELTER -> playerFeet.relative(facing, 2); // the doorway, which stays open until the end
 			case WALL -> playerFeet.relative(facing, 1);
 			case BRIDGE -> playerFeet;
+			case CAMP -> playerFeet.relative(facing, 1);
 		};
 		List<BlockPos> open = new ArrayList<>(blueprint.openSpots(level));
 		// Bottom layer first, then up; along a bridge from the near end.
@@ -185,6 +186,16 @@ public final class BuildOrder implements CompanionOrder {
 
 	/** A door in a shelter's doorway and a torch inside, if the companion has them. */
 	private void finishTouches(ServerLevel level) {
+		if (blueprint.kind() == Blueprint.Kind.CAMP) {
+			BlockPos fire = blueprint.centre();
+			ItemStack campfire = take(stack -> stack.is(Items.CAMPFIRE) || stack.is(Items.SOUL_CAMPFIRE));
+			if (fire != null && campfire != null && Blueprint.isOpen(level.getBlockState(fire))) {
+				Block block = campfire.is(Items.SOUL_CAMPFIRE) ? Blocks.SOUL_CAMPFIRE : Blocks.CAMPFIRE;
+				level.setBlockAndUpdate(fire, block.defaultBlockState());
+				campfire.shrink(1);
+			}
+			return;
+		}
 		if (blueprint.kind() != Blueprint.Kind.SHELTER) {
 			return;
 		}

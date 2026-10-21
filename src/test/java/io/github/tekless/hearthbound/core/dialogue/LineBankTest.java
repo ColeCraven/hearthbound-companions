@@ -101,6 +101,16 @@ class LineBankTest {
 		REQUIRED.put("ask.build_what", plus(base, "things"));
 		REQUIRED.put("talk.mention.mob", plus(base, "thing"));
 		REQUIRED.put("talk.mention.thing", plus(base, "thing"));
+		for (String topic : List.of("weather", "road", "food", "teasing")) {
+			for (String step : List.of("open", "reply", "close")) {
+				REQUIRED.put("exchange." + topic + "." + step, plus(base, "other", "thing"));
+			}
+		}
+		REQUIRED.put("routine.gather", plus(base, "item"));
+		REQUIRED.put("routine.farm", plus(base, "item"));
+		REQUIRED.put("routine.hunt", plus(base, "mob"));
+		REQUIRED.put("routine.torch", base);
+		REQUIRED.put("fail.camp_campfire", base);
 		REQUIRED.put("role.strong", plus(base, "task"));
 		REQUIRED.put("role.weak", plus(base, "task"));
 	}

@@ -817,6 +817,74 @@
     "role.weak": [
       "Not my trade, but I'll {task}. Badly, if need be.",
       "I'd rather hit something, but fine. {task}."
+    ],
+    "exchange.weather.open": [
+      "Not a fan of {thing}. Gets in the armour.",
+      "{thing}. Of course."
+    ],
+    "exchange.weather.reply": [
+      "Could be worse. Could be arrows.",
+      "I've marched through worse."
+    ],
+    "exchange.weather.close": [
+      "Keep moving. Warms you up.",
+      "Fair. Eyes up."
+    ],
+    "exchange.road.open": [
+      "Long road through the {thing}.",
+      "{thing} again. Same road, different mud."
+    ],
+    "exchange.road.reply": [
+      "Better than a siege.",
+      "Long, but quiet. I'll take it."
+    ],
+    "exchange.road.close": [
+      "Quiet is good. Quiet's rare.",
+      "Mm. Keep your boots dry."
+    ],
+    "exchange.food.open": [
+      "I'd cut a path through a dragon for {thing}.",
+      "My stomach's louder than a war horn. Thinking of {thing}."
+    ],
+    "exchange.food.reply": [
+      "Same. Rations don't count.",
+      "Hot food, dry bed. That's the dream."
+    ],
+    "exchange.food.close": [
+      "When we stop. Not before.",
+      "Aye. Soon."
+    ],
+    "exchange.teasing.open": [
+      "{other}, you walk like a wounded ox.",
+      "{other}, you couldn't sneak up on a sleeping cow."
+    ],
+    "exchange.teasing.reply": [
+      "Says the one who snores like a siege engine.",
+      "Careful. I bite."
+    ],
+    "exchange.teasing.close": [
+      "Fair hit. Keep walking.",
+      "Hm. I'll allow it."
+    ],
+    "routine.gather": [
+      "Might as well make myself useful. {item}.",
+      "Idle hands. I'll take some {item}."
+    ],
+    "routine.farm": [
+      "Ripe {item}. Won't pick itself.",
+      "Quick harvest. {item}."
+    ],
+    "routine.hunt": [
+      "{mob} over there. I'll deal with it.",
+      "Stay put. I've got the {mob}."
+    ],
+    "routine.torch": [
+      "Too dark. Fixing that.",
+      "Torch. Better."
+    ],
+    "fail.camp_campfire": [
+      "A camp needs a fire. I haven't got a campfire on me.",
+      "No campfire in my pack. Get me one."
     ]
   }
 }

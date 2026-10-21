@@ -90,6 +90,7 @@ public final class HubResidents {
 			spawnMissing(level, hub);
 		}
 		greetVisitors(level, hub);
+		Exchanges.hubTick(server);
 	}
 
 	/** Spawns every resident who doesn't exist anywhere in the world yet. Returns how many. */
