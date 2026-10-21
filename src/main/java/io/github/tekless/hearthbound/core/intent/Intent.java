@@ -32,6 +32,14 @@ public record Intent(IntentType type, String item, Integer count, String target)
 		return new Intent(IntentType.ATTACK, null, null, target);
 	}
 
+	public static Intent build(String thing) {
+		return new Intent(IntentType.BUILD, thing, null, null);
+	}
+
+	public static Intent mine(String shape, Integer length) {
+		return new Intent(IntentType.MINE, null, length, shape);
+	}
+
 	public Intent withCount(Integer newCount) {
 		return new Intent(type, item, newCount, target);
 	}

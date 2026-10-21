@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -82,11 +83,20 @@ public final class CommandParser {
 			"gather up", "pick up", "round up", "dig up", "cut down", "chop down",
 			"gather", "collect", "get", "fetch", "grab", "chop", "cut", "mine", "dig", "harvest", "bring", "find",
 			"acquire", "obtain", "scavenge", "pick");
+	private static final Pattern MINE_TRIP = Pattern.compile("^((lets|time to|we should|you should|start|go|keep) )*(go )?(mining|digging)\\b.*|"
+			+ "^mine (here|around|for (ores?|me|us|stuff|things|resources))\\b.*|^(go )?strip ?mine\\b.*|^(lets )?(go )?mine( for a bit| a while| some)?$");
+	private static final Pattern MINE_DOWN = Pattern.compile("\\b(dig|mine|tunnel|go) (straight )?(down|downwards|deeper|a staircase|some stairs|stairs|a hole|a shaft|a mineshaft)\\b"
+			+ "|\\bstaircase (down|downwards)\\b|\\b(dig|mine) \\d+ (blocks? )?down\\b");
+	private static final Pattern MINE_TUNNEL = Pattern.compile("\\b(dig|mine|make|cut|carve|bore) (out )?(me |us )?(a |another )?tunnel\\b|\\btunnel (forward|ahead|through|straight|this way|that way)\\b"
+			+ "|\\b(dig|mine) (forward|ahead|straight ahead|straight|through (here|this|that|there))\\b|^tunnel\\b");
+	private static final Pattern BUILD = Pattern.compile("^(build|construct|put up|set up|throw up|make|knock up|raise)( me| us)?( a| an| some| the| another)?( (?<thing>.+))?$");
+	private static final Pattern BRIDGE_VERB = Pattern.compile("^bridge (this|that|the|over|across)?\\b.*|\\b(get|take) us (across|over)\\b");
+	private static final Pattern DIGITS = Pattern.compile("\\b(\\d{1,3})\\b");
 	private static final Set<String> UNSUPPORTED_VERBS = Set.of(
-			"build", "craft", "make", "construct", "plant", "sow", "farm", "breed", "tame", "ride", "fly", "swim", "sleep",
+			"craft", "make", "plant", "sow", "farm", "breed", "tame", "ride", "fly", "swim", "sleep",
 			"cook", "smelt", "brew", "enchant", "sell", "buy", "fish", "teleport", "tp", "explore", "scout", "map", "sing",
 			"dance", "jump", "open", "close", "light", "place", "put", "repair", "fix", "heal", "cure", "feed", "shear",
-			"milk", "read", "write", "tunnel", "bridge", "climb", "sail", "steal", "rob", "burn", "break", "destroy",
+			"milk", "read", "write", "climb", "sail", "steal", "rob", "burn", "break", "destroy",
 			"hunt", "trade", "kiss", "marry", "eat", "drink");
 	private static final Set<String> PRONOUN_TARGETS = Set.of(
 			"that", "it", "this", "him", "her", "them", "those", "these", "that one", "this one", "that thing", "this thing",
@@ -111,11 +121,53 @@ public final class CommandParser {
 			+ "(youre|you are) (great|awesome|amazing|the best|cool|good|brilliant|wonderful|a good friend|helpful|so helpful|brave|strong|smart|funny)|"
 			+ "i (like|love) you|love you|good friend|best companion)\\b");
 	private static final Pattern T_INSULT = Pattern.compile("\\b((youre|you are) (useless|stupid|dumb|annoying|bad|terrible|slow|an idiot|worthless|lame|the worst|pathetic)|"
-			+ "shut up|idiot|stupid|you suck|i hate you|moron|dummy|useless)\\b");
+			+ "shut up|idiot|stupid|you suck|i hate you|i dont like you|i do not like you|moron|dummy|useless)\\b");
 	private static final Pattern T_BYE = Pattern.compile("^(bye|goodbye|good bye|see (you|ya)|later|farewell|good night|night|cya|ttyl|until next time)\\b");
 	private static final Pattern T_LIKES = Pattern.compile("\\b(what do you (like|love|enjoy)|whats your fav(ou?rite)?|fav(ou?rite)|what makes you happy|what are you into)\\b");
 	private static final Pattern T_DISLIKES = Pattern.compile("\\b(what do you (hate|dislike|fear)|what dont you like|what are you (afraid|scared) of|what scares you|what annoys you)\\b");
 	private static final Pattern T_WHERE = Pattern.compile("\\b(where are we|what is this place|what place is this|where am i|what biome|which biome|what is this biome)\\b");
+	private static final Pattern T_STORY = Pattern.compile("\\b(tell me about your (past|family|home|life|village|people|childhood)|where (did|do) you (grow up|come from|live)|"
+			+ "(your|ur) (family|parents|mom|mum|dad|home|childhood|village)|do you have (a )?(family|kids|siblings|brothers|sisters|parents|a home)|"
+			+ "why are you (here|out here|adventuring|travelling|traveling|on the road)|how did you (end up|get) here|what did you do before|"
+			+ "what were you before|how old are you)\\b");
+	private static final Pattern T_PLACE = Pattern.compile("\\b(what do you think (of|about) (this|it|here|the view)|(isnt|is not) (it|this) (beautiful|pretty|amazing|nice|gorgeous|lovely)|"
+			+ "look at (that|this|the) (view|sunset|sunrise|sky|mountain|lake|sea|ocean|waterfall)|(beautiful|pretty|gorgeous|amazing|lovely|nice) (view|place|sunset|sunrise|spot|sky)|"
+			+ "do you like (it )?here|nice here|its beautiful|its pretty)\\b");
+	private static final Pattern T_PLAN = Pattern.compile("\\b(what should we do|where should we go|any (ideas|plans)|what now|what next|what do you want to do|"
+			+ "lets do something|im bored|i am bored|so bored|got any plans|what (shall|should) we do|where to next|where do we go)\\b");
+	private static final Pattern T_YES = Pattern.compile("^(yes|yeah|yea|yep|yup|ya|sure|ok|okay|k|alright|all right|of course|definitely|absolutely|sounds good|i guess|indeed|right|true|exactly|agreed|deal)$");
+	private static final Pattern T_NO = Pattern.compile("^(no|nah|nope|not really|never|no way|i dont think so|not now|maybe not|naw)$");
+	private static final Pattern T_LAUGH = Pattern.compile("\\b(ha(ha)+|he(he)+|lol|lmao|rofl|xd|thats (so )?funny|hilarious|good one)\\b");
+	private static final Pattern T_FONDNESS = Pattern.compile("\\b(i (like|love) you|love you|i missed you|missed you|glad (youre|you are) here|"
+			+ "(youre|you are) (my )?(best friend|a good friend|my friend|family)|good friend|best companion|i trust you|i like having you)\\b");
+	private static final Pattern T_SAD = Pattern.compile("\\b((im|i am|i feel|feeling) (sad|down|lonely|upset|tired|exhausted|scared|lost|awful|terrible|bad)|"
+			+ "i died|i lost (everything|my stuff|all my|my)|bad day|this sucks|i give up|im sorry|i am sorry)\\b");
+	private static final Pattern T_FOOD = Pattern.compile("\\b(are you hungry|hungry|food|dinner|lunch|breakfast|snack|something to eat|lets eat|cook)\\b");
+	private static final Pattern T_HELP = Pattern.compile("\\b(what can (you|u) do|what are you (able|good) to do|what do you know how to do|what can i (say|ask|tell you)"
+			+ "|how does this work|what are your (skills|abilities|commands)|list (your )?commands|^help$|^help me$|what (orders|commands) do you)\\b");
+	private static final Set<String> QUESTION_WORDS = Set.of("what", "why", "how", "when", "where", "who", "which", "do", "does", "did",
+			"are", "is", "can", "could", "would", "will", "should", "have", "has", "was", "were", "arent", "isnt", "dont", "doesnt", "wanna");
+	private static final Pattern T_ABOUT_ME = Pattern.compile("\\b(what do you know about me|what do i (like|love|hate)|whats my name|what is my name|do you (know|remember) my name|"
+			+ "what do you remember about me|what have i told you|do you know me|what am i called|who am i|what do you call me|tell me about me|"
+			+ "do you remember what i (like|said|told you))\\b");
+	private static final Pattern T_BOND = Pattern.compile("\\b(do you (like|love|trust|hate) me|are we (friends|good|cool|ok|okay|close)|what do you think (of|about) me|"
+			+ "how do you feel about me|am i your friend|are you my friend|are you (mad|angry|upset) (at|with) me|do you care about me|we good|"
+			+ "am i a good (friend|leader|boss|partner))\\b");
+
+	/** "I hate it when you dig down" talks about digging; it doesn't ask for it. */
+	private static final Pattern FEELING = Pattern.compile("^i (really |also |just |kind of |kinda )?(like|love|enjoy|adore|hate|dislike|despise|loathe|cant stand|dont like|do not like)\\b");
+
+	// Things the player says about themselves. Matched on the cleaned message; the value is checked again below.
+	private static final Pattern S_NICKNAME = Pattern.compile("^(?:(?:you can |you could |just |please )?call me|my name is|my names|i go by|people call me|"
+			+ "everyone calls me|im called|i am called) (?<v>[a-z0-9]+(?: [a-z0-9]+)?)$");
+	private static final Pattern S_FORGET = Pattern.compile("\\b(dont call me that|do not call me that|stop calling me that|forget my (name|nickname)|"
+			+ "call me by my (real )?name|use my (real )?name)\\b");
+	private static final Pattern S_FAVOURITE_OF = Pattern.compile("^my fav(?:ou?rite)? [a-z]+ (?:is|are) (?<v>.+)$");
+	private static final Pattern S_LIKE = Pattern.compile("^(?:i (?:really |also |just |do |kind of |kinda )?(?:like|love|enjoy|adore)|my fav(?:ou?rite)? (?:thing |things )?(?:is|are)|"
+			+ "(?:im|i am) (?:a )?(?:big |huge )?fan of|(?:im|i am) (?:really )?into) (?<v>.+)$");
+	private static final Pattern S_LIKE_AFTER = Pattern.compile("^(?<v>.+?) (?:is|are) my fav(?:ou?rite)?(?: thing| things)?$");
+	private static final Pattern S_DISLIKE = Pattern.compile("^(?:i (?:really |also |just )?(?:hate|dislike|despise|loathe|cant stand|cannot stand|dont like|do not like)|"
+			+ "(?:im|i am) (?:really |so )?(?:scared|afraid|terrified) of) (?<v>.+)$");
 	private static final Pattern T_MEMORY = Pattern.compile("\\b(remember (when|that|the)|do you remember|what do you remember|our (adventures|journey|travels)|what have we (done|been through))\\b");
 
 	private final Predicate<String> isMobName;
@@ -143,13 +195,22 @@ public final class CommandParser {
 		if (DISMISS.matcher(unstripped).find() && !RECRUIT.matcher(unstripped).find()) {
 			return command(Intent.of(IntentType.DISMISS));
 		}
+		// "hi there" is a greeting, even though "hi" on its own is a filler word in front of orders.
+		if (T_HELLO.matcher(unstripped).matches()) {
+			return new ParseResult.Talk(TalkTopic.HELLO);
+		}
 		tokens = stripFillers(tokens, names);
 		if (tokens.isEmpty()) {
 			return new ParseResult.Talk(TalkTopic.HELLO);
 		}
 		String c = String.join(" ", tokens);
 
-		ParseResult command = parseCommand(c, tokens);
+		// Statements about themselves first: "I love chopping trees" is not an order to chop.
+		ParseResult shared = parseShare(c);
+		if (shared != null) {
+			return shared;
+		}
+		ParseResult command = FEELING.matcher(c).find() ? null : parseCommand(c, tokens);
 		if (command != null) {
 			return command;
 		}
@@ -160,6 +221,9 @@ public final class CommandParser {
 		String first = tokens.get(0);
 		if (UNSUPPORTED_VERBS.contains(first)) {
 			return new ParseResult.Unsupported(first);
+		}
+		if (message.trim().endsWith("?") || QUESTION_WORDS.contains(first)) {
+			return new ParseResult.Talk(TalkTopic.QUESTION);
 		}
 		return new ParseResult.Unrecognised();
 	}
@@ -182,6 +246,10 @@ public final class CommandParser {
 		}
 		if (STATUS.matcher(c).find()) {
 			return command(Intent.of(IntentType.STATUS));
+		}
+		ParseResult work = parseWork(c);
+		if (work != null) {
+			return work;
 		}
 		if (COME.matcher(c).matches()) {
 			return command(Intent.of(IntentType.COME));
@@ -292,12 +360,103 @@ public final class CommandParser {
 		return null;
 	}
 
+	/** Building and digging: "build a shelter", "bridge this gap", "go mining", "dig down 20". */
+	private static ParseResult parseWork(String c) {
+		Matcher digits = DIGITS.matcher(c);
+		Integer length = digits.find() ? Integer.valueOf(digits.group(1)) : null;
+		if (MINE_DOWN.matcher(c).find()) {
+			return command(Intent.mine("down", length));
+		}
+		if (MINE_TUNNEL.matcher(c).find()) {
+			return command(Intent.mine("tunnel", length));
+		}
+		if (MINE_TRIP.matcher(c).find()) {
+			return command(Intent.mine("trip", length));
+		}
+		if (BRIDGE_VERB.matcher(c).find()) {
+			return command(Intent.build("bridge"));
+		}
+		Matcher build = BUILD.matcher(c);
+		if (build.matches()) {
+			String thing = build.group("thing");
+			boolean known = thing != null && thing.matches(".*\\b(shelter|hut|house|cabin|home|shack|base|cottage|hideout|tent|room|wall|barrier|barricade|bridge|walkway)s?\\b.*");
+			// "make" is mostly crafting ("make a sword"), so it only counts for things we can build.
+			if (known || !c.startsWith("make") && !c.startsWith("knock")) {
+				return command(Intent.build(thing));
+			}
+		}
+		return null;
+	}
+
+	private static ParseResult parseShare(String c) {
+		if (S_FORGET.matcher(c).find()) {
+			return new ParseResult.Share(FactKind.FORGET_NAME, "");
+		}
+		Matcher nickname = S_NICKNAME.matcher(c);
+		if (nickname.matches()) {
+			Optional<String> name = Answers.nickname(nickname.group("v"));
+			return name.map(n -> (ParseResult) new ParseResult.Share(FactKind.NICKNAME, n)).orElse(null);
+		}
+		for (Pattern pattern : List.of(S_FAVOURITE_OF, S_LIKE, S_LIKE_AFTER)) {
+			Matcher like = pattern.matcher(c);
+			if (like.matches()) {
+				return fact(FactKind.LIKE, like.group("v"));
+			}
+		}
+		Matcher dislike = S_DISLIKE.matcher(c);
+		if (dislike.matches()) {
+			return fact(FactKind.DISLIKE, dislike.group("v"));
+		}
+		return null;
+	}
+
+	/** A like or dislike, unless it's really about the companion or the moment (then it's small talk). */
+	private static ParseResult fact(FactKind kind, String value) {
+		return Answers.cleanThing(value).map(thing -> (ParseResult) new ParseResult.Share(kind, thing)).orElse(null);
+	}
+
 	private static TalkTopic parseTopic(String c, List<String> tokens) {
+		if (T_HELP.matcher(c).find()) {
+			return TalkTopic.HELP;
+		}
+		if (T_ABOUT_ME.matcher(c).find()) {
+			return TalkTopic.ABOUT_ME;
+		}
+		if (T_BOND.matcher(c).find()) {
+			return TalkTopic.BOND;
+		}
 		if (T_HOW.matcher(c).find()) {
 			return TalkTopic.HOW;
 		}
+		if (T_STORY.matcher(c).find()) {
+			return TalkTopic.STORY;
+		}
 		if (T_WHO.matcher(c).find()) {
 			return TalkTopic.WHO;
+		}
+		if (T_YES.matcher(c).matches()) {
+			return TalkTopic.YES;
+		}
+		if (T_NO.matcher(c).matches()) {
+			return TalkTopic.NO;
+		}
+		if (T_PLAN.matcher(c).find()) {
+			return TalkTopic.PLAN;
+		}
+		if (T_SAD.matcher(c).find()) {
+			return TalkTopic.SAD;
+		}
+		if (T_FONDNESS.matcher(c).find()) {
+			return TalkTopic.FONDNESS;
+		}
+		if (T_PLACE.matcher(c).find()) {
+			return TalkTopic.PLACE;
+		}
+		if (T_LAUGH.matcher(c).find()) {
+			return TalkTopic.LAUGH;
+		}
+		if (T_FOOD.matcher(c).find()) {
+			return TalkTopic.FOOD;
 		}
 		if (T_JOKE.matcher(c).find()) {
 			return TalkTopic.JOKE;

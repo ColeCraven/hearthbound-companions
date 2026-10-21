@@ -6,9 +6,12 @@ import io.github.tekless.hearthbound.client.render.CompanionRenderer;
 import io.github.tekless.hearthbound.entity.CompanionEntity;
 import io.github.tekless.hearthbound.network.PartyStatusPayload;
 import io.github.tekless.hearthbound.registry.ModEntities;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -22,6 +25,7 @@ import net.minecraft.world.phys.HitResult;
 
 public final class HearthboundClient implements ClientModInitializer {
 	private static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(Hearthbound.id("main"));
+	private static final Pattern AT_NAME = Pattern.compile("(?:^|\\s)@([A-Za-z]+)");
 	private static KeyMapping talkKey;
 	private static KeyMapping hudKey;
 	private static boolean hudVisible = true;
@@ -45,6 +49,8 @@ public final class HearthboundClient implements ClientModInitializer {
 
 		ClientPlayNetworking.registerGlobalReceiver(PartyStatusPayload.TYPE, (payload, context) -> PartyHud.update(payload));
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> PartyHud.clear());
+		// "@Bram join me" makes Bram the one the talk key fills in next, even before the party list updates.
+		ClientSendMessageEvents.CHAT.register(HearthboundClient::rememberAddressee);
 		HudElementRegistry.addLast(Hearthbound.id("party"), PartyHud::render);
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -83,6 +89,21 @@ public final class HearthboundClient implements ClientModInitializer {
 			lastAddressed = name;
 		}
 		client.gui.setScreen(new ChatScreen(name == null ? "@" : "@" + name + " ", false));
+	}
+
+	private static void rememberAddressee(String message) {
+		Minecraft client = Minecraft.getInstance();
+		Matcher at = AT_NAME.matcher(message);
+		if (client.level == null || !at.find()) {
+			return;
+		}
+		String typed = at.group(1);
+		for (Entity entity : client.level.entitiesForRendering()) {
+			if (entity instanceof CompanionEntity companion && firstName(companion).equalsIgnoreCase(typed)) {
+				lastAddressed = firstName(companion);
+				return;
+			}
+		}
 	}
 
 	private static String firstName(CompanionEntity companion) {

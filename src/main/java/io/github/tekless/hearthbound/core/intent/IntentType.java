@@ -15,7 +15,11 @@ public enum IntentType {
 	STATUS,
 	INVENTORY,
 	RECRUIT,
-	DISMISS;
+	DISMISS,
+	/** Build a simple structure; the item names it ("shelter", "wall", "bridge"). */
+	BUILD,
+	/** Dig: the target is "tunnel", "down" or "trip" (down then along); the count is how far. */
+	MINE;
 
 	public String id() {
 		return name().toLowerCase(Locale.ROOT);

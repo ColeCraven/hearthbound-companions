@@ -343,15 +343,20 @@
       "{biome}. Real estate's cheap, at least."
     ],
     "talk.memory": [
-      "Remember {event}? I still tell that story. With improvements.",
-      "Ah, {event}. Good times. Profitable? Not really."
+      "Remember when {event}? I still tell that story. With improvements.",
+      "Ah, the time {event}. Good times. Profitable? Not really.",
+      "When {event}. Still my favourite story. The true version, anyway."
     ],
     "talk.generic": [
       "Sure, sure.",
       "If you say so, boss.",
       "Interesting. Is there money in it?",
       "Uh-huh. Anyway.",
-      "I'll pretend that made sense."
+      "I'll pretend that made sense.",
+      "Sure.",
+      "Mhm. Riveting.",
+      "Right, right.",
+      "Uh-huh. Hey, is that a chest?"
     ],
     "gift.received": [
       "A {item}? For me? Who are you trying to bribe?",
@@ -427,6 +432,287 @@
     "fail.protected": [
       "Rob the town in broad daylight? Even I've got standards. Further out.",
       "Not here. Too many witnesses. Let's go somewhere quieter."
+    ],
+    "talk.story": [
+      "Where I'm from? Here and there. Mostly there, until people started asking questions.",
+      "I grew up in a port town. Learned to swim, pick locks and run, in that order.",
+      "My family were honest folk. I'm the exception. Every family needs one.",
+      "There was a bastion, a lot of gold and a very angry piglin. That's how I ended up out here."
+    ],
+    "talk.place": [
+      "Nice. Know what would make it nicer? A buried treasure chest.",
+      "{biome}. Pretty. Probably full of loot nobody's bothered to find.",
+      "Lovely view. Bet I could sell it.",
+      "Not bad. Needs more gold."
+    ],
+    "talk.plan": [
+      "Shipwrecks. Lots of shipwrecks. Trust me.",
+      "Let's find a village and see what they're trading. And what they're not watching.",
+      "Desert temple? I know a trick for the pressure plate. Mostly.",
+      "Bored? Let's go somewhere we shouldn't."
+    ],
+    "talk.yes": [
+      "Now we're talking.",
+      "Knew you'd see it my way.",
+      "Deal.",
+      "Smart."
+    ],
+    "talk.no": [
+      "Your loss.",
+      "Fine, fine.",
+      "Spoilsport.",
+      "Worth a try."
+    ],
+    "talk.laugh": [
+      "I'm hilarious, I know.",
+      "Ha! Careful, I charge for comedy.",
+      "See, this is why I keep you around."
+    ],
+    "talk.fondness": [
+      "Aw. Careful, partner, I might start liking you back.",
+      "That's sweet. Still not splitting the emeralds evenly.",
+      "...Yeah. You're all right too. Don't spread it around."
+    ],
+    "talk.sad": [
+      "Hey, chin up. Nothing a little treasure can't fix.",
+      "Rough day? Had worse. Want to hear about the time I lost everything? Twice?",
+      "Come on. You've still got me. That's worth something. Quite a lot, actually."
+    ],
+    "talk.food": [
+      "Golden carrots. Fancy, I know.",
+      "I'll eat what's going. Especially if someone else paid for it.",
+      "Is there cake? There should be cake."
+    ],
+    "talk.question": [
+      "Good question. Here's a better one: what's it worth to you?",
+      "No idea. Want me to make something up?",
+      "Couldn't say. Wouldn't say, maybe.",
+      "Ask me again when there's money in it."
+    ],
+    "ack.build": [
+      "Building {thing}? For you, partner, sure.",
+      "{thing}. I've robbed nicer, but fine.",
+      "On it. {thing}, rogue-built."
+    ],
+    "done.build": [
+      "There. {thing}, all yours. Don't lean on it.",
+      "Done. {thing}. Rent's due Tuesday.",
+      "Finished. You owe me one."
+    ],
+    "fail.build_unknown": [
+      "That's a bit fancy for me. I can do {things}.",
+      "I'm a thief, not a carpenter. {things}, take it or leave it.",
+      "Nope. {things}. That's my whole catalogue."
+    ],
+    "fail.build_site": [
+      "Can't put {thing} here. {why}.",
+      "Bad spot, partner. {why}.",
+      "Not here. {why}."
+    ],
+    "fail.build_materials": [
+      "I'll need {need} blocks for {thing}. I've got {have}. You're buying.",
+      "{have} blocks? For {thing}? I need {need}.",
+      "Short {thing}, short blocks. {have} of {need}."
+    ],
+    "status.build": [
+      "Building {thing}. Don't rush genius.",
+      "Still on {thing}. Almost done."
+    ],
+    "ack.mine": [
+      "Mining! Let's find something shiny.",
+      "Down we go. Dibs on the diamonds.",
+      "Pickaxe out. There's treasure down there somewhere."
+    ],
+    "done.mine": [
+      "Done. Found {ores}. Fair split?",
+      "{count} blocks of rock for {ores}. Could be worse.",
+      "That's enough digging. {ores}, all ours."
+    ],
+    "fail.mine_hazard": [
+      "Whoa, {danger} ahead. I like treasure, not that much.",
+      "Stopping. {danger}. I've seen what that does.",
+      "Nope. {danger} behind this wall."
+    ],
+    "fail.mine_cave": [
+      "We've broken into a cave. Could be loot. Could be spiders. Stopping.",
+      "Cave ahead. Not walking into an ambush."
+    ],
+    "fail.mine_bottom": [
+      "That's bedrock. Even I can't pick that lock.",
+      "No deeper. World's got a floor."
+    ],
+    "fail.mine_full": [
+      "Pockets full! Got {ores} though.",
+      "Can't carry more. Shame."
+    ],
+    "status.mine": [
+      "Mining. {count} blocks in, still looking for shiny things.",
+      "Digging away. {count} blocks so far."
+    ],
+    "talk.help": [
+      "I fight, I fetch, I dig, I build a bit, and I find things. Mostly the finding.",
+      "Gathering, mining, building, stabbing. Also looting, but don't put that in writing."
+    ],
+    "fact.nickname": [
+      "{nick}. Got a nice ring to it. Very marketable.",
+      "{nick} it is, partner.",
+      "{nick}? I'd have gone with something flashier. But sure."
+    ],
+    "fact.like": [
+      "{thing}, huh? I'll keep my eyes open. For a small fee.",
+      "Noted. {thing}. Good to know what you can be bribed with.",
+      "{thing}. I'll remember. I remember everything worth anything.",
+      "{thing}. Good taste. Expensive taste, maybe."
+    ],
+    "fact.dislike": [
+      "{thing}? Noted. I'll steer us around it. Usually.",
+      "Can't stand {thing}? Me neither, now. Solidarity.",
+      "{thing}. Got it. I'll keep it off your back."
+    ],
+    "fact.forget": [
+      "Fine, fine. {player} again. Boring, but fine.",
+      "Back to {player}. I'll miss the other one."
+    ],
+    "talk.about_me": [
+      "Let's see what I've got on you. {facts}. Good file.",
+      "{facts}. See? I listen. When it suits me.",
+      "You want to know what I know? {facts}. That's a free sample."
+    ],
+    "talk.about_me.none": [
+      "You're {player}. That's the whole file. You're a mystery. I like that.",
+      "Honestly? Just your name, {player}. You keep your cards close."
+    ],
+    "talk.bond": [
+      "We're partners. That's better than friends. Partners share loot.",
+      "I like you fine, {player}. You haven't sold me out yet.",
+      "We're good. Mostly. Ask me after the next payday."
+    ],
+    "talk.bond.close": [
+      "You're the only person I'd split loot with evenly. Almost evenly.",
+      "Friends? Partner, you're the closest thing I've got to family.",
+      "I'd go back into a burning bastion for you. Once."
+    ],
+    "talk.bond.cold": [
+      "We're... working on it. You've been rough on the help.",
+      "I've had worse bosses. Not many, lately.",
+      "Let's just say I'm keeping my options open."
+    ],
+    "talk.bond.stranger": [
+      "We've barely met. Buy me something and we'll talk.",
+      "Friends? I don't even know your price yet."
+    ],
+    "talk.answer": [
+      "Ha. Fair enough.",
+      "Interesting. Might be money in that.",
+      "Huh. I'll file that away.",
+      "Sure, sure. I believe you."
+    ],
+    "talk.answer.good": [
+      "Good. Happy boss, happy crew.",
+      "Excellent. Let's go find something to borrow. Permanently.",
+      "Love to hear it."
+    ],
+    "talk.answer.bad": [
+      "Rough one? Stick with me. I'm very cheering. Ask anyone.",
+      "That's bad luck. It turns. Trust me, I'd know.",
+      "Sorry, partner. Want to hear about the time I got stuck in a minecart for a week?"
+    ],
+    "ask.nickname": [
+      "So what do people call you? The good name, not the wanted poster one.",
+      "Partner, what should I call you? Pick something I can shout.",
+      "Got a nickname? Everyone worth knowing has one."
+    ],
+    "ask.nickname.skip": [
+      "{player} it is. Keeps things simple.",
+      "Mysterious. I respect it. {player} it is."
+    ],
+    "ask.skip": [
+      "Playing it close. Smart.",
+      "Fine, keep your secrets. I'll find out anyway."
+    ],
+    "ask.like": [
+      "What's your weakness, partner? Gold? Emeralds? Cake?",
+      "If I found you a present, what would you want it to be?",
+      "What's the best thing you've ever found out here?"
+    ],
+    "ask.dislike": [
+      "What do you hate most? Asking for professional reasons.",
+      "Anything you'd pay me to keep away from you?",
+      "What's your worst nightmare out here? Honest answer."
+    ],
+    "ask.how": [
+      "How you holding up, boss?",
+      "You doing all right? You've got that look.",
+      "How's life treating you today, partner?"
+    ],
+    "ask.open": [
+      "If you could rob anyone in this world, who would it be? Hypothetically.",
+      "Ever think about what we'll do with all the loot?",
+      "You believe in luck? Or do you make your own?"
+    ],
+    "recall.liked": [
+      "Look at this. Didn't you say you liked {thing}? I remember these things.",
+      "{thing}. You mentioned it. Consider this place my gift to you."
+    ],
+    "recall.liked_find": [
+      "{item}, right there. You said you liked {thing}. Finder's fee is negotiable.",
+      "Psst. {item}. You told me you liked {thing}."
+    ],
+    "recall.disliked": [
+      "{mob}, close. I know, I know, you hate {thing}. I'm on it.",
+      "Bad news, partner. {mob}. Your least favourite."
+    ],
+    "react.level": [
+      "Level {level}! You're worth more every day.",
+      "{level} levels. Want me to hold some? No? Fair.",
+      "Level {level}. Look at you go."
+    ],
+    "react.diamonds": [
+      "Diamonds! Hold them up to the light. Beautiful.",
+      "Now that's what I call a payday.",
+      "Diamonds. I'm not saying split them. I'm just saying I was here."
+    ],
+    "react.sleep": [
+      "Sweet dreams. I'll keep watch. And my hands to myself.",
+      "Get some sleep. I'll be here.",
+      "Night, partner. Don't let the phantoms bite."
+    ],
+    "react.wake": [
+      "Morning, partner! Sleep well?",
+      "Rise and shine. How'd you sleep?",
+      "You're up! Good night's sleep?"
+    ],
+    "react.player_died": [
+      "{player}! No! Who's going to pay me?",
+      "Partner! No!",
+      "{player}! Not like this!"
+    ],
+    "react.respawn": [
+      "There you are! Don't scare me like that. I almost got sentimental.",
+      "Back from the dead. Nice trick. Teach me sometime.",
+      "You're back! Good. I was this close to crying. Not really. A bit."
+    ],
+    "react.advancement": [
+      "{advancement}. Smooth.",
+      "Nice, {advancement}. I'll tell people I taught you that.",
+      "{advancement}! Look at you, collecting trophies."
+    ],
+    "react.challenge": [
+      "{advancement}?! Partner, that's legendary. It's going in the stories.",
+      "You pulled off {advancement}. Remind me never to bet against you."
+    ],
+    "gesture.crouch": [
+      "Ha! The secret handshake. Back at you.",
+      "Crouching at me? Partner, I invented that.",
+      "Hello to you too, {player}."
+    ],
+    "gift.food": [
+      "You look hungry. Here, {item}. On the house, just this once.",
+      "Eat this. {item}. Don't ask where I got it."
+    ],
+    "gift.flower": [
+      "Here. Picked this {item}. Don't tell anyone I'm sweet.",
+      "For you. This {item}. Free of charge, for once."
     ]
   }
 }

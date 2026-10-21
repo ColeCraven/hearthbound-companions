@@ -68,6 +68,8 @@ public final class CompanionCommands {
 														StringArgumentType.getString(ctx, "skin"), StringArgumentType.getString(ctx, "model"))))))));
 
 		root.then(Commands.literal("list").executes(CompanionCommands::list));
+		root.then(Commands.literal("help").executes(CompanionCommands::help));
+		root.executes(CompanionCommands::help);
 
 		for (IntentType type : List.of(IntentType.RECRUIT, IntentType.DISMISS, IntentType.FOLLOW, IntentType.WAIT, IntentType.COME,
 				IntentType.CANCEL, IntentType.STATUS, IntentType.GIVE, IntentType.INVENTORY)) {
@@ -187,6 +189,13 @@ public final class CompanionCommands {
 		level.addFreshEntity(companion);
 		ctx.getSource().sendSuccess(() -> Component.literal("Summoned " + companion.companionName() + " the "
 				+ companion.archetype().displayName() + ". Say \"@" + companion.companionName() + " join me\" to recruit them."), false);
+		return 1;
+	}
+
+	private static int help(CommandContext<CommandSourceStack> ctx) {
+		for (Component line : HelpText.lines()) {
+			ctx.getSource().sendSuccess(() -> line, false);
+		}
 		return 1;
 	}
 

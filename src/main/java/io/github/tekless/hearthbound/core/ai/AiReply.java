@@ -24,11 +24,11 @@ public record AiReply(String reply, Optional<Intent> intent) {
 			  "type": "object",
 			  "properties": {
 			    "reply": {"type": "string", "description": "What you say out loud: 1-2 short sentences, in character."},
-			    "intent": {"type": "string", "enum": ["none", "follow", "wait", "come", "gather", "cancel", "give", "attack", "status", "recruit", "dismiss"],
+			    "intent": {"type": "string", "enum": ["none", "follow", "wait", "come", "gather", "cancel", "give", "attack", "status", "recruit", "dismiss", "build", "mine"],
 			               "description": "An action you agree to start now, or none."},
-			    "item": {"anyOf": [{"type": "string"}, {"type": "null"}], "description": "For gather/give: the item, e.g. oak logs, cobblestone, iron. Otherwise null."},
-			    "count": {"anyOf": [{"type": "integer"}, {"type": "null"}], "description": "For gather/give: how many. Otherwise null."},
-			    "target": {"anyOf": [{"type": "string"}, {"type": "null"}], "description": "For attack: the creature, e.g. zombie. Otherwise null."}
+			    "item": {"anyOf": [{"type": "string"}, {"type": "null"}], "description": "For gather/give: the item, e.g. oak logs, cobblestone, iron. For build: shelter, wall or bridge. Otherwise null."},
+			    "count": {"anyOf": [{"type": "integer"}, {"type": "null"}], "description": "For gather/give: how many. For mine: how many blocks to dig. Otherwise null."},
+			    "target": {"anyOf": [{"type": "string"}, {"type": "null"}], "description": "For attack: the creature, e.g. zombie. For mine: tunnel, down, or trip (down then along). Otherwise null."}
 			  },
 			  "required": ["reply", "intent", "item", "count", "target"],
 			  "additionalProperties": false

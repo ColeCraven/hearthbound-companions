@@ -82,6 +82,9 @@ public class CompanionGameTests {
 		original.memory().addPlayerLine("hello there");
 		original.memory().addCompanionLine("Well met.");
 		original.memory().addEvent("fought a zombie with {player}");
+		original.factsAbout(player).setNickname("Cap");
+		original.factsAbout(player).like("the sea");
+		original.factsAbout(player).dislike("spiders");
 
 		ServerLevel level = helper.getLevel();
 		TagValueOutput out = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
@@ -101,6 +104,9 @@ public class CompanionGameTests {
 		helper.assertValueEqual(copy.countCarried(s -> s.is(Items.OAK_LOG)), 12, "inventory");
 		helper.assertValueEqual(copy.memory().lines().size(), 2, "conversation lines");
 		helper.assertValueEqual(copy.memory().events().size(), original.memory().events().size(), "events");
+		helper.assertValueEqual(copy.callName(player), "Cap", "nickname");
+		helper.assertValueEqual(copy.factsAbout(player).likes(), java.util.List.of("the sea"), "likes");
+		helper.assertValueEqual(copy.factsAbout(player).dislikes(), java.util.List.of("spiders"), "dislikes");
 		removePlayer(helper, player);
 		helper.succeed();
 	}

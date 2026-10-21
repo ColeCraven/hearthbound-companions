@@ -33,6 +33,8 @@ public interface CompanionOrder {
 		GATHER,
 		GIVE,
 		ATTACK,
+		MINE,
+		BUILD,
 		HOME;
 
 		/** Follow and wait are standing modes; the others are tasks that end. */

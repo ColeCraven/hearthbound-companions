@@ -1,13 +1,19 @@
 package io.github.tekless.hearthbound.world;
 
 import io.github.tekless.hearthbound.Hearthbound;
+import io.github.tekless.hearthbound.core.intent.QuestionKind;
+import io.github.tekless.hearthbound.core.memory.PlayerFacts;
 import io.github.tekless.hearthbound.core.persona.Archetype;
 import io.github.tekless.hearthbound.dialogue.Conversations;
 import io.github.tekless.hearthbound.entity.CompanionEntity;
 import io.github.tekless.hearthbound.network.HearthboundNetwork;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.WeakHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
@@ -16,6 +22,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -45,7 +55,16 @@ public final class AmbientChatter {
 		boolean suggestedEat;
 		long shelterDay = -1;
 		long lastCarry = -100000;
+		long lastQuestion = -100000;
+		long lastDislike = -100000;
+		long flowerDay = -1;
+		/** Likes already brought up, and when, so "you said you loved the ocean" isn't said at every beach. */
+		final Map<String, Long> recalled = new HashMap<>();
 	}
+
+	/** Food a friend wouldn't hand you. */
+	private static final Set<Item> BAD_FOOD = Set.of(Items.ROTTEN_FLESH, Items.SPIDER_EYE, Items.POISONOUS_POTATO, Items.PUFFERFISH,
+			Items.SUSPICIOUS_STEW, Items.CHORUS_FRUIT);
 
 	private AmbientChatter() {
 	}
@@ -101,6 +120,15 @@ public final class AmbientChatter {
 		int food = player.getFoodData().getFoodLevel();
 		if (food <= 6 && !state.suggestedEat) {
 			state.suggestedEat = true;
+			Optional<ItemStack> snack = bestFood(companion);
+			if (snack.isPresent() && companion.distanceTo(player) < 6) {
+				Item item = snack.get().getItem();
+				String name = snack.get().getHoverName().getString().toLowerCase(java.util.Locale.ROOT);
+				int given = companion.giveTo(player, stack -> stack.is(item), 3);
+				if (given > 0) {
+					return speak(companion, state, "gift.food", Map.of("item", name), true);
+				}
+			}
 			return speak(companion, state, "suggest.eat", Map.of(), true);
 		}
 		if (food > 12) {
@@ -119,7 +147,41 @@ public final class AmbientChatter {
 			state.lastCarry = now;
 			return speak(companion, state, "suggest.carry", Map.of(), true);
 		}
+		return state.cooldown <= 0 && giveFlower(player, companion, state, day);
+	}
+
+	/** Once a day at most, a companion who likes you hands over a flower they picked on the way. */
+	private static boolean giveFlower(ServerPlayer player, CompanionEntity companion, State state, long day) {
+		int affinity = companion.memory().affinity();
+		boolean fond = affinity >= 40 || (affinity >= 10 && (companion.archetype() == Archetype.NATURALIST || companion.archetype() == Archetype.FARMHAND));
+		if (!fond || state.flowerDay == day || companion.distanceTo(player) > 5 || companion.getRandom().nextInt(30) != 0) {
+			return false;
+		}
+		for (ItemStack stack : companion.inventory().getItems()) {
+			if (stack.is(net.minecraft.tags.BlockItemTags.SMALL_FLOWERS.item())) {
+				Item flower = stack.getItem();
+				String name = stack.getHoverName().getString().toLowerCase(java.util.Locale.ROOT);
+				if (companion.giveTo(player, s -> s.is(flower), 1) > 0) {
+					state.flowerDay = day;
+					companion.wave();
+					return speak(companion, state, "gift.flower", Map.of("item", name), false);
+				}
+			}
+		}
 		return false;
+	}
+
+	private static Optional<ItemStack> bestFood(CompanionEntity companion) {
+		ItemStack best = null;
+		int bestNutrition = 0;
+		for (ItemStack stack : companion.inventory().getItems()) {
+			FoodProperties food = stack.get(DataComponents.FOOD);
+			if (food != null && !BAD_FOOD.contains(stack.getItem()) && food.nutrition() > bestNutrition) {
+				best = stack;
+				bestNutrition = food.nutrition();
+			}
+		}
+		return Optional.ofNullable(best);
 	}
 
 	private static State initialState(CompanionEntity companion) {
@@ -143,6 +205,15 @@ public final class AmbientChatter {
 			}
 			if (mob instanceof Mob hostile && hostile.getTarget() == player && isBehind(player, mob)) {
 				return speak(companion, state, "callout.hostile_behind", Map.of("mob", mob.getName().getString().toLowerCase()), true);
+			}
+			long now = level.getGameTime();
+			if (now - state.lastDislike > 6000) {
+				String name = mob.getName().getString().toLowerCase();
+				Optional<String> hated = facts(player, companion).flatMap(f -> f.dislikedMatch(name));
+				if (hated.isPresent()) {
+					state.lastDislike = now;
+					return speak(companion, state, "recall.disliked", Map.of("thing", hated.get(), "mob", name), true);
+				}
 			}
 		}
 		if (player.getHealth() <= 6 && !state.warnedLowHealth) {
@@ -179,7 +250,13 @@ public final class AmbientChatter {
 		} else if (underground && !state.wasUnderground) {
 			key = "ambient.cave";
 		} else if (!biome.equals(state.lastBiome)) {
-			key = biomeKey(level, companion);
+			Optional<String> loved = recall(player, companion, state, biome);
+			if (loved.isPresent()) {
+				key = "recall.liked";
+				vars = Map.of("thing", loved.get());
+			} else {
+				key = biomeKey(level, companion);
+			}
 		}
 		state.wasNight = night;
 		state.wasRaining = raining;
@@ -189,8 +266,17 @@ public final class AmbientChatter {
 			String spotted = spotInteresting(level, companion);
 			if (spotted != null) {
 				key = spotted.startsWith("ore:") ? "callout.ore" : "callout.chest";
-				vars = Map.of("item", spotted.startsWith("ore:") ? spotted.substring(4) : "chest");
+				String item = spotted.startsWith("ore:") ? spotted.substring(4) : "chest";
+				vars = Map.of("item", item);
+				Optional<String> loved = recall(player, companion, state, item);
+				if (loved.isPresent()) {
+					key = "recall.liked_find";
+					vars = Map.of("item", item, "thing", loved.get());
+				}
 			} else if (companion.getRandom().nextInt(4) == 0) {
+				if (companion.getRandom().nextInt(5) < 2 && askSomething(player, companion, state)) {
+					return true;
+				}
 				key = "ambient.idle";
 			}
 		}
@@ -204,6 +290,53 @@ public final class AmbientChatter {
 			state.cooldown = (int) (base / Math.max(0.25, chatter));
 		}
 		return spoke;
+	}
+
+	/**
+	 * In a quiet moment, asks the player something about themselves, and remembers the answer
+	 * (see Conversations#answer). Only one-on-one, never mid-conversation or mid-task.
+	 */
+	private static boolean askSomething(ServerPlayer player, CompanionEntity companion, State state) {
+		long now = companion.level().getGameTime();
+		if (now - state.lastQuestion < 6000 || !companion.isOwnedBy(player) || companion.distanceTo(player) > 10 || companion.getTarget() != null
+				|| !companion.order().kind().isMode() || player.isSleeping() || Conversations.isChatting(player) || !Conversations.aloneWithCompanions(player)) {
+			return false;
+		}
+		PlayerFacts facts = companion.factsAbout(player);
+		java.util.List<QuestionKind> options = new java.util.ArrayList<>(java.util.List.of(QuestionKind.HOW, QuestionKind.OPEN));
+		if (facts.nickname().isEmpty() && companion.memory().affinity() >= 5) {
+			options.add(QuestionKind.NICKNAME);
+			options.add(QuestionKind.NICKNAME);
+		}
+		if (facts.likes().size() < 3) {
+			options.add(QuestionKind.LIKE);
+			options.add(QuestionKind.LIKE);
+		}
+		if (facts.dislikes().size() < 2) {
+			options.add(QuestionKind.DISLIKE);
+		}
+		QuestionKind kind = options.get(companion.getRandom().nextInt(options.size()));
+		state.lastQuestion = now;
+		companion.ask(player, kind, "ask." + kind.name().toLowerCase(java.util.Locale.ROOT), Map.of());
+		Conversations.beginChat(player, companion);
+		Archetype.Chattiness chattiness = companion.archetype().chattiness();
+		state.cooldown = Math.max(state.cooldown, chattiness.minTicks());
+		return true;
+	}
+
+	/** Something the player said they love, if it's right here (and hasn't been mentioned in the last day). */
+	private static Optional<String> recall(ServerPlayer player, CompanionEntity companion, State state, String worldThing) {
+		long now = companion.level().getGameTime();
+		Optional<String> loved = facts(player, companion).flatMap(f -> f.likedMatch(worldThing));
+		if (loved.isEmpty() || now - state.recalled.getOrDefault(loved.get(), -100000L) < 24000) {
+			return Optional.empty();
+		}
+		state.recalled.put(loved.get(), now);
+		return loved;
+	}
+
+	private static Optional<PlayerFacts> facts(ServerPlayer player, CompanionEntity companion) {
+		return companion.isOwnedBy(player) ? companion.memory().knownFacts(player.getUUID().toString()) : Optional.empty();
 	}
 
 	private static String biomeKey(ServerLevel level, CompanionEntity companion) {

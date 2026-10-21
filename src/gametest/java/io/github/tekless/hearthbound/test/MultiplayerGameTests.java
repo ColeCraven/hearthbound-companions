@@ -58,6 +58,12 @@ public class MultiplayerGameTests {
 		return companion;
 	}
 
+	/** Where a player looks follows their head, so turn both. */
+	private static void turn(ServerPlayer player, float yaw) {
+		player.setYRot(yaw);
+		player.setYHeadRot(yaw);
+	}
+
 	/** Runs the test body with a temporary server config, restoring the old one afterwards. */
 	private static HearthboundConfig.Server swapServerConfig(HearthboundConfig.Server replacement) {
 		HearthboundConfig.Server old = Hearthbound.config().server;
@@ -176,6 +182,34 @@ public class MultiplayerGameTests {
 		} finally {
 			swapServerConfig(old);
 		}
+		helper.succeed();
+	}
+
+	@GameTest(maxTicks = 40)
+	public void plainChatCarriesOnAConversation(GameTestHelper helper) {
+		floor(helper);
+		ServerPlayer talker = player(helper, 1.5, 1.5);
+		CompanionEntity companion = companion(helper, "Wulf", 3.5, 3.5);
+		// Other tests run beside this one, so their players count as "people around": face Wulf.
+		talker.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, companion.getEyePosition());
+		helper.assertTrue(Conversations.onChat(talker, "@wulf hello"), "addressed by name");
+		helper.assertTrue(Conversations.onChat(talker, "how are you?"), "then no @ needed");
+		helper.assertTrue(Conversations.onChat(talker, "tell me about your family"), "still talking");
+		helper.assertTrue(companion.memory().lines().stream().anyMatch(l -> l.fromPlayer() && l.text().equals("tell me about your family")),
+				"the companion heard it");
+		helper.assertFalse(Conversations.onChat(talker, "look at this @Steve"), "a message for another player stays theirs");
+
+		// With a friend around, plain chat only goes to the companion while you're facing them.
+		ServerPlayer friend = player(helper, 6.5, 1.5);
+		float facing = talker.getYRot();
+		turn(talker, facing + 180); // turned away from Wulf
+		helper.assertFalse(Conversations.onChat(talker, "lol nice"), "chat with a friend isn't taken over");
+		turn(talker, facing);
+		helper.assertTrue(Conversations.onChat(talker, "lol nice"), "facing the companion, it's for them");
+		Conversations.onChat(talker, "bye");
+		turn(talker, facing + 180);
+		helper.assertFalse(Conversations.onChat(talker, "anyway"), "bye ends the conversation");
+		remove(helper, talker, friend);
 		helper.succeed();
 	}
 

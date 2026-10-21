@@ -349,15 +349,20 @@
       "{biome}! I've never been anywhere like it. Well, I've never been anywhere."
     ],
     "talk.memory": [
-      "Remember {event}? I told the chickens about it. In my head.",
-      "I keep thinking about {event}. Was I brave? I think I was brave."
+      "Remember when {event}? I told the chickens about it. In my head.",
+      "I keep thinking about when {event}. Was I brave? I think I was brave.",
+      "Ooh, remember when {event}? That was the best."
     ],
     "talk.generic": [
       "Oh! Okay!",
       "Huh. I never thought of that.",
       "That's a lot to think about.",
       "Okay! I think I understand. Mostly.",
-      "Really? Wow."
+      "Really? Wow.",
+      "Oh, really?",
+      "Wow!",
+      "Hehe. Okay!",
+      "I'm listening! Sorry, I was looking at a sheep."
     ],
     "gift.received": [
       "For me? A {item}! Thank you!",
@@ -436,6 +441,288 @@
     "fail.protected": [
       "Not here! Somebody worked hard on all this. Let's find a field or a forest.",
       "I can't dig up people's home! Somewhere out in the wild, maybe?"
+    ],
+    "talk.story": [
+      "I grew up on a farm by a river. Cows, sheep, my gran, and too many chickens.",
+      "My gran raised me. She makes the best bread in the whole valley. I'm still learning.",
+      "I'd never been past the next village before I met you. Now look at me! Well, don't look too close.",
+      "Why did I leave home? I wanted to see the ocean. I still haven't. Is it big?"
+    ],
+    "talk.place": [
+      "It's so pretty here! Do you think the soil's good?",
+      "{biome}! My gran wouldn't believe me if I told her.",
+      "I like it! It smells like after rain.",
+      "It's lovely. I wish I could bring the cows."
+    ],
+    "talk.plan": [
+      "We could build a little shelter! Somewhere cosy. With a sheep outside. Or two sheep.",
+      "Let's find a village! I like villages. They have bread.",
+      "Fishing? I'm good at fishing. Well, I'm good at sitting by water.",
+      "Could we go somewhere that isn't a cave? Please?"
+    ],
+    "talk.yes": [
+      "Yay!",
+      "Okay!",
+      "Oh, good!",
+      "Hooray!"
+    ],
+    "talk.no": [
+      "Oh. Okay.",
+      "That's all right!",
+      "Aw. Maybe later?",
+      "Okay, never mind!"
+    ],
+    "talk.laugh": [
+      "Hee! That's funny!",
+      "Hehe, you sound like my gran when she laughs.",
+      "I'm laughing too! I don't know why!"
+    ],
+    "talk.fondness": [
+      "Really? Oh! I like you too! You're my best friend out here.",
+      "That's the nicest thing! I'm going to tell the next cow I meet.",
+      "Aw. I'm so glad I came with you."
+    ],
+    "talk.sad": [
+      "Oh no. Do you want a hug? I give good hugs. Gran says so.",
+      "When I'm sad I bake bread. Want me to bake you some bread?",
+      "It's okay. Tomorrow's a new day. The sun always comes up. Even after creepers."
+    ],
+    "talk.food": [
+      "Bread! Warm bread. With butter if we had butter.",
+      "Pumpkin pie is the best food in the whole world.",
+      "I'm always hungry. Is that normal? I think it's normal."
+    ],
+    "talk.question": [
+      "Um. I don't know! Sorry!",
+      "That's a hard one. My gran would know.",
+      "I'm not sure. Do you know?",
+      "Ooh. Hm. No idea!"
+    ],
+    "ack.build": [
+      "Ooh! I can build {thing}! I think!",
+      "{thing}? Okay! My gran built a whole barn once.",
+      "Building {thing}! Stand back, I'm not very good."
+    ],
+    "done.build": [
+      "I did it! {thing}! Look!",
+      "All done! {thing}. It's a bit wonky. Is that okay?",
+      "Finished! Can we put a sheep in it?"
+    ],
+    "fail.build_unknown": [
+      "Oh. I don't know how to build that. I can do {things}!",
+      "Um, that's too hard for me. {things}?",
+      "I only know {things}. Sorry!"
+    ],
+    "fail.build_site": [
+      "I can't build {thing} here! {why}.",
+      "Not here, sorry. {why}.",
+      "Oh no, {why}. Somewhere else?"
+    ],
+    "fail.build_materials": [
+      "I need {need} blocks for {thing}, but I've only got {have}!",
+      "Not enough blocks! {have} out of {need}.",
+      "Could you give me some blocks? I need {need} and I have {have}."
+    ],
+    "status.build": [
+      "I'm building {thing}! It's going okay!",
+      "Still building {thing}. Don't look yet!"
+    ],
+    "ack.mine": [
+      "Mining? Okay... I'll be brave.",
+      "Down into the dark. Okay. Okay okay okay.",
+      "I'll dig! Can we put torches up? Lots of torches?"
+    ],
+    "done.mine": [
+      "Done! We found {ores}! Can we go back up now?",
+      "{count} blocks! And {ores}! I was so brave.",
+      "All done. {ores}. I'm going to tell Gran."
+    ],
+    "fail.mine_hazard": [
+      "There's {danger} back there! Nope! No thank you!",
+      "Stop! {danger}! I'm not digging into that!",
+      "Eek. {danger}. I'm stopping."
+    ],
+    "fail.mine_cave": [
+      "We dug into a cave! It's so dark! Can we not go in?",
+      "Oh no, a big cave. I'm stopping here."
+    ],
+    "fail.mine_bottom": [
+      "I can't dig any further! It's too hard!",
+      "That's the bottom of the world, I think."
+    ],
+    "fail.mine_full": [
+      "My bag's full! We got {ores} though!",
+      "I can't carry any more! Help?"
+    ],
+    "status.mine": [
+      "Digging! {count} blocks. It's very dark.",
+      "Still mining. {count} blocks so far. Mostly rock."
+    ],
+    "talk.help": [
+      "I can follow you, carry things, chop wood, dig, build a little shelter, and pet every animal we meet!",
+      "Lots of farm stuff! Gathering, digging, building small things. And I'm good at hugs."
+    ],
+    "fact.nickname": [
+      "{nick}! That's a great name!",
+      "Ooh, {nick}. I'll remember! I'm good at names. Mostly.",
+      "{nick} it is!"
+    ],
+    "fact.like": [
+      "{thing}! I'll remember that!",
+      "Ooh, {thing}. Good one!",
+      "{thing}! I'll keep an eye out!",
+      "Yay, {thing}! I'll tell the chickens. In my head."
+    ],
+    "fact.dislike": [
+      "{thing}? Ew. Okay, I'll tell you if I see any.",
+      "Got it! I'll keep {thing} away. If I can.",
+      "{thing}? Yeah, I don't blame you."
+    ],
+    "fact.forget": [
+      "Okay! {player} again!",
+      "Oops, sorry! {player} it is."
+    ],
+    "talk.about_me": [
+      "I know lots! {facts}. Did I get it?",
+      "Um, let me think. {facts}! Right?",
+      "{facts}. See? I remember stuff!"
+    ],
+    "talk.about_me.none": [
+      "You're {player}! And um. That's it. Tell me more stuff!",
+      "Just your name, {player}. You never tell me anything!"
+    ],
+    "talk.bond": [
+      "Of course I like you! You're my friend!",
+      "We're friends! I think. Are we? Yes. We are.",
+      "I like you lots, {player}."
+    ],
+    "talk.bond.close": [
+      "You're my best friend in the whole world! Even more than the cows.",
+      "Yes! A hundred times yes! Best friends!",
+      "I'd follow you anywhere. Even into a cave. Even a dark one."
+    ],
+    "talk.bond.cold": [
+      "I still like you. You just make it a bit hard sometimes.",
+      "Um. We're okay? I think? You've been a bit mean.",
+      "I want to be friends. Can we try being nicer?"
+    ],
+    "talk.bond.stranger": [
+      "We only just met! But you seem nice!",
+      "I don't know you yet! Let's go on an adventure and find out!"
+    ],
+    "talk.answer": [
+      "Ooh! Okay!",
+      "Huh! I never thought of that.",
+      "Really? Wow.",
+      "Ha! That's a good answer."
+    ],
+    "talk.answer.good": [
+      "Yay! That makes me happy too!",
+      "Good! Good good good.",
+      "That's the best! Me too, now."
+    ],
+    "talk.answer.bad": [
+      "Aw, no. Do you want a hug? I give good hugs.",
+      "That's sad. My gran says a good sleep fixes most things.",
+      "Oh no. Stay with me, I'll cheer you up!"
+    ],
+    "ask.nickname": [
+      "What should I call you? Something nice?",
+      "Do you have a nickname? My gran calls me Sprout.",
+      "Um, what do your friends call you?"
+    ],
+    "ask.nickname.skip": [
+      "Okay! {player} is nice anyway!",
+      "That's fine! I like {player}."
+    ],
+    "ask.skip": [
+      "Okay! You can tell me later!",
+      "That's okay! It's a hard question."
+    ],
+    "ask.like": [
+      "What's your favourite thing in the whole world?",
+      "Ooh, what's your favourite animal? Mine's all of them.",
+      "What do you like best out here?"
+    ],
+    "ask.dislike": [
+      "What's the worst thing out here? I think it's spiders. What's yours?",
+      "Is there anything you really really don't like?",
+      "What scares you? It's okay, I'm scared of lots of things."
+    ],
+    "ask.how": [
+      "How are you feeling? Good? I hope good.",
+      "Are you okay? You can tell me.",
+      "How's your day been, {player}?"
+    ],
+    "ask.open": [
+      "Do you think cows have best friends?",
+      "If you had a farm, what would you grow?",
+      "Do you miss home? I miss home sometimes."
+    ],
+    "recall.liked": [
+      "Look! You said you liked {thing}! Isn't it nice?",
+      "{thing}! You told me about that! Yay!"
+    ],
+    "recall.liked_find": [
+      "{item}! You said you liked {thing}! Look!",
+      "Ooh, {item}. I remembered you like {thing}!"
+    ],
+    "recall.disliked": [
+      "Eek, {mob}! I know you hate {thing}. Me too now!",
+      "Um, {mob}, over there. I remember, you don't like {thing}."
+    ],
+    "react.level": [
+      "Level {level}! Yay!",
+      "Wow, level {level}! You're so strong!",
+      "{level} levels! That's so many!"
+    ],
+    "react.diamonds": [
+      "Diamonds! Can I hold one? I'll be careful!",
+      "Wow! Shiny! Diamonds!",
+      "Diamonds! My gran won't believe this!"
+    ],
+    "react.sleep": [
+      "Night night! Sleep tight!",
+      "Sweet dreams! I'll be right here.",
+      "Goodnight! Dream about something nice!"
+    ],
+    "react.wake": [
+      "Good morning! Did you sleep well?",
+      "You're awake! How did you sleep?",
+      "Morning! Sleep okay?"
+    ],
+    "react.player_died": [
+      "{player}! No no no!",
+      "{player}! Oh no!",
+      "No! {player}!"
+    ],
+    "react.respawn": [
+      "You're back! I was so scared!",
+      "There you are! Don't do that again, okay?",
+      "Yay, you're okay! I was so worried!"
+    ],
+    "react.advancement": [
+      "{advancement}! Yay!",
+      "Ooh, you got {advancement}! Well done!",
+      "{advancement}! That sounds so cool!"
+    ],
+    "react.challenge": [
+      "{advancement}?! That's amazing! You're amazing!",
+      "Wow! {advancement}! I'm telling everyone back home!"
+    ],
+    "gesture.crouch": [
+      "Hehe! Hi!",
+      "Ooh, is this a game? Hi!",
+      "Hello! I can do it too, look!"
+    ],
+    "gift.food": [
+      "You look hungry! Here, {item}. I saved it for you!",
+      "Eat something! {item}, from my bag."
+    ],
+    "gift.flower": [
+      "I picked this {item} for you! It's pretty. Here!",
+      "Here! This {item} is for you!",
+      "Look, this {item}! It's yours now."
     ]
   }
 }

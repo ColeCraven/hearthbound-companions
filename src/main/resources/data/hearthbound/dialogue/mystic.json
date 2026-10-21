@@ -346,15 +346,20 @@
       "We're in {biome}. Listen and you'll hear its age."
     ],
     "talk.memory": [
-      "{event}. I haven't forgotten. I never do.",
-      "Remember {event}? The stars do."
+      "The time {event}. I haven't forgotten. I never do.",
+      "Remember when {event}? The stars do.",
+      "When {event}. It stays with me."
     ],
     "talk.generic": [
       "Hm.",
       "Perhaps.",
       "Interesting. In a quiet way.",
       "The world is stranger than that, but go on.",
-      "I'll consider it. Under the stars."
+      "I'll consider it. Under the stars.",
+      "Mm.",
+      "I see.",
+      "Curious.",
+      "Go on. I'm listening, even if it doesn't look like it."
     ],
     "gift.received": [
       "A {item}. Thoughtful. Strange, but thoughtful.",
@@ -434,6 +439,286 @@
     "fail.protected": [
       "Not here. This ground is spoken for. The wild places won't mind.",
       "Leave the hall standing. We'll take what we need from the wilderness."
+    ],
+    "talk.story": [
+      "I was born on the longest night of the year. My mother said it explained a lot.",
+      "I studied in a tower full of books and dust. Then I read one book too many.",
+      "Family? Somewhere. We write, sometimes. In our own way.",
+      "I left because the stars told me to. Also, I was bored."
+    ],
+    "talk.place": [
+      "{biome}. The air feels thin here. Old.",
+      "It's beautiful. Wait until night. It's better at night.",
+      "Pretty. Something happened here once. I can feel it."
+    ],
+    "talk.plan": [
+      "We could look for a stronghold. The End is waiting. It's very patient.",
+      "Find an ancient city. Quietly. Very quietly.",
+      "Let's wait for night and watch the sky. That's a plan.",
+      "Enchanting. We need lapis, books, and nerve."
+    ],
+    "talk.yes": [
+      "So be it.",
+      "Good.",
+      "Yes. I thought you might.",
+      "Then it's decided."
+    ],
+    "talk.no": [
+      "As you like.",
+      "Hm. Fine.",
+      "Then not.",
+      "The stars won't mind. Probably."
+    ],
+    "talk.laugh": [
+      "Heh. You're strange. I like strange.",
+      "Laugh while you can. ...That came out darker than I meant.",
+      "Hm. That was almost funny."
+    ],
+    "talk.fondness": [
+      "...Thank you. I don't hear that often.",
+      "I saw you in the stars once. I think. You were taller.",
+      "You're good company. For someone who likes the daytime."
+    ],
+    "talk.sad": [
+      "Everything passes. Even this. Especially this.",
+      "Sit. Breathe. Look up. The sky doesn't care how bad today was, and that's a comfort.",
+      "Even the darkest night ends at dawn. I checked."
+    ],
+    "talk.food": [
+      "Chorus fruit. It's an acquired taste. I acquired it.",
+      "I forget to eat. Remind me sometimes.",
+      "Something warm. Soup, ideally, by a fire, at night."
+    ],
+    "talk.question": [
+      "Some questions are better left open.",
+      "I don't know. Few things are certain. Fewer are interesting.",
+      "Ask the stars. I'll translate.",
+      "Hm. A question for another night."
+    ],
+    "ack.build": [
+      "{thing}. Fine. Walls are just slow magic.",
+      "I'll build {thing}. Don't expect runes.",
+      "Very well. {thing}."
+    ],
+    "done.build": [
+      "{thing}. Done. It has a certain... presence.",
+      "Finished. The stars approve. Probably.",
+      "There. {thing}."
+    ],
+    "fail.build_unknown": [
+      "That's beyond me. {things}, I can do.",
+      "I'm no architect. {things}.",
+      "No. {things}. That's all I know."
+    ],
+    "fail.build_site": [
+      "Not here. {why}.",
+      "This ground won't take {thing}: {why}.",
+      "Wrong place. {why}."
+    ],
+    "fail.build_materials": [
+      "{thing} needs {need} blocks. I have {have}.",
+      "I'm short. {have} of {need}.",
+      "Give me {need} blocks, and {thing} will rise. I have {have}."
+    ],
+    "status.build": [
+      "Building {thing}. Slowly. Like everything that lasts.",
+      "Still at {thing}."
+    ],
+    "ack.mine": [
+      "Into the dark. My favourite.",
+      "Down, then. The deep places have things to say.",
+      "Mining. Quietly."
+    ],
+    "done.mine": [
+      "Enough. We found {ores}.",
+      "{count} blocks deep in the quiet. {ores}.",
+      "Done. The earth gave up {ores}."
+    ],
+    "fail.mine_hazard": [
+      "{danger}, beyond the stone. We stop.",
+      "No. {danger}. Even I'm not that curious.",
+      "Something's waiting behind this wall. {danger}."
+    ],
+    "fail.mine_cave": [
+      "We've opened a cave. Something's listening. Let's stop.",
+      "A cave. Dark, old, waiting. Not alone."
+    ],
+    "fail.mine_bottom": [
+      "The bottom of the world. Even I can't go further.",
+      "Bedrock. The world's floor."
+    ],
+    "fail.mine_full": [
+      "My pack's full. {ores}, before it did.",
+      "I can't carry more. Lighten my load?"
+    ],
+    "status.mine": [
+      "Digging. {count} blocks into the dark.",
+      "Still mining. {count} blocks. It's peaceful down here."
+    ],
+    "talk.help": [
+      "I fight, I dig, I build when pressed, and I read the sky. Ask.",
+      "Gathering, mining, a little building. And omens. Free of charge."
+    ],
+    "fact.nickname": [
+      "{nick}. The stars approve. Probably.",
+      "{nick}. I'll use it. Carefully.",
+      "{nick}. A good name to be remembered by."
+    ],
+    "fact.like": [
+      "{thing}. I'll remember. I always do.",
+      "{thing}. Interesting choice. Very you.",
+      "Noted. {thing}. The stars said as much. They didn't, but it sounds better.",
+      "{thing}. I'll keep that."
+    ],
+    "fact.dislike": [
+      "{thing}. Then we'll keep our distance.",
+      "{thing}. Understandable. Some things are best avoided.",
+      "I'll remember. {thing}. Not your friend."
+    ],
+    "fact.forget": [
+      "{player}, then. The old name never fit anyway.",
+      "As you like. {player} again."
+    ],
+    "talk.about_me": [
+      "I know more than you think. {facts}.",
+      "{facts}. You told me. I listened.",
+      "Let's see. {facts}. And other things I won't mention."
+    ],
+    "talk.about_me.none": [
+      "You're {player}. The rest, you've kept to yourself. Wise.",
+      "Your name, {player}. Little else. You're a quiet one."
+    ],
+    "talk.bond": [
+      "I like you. I don't say that to most people. Or anyone.",
+      "We're friends, I think. The cautious kind.",
+      "You're good company, {player}. Rare thing."
+    ],
+    "talk.bond.close": [
+      "You're the one person I'd stay up past dawn for.",
+      "Friends? More than that. You're my anchor out here.",
+      "If the stars had a favourite, it would be you. You're mine, too."
+    ],
+    "talk.bond.cold": [
+      "We're... distant, lately. Like the moon.",
+      "I'm still here. Draw your own conclusions.",
+      "Ask me again after a few quieter nights."
+    ],
+    "talk.bond.stranger": [
+      "We've just met. Ask the stars. Or ask me later.",
+      "I don't know you yet. That can change."
+    ],
+    "talk.answer": [
+      "Hm. Interesting.",
+      "Perhaps. Perhaps not.",
+      "That answer will stay with me.",
+      "Curious. I'll think on it."
+    ],
+    "talk.answer.good": [
+      "Good. Hold on to that.",
+      "Then the day is kind. Enjoy it.",
+      "Good. I'm glad. Quietly."
+    ],
+    "talk.answer.bad": [
+      "Bad days pass. Even the long nights end.",
+      "I'm sorry. Sit with me a while, if you like.",
+      "The worst nights have the clearest stars. Hold on."
+    ],
+    "ask.nickname": [
+      "What do you call yourself, when no one's listening?",
+      "Names matter. What should I call you?",
+      "Is there a name you'd rather I used?"
+    ],
+    "ask.nickname.skip": [
+      "{player}, then. A name is a name.",
+      "Keep your secrets. {player} it is."
+    ],
+    "ask.skip": [
+      "Some answers keep.",
+      "A secret. Good. Keep it."
+    ],
+    "ask.like": [
+      "What do you love out here? Tell me something true.",
+      "What's your favourite thing to find in the dark?",
+      "What makes you stop and stare?"
+    ],
+    "ask.dislike": [
+      "What do you fear? Everyone fears something.",
+      "What's the thing you'd banish from this world, if you could?",
+      "What can't you stand? I collect these things."
+    ],
+    "ask.how": [
+      "How are you, really?",
+      "How's your heart these days?",
+      "Are you well? You seem far away."
+    ],
+    "ask.open": [
+      "Do you ever wonder what the endermen are looking for?",
+      "If you could ask the stars one thing, what would it be?",
+      "Do you believe a place can remember the people who lived there?"
+    ],
+    "recall.liked": [
+      "You said you liked {thing}. And here we are. Coincidence? No.",
+      "{thing}. You told me about it once. I listen."
+    ],
+    "recall.liked_find": [
+      "{item}. You said you liked {thing}. The world is listening too.",
+      "Look. {item}. For the one who likes {thing}."
+    ],
+    "recall.disliked": [
+      "{mob}, near. I know. {thing}. Stay close.",
+      "Something you hate is close. {mob}. Careful."
+    ],
+    "react.level": [
+      "Level {level}. The enchanting table will be pleased.",
+      "{level} levels. Power suits you.",
+      "Level {level}. Spend it wisely. Or beautifully."
+    ],
+    "react.diamonds": [
+      "Diamonds. Old starlight, pressed into stone.",
+      "Diamonds. Handle them gently. They remember.",
+      "Ah. Diamonds. The world gives you gifts."
+    ],
+    "react.sleep": [
+      "Sleep. I'll keep the night company.",
+      "Go on, rest. The night and I have things to discuss.",
+      "Dream well. I'll be awake. I usually am."
+    ],
+    "react.wake": [
+      "Morning already. Sleep well?",
+      "You're up. Did you dream?",
+      "The night's over. Did you rest?"
+    ],
+    "react.player_died": [
+      "{player}! No...",
+      "{player}!",
+      "Not yet, {player}. Not yet."
+    ],
+    "react.respawn": [
+      "You came back. I knew you would. Mostly.",
+      "Back from the other side. Was it dark?",
+      "There you are. Don't make a habit of it."
+    ],
+    "react.advancement": [
+      "{advancement}. Written in the stars now.",
+      "{advancement}. I saw it coming.",
+      "So. {advancement}. The world takes note."
+    ],
+    "react.challenge": [
+      "{advancement}. Few manage that. Fewer live to talk about it.",
+      "{advancement}. The stars will remember. So will I."
+    ],
+    "gesture.crouch": [
+      "...Hello. Is this a ritual?",
+      "Hm. A greeting. Very well.",
+      "I know this one. Hello, {player}."
+    ],
+    "gift.food": [
+      "Eat. {item}. You're fading.",
+      "Here. {item}. Even heroes need supper."
+    ],
+    "gift.flower": [
+      "This {item} was growing alone. Now it's yours.",
+      "Here. This {item} looked like it wanted to be given away."
     ]
   }
 }

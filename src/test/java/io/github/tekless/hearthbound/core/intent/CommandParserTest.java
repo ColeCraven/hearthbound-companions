@@ -1,6 +1,7 @@
 package io.github.tekless.hearthbound.core.intent;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -125,6 +126,8 @@ class CommandParserTest {
 	@CsvSource({
 			"hello, HELLO",
 			"hi Hazel, HELLO",
+			"hi there!, HELLO",
+			"hey there, HELLO",
 			"how are you?, HOW",
 			"who are you, WHO",
 			"tell me a joke, JOKE",
@@ -135,18 +138,118 @@ class CommandParserTest {
 			"where are we, WHERE",
 			"what's your favourite thing, LIKES",
 			"what are you afraid of, DISLIKES",
-			"do you remember the creeper, MEMORY"
+			"do you remember the creeper, MEMORY",
+			"tell me about your family, STORY",
+			"where did you grow up, STORY",
+			"isnt it beautiful, PLACE",
+			"look at that sunset, PLACE",
+			"what should we do now, PLAN",
+			"im bored, PLAN",
+			"yeah, YES",
+			"sure, YES",
+			"nope, NO",
+			"haha, LAUGH",
+			"lol thats funny, LAUGH",
+			"i love you, FONDNESS",
+			"glad youre here, FONDNESS",
+			"im sad, SAD",
+			"i died again, SAD",
+			"are you hungry, FOOD",
+			"why is the sky blue?, QUESTION",
+			"do dragons exist, QUESTION",
+			"what can you do, HELP",
+			"help, HELP",
+			"what do you know about me, ABOUT_ME",
+			"whats my name?, ABOUT_ME",
+			"are we friends, BOND",
+			"do you like me?, BOND",
+			"what do you think of me, BOND",
+			"i like having you around, FONDNESS",
+			"i dont like you, INSULT"
 	})
 	void recognisesSmallTalk(String message, TalkTopic topic) {
 		ParseResult result = parser.parse(message, List.of("Hazel"));
 		assertEquals(topic, assertInstanceOf(ParseResult.Talk.class, result, () -> message + " -> " + result).topic());
 	}
 
+	@ParameterizedTest
+	@CsvSource({
+			"call me Captain, NICKNAME, Captain",
+			"'Hazel, my name is sam', NICKNAME, Sam",
+			"I love the ocean, LIKE, the ocean",
+			"i really like diamonds a lot, LIKE, diamonds",
+			"my favourite colour is blue, LIKE, blue",
+			"cake is my favourite, LIKE, cake",
+			"i love chopping trees, LIKE, chopping trees",
+			"I hate spiders, DISLIKE, spiders",
+			"im scared of the dark, DISLIKE, the dark",
+			"i cant stand rain, DISLIKE, rain",
+			"dont call me that, FORGET_NAME, ''"
+	})
+	void playersTellCompanionsAboutThemselves(String message, FactKind kind, String value) {
+		ParseResult result = parser.parse(message, List.of("Hazel"));
+		ParseResult.Share share = assertInstanceOf(ParseResult.Share.class, result, () -> message + " -> " + result);
+		assertEquals(kind, share.kind());
+		assertEquals(value, share.value());
+	}
+
+	@Test
+	void talkAboutTheCompanionOrTheMomentIsNotAFact() {
+		for (String message : List.of("i love it here", "call me when youre done", "i hate it", "i like that idea")) {
+			ParseResult result = parser.parse(message, List.of());
+			assertFalse(result instanceof ParseResult.Share, message + " -> " + result);
+		}
+		for (String message : List.of("i hate it when you dig down", "i love watching you chop trees", "i like it when you follow me")) {
+			ParseResult result = parser.parse(message, List.of());
+			assertFalse(result instanceof ParseResult.Command, "talking about an order isn't giving one: " + message + " -> " + result);
+		}
+	}
+
 	@Test
 	void unsupportedActionsAreNamed() {
-		ParseResult result = parser.parse("build me a house", List.of());
-		assertEquals("build", assertInstanceOf(ParseResult.Unsupported.class, result).action());
-		assertInstanceOf(ParseResult.Unsupported.class, parser.parse("craft a sword", List.of()));
+		ParseResult result = parser.parse("craft a sword", List.of());
+		assertEquals("craft", assertInstanceOf(ParseResult.Unsupported.class, result).action());
+		assertEquals("make", assertInstanceOf(ParseResult.Unsupported.class, parser.parse("make a cake", List.of())).action());
+	}
+
+	@ParameterizedTest
+	@CsvSource({
+			"build me a house, house",
+			"build a wall, wall",
+			"could you build us a bridge, bridge",
+			"bridge this gap, bridge",
+			"make a shelter, shelter",
+			"build a castle, castle"
+	})
+	void buildOrders(String message, String thing) {
+		Intent intent = command(message);
+		assertEquals(IntentType.BUILD, intent.type());
+		assertEquals(thing, intent.item());
+	}
+
+	@ParameterizedTest
+	@CsvSource({
+			"go mining, trip, ",
+			"lets go mining, trip, ",
+			"mine here, trip, ",
+			"dig a tunnel, tunnel, ",
+			"dig a tunnel 20 blocks long, tunnel, 20",
+			"dig down, down, ",
+			"dig down 30, down, 30",
+			"dig a staircase, down, "
+	})
+	void digOrders(String message, String shape, Integer length) {
+		Intent intent = command(message);
+		assertEquals(IntentType.MINE, intent.type());
+		assertEquals(shape, intent.target());
+		assertEquals(length, intent.count());
+	}
+
+	@Test
+	void miningAnOreIsStillGathering() {
+		assertEquals(IntentType.GATHER, command("mine some iron").type());
+		assertEquals(IntentType.GATHER, command("mine x8 coal").type());
+		assertEquals(IntentType.GATHER, command("dig up some clay").type());
 	}
 
 	@Test

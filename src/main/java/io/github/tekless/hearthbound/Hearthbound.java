@@ -12,13 +12,18 @@ import io.github.tekless.hearthbound.registry.ModItems;
 import io.github.tekless.hearthbound.server.SkinProfiles;
 import io.github.tekless.hearthbound.server.VanillaClients;
 import io.github.tekless.hearthbound.world.AmbientChatter;
+import io.github.tekless.hearthbound.world.Gestures;
+import io.github.tekless.hearthbound.world.Moments;
 import io.github.tekless.hearthbound.world.CompanionRoster;
 import io.github.tekless.hearthbound.world.CompanionTracker;
 import io.github.tekless.hearthbound.world.HubResidents;
 import java.nio.file.Path;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityLevelChangeEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
@@ -70,7 +75,12 @@ public final class Hearthbound implements ModInitializer {
 			CompanionRoster.get(server);
 		});
 		ServerLifecycleEvents.SERVER_STOPPING.register(server -> CompanionRoster.close());
-		ServerLifecycleEvents.SERVER_STOPPED.register(server -> ai = null);
+		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+			ai = null;
+			Conversations.reset();
+			Moments.reset();
+			Gestures.reset();
+		});
 
 		// "@Hazel follow me" in normal chat. Runs on the server thread after the message is shown.
 		ServerMessageEvents.CHAT_MESSAGE.register((message, sender, params) -> {
@@ -81,10 +91,33 @@ public final class Hearthbound implements ModInitializer {
 		// Following companions travel with their owner through portals and long teleports.
 		ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register((player, origin, destination) -> bringFollowers(player, origin));
 		ServerTickEvents.END_SERVER_TICK.register(Hearthbound::tick);
+
+		// Companions notice what happens to their player (advancements come from PlayerAdvancementsMixin).
+		ServerLivingEntityEvents.AFTER_DEATH.register((entity, source) -> {
+			if (entity instanceof ServerPlayer player) {
+				Moments.playerDied(player);
+			}
+		});
+		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+			if (!alive) {
+				Moments.respawned(newPlayer);
+			}
+		});
+		EntitySleepEvents.START_SLEEPING.register((entity, pos) -> {
+			if (entity instanceof ServerPlayer player) {
+				Moments.wentToBed(player);
+			}
+		});
+		EntitySleepEvents.STOP_SLEEPING.register((entity, pos) -> {
+			if (entity instanceof ServerPlayer player) {
+				Moments.wokeUp(player);
+			}
+		});
 		LOGGER.info("Hearthbound Companions ready (AI provider: {})", config.ai.provider);
 	}
 
 	private static void tick(MinecraftServer server) {
+		Gestures.tick(server);
 		if (server.getTickCount() % 20 != 0) {
 			return;
 		}
@@ -101,6 +134,7 @@ public final class Hearthbound implements ModInitializer {
 				}
 			}
 			AmbientChatter.tick(player);
+			Moments.tick(player);
 		}
 	}
 

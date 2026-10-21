@@ -10,6 +10,10 @@ public sealed interface ParseResult {
 	record Talk(TalkTopic topic) implements ParseResult {
 	}
 
+	/** The player telling us about themselves ("call me Captain", "I love the ocean"). */
+	record Share(FactKind kind, String value) implements ParseResult {
+	}
+
 	/** Looks like a request, but something essential is missing (e.g. "gather" without an item). */
 	record Unclear(UnclearReason reason) implements ParseResult {
 	}

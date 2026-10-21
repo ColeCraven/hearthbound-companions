@@ -1,6 +1,8 @@
 package io.github.tekless.hearthbound.entity;
 
+import io.github.tekless.hearthbound.core.dialogue.English;
 import io.github.tekless.hearthbound.core.persona.Archetype;
+import io.github.tekless.hearthbound.entity.order.BuildOrder;
 import java.util.Locale;
 import java.util.Map;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,10 +10,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.tags.BlockItemTags;
+import net.minecraft.world.level.block.DoorBlock;
 
 /**
  * Right-click a companion with an item to give it to them. Each personality has favourites; gifts
@@ -29,8 +33,14 @@ public final class Gifts {
 	}
 
 	public static void receive(CompanionEntity companion, ServerPlayer player, ItemStack held) {
-		ItemStack gift = held.split(1);
+		// Building supplies (blocks, torches, doors) come in stacks; everything else is one at a time.
+		boolean supplies = BuildOrder.isBuildingBlock(held) || held.is(Items.TORCH)
+				|| (held.getItem() instanceof BlockItem item && item.getBlock() instanceof DoorBlock);
+		ItemStack gift = held.split(supplies ? held.getCount() : 1);
 		String name = gift.getHoverName().getString().toLowerCase(Locale.ROOT);
+		if (supplies && gift.getCount() > 1) {
+			name = gift.getCount() + " " + name;
+		}
 		boolean loved = loves(companion.archetype(), gift);
 		boolean gear = companion.getEquipmentSlotForItem(gift) != EquipmentSlot.MAINHAND || gift.is(ItemTags.SWORDS) || gift.is(ItemTags.AXES);
 		companion.storeOrDrop(gift);
@@ -41,7 +51,7 @@ public final class Gifts {
 			companion.memory().changeAffinity(loved ? 4 : 1);
 			companion.setLastGiftTime(now);
 			if (loved) {
-				companion.memory().addEvent("{player} gave me a " + name + ", which I loved");
+				companion.memory().addEvent("{player} gave me " + English.withArticle(name));
 			}
 		}
 		companion.say(loved ? "gift.loved" : "gift.received", Map.of("item", name));

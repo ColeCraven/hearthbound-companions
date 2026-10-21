@@ -3,12 +3,15 @@ package io.github.tekless.hearthbound.core.memory;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * What a companion remembers: the recent conversation, a handful of notable shared events
- * (written by game code from things that actually happened), and an affinity score.
- * Saved with the companion so it survives quitting and reloading.
+ * (written by game code from things that actually happened), what each player has told them about
+ * themselves, and an affinity score. Saved with the companion so it survives quitting and reloading.
  */
 public final class CompanionMemory {
 	public static final int MAX_LINES = 16;
@@ -16,6 +19,8 @@ public final class CompanionMemory {
 
 	private final Deque<Line> lines = new ArrayDeque<>();
 	private final Deque<String> events = new ArrayDeque<>();
+	/** Per player id: what they've told us about themselves. Kept when the conversation moves on. */
+	private final Map<String, PlayerFacts> facts = new LinkedHashMap<>();
 	private int affinity;
 	/** Who the remembered conversation is with (a player id), or null if nobody yet. */
 	private String partner;
@@ -66,8 +71,14 @@ public final class CompanionMemory {
 		}
 	}
 
-	/** Records a notable event in plain words, e.g. "fought a creeper with {player}". */
+	/**
+	 * Records a notable event as a clause that can follow "Remember when...", e.g. "I fought a creeper
+	 * with {player}". Older saves stored events without the "I", so it's added back here.
+	 */
 	public void addEvent(String event) {
+		if (!(event.startsWith("I ") || event.startsWith("we ") || event.startsWith("you ") || event.startsWith("{player}"))) {
+			event = "I " + event;
+		}
 		if (!events.isEmpty() && events.peekLast().equals(event)) {
 			return;
 		}
@@ -83,6 +94,22 @@ public final class CompanionMemory {
 
 	public List<String> events() {
 		return new ArrayList<>(events);
+	}
+
+	/** What this player has told us (created empty on first use). */
+	public PlayerFacts factsAbout(String playerId) {
+		return facts.computeIfAbsent(playerId, id -> new PlayerFacts());
+	}
+
+	/** What this player has told us, if anything. */
+	public Optional<PlayerFacts> knownFacts(String playerId) {
+		PlayerFacts known = facts.get(playerId);
+		return known == null || known.isEmpty() ? Optional.empty() : Optional.of(known);
+	}
+
+	/** Everyone's facts, for saving. */
+	public Map<String, PlayerFacts> allFacts() {
+		return facts;
 	}
 
 	public int affinity() {
@@ -102,6 +129,7 @@ public final class CompanionMemory {
 	public void clear() {
 		lines.clear();
 		events.clear();
+		facts.clear();
 		affinity = 0;
 		partner = null;
 	}

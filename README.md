@@ -8,7 +8,7 @@
 ![Fabric](https://img.shields.io/badge/Loader-Fabric-DBD0B4)
 ![Java 25](https://img.shields.io/badge/Java-25-E76F00)
 ![License: MIT](https://img.shields.io/badge/License-MIT-3A7BD5)
-![Status: v0.2 preview](https://img.shields.io/badge/Status-v0.2%20preview-8A63D2)
+![Status: v0.3 preview](https://img.shields.io/badge/Status-v0.3%20preview-8A63D2)
 
 ![Freya, Bram, Hazel and Emmett](docs/images/cast/group-1.png)
 
@@ -55,15 +55,46 @@ More about them (and how I drew the skins) in [docs/CAST.md](docs/CAST.md).
 
 ## What they can do
 
-You talk to them in normal chat. `@Hazel follow me`, `Bram, get me 16 oak logs`,
-`@all wait here`, or `@Cass tell me a joke`. Press **G** and the chat opens with the name of
-whoever you're looking at already filled in. Every personality has around a hundred
-situations of their own dialogue, so you're not hearing the same line over and over.
+You talk to them in normal chat. Say hi with `@Rosie hi!` (or just right-click her) and after that
+you can keep chatting like you would with anyone: "how are you?", "tell me about your family",
+"what should we do today?". No @ needed until you say bye or wander off, and a typo in a name
+(`@rsoie`) still gets through. Orders work the same way: `@Hazel follow me`,
+`Bram, get me 16 oak logs`, `@all wait here`. Press **G** and the chat opens with the name of
+whoever you're looking at already filled in. Every personality has well over a hundred situations
+of their own dialogue, so you're not hearing the same line over and over.
 
-They take orders too: follow, wait, come here, gather stuff, hand items over, attack that thing,
-stop what you're doing, go home. When they can't do something, they tell you why, in
-character: there's no iron around here, they need a pickaxe for stone, their pack is full, or
-"I don't build."
+They get to know you, too. Tell one "call me Captain" and that's what they call you from then on.
+Tell them you love the ocean and they'll point it out when you get to one. When things are quiet
+they ask you stuff ("What should I call you, anyway?", "What's your favourite thing to find down a
+mine?") and remember the answer. Ask "what do you know about me?" and they'll tell you.
+
+<p align="center">
+  <img src="docs/images/free-chat.png" width="70%" alt="Rosie learning a nickname and a favourite thing, then saying them back">
+</p>
+
+They notice what you're up to. They cheer when you get an advancement or find diamonds, say
+goodnight when you go to bed and ask how you slept in the morning, and panic when you die. Crouch
+twice while looking at one and they'll crouch back. If you're starving and they have food on them,
+they hand some over, and the ones who like you sometimes give you a flower they picked on the way.
+
+### Orders and real work
+
+Follow, wait, come here, gather stuff, hand items over, attack that thing, stop, go home. They can
+also do proper jobs:
+
+- **Dig.** "go mining" digs a staircase down and then a tunnel along, grabbing any ores next to it.
+  "dig a tunnel" and "dig down 20" do one or the other. They need a pickaxe, put torches up if they
+  carry some, and stop before lava, water or a big drop.
+- **Build.** "build a shelter", "build a wall" or "build a bridge" (across water or a gap in front of
+  you), using blocks from their pack. A shelter gets a door and a torch if they have them.
+
+<p align="center">
+  <img src="docs/images/building.png" width="70%" alt="Conoby's finished shelter, built from the planks in his pack">
+</p>
+
+When they can't do something, they tell you why, in character: there's no iron around here, they
+need a pickaxe, the ground's too uneven to build on, they're short on blocks. Type `/companion help`
+in game for the full list of things you can say.
 
 Stand still for a bit and they get bored. Hazel goes to study a
 flower, Cass grabs loot you left lying around (and admits it), Rosie goes and pets the
@@ -83,7 +114,7 @@ favourites (emeralds for Cass, bread for Rosie, amethyst for Luna), and it warms
 towards you. Give a fighter a better sword and they'll equip it.
 
 <p align="center">
-  <img src="docs/images/party-conversation.png" width="49%" alt="A party chatting and refusing to build a castle">
+  <img src="docs/images/party-conversation.png" width="49%" alt="A party chatting, and Bram explaining he can't build a castle">
   <img src="docs/images/gathering.png" width="49%" alt="Bram gathering logs, shown in the party list">
 </p>
 
@@ -124,7 +155,7 @@ You'll need Minecraft Java Edition 26.3 with Fabric.
 
 1. Install [Fabric Loader](https://fabricmc.net/use/installer/) (0.19.5 or newer) for 26.3.
 2. Drop [Fabric API](https://modrinth.com/mod/fabric-api) into your `mods` folder.
-3. Drop `hearthbound-0.2.0.jar` in there too (grab it from [Releases](../../releases)). Only want
+3. Drop `hearthbound-0.3.0.jar` in there too (grab it from [Releases](../../releases)). Only want
    single player? v0.1.0 there is the version from before server support was added.
 4. Launch the Fabric profile.
 
@@ -138,10 +169,14 @@ run `/companion summon hazel`. Walk up, right-click to say hi, then type `@Hazel
 | Get resources | `@Name get me a stack of cobblestone` | `/companion gather Name 64 cobblestone` |
 | Get your stuff back | `@Name give me everything` | `/companion give Name` |
 | Fight something | look at it, `@Name attack that` | |
+| Dig | `@Name go mining`, `dig a tunnel`, `dig down 20` | |
+| Build | `@Name build a shelter` (or a wall, or a bridge) | |
+| Tell them about you | `call me Captain`, `I love the ocean` | |
 | Check on them | `@Name what are you doing?` | `/companion list` |
 | Stop a task | `@Name stop` | `/companion cancel Name` |
 | Swap items | sneak + right-click them | `/companion inventory Name` |
 | Let them go | `@Name you're dismissed` | `/companion dismiss Name` |
+| See everything you can do | `@Name what can you do?` | `/companion help` |
 
 Press **H** to hide the little party list in the corner.
 
@@ -149,7 +184,8 @@ Press **H** to hide the little party list in the corner.
 
 You can also run it on a multiplayer server, and your friends don't need to install anything. With
 [Polymer](https://modrinth.com/mod/polymer) on the server, companions show up for unmodded players as
-player-shaped mannequins with a name tag and a little status line ("Sellsword · free to recruit").
+player-shaped mannequins with a name tag and a short grey line under it (their personality, or
+who they're travelling with).
 Talking, recruiting and orders all work exactly the same.
 
 On my own server the whole cast lives in the spawn hub, hanging around until someone asks them
@@ -216,10 +252,11 @@ python tools/skins/cast.py
 
 ## Testing
 
-I tried to test this properly instead of just eyeballing it. There are 113 unit tests (the chat
-parser, the gathering logic, the AI response handling), 21 tests that run inside a real game
-server (gathering logs and handing them over, cancelling halfway, catching up after a teleport,
-saving and loading), and a few scripted runs in the actual game client. One of those drops two
+I tried to test this properly instead of just eyeballing it. There are 219 unit tests (the chat
+parser, reading answers to the companions' own questions, the gathering logic, the AI response
+handling), 33 tests that run inside a real game server (gathering logs and handing them over,
+digging a tunnel, stopping before lava, building a shelter and a bridge, remembering a nickname,
+reacting to an advancement, saving and loading), and a few scripted runs in the actual game client. One of those drops two
 companions into a normal generated world, walks them across the terrain, fights zombies at night,
 goes to the Nether and back, then quits and reloads the world to check nothing got lost. It caught
 a couple of real bugs along the way.
@@ -228,8 +265,8 @@ The full write-up, including what still needs testing, is in [TESTING.md](docs/T
 
 ## Known issues
 
-- They use Minecraft's normal pathfinding, so they won't dig tunnels or build bridges. If something
-  is out of reach (like the top of a tall tree) they'll say so and skip it.
+- They dig and build when you ask, but not on their own to get somewhere. If something is out of
+  reach (like the top of a tall tree) they'll say so and skip it.
 - If you teleport really far and their chunk unloads before they notice, they'll stay put until you
   come back.
 - Melee only for now, no bows.
@@ -242,8 +279,8 @@ The full write-up, including what still needs testing, is in [TESTING.md](docs/T
 
 ## What's next
 
-A conversation screen with your history, companions who comment on each other more, bows, a way to
-set a home for them, and more cast members. If you have ideas, open an issue!
+A conversation screen with your history, bows, a way to set a home for them, more things to build,
+and more cast members. If you have ideas, open an issue!
 
 ## Credits
 

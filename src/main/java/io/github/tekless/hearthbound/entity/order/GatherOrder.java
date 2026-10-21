@@ -20,12 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
@@ -47,12 +42,10 @@ public final class GatherOrder implements CompanionOrder, GatherWorld<BlockPos> 
 	private final int baseline;
 	private final StuckDetector stuck = new StuckDetector(80, 0.6);
 
+	private final BlockWork work;
+
 	private BlockPos pathTarget;
 	private int repathCooldown;
-	private BlockPos breakingPos;
-	private float breakProgress;
-	private int lastCrackStage = -1;
-	private int swingCooldown;
 
 	public GatherOrder(CompanionEntity companion, GatherSpec spec, int goal) {
 		this(companion, spec, goal, -1);
@@ -64,6 +57,7 @@ public final class GatherOrder implements CompanionOrder, GatherWorld<BlockPos> 
 		this.spec = spec;
 		this.baseline = baseline >= 0 ? baseline : companion.countCarried(spec.counts());
 		this.machine = new GatherMachine<>(this, goal);
+		this.work = new BlockWork(companion);
 	}
 
 	public GatherSpec spec() {
@@ -102,7 +96,7 @@ public final class GatherOrder implements CompanionOrder, GatherWorld<BlockPos> 
 			case GatherMachine.Event.CollectedAll all -> companion.say("done.gather", vars);
 			case GatherMachine.Event.Delivered delivered -> {
 				companion.say("done.delivered", Map.of("item", spec.displayName(), "count", Integer.toString(delivered.count())));
-				companion.memory().addEvent("gathered " + delivered.count() + " " + spec.displayName() + " for {player}");
+				companion.memory().addEvent("I gathered " + delivered.count() + " " + spec.displayName() + " for {player}");
 			}
 			case GatherMachine.Event.Partial partial -> companion.say(
 					partial.reason() == io.github.tekless.hearthbound.core.task.FailureReason.INVENTORY_FULL ? "fail.inventory_full" : "partial.gather",
@@ -238,50 +232,15 @@ public final class GatherOrder implements CompanionOrder, GatherWorld<BlockPos> 
 
 	@Override
 	public Break breakStep(BlockPos target) {
-		ServerLevel level = (ServerLevel) companion.level();
-		BlockState state = level.getBlockState(target);
-		if (!spec.blocks().test(state)) {
-			clearBreaking();
+		if (!spec.blocks().test(companion.level().getBlockState(target))) {
+			work.clear();
 			return Break.GONE;
 		}
-		if (!target.equals(breakingPos)) {
-			clearBreaking();
-			breakingPos = target.immutable();
-			companion.holdBestToolFor(state);
-		}
-		companion.getLookControl().setLookAt(Vec3.atCenterOf(target));
-		float hardness = state.getDestroySpeed(level, target);
-		if (hardness < 0) {
-			clearBreaking();
-			return Break.GONE;
-		}
-		ItemStack tool = companion.getMainHandItem();
-		boolean correct = !state.requiresCorrectToolForDrops() || tool.isCorrectToolForDrops(state);
-		float speed = Math.max(1.0F, tool.getDestroySpeed(state));
-		breakProgress += hardness == 0 ? 1.0F : speed / hardness / (correct ? 30.0F : 100.0F);
-		if (--swingCooldown <= 0) {
-			swingCooldown = 5;
-			companion.swing(InteractionHand.MAIN_HAND, net.minecraft.world.item.component.SwingAnimation.DEFAULT, true);
-		}
-		int stage = Math.min(9, (int) (breakProgress * 10));
-		if (stage != lastCrackStage) {
-			lastCrackStage = stage;
-			level.destroyBlockProgress(companion.getId(), target, stage);
-		}
-		if (breakProgress < 1.0F) {
-			return Break.IN_PROGRESS;
-		}
-		BlockEntity blockEntity = state.hasBlockEntity() ? level.getBlockEntity(target) : null;
-		List<ItemStack> drops = Block.getDrops(state, level, target, blockEntity, companion, tool);
-		level.destroyBlock(target, false, companion);
-		if (!tool.isEmpty() && tool.isDamageableItem()) {
-			tool.hurtAndBreak(1, companion, EquipmentSlot.MAINHAND);
-		}
-		for (ItemStack drop : drops) {
-			companion.storeOrDrop(drop);
-		}
-		clearBreaking();
-		return Break.DONE;
+		return switch (work.step(target)) {
+			case IN_PROGRESS -> Break.IN_PROGRESS;
+			case DONE -> Break.DONE;
+			case GONE -> Break.GONE;
+		};
 	}
 
 	@Override
@@ -345,12 +304,7 @@ public final class GatherOrder implements CompanionOrder, GatherWorld<BlockPos> 
 	}
 
 	private void clearBreaking() {
-		if (breakingPos != null && companion.level() instanceof ServerLevel level) {
-			level.destroyBlockProgress(companion.getId(), breakingPos, -1);
-		}
-		breakingPos = null;
-		breakProgress = 0;
-		lastCrackStage = -1;
+		work.clear();
 	}
 
 	/** At least one face touches air or a non-solid block, so the companion isn't mining through walls. */

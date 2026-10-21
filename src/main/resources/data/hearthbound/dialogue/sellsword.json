@@ -385,15 +385,20 @@
       "{biome}, looks like. I've fought in worse."
     ],
     "talk.memory": [
-      "Remember {event}? Good times. Mostly.",
-      "Still thinking about {event}."
+      "Remember when {event}? Good times. Mostly.",
+      "Still thinking about the time {event}.",
+      "The day {event}. That was a day."
     ],
     "talk.generic": [
       "Hm.",
       "If you say so.",
       "Sure. Anything else, or are we moving?",
       "I'm a sword, {player}, not a philosopher.",
-      "Talk later. Keep your eyes open now."
+      "Talk later. Keep your eyes open now.",
+      "Right.",
+      "Noted.",
+      "Is that so.",
+      "Mm. Keep walking, keep talking."
     ],
     "gift.received": [
       "{item}? Useful. Thanks.",
@@ -474,6 +479,287 @@
     "fail.protected": [
       "Not here. Folk live here. Take me somewhere wild and I'll chop all day.",
       "Tear up the town? No. Let's go further out."
+    ],
+    "talk.story": [
+      "Grew up with a sword in my hand and mud on my boots. Not much else to tell.",
+      "Fought in more wars than I can name. Most of them weren't mine.",
+      "Family? Had one. The road's my family now. And you, I suppose.",
+      "I was a soldier. Then I was a soldier who got paid. Better."
+    ],
+    "talk.place": [
+      "{biome}. Good ground. Easy to see trouble coming.",
+      "Pretty. Pretty places still have skeletons in them.",
+      "Nice view. I'd like it more with a wall around it."
+    ],
+    "talk.plan": [
+      "Find something that needs hitting. Then hit it.",
+      "Iron. We need iron. Everything's better with iron.",
+      "There's a village somewhere. Villages have smiths. Smiths have swords.",
+      "Bored? Go find a dungeon. You won't be bored long."
+    ],
+    "talk.yes": [
+      "Good.",
+      "Right then.",
+      "Thought so.",
+      "Agreed."
+    ],
+    "talk.no": [
+      "Fine.",
+      "Your call.",
+      "Suit yourself.",
+      "Hm. Fair."
+    ],
+    "talk.laugh": [
+      "Heh.",
+      "Don't laugh too loud. Things hear you.",
+      "Ha. You're all right."
+    ],
+    "talk.fondness": [
+      "...You too. Don't make it a thing.",
+      "Glad I signed on with you. Most bosses don't last this long.",
+      "Careful. People who say that tend to get me killed. I'll risk it."
+    ],
+    "talk.sad": [
+      "Bad days end. Sit down, eat something, we go again.",
+      "Everyone loses fights. The trick is getting up after.",
+      "Hey. I've got your back. That's not nothing."
+    ],
+    "talk.food": [
+      "Steak. Cooked. Lots of it.",
+      "I'll eat anything that isn't rotten flesh. Mostly.",
+      "Hungry? Kill a cow, light a fire. Simple."
+    ],
+    "talk.question": [
+      "Don't know. Don't much care.",
+      "Ask me something I can hit.",
+      "No idea. Ask the clever one.",
+      "Couldn't tell you."
+    ],
+    "ack.build": [
+      "{thing}? Fine. Stand back.",
+      "Right. {thing}, coming up. Don't watch, it's not pretty.",
+      "I can stack blocks. Building {thing}."
+    ],
+    "done.build": [
+      "Done. {thing}. It'll hold.",
+      "There. {thing}. Not pretty, but it'll stop an arrow.",
+      "Finished. Next time pay me extra."
+    ],
+    "fail.build_unknown": [
+      "I'm a sword, not a mason. I can do {things}. That's it.",
+      "Can't build that. {things}, I can manage.",
+      "Keep it simple. {things}."
+    ],
+    "fail.build_site": [
+      "Not here. {why}.",
+      "Can't put {thing} here, {why}.",
+      "Bad spot. {why}."
+    ],
+    "fail.build_materials": [
+      "Need {need} blocks for {thing}. I've got {have}. Hand some over.",
+      "{have} blocks won't make {thing}. I need {need}.",
+      "Short on blocks. {have} of {need}."
+    ],
+    "status.build": [
+      "Building {thing}. Almost there.",
+      "Stacking blocks. {thing}. Patience."
+    ],
+    "ack.mine": [
+      "Pick out. Let's dig.",
+      "Mining. Stay behind me.",
+      "Right. Down we go."
+    ],
+    "done.mine": [
+      "That's far enough. Found {ores}.",
+      "Done digging. {ores}, for what it's worth.",
+      "Dug {count} blocks. Got {ores}."
+    ],
+    "fail.mine_hazard": [
+      "Stop. {danger} ahead. Not digging into that.",
+      "{danger}. I'm not that brave.",
+      "Hold it. There's {danger} behind this wall."
+    ],
+    "fail.mine_cave": [
+      "We've broken into a cave. Could be anything down there. Stopping.",
+      "Open cave ahead. I'm not walking in blind."
+    ],
+    "fail.mine_bottom": [
+      "Can't dig any further. Rock's too hard.",
+      "Bedrock. That's the end of the line."
+    ],
+    "fail.mine_full": [
+      "Pack's full. Found {ores} before it got heavy.",
+      "Can't carry any more. Take some of this."
+    ],
+    "status.mine": [
+      "Digging. {count} blocks so far.",
+      "Still mining. {count} blocks in."
+    ],
+    "talk.help": [
+      "Fight, guard, haul, dig, chop, stack some blocks. Ask.",
+      "I hit things. I carry things. I dig holes and build walls. That's the list."
+    ],
+    "fact.nickname": [
+      "{nick}. Fine. Easier to shout in a fight.",
+      "{nick} it is.",
+      "{nick}? Suits you. Don't let it go to your head."
+    ],
+    "fact.like": [
+      "{thing}. Good to know.",
+      "{thing}, huh? I'll keep an eye out.",
+      "Noted. {thing}. You've got taste, for an employer.",
+      "{thing}. I'll remember that."
+    ],
+    "fact.dislike": [
+      "{thing}. Noted. Point me at it next time.",
+      "Can't stand {thing}? Then it gets past me first.",
+      "{thing}. Right. I'll keep it off you."
+    ],
+    "fact.forget": [
+      "Back to {player}, then. Fine by me.",
+      "{player} it is. No more fancy names."
+    ],
+    "talk.about_me": [
+      "You want a report? {facts}. That's the lot.",
+      "Let's see. {facts}. Did I miss anything?",
+      "{facts}. I pay attention. It's the job."
+    ],
+    "talk.about_me.none": [
+      "You're {player}. Past that, you've told me nothing. Which I respect.",
+      "{player}. That's all I've got. You don't talk about yourself much."
+    ],
+    "talk.bond": [
+      "We're fine. You pay, I guard, nobody's dead. Good arrangement.",
+      "Getting there. Keep not getting me killed and we'll see.",
+      "You're all right, {player}."
+    ],
+    "talk.bond.close": [
+      "Honestly? Best boss I've had. Don't tell the others.",
+      "I'd take a sword for you. I'd complain about it, but I'd take it.",
+      "Yeah. We're friends. Don't make it a thing."
+    ],
+    "talk.bond.cold": [
+      "Truth? You're making it hard. Keep your sword pointed at the enemy.",
+      "We work together. That's what we are right now.",
+      "Ask me again when I've cooled off."
+    ],
+    "talk.bond.stranger": [
+      "We've just met. Hire me and we'll find out.",
+      "Don't know you yet. That's not a no."
+    ],
+    "talk.answer": [
+      "Huh. Fair enough.",
+      "If you say so.",
+      "Hm. Didn't expect that.",
+      "Right. I'll think on it. Briefly."
+    ],
+    "talk.answer.good": [
+      "Good. Keep it that way.",
+      "Glad to hear it. Let's not ruin it.",
+      "Good. Fewer complaints for me."
+    ],
+    "talk.answer.bad": [
+      "That's rough. Stay close, I've got your back.",
+      "Bad days end. Usually with a fight. Want one?",
+      "Sorry to hear it. Stick with me today."
+    ],
+    "ask.nickname": [
+      "What do I call you, anyway? Boss is getting old.",
+      "You got a name you'd rather I used?",
+      "Out of curiosity. What should I call you?"
+    ],
+    "ask.nickname.skip": [
+      "{player} it is, then.",
+      "Fine. {player}. Keeps it simple."
+    ],
+    "ask.skip": [
+      "Fair. Keep it to yourself.",
+      "Suit yourself."
+    ],
+    "ask.like": [
+      "What's worth finding out here, to you? So I know what to grab.",
+      "Best thing you've ever dug up? Go on.",
+      "What do you actually like, besides walking into danger?"
+    ],
+    "ask.dislike": [
+      "Anything you can't stand? I'd rather know before it jumps us.",
+      "What do you hate most out here?",
+      "Got a worst enemy? Thing, not person."
+    ],
+    "ask.how": [
+      "How are you holding up?",
+      "You doing all right? Honest answer.",
+      "How's the body? Holding together?"
+    ],
+    "ask.open": [
+      "Do you ever stop and just look around? Or is that just me?",
+      "If you could have one thing out here, what would it be?",
+      "Ever think about settling down? Or is it the road forever?"
+    ],
+    "recall.liked": [
+      "Look where we are. You said you liked {thing}, didn't you?",
+      "{thing}. You mentioned it once. Thought you'd want to know we're here."
+    ],
+    "recall.liked_find": [
+      "{item}, right there. You said you liked {thing}.",
+      "Look. {item}. You told me you liked {thing}, so I'm pointing."
+    ],
+    "recall.disliked": [
+      "{mob}, close by. I know, you hate {thing}. I've got it.",
+      "Heads up. {mob}. Your favourite."
+    ],
+    "react.level": [
+      "Level {level}. You're getting dangerous.",
+      "Level {level}. Don't spend it all on one enchantment.",
+      "{level} levels. Not bad."
+    ],
+    "react.diamonds": [
+      "Diamonds. Now we're talking.",
+      "That's diamond. Don't drop it in lava.",
+      "Shiny. Mind if I don't carry those? Makes me a target."
+    ],
+    "react.sleep": [
+      "Sleep. I'll watch the door.",
+      "Get some rest. I'll be up.",
+      "Night. I'll be here."
+    ],
+    "react.wake": [
+      "Morning. Sleep all right?",
+      "Up already? How'd you sleep?",
+      "Morning, {player}. Rested?"
+    ],
+    "react.player_died": [
+      "{player}! No. No, no.",
+      "Damn it, {player}!",
+      "{player}! Get back here!"
+    ],
+    "react.respawn": [
+      "There you are. Don't do that again.",
+      "Back on your feet. Good. You had me worried. Slightly.",
+      "You're alive. Fine. I wasn't worried."
+    ],
+    "react.advancement": [
+      "{advancement}. Nice work.",
+      "That's {advancement} done. Not bad.",
+      "Huh. {advancement}. I'll put it in the report."
+    ],
+    "react.challenge": [
+      "{advancement}? That's real work. I'm impressed. Don't tell anyone.",
+      "You did {advancement}. Remind me never to get on your bad side."
+    ],
+    "gesture.crouch": [
+      "...Did you just crouch at me? Fine.",
+      "Ha. Hello to you too.",
+      "Is this how you people say hello?"
+    ],
+    "gift.food": [
+      "You're starving. Here. {item}. Eat.",
+      "Eat something before you fall over. {item}, from my pack.",
+      "Here, {item}. Can't have you fainting mid-fight."
+    ],
+    "gift.flower": [
+      "Found this {item}. Don't read into it.",
+      "Here. Picked this {item}. It was in the way."
     ]
   }
 }

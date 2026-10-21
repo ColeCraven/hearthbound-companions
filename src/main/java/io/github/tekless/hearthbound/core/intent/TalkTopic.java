@@ -16,6 +16,28 @@ public enum TalkTopic {
 	DISLIKES,
 	WHERE,
 	MEMORY,
+	/** Their past: home, family, how they ended up on the road. */
+	STORY,
+	/** What they think of where you are ("isn't it beautiful?"). */
+	PLACE,
+	/** What to do next ("any ideas?", "I'm bored"). */
+	PLAN,
+	YES,
+	NO,
+	LAUGH,
+	/** Warm words aimed at them ("I like you", "glad you're here"). */
+	FONDNESS,
+	/** The player is having a bad time. */
+	SAD,
+	FOOD,
+	/** "What can you do?" A short answer in character, plus a pointer to /companion help. */
+	HELP,
+	/** "What do you know about me?" What the player has told them, said back. */
+	ABOUT_ME,
+	/** "Are we friends?" How they feel about the player, from affinity. */
+	BOND,
+	/** Any other question; a reply in character that doesn't pretend to know the answer. */
+	QUESTION,
 	GENERIC;
 
 	/** Line-bank key for this topic, e.g. {@code talk.joke}. */

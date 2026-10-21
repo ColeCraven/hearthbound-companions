@@ -346,15 +346,20 @@
       "{biome}. A fair land, if a dangerous one."
     ],
     "talk.memory": [
-      "I remember {event}. You were brave.",
-      "{event}... I think of it often."
+      "I remember when {event}. You were brave.",
+      "The day {event}... I think of it often.",
+      "I have not forgotten the time {event}."
     ],
     "talk.generic": [
       "I see.",
       "That is worth thinking on.",
       "Hm. Wise words, perhaps.",
       "I hear you, friend.",
-      "Whatever comes, I am with you."
+      "Whatever comes, I am with you.",
+      "Indeed.",
+      "I hear you.",
+      "Is that so? Tell me more, if you wish.",
+      "Mm. Stay close, friend."
     ],
     "gift.received": [
       "A {item}. Thank you, {player}. I will use it well.",
@@ -429,6 +434,286 @@
     "fail.protected": [
       "Not within these walls. This place belongs to everyone. We gather further afield.",
       "I will not strip the land where people make their home. Lead me somewhere wild."
+    ],
+    "talk.story": [
+      "I swore my oath young. I have kept it every day since. Most days it is easy. Some it is not.",
+      "I once guarded a village by the sea. One night it was not enough. I travel now so I am never too far away again.",
+      "My family were smiths. I learned to make armour before I learned to wear it.",
+      "Why am I on the road? Because people are, and someone ought to watch over them."
+    ],
+    "talk.place": [
+      "{biome}. A good place, if we keep it safe.",
+      "It is beautiful. Things worth looking at are things worth protecting.",
+      "A fine view, friend. Let us remember it."
+    ],
+    "talk.plan": [
+      "We could find a village and see that it is safe. There is always something to mend.",
+      "Rest, perhaps. Then iron, for better armour.",
+      "There are always raiders somewhere. We could put a stop to some of them.",
+      "Wherever you go, I will follow. You choose."
+    ],
+    "talk.yes": [
+      "Very well.",
+      "Agreed, friend.",
+      "Good. So be it.",
+      "As you say."
+    ],
+    "talk.no": [
+      "I understand.",
+      "Then we will not.",
+      "Very well. Another day.",
+      "As you wish."
+    ],
+    "talk.laugh": [
+      "It is good to hear you laugh.",
+      "Heh. Even I smiled at that.",
+      "Laughter keeps the dark away. Keep it up."
+    ],
+    "talk.fondness": [
+      "And I you, friend. You have my sword and my word.",
+      "It is an honour to walk beside you.",
+      "Thank you. I have not had a friend like you in a long time."
+    ],
+    "talk.sad": [
+      "Rest a while. I will keep watch.",
+      "There is no shame in a hard day. Only in giving up, and you have not.",
+      "Whatever has happened, you are not alone. I am here."
+    ],
+    "talk.food": [
+      "Bread and a little stew. A soldier's supper.",
+      "Eat first, friend. We fight better fed.",
+      "Baked potatoes. Simple, warm, honest."
+    ],
+    "talk.question": [
+      "I do not know. But we can find out together.",
+      "A fair question. I wish I had a fair answer.",
+      "That is beyond me, I am afraid.",
+      "Hm. Let me think on that while I keep watch."
+    ],
+    "ack.build": [
+      "I will build {thing}. It will be sturdy.",
+      "{thing}. Consider it raised.",
+      "Very well. {thing} it is."
+    ],
+    "done.build": [
+      "{thing} is finished. It will keep you safe.",
+      "Done, friend. {thing}, sound and steady.",
+      "It stands. {thing}."
+    ],
+    "fail.build_unknown": [
+      "That is beyond my skill. I can raise {things}.",
+      "Forgive me. I only know how to build {things}.",
+      "I am no master builder. {things}, I can do."
+    ],
+    "fail.build_site": [
+      "I cannot build {thing} here. {why}.",
+      "This place will not do: {why}.",
+      "Not here, friend. {why}."
+    ],
+    "fail.build_materials": [
+      "I need {need} blocks for {thing}, and I carry {have}.",
+      "{thing} takes {need} blocks. I have but {have}.",
+      "Not enough stone or wood: {have} of {need}."
+    ],
+    "status.build": [
+      "I am building {thing}. Soon it will stand.",
+      "Still at work on {thing}."
+    ],
+    "ack.mine": [
+      "I will dig. Stay close behind me.",
+      "Very well. Into the deep, carefully.",
+      "Mining. I will watch the walls."
+    ],
+    "done.mine": [
+      "Enough digging. We found {ores}.",
+      "Done. {count} blocks dug, and {ores}.",
+      "The tunnel is done. {ores}."
+    ],
+    "fail.mine_hazard": [
+      "Stop. There is {danger} beyond this rock. We go no further.",
+      "{danger}. I will not lead you into that.",
+      "Hold. {danger} ahead."
+    ],
+    "fail.mine_cave": [
+      "We have opened into a cave. Let us not go in unready.",
+      "A cave lies ahead. I stop here until you decide."
+    ],
+    "fail.mine_bottom": [
+      "We can dig no deeper. The world's floor is beneath us.",
+      "Bedrock. No further."
+    ],
+    "fail.mine_full": [
+      "My pack is full. We found {ores}.",
+      "I can carry no more, friend."
+    ],
+    "status.mine": [
+      "Digging. {count} blocks so far.",
+      "Still mining, carefully. {count} blocks."
+    ],
+    "talk.help": [
+      "I guard, I fight, I gather, I dig, and I can raise a shelter or a wall. Ask, and it is done.",
+      "Whatever keeps you safe. Fighting, building walls, digging, fetching."
+    ],
+    "fact.nickname": [
+      "{nick}. I will remember it, friend.",
+      "{nick} it is. A good name to stand behind.",
+      "Very well, {nick}."
+    ],
+    "fact.like": [
+      "{thing}. I will remember that.",
+      "{thing}? Then I hope we find plenty of it.",
+      "It is good to know what brings you joy. {thing}. Noted.",
+      "{thing}. I will keep watch for it."
+    ],
+    "fact.dislike": [
+      "{thing}. Then it will have to get through me first.",
+      "I will keep {thing} away from you, as best I can.",
+      "Noted, friend. {thing} is no friend of ours."
+    ],
+    "fact.forget": [
+      "As you wish. {player} once more.",
+      "Of course. {player} it is."
+    ],
+    "talk.about_me": [
+      "I remember what you tell me, friend. {facts}.",
+      "Let me see. {facts}. Have I kept it right?",
+      "{facts}. I keep these things close."
+    ],
+    "talk.about_me.none": [
+      "You are {player}. Beyond that, you have told me little. That is your right.",
+      "I know your name, {player}. Little else, yet."
+    ],
+    "talk.bond": [
+      "You are my friend, {player}. I would not walk this road with just anyone.",
+      "I trust you. That is not a small thing for me.",
+      "We are friends. Growing closer, I think."
+    ],
+    "talk.bond.close": [
+      "You are as dear to me as any I have sworn to protect. Dearer.",
+      "I would stand between you and anything. You know that.",
+      "My closest friend. I do not say it lightly."
+    ],
+    "talk.bond.cold": [
+      "I will protect you, as I swore to. Friendship takes more.",
+      "Things have been strained between us. I hope that changes.",
+      "I am still here. That should tell you something."
+    ],
+    "talk.bond.stranger": [
+      "We have only just met. Trust is earned, friend.",
+      "I do not know you yet. But I would like to."
+    ],
+    "talk.answer": [
+      "I see. That is worth thinking on.",
+      "Hm. A fair answer.",
+      "I had not thought of it that way.",
+      "Thank you for telling me."
+    ],
+    "talk.answer.good": [
+      "Good. That gladdens me.",
+      "I am glad, friend. Truly.",
+      "Then all is well."
+    ],
+    "talk.answer.bad": [
+      "I am sorry, friend. Stay close to me.",
+      "Hard days pass. I will be here when this one does.",
+      "Rest if you need to. I will keep watch."
+    ],
+    "ask.nickname": [
+      "Friend, what name would you have me call you?",
+      "I have never asked. What do you prefer to be called?",
+      "How should I call you, in battle and out of it?"
+    ],
+    "ask.nickname.skip": [
+      "Then {player} it is. A fine name.",
+      "As you like. {player} it shall be."
+    ],
+    "ask.skip": [
+      "That is your right, friend.",
+      "Another time, then."
+    ],
+    "ask.like": [
+      "What do you hold dear out here, friend?",
+      "What is your favourite thing in this world? I would like to know.",
+      "Tell me something you love. It helps to know what we fight for."
+    ],
+    "ask.dislike": [
+      "What do you fear most out here? I would rather know.",
+      "Is there anything you cannot abide? Tell me, and I will keep it from you.",
+      "What is the worst foe you have faced?"
+    ],
+    "ask.how": [
+      "How do you fare, friend?",
+      "Are you well? Truly?",
+      "How is your heart today, {player}?"
+    ],
+    "ask.open": [
+      "Do you ever think of making a home somewhere? A real one?",
+      "What do you think we are fighting for, in the end?",
+      "If you could protect one place in all this world, which would it be?"
+    ],
+    "recall.liked": [
+      "Look, friend. You said you liked {thing}. Here we are.",
+      "{thing}. I remembered. I hoped we would find it."
+    ],
+    "recall.liked_find": [
+      "{item}, there. You told me you liked {thing}.",
+      "Look, {item}. You said you liked {thing}."
+    ],
+    "recall.disliked": [
+      "{mob}, close. I know you hate {thing}. Stand behind me.",
+      "Stay back, friend. {mob}. I remember what you told me."
+    ],
+    "react.level": [
+      "Level {level}. You grow stronger, friend.",
+      "{level} levels. I am proud of you.",
+      "Level {level}. Well earned."
+    ],
+    "react.diamonds": [
+      "Diamonds. Well found, friend.",
+      "A fine find. Armour, perhaps? Your safety first.",
+      "Diamonds! Fortune favours you today."
+    ],
+    "react.sleep": [
+      "Sleep, friend. I will stand watch.",
+      "Rest. I will be at the door.",
+      "Good night. I am here."
+    ],
+    "react.wake": [
+      "Good morning, friend. Did you rest well?",
+      "The sun is up. Did you sleep well?",
+      "Morning, {player}. Was your sleep peaceful?"
+    ],
+    "react.player_died": [
+      "{player}! No!",
+      "I failed you... {player}!",
+      "{player}!"
+    ],
+    "react.respawn": [
+      "You live. Thank the stars.",
+      "There you are. I should have been closer.",
+      "Friend! You are back. My heart can rest."
+    ],
+    "react.advancement": [
+      "{advancement}. Well done, friend.",
+      "That is {advancement} achieved. I am proud.",
+      "{advancement}. A worthy deed."
+    ],
+    "react.challenge": [
+      "{advancement}. That will be sung about, friend.",
+      "You achieved {advancement}. I have never been prouder to walk beside you."
+    ],
+    "gesture.crouch": [
+      "Ha. A greeting? Then I return it.",
+      "Well met, {player}.",
+      "I know this custom. Hello, friend."
+    ],
+    "gift.food": [
+      "You must eat, friend. Here. {item}.",
+      "Here. {item}. A hungry fighter is a slow one."
+    ],
+    "gift.flower": [
+      "I found this {item}. It made me think of you.",
+      "For you, friend. This {item} grew by the path."
     ]
   }
 }

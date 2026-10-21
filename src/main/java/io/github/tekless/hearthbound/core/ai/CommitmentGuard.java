@@ -51,6 +51,8 @@ public final class CommitmentGuard {
 			case COME -> verb.matches("come|head");
 			case GIVE -> verb.matches("bring|give|hand|come|get|fetch");
 			case ATTACK -> verb.matches("attack|kill|fight|slay|get|hunt");
+			case BUILD -> verb.matches("build|make|place|put|get");
+			case MINE -> verb.matches("mine|dig|head|go|get|find");
 			case CANCEL, STATUS, INVENTORY, RECRUIT, DISMISS -> verb.matches("follow|wait|stay|come|head|give|hand");
 		};
 	}

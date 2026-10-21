@@ -67,38 +67,39 @@ Operator commands: `/companion hub list`, `/companion hub spawn`, `/companion hu
 
 `server.skins` picks where a mannequin's skin comes from, per viewer:
 
-1. **Signed skins**: put a `value`/`signature` pair per cast member in
+1. Signed skins: put a `value`/`signature` pair per cast member in
    `config/hearthbound-skins.json`. Every vanilla client shows these, with nothing to download.
    `python tools/skins/mineskin_upload.py config/hearthbound-skins.json` uploads the cast PNGs to
    [MineSkin](https://mineskin.org) (unlisted, no account needed), which has Mojang sign and host them,
    and writes the file for you. This is what my server uses.
-2. **Resource pack**: the cast textures are added to Polymer's resource pack. A player who accepts the
+2. Resource pack: the cast textures are added to Polymer's resource pack. A player who accepts the
    pack sees the hand-drawn outfits. Polymer's pack hosting must be on for this.
-3. **Default skins**: otherwise each cast member wears one of the game's default skins picked to suit
+3. Default skins: otherwise each cast member wears one of the game's default skins picked to suit
    them. This is what you get with no extra setup.
 
 ## AI on a shared server
 
 AI dialogue is off by default here too. If you turn it on, a few things matter more with friends
-around:
+around. Every reply is one request, and `ai.maxRequestsPerPlayerPerMinute` (default 6) and
+`ai.maxConcurrentRequests` (default 4) cap it. Past the limit, companions just answer with their own
+lines, so nothing breaks.
 
-- **Cost**: every reply is one request. `ai.maxRequestsPerPlayerPerMinute` (default 6) and
-  `ai.maxConcurrentRequests` (default 4) cap it. Past the limit, companions just answer with their own
-  lines, so nothing breaks.
-- **Privacy**: what a player says to a companion goes to the AI provider you configure. Only that
-  player's own conversation with that one companion is sent (see Privacy above), plus a short
-  description of the surroundings. Tell your friends if you turn it on.
-- **Local is easiest**: Ollama on the server machine costs nothing and keeps everything on your PC.
+What a player says to a companion goes to the AI provider you configure. Only that player's own
+conversation with that one companion is sent (see Privacy above), plus a short description of the
+surroundings. Tell your friends if you turn it on.
 
-## How it was tested
+The easiest setup is Ollama on the server machine. It costs nothing and keeps everything on your PC.
 
-- 20 in-game server tests, 5 of them for multiplayer: stranger orders refused, stranger damage
-  blocked, companions never targeting players, protected areas and the build guard, the hub spawning
-  each resident once and taking them back, replies and per-speaker memory, and `@name` in the middle
-  of a message.
-- A copy of the real server (Fabric API, Polymer, Universal Graves, Ledger, Lithium, FerriteCore plus
-  Hearthbound) joined by Mojang's official, unmodified 26.3 client. The client's jar was checked
-  against Mojang's SHA-1. The twelve residents spawned at the hub, rendered as mannequins with names
-  and status lines, greeted the player in chat, and could be recruited (the label changed to
-  "travelling with..." and they followed). The recruited companion was still in the party after a
-  server restart.
+## How I tested it
+
+There are 20 in-game server tests, 5 of them for multiplayer: stranger orders refused, stranger
+damage blocked, companions never targeting players, protected areas and the build guard, the hub
+spawning each resident once and taking them back, replies and per-speaker memory, and `@name` in
+the middle of a message.
+
+I also ran a copy of my real server (Fabric API, Polymer, Universal Graves, Ledger, Lithium,
+FerriteCore plus Hearthbound) and joined it with Mojang's official, unmodified 26.3 client, after
+checking the client's jar against Mojang's SHA-1. The twelve residents spawned at the hub, rendered
+as mannequins with names and status lines, greeted me in chat, and could be recruited (the label
+changed to "travelling with..." and they followed). The recruited companion was still in the party
+after a server restart.

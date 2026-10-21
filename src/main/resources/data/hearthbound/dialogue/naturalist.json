@@ -352,15 +352,20 @@
       "This is {biome}. One of my favourites. They're all my favourites, really."
     ],
     "talk.memory": [
-      "Do you remember {event}? I wrote two pages about it.",
-      "I still think about {event}. What a day."
+      "Do you remember when {event}? I wrote two pages about it.",
+      "I still think about the time {event}. What a day.",
+      "Oh, remember when {event}? I've a sketch of it somewhere."
     ],
     "talk.generic": [
       "Interesting! Tell me more?",
       "Hmm, I hadn't thought of it that way.",
       "That's fascinating. Truly.",
       "I'll have to think about that one.",
-      "Ooh. I'll put that in the notebook."
+      "Ooh. I'll put that in the notebook.",
+      "Oh, really?",
+      "Huh! I like that.",
+      "Go on, I'm listening.",
+      "Mm-hm! Wait, is that a new kind of flower?"
     ],
     "gift.received": [
       "A {item}! Thank you! I'll take good care of it.",
@@ -436,6 +441,288 @@
     "fail.protected": [
       "Not here, this is where people live! Let's find some proper wilderness.",
       "I couldn't, not so close to everyone's homes. Somewhere wilder?"
+    ],
+    "talk.story": [
+      "I grew up in a cottage at the edge of a forest. I knew every bird before I knew my letters.",
+      "My grandmother kept bees. That's where it started, really. Bees, then flowers, then everything.",
+      "I left home to see a mushroom field. I still haven't. But I've seen so much on the way!",
+      "Before this I was a scribe. Very dull. Then I copied a book about axolotls and that was that."
+    ],
+    "talk.place": [
+      "{biome}! Look at the plants here, they're completely different from the last place.",
+      "It's beautiful. Listen to that. Can you hear the birds? Well, the chickens.",
+      "I could spend a week here and not run out of things to sketch.",
+      "Isn't it? I love how the light falls here."
+    ],
+    "talk.plan": [
+      "Ooh, we could look for a new biome! I've never seen a cherry grove up close. Well, I have, but again!",
+      "There might be a swamp nearby. Swamps are wonderful. Frogs!",
+      "Let's follow the river and see where it goes. Rivers always go somewhere.",
+      "We could plant a garden. A small one. With a bench."
+    ],
+    "talk.yes": [
+      "Lovely!",
+      "Wonderful.",
+      "Oh, good!",
+      "Yes! I hoped you'd say that."
+    ],
+    "talk.no": [
+      "Oh. That's all right.",
+      "Fair enough!",
+      "Maybe another time, then.",
+      "Hm, okay. I'll note that down."
+    ],
+    "talk.laugh": [
+      "Hehe. You have a nice laugh.",
+      "Ha! I'll write that one down.",
+      "Oh, stop, you'll scare the rabbits."
+    ],
+    "talk.fondness": [
+      "Oh! I... I like travelling with you too. Very much.",
+      "You're my favourite thing I've found out here. Don't tell the axolotls.",
+      "That's the nicest thing anyone's said to me since the bees."
+    ],
+    "talk.sad": [
+      "Oh, come here. Sit with me a moment. Look at the sky, it helps.",
+      "Bad days are like winter. They always end, even when it doesn't feel like it.",
+      "Do you want some tea? I have a herb for everything. Well, most things."
+    ],
+    "talk.food": [
+      "Berries! Sweet berries, glow berries, I'm not fussy.",
+      "Mushroom stew is underrated. Very underrated.",
+      "I could eat. I always forget to eat when I'm sketching."
+    ],
+    "talk.question": [
+      "Ooh, good question. I don't know! Let's find out.",
+      "Hmm. I'd have to look that up. If only I had a library.",
+      "I'm not sure. But I love that you asked.",
+      "That's one for the notebook. Under 'mysteries'."
+    ],
+    "ack.build": [
+      "Ooh, a building project! {thing} it is.",
+      "I've never built {thing} before. Well, once. It leaned. Let's go!",
+      "{thing}! I'll do my best."
+    ],
+    "done.build": [
+      "There! {thing}. I'm rather proud of it.",
+      "All done. {thing}. I might sketch it.",
+      "Finished! It's not a beaver dam, but it'll do."
+    ],
+    "fail.build_unknown": [
+      "Oh, that's beyond me, I'm afraid. I can manage {things}.",
+      "I'm a naturalist, not an architect! {things}, though, I can do.",
+      "Hmm. I only know how to make {things}."
+    ],
+    "fail.build_site": [
+      "I don't think {thing} would work here. {why}.",
+      "Not this spot, I'm afraid: {why}.",
+      "Hmm, {why}. Somewhere else?"
+    ],
+    "fail.build_materials": [
+      "I'd need {need} blocks for {thing}, and I've only got {have}. Could you spare some?",
+      "Not enough blocks: {have} out of {need}.",
+      "{thing} needs {need} blocks. I have {have}. Planks would be lovely."
+    ],
+    "status.build": [
+      "Building {thing}! It's coming along.",
+      "Still working on {thing}. Nearly there."
+    ],
+    "ack.mine": [
+      "Into the earth we go! I hope there are geodes.",
+      "Mining! I love seeing the rock layers.",
+      "Pickaxe ready. Let's see what's down there."
+    ],
+    "done.mine": [
+      "Done! We found {ores}. And some lovely rock strata.",
+      "That's {count} blocks dug. Found {ores}.",
+      "All done! {ores}. I took notes on the layers too."
+    ],
+    "fail.mine_hazard": [
+      "Wait! There's {danger} right behind here. Let's not.",
+      "Careful, {danger}! I'm stopping here.",
+      "I can feel the heat. Or hear the drip. {danger}, anyway. Stopping."
+    ],
+    "fail.mine_cave": [
+      "Oh! We've opened into a cave. Lovely, but let's not wander in blind.",
+      "A cave! I'd love to explore it, but not without you."
+    ],
+    "fail.mine_bottom": [
+      "We can't go any deeper. That's bedrock, I think.",
+      "That's as far down as anyone goes, I'm afraid."
+    ],
+    "fail.mine_full": [
+      "My pack's full! We found {ores} though.",
+      "No more room. Could you take some of this?"
+    ],
+    "status.mine": [
+      "Digging! {count} blocks so far.",
+      "Still mining. {count} blocks. The layers are fascinating."
+    ],
+    "talk.help": [
+      "I can gather things, follow you, dig, build small shelters and walls, and tell you about every flower we pass.",
+      "Lots! Gathering, digging, building a little, and keeping you company. Ask me anything."
+    ],
+    "fact.nickname": [
+      "{nick}! Lovely. I'll write it down properly.",
+      "{nick} it is! It suits you.",
+      "Oh, {nick}. I like that."
+    ],
+    "fact.like": [
+      "{thing}! Wonderful. I'll keep an eye out for you.",
+      "Oh, {thing}? I'll remember that.",
+      "{thing}. I'm writing that in my notebook, right under 'favourite things'.",
+      "Noted! {thing}. You have excellent taste."
+    ],
+    "fact.dislike": [
+      "{thing}? Understandable. I'll warn you if I see any.",
+      "Oh no, {thing}. I'll keep it well away from you.",
+      "Noted. I'll put {thing} on the list of things to avoid."
+    ],
+    "fact.forget": [
+      "Oh! Of course. {player} again, then.",
+      "Back to {player}. Consider it crossed out."
+    ],
+    "talk.about_me": [
+      "Let me check my notes! {facts}. Did I get it right?",
+      "Ooh, I know this one. {facts}.",
+      "From my notebook: {facts}. Anything to add?"
+    ],
+    "talk.about_me.none": [
+      "You're {player}! And... that's all I've got. Tell me something?",
+      "Hmm, my page on you is almost empty, {player}. Just your name."
+    ],
+    "talk.bond": [
+      "Of course I like you! You're very good company.",
+      "We're friends, I'd say. Expedition friends, at least.",
+      "I like you, {player}. You let me stop and look at things."
+    ],
+    "talk.bond.close": [
+      "You're my best friend out here. Possibly anywhere.",
+      "Do I like you? I'd follow you into the Nether. With notes.",
+      "You're the best thing I've found on this whole journey."
+    ],
+    "talk.bond.cold": [
+      "I... I'm still a little hurt, if I'm honest.",
+      "We're all right. Just give me some time.",
+      "I'd like to be friends. Things have been rocky."
+    ],
+    "talk.bond.stranger": [
+      "We've only just met! But you seem nice.",
+      "Ask me again once we've seen a few sunsets together."
+    ],
+    "talk.answer": [
+      "Oh! Interesting.",
+      "Hmm, I'll have to think about that.",
+      "Ha! I didn't expect that.",
+      "Really? I'll ponder that tonight."
+    ],
+    "talk.answer.good": [
+      "Oh, good! That makes me happy.",
+      "Wonderful. Days like this are the best.",
+      "Lovely! Let's keep it that way."
+    ],
+    "talk.answer.bad": [
+      "Oh no. Do you want to sit for a bit? We can look at clouds.",
+      "I'm sorry. Stay close to me today.",
+      "That's rotten. Tomorrow's a new page, though."
+    ],
+    "ask.nickname": [
+      "What should I call you? I want to get it right.",
+      "Do you have a name you like to go by? For my notes.",
+      "I realise I've never asked. What do you like to be called?"
+    ],
+    "ask.nickname.skip": [
+      "{player} it is! A perfectly good name.",
+      "That's fine. {player} suits you anyway."
+    ],
+    "ask.skip": [
+      "That's all right! Another time.",
+      "Oh, a mystery. I like mysteries."
+    ],
+    "ask.like": [
+      "What's your favourite thing out here? Flowers, animals, rocks? I won't judge.",
+      "If you could find one thing on this trip, what would it be?",
+      "What do you love most about all this?"
+    ],
+    "ask.dislike": [
+      "Is there anything you really can't stand out here? I'd like to know.",
+      "What's the one thing you'd happily never see again?",
+      "What scares you most out here? I won't tell."
+    ],
+    "ask.how": [
+      "How are you feeling? Honestly.",
+      "Are you doing all right? You've been quiet.",
+      "How's your day been, {player}?"
+    ],
+    "ask.open": [
+      "Do you think the villagers know we're watching them?",
+      "What do you think is at the bottom of the ocean? Besides more ocean.",
+      "Do you ever just stop and listen to the trees?"
+    ],
+    "recall.liked": [
+      "Oh, look! You said you liked {thing}, didn't you?",
+      "{thing}! You said you liked it. Here we are!"
+    ],
+    "recall.liked_find": [
+      "Oh! {item}! You said you liked {thing}, didn't you?",
+      "Look, {item}. I remembered you liked {thing}."
+    ],
+    "recall.disliked": [
+      "Oh dear. {mob} about. I know you hate {thing}. Stay near me.",
+      "Careful, {mob} nearby. I remember. {thing}. Not your favourite."
+    ],
+    "react.level": [
+      "Level {level}! Look at you!",
+      "Ooh, level {level}. You're getting so good at this.",
+      "{level} levels! That deserves a little celebration."
+    ],
+    "react.diamonds": [
+      "Diamonds! Can I see? Just for a second?",
+      "Ooh! Diamonds! The way they catch the light...",
+      "You found diamonds! I'm so pleased."
+    ],
+    "react.sleep": [
+      "Sleep well. I'll read for a bit.",
+      "Goodnight! I'll be right here.",
+      "Rest up. Tomorrow we'll go and find something lovely."
+    ],
+    "react.wake": [
+      "Good morning! Did you sleep well?",
+      "Morning, {player}! How did you sleep?",
+      "You're up! Sleep all right?"
+    ],
+    "react.player_died": [
+      "{player}! No!",
+      "Oh no, no, no. {player}!",
+      "{player}!"
+    ],
+    "react.respawn": [
+      "You're back! Oh, thank goodness.",
+      "There you are! Please don't do that again.",
+      "Oh, I was so worried. Come here."
+    ],
+    "react.advancement": [
+      "{advancement}! How exciting!",
+      "Ooh, {advancement}. That's going in my notebook.",
+      "Well done! {advancement}, just like that."
+    ],
+    "react.challenge": [
+      "{advancement}?! That's incredible! I need to sit down.",
+      "You did {advancement}! I'll be telling people about this for years."
+    ],
+    "gesture.crouch": [
+      "Oh! Hello! Is this a greeting? I like it.",
+      "Ha! Hello to you too.",
+      "I've read about this! It's how you say hello."
+    ],
+    "gift.food": [
+      "You look famished! Here, {item}. I've been saving it.",
+      "Eat something, please. {item}, from my pack."
+    ],
+    "gift.flower": [
+      "I picked this {item} for you. I thought you'd like it.",
+      "Here! This {item} reminded me of you.",
+      "For you. This {item} was the prettiest one I found."
     ]
   }
 }

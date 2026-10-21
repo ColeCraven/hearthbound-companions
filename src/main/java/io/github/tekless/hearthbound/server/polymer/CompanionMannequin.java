@@ -43,19 +43,19 @@ final class CompanionMannequin implements PolymerEntity {
 		boolean hasPack = PolymerBridge.hasResourcePack(player);
 		data.add(SynchedEntityData.DataValue.create(MannequinData.PROFILE, SkinProfiles.forViewer(companion.skinVariant(), hasPack)));
 		data.add(SynchedEntityData.DataValue.create(MannequinData.DESCRIPTION, Optional.of(description())));
-		data.add(SynchedEntityData.DataValue.create(MannequinData.POSE, companion.isDowned() ? Pose.CROUCHING : Pose.STANDING));
+		data.add(SynchedEntityData.DataValue.create(MannequinData.POSE, companion.isDowned() || companion.getPose() == Pose.CROUCHING ? Pose.CROUCHING : Pose.STANDING));
 	}
 
 	private Component description() {
 		if (companion.isDowned()) {
 			return Texts.tr("label.hearthbound.downed").withStyle(ChatFormatting.RED);
 		}
+		// Kept short and grey so it sits quietly under the name.
 		String owner = companion.ownerName();
 		if (owner != null) {
 			return Texts.tr("label.hearthbound.with", owner).withStyle(ChatFormatting.GRAY);
 		}
 		Archetype archetype = Archetype.byId(companion.syncedArchetype()).orElse(companion.archetype());
-		return Texts.tr("label.hearthbound.free", archetype.displayName())
-				.withStyle(CompanionEntity.nameColour(archetype.id()));
+		return Texts.tr("label.hearthbound.free", archetype.displayName()).withStyle(ChatFormatting.GRAY);
 	}
 }

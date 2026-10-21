@@ -36,6 +36,15 @@ class LineBankTest {
 		}
 		REQUIRED.put("recruit.party_full", plus(base, "count"));
 		REQUIRED.put("recruit.taken", plus(base, "owner"));
+		for (String key : List.of("ack.build", "done.build", "status.build")) {
+			REQUIRED.put(key, plus(base, "thing"));
+		}
+		REQUIRED.put("fail.build_unknown", plus(base, "things"));
+		REQUIRED.put("fail.build_site", plus(base, "thing", "why"));
+		REQUIRED.put("fail.build_materials", plus(base, "thing", "need", "have"));
+		for (String key : List.of("ack.mine", "done.mine", "fail.mine_hazard", "fail.mine_cave", "fail.mine_bottom", "fail.mine_full", "status.mine")) {
+			REQUIRED.put(key, plus(base, "ores", "count", "danger", "item", "tool", "have"));
+		}
 		REQUIRED.put("ack.gather", plus(base, "count", "item"));
 		REQUIRED.put("ack.cancel", plus(base, "task"));
 		REQUIRED.put("ack.attack", plus(base, "mob"));
@@ -69,6 +78,24 @@ class LineBankTest {
 		for (String biome : List.of("forest", "desert", "snow", "ocean", "jungle", "swamp", "mountain", "plains", "nether", "end")) {
 			REQUIRED.put("ambient.biome." + biome, base);
 		}
+		// Getting to know the player.
+		REQUIRED.put("fact.nickname", plus(base, "nick"));
+		REQUIRED.put("fact.like", plus(base, "thing"));
+		REQUIRED.put("fact.dislike", plus(base, "thing"));
+		REQUIRED.put("talk.about_me", plus(base, "biome", "event", "facts"));
+		for (String key : List.of("fact.forget", "talk.about_me.none", "talk.bond.close", "talk.bond.cold", "talk.bond.stranger", "talk.answer",
+				"talk.answer.good", "talk.answer.bad", "ask.nickname", "ask.nickname.skip", "ask.skip", "ask.like", "ask.dislike", "ask.how", "ask.open",
+				"gesture.crouch", "react.diamonds", "react.sleep", "react.wake", "react.player_died", "react.respawn")) {
+			REQUIRED.put(key, base);
+		}
+		REQUIRED.put("recall.liked", plus(base, "thing"));
+		REQUIRED.put("recall.liked_find", plus(base, "thing", "item"));
+		REQUIRED.put("recall.disliked", plus(base, "thing", "mob"));
+		REQUIRED.put("react.level", plus(base, "level"));
+		REQUIRED.put("react.advancement", plus(base, "advancement"));
+		REQUIRED.put("react.challenge", plus(base, "advancement"));
+		REQUIRED.put("gift.food", plus(base, "item"));
+		REQUIRED.put("gift.flower", plus(base, "item"));
 	}
 
 	private static Set<String> plus(Set<String> base, String... extra) {
@@ -148,5 +175,22 @@ class LineBankTest {
 	void fillsPlaceholdersAndNeverShowsBraces() {
 		assertEquals("16 oak logs. On it.", LineSelector.fill("{count} {item}. On it.", Map.of("count", "16", "item", "oak logs")));
 		assertFalse(LineSelector.fill("Hello {player}, {unknown}!", Map.of()).contains("{"));
+	}
+
+	@Test
+	void placeholdersThatStartASentenceAreCapitalised() {
+		assertEquals("A shelter? Sure.", LineSelector.fill("{thing}? Sure.", Map.of("thing", "a shelter")));
+		assertEquals("Not here. The ground's too uneven.", LineSelector.fill("Not here. {why}.", Map.of("why", "the ground's too uneven")));
+		assertEquals("I'll build a wall.", LineSelector.fill("I'll build {thing}.", Map.of("thing", "a wall")));
+	}
+
+	@Test
+	void articlesAgreeWithWhatFillsThem() {
+		assertEquals("Look, an apple!", LineSelector.fill("Look, a {item}!", Map.of("item", "apple")));
+		assertEquals("Watch out, an enderman!", LineSelector.fill("Watch out, a {mob}!", Map.of("mob", "enderman")));
+		assertEquals("Some sweet berries? Thank you!", LineSelector.fill("A {item}? Thank you!", Map.of("item", "sweet berries")));
+		assertEquals("I love these cookies.", LineSelector.fill("I love this {item}.", Map.of("item", "cookies")));
+		assertEquals("It's a cactus.", LineSelector.fill("It's a {item}.", Map.of("item", "cactus")));
+		assertEquals("Ha, a zombie.", LineSelector.fill("Ha, a {mob}.", Map.of("mob", "zombie")));
 	}
 }

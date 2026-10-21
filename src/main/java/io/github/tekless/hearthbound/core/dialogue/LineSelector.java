@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -65,15 +66,54 @@ public final class LineSelector {
 	public static String fill(String template, Map<String, String> vars) {
 		Matcher m = PLACEHOLDER.matcher(template);
 		StringBuilder out = new StringBuilder();
+		int last = 0;
 		while (m.find()) {
+			out.append(template, last, m.start());
+			last = m.end();
 			String value = vars.get(m.group(1));
 			if (value == null) {
 				value = defaultFor(m.group(1));
 			}
-			m.appendReplacement(out, Matcher.quoteReplacement(value));
+			// "{thing}? Sure." -> "A shelter? Sure." when the placeholder starts a sentence.
+			String before = template.substring(0, m.start()).stripTrailing();
+			boolean sentenceStart = before.isEmpty() || before.endsWith(".") || before.endsWith("!") || before.endsWith("?");
+			if (sentenceStart && !value.isEmpty() && Character.isLowerCase(value.charAt(0))) {
+				value = Character.toUpperCase(value.charAt(0)) + value.substring(1);
+			}
+			agreeWith(out, value);
+			out.append(value);
 		}
-		m.appendTail(out);
+		out.append(template, last, template.length());
 		return out.toString();
+	}
+
+	/**
+	 * Fixes the word in front of a filled-in value: "a {item}" becomes "an apple" or "some sweet
+	 * berries", "this {item}" becomes "these cookies".
+	 */
+	private static void agreeWith(StringBuilder out, String value) {
+		if (value.isEmpty() || out.length() < 2 || out.charAt(out.length() - 1) != ' ') {
+			return;
+		}
+		int end = out.length() - 1;
+		int start = end;
+		while (start > 0 && Character.isLetter(out.charAt(start - 1))) {
+			start--;
+		}
+		String word = out.substring(start, end);
+		String lower = value.toLowerCase(Locale.ROOT);
+		boolean plural = lower.endsWith("s") && !lower.endsWith("ss") && !lower.endsWith("us") && !lower.endsWith("is");
+		String replacement = switch (word.toLowerCase(Locale.ROOT)) {
+			case "a", "an" -> plural ? "some" : "aeiou".indexOf(lower.charAt(0)) >= 0 ? "an" : "a";
+			case "this", "these" -> plural ? "these" : "this";
+			default -> null;
+		};
+		if (replacement != null && !replacement.equalsIgnoreCase(word)) {
+			if (Character.isUpperCase(word.charAt(0))) {
+				replacement = Character.toUpperCase(replacement.charAt(0)) + replacement.substring(1);
+			}
+			out.replace(start, end, replacement);
+		}
 	}
 
 	private static String defaultFor(String placeholder) {

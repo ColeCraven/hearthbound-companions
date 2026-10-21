@@ -17,6 +17,7 @@ import io.github.tekless.hearthbound.dialogue.Conversations;
 import io.github.tekless.hearthbound.dialogue.Texts;
 import io.github.tekless.hearthbound.entity.CompanionEntity;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -194,6 +195,8 @@ public final class AiService {
 			case CANCEL -> "ack.cancel.nothing";
 			case RECRUIT -> "recruit.accept";
 			case DISMISS -> "dismiss.accept";
+			case BUILD -> "ack.build";
+			case MINE -> "ack.mine";
 			case STATUS, INVENTORY -> "talk.generic";
 		};
 	}
@@ -252,8 +255,20 @@ public final class AiService {
 		List<CompanionMemory.Line> lines = companion.memory().lines();
 		List<CompanionMemory.Line> recent = lines.subList(Math.max(0, lines.size() - 8), lines.size());
 		String playerName = sharePlayerName ? player.getName().getString() : "the player";
+		List<String> told = new ArrayList<>();
+		companion.memory().knownFacts(player.getUUID().toString()).ifPresent(facts -> {
+			if (sharePlayerName) {
+				facts.nickname().ifPresent(name -> told.add("They like to be called " + name));
+			}
+			if (!facts.likes().isEmpty()) {
+				told.add("They like " + String.join(", ", facts.likes()));
+			}
+			if (!facts.dislikes().isEmpty()) {
+				told.add("They can't stand " + String.join(", ", facts.dislikes()));
+			}
+		});
 		return new PromptBuilder.Context(companion.companionName(), companion.archetype(), playerName, world, recent,
-				companion.memory().events(), companion.memory().affinity(), companion.order().describe(), companion.isRecruited(),
+				companion.memory().events(), told, companion.memory().affinity(), companion.order().describe(), companion.isRecruited(),
 				companion.castMember().map(member -> companion.companionName() + " (" + member.pronouns() + "), " + member.background()).orElse(null));
 	}
 }

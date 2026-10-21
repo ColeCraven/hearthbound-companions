@@ -17,6 +17,7 @@
 		"main": ["io.github.tekless.hearthbound.Hearthbound"],
 		"client": ["io.github.tekless.hearthbound.client.HearthboundClient"]
 	},
+	"mixins": ["hearthbound.mixins.json"],
 	"depends": {
 		"fabricloader": ">=0.19.5",
 		"minecraft": "~26.3",

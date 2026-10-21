@@ -12,7 +12,10 @@
   "message.hearthbound.welcome_tip": "These folk are looking for company. Talk to them in chat: \"@%1$s hello\", or \"@%1$s join me\" to bring them along. Right-click one to say hi.",
   "message.hearthbound.recruit_hint": "Say \"@%1$s join me\" in chat to ask them along.",
   "message.hearthbound.party_full_server": "You already travel with %1$s companions, the most allowed here.",
-  "label.hearthbound.free": "%1$s · free to recruit",
-  "label.hearthbound.with": "travelling with %1$s",
-  "label.hearthbound.downed": "knocked down"
+  "label.hearthbound.free": "%1$s",
+  "label.hearthbound.with": "with %1$s",
+  "label.hearthbound.downed": "knocked down",
+  "message.hearthbound.chatting": "You're talking with %1$s. Just keep typing, no @ needed. Say bye when you're done.",
+  "message.hearthbound.help_hint": "Type /companion help to see everything you can ask.",
+  "message.hearthbound.recruited_tip": "%1$s is with you now. Chat away, or try \"%1$s, go mining\" or \"build a shelter\". /companion help lists the rest."
 }

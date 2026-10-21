@@ -1,18 +1,23 @@
 package io.github.tekless.hearthbound.entity;
 
 import io.github.tekless.hearthbound.Hearthbound;
+import io.github.tekless.hearthbound.core.dialogue.English;
 import io.github.tekless.hearthbound.core.dialogue.LineBank;
 import io.github.tekless.hearthbound.core.dialogue.LineSelector;
+import io.github.tekless.hearthbound.core.intent.QuestionKind;
 import io.github.tekless.hearthbound.core.memory.CompanionMemory;
+import io.github.tekless.hearthbound.core.memory.PlayerFacts;
 import io.github.tekless.hearthbound.core.persona.Archetype;
 import io.github.tekless.hearthbound.core.task.FollowPolicy;
 import io.github.tekless.hearthbound.core.task.TaskStatus;
+import io.github.tekless.hearthbound.dialogue.Conversations;
 import io.github.tekless.hearthbound.dialogue.Texts;
 import io.github.tekless.hearthbound.entity.order.ComeOrder;
 import io.github.tekless.hearthbound.entity.order.CompanionOrder;
 import io.github.tekless.hearthbound.entity.order.FollowOrder;
 import io.github.tekless.hearthbound.entity.order.GatherOrder;
 import io.github.tekless.hearthbound.entity.order.HomeOrder;
+import io.github.tekless.hearthbound.entity.order.MineOrder;
 import io.github.tekless.hearthbound.entity.order.WaitOrder;
 import io.github.tekless.hearthbound.world.CompanionRoster;
 import io.github.tekless.hearthbound.world.GatherCatalog;
@@ -40,6 +45,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.SimpleMenuProvider;
@@ -50,6 +56,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -126,6 +133,15 @@ public class CompanionEntity extends PathfinderMob {
 	private final Map<UUID, Long> hintedAt = new HashMap<>();
 	/** Situation key of the last scripted line (useful for tests and debugging). */
 	private String lastLineKey = "";
+	/** A question we asked a player and are waiting to hear back on, or null. */
+	private @Nullable AskedQuestion asked;
+	/** Counts down while crouching back at someone (two quick bobs). */
+	private int crouchTicks;
+	private long lastCrouchHello = -100000;
+
+	/** A question this companion asked, so the player's next words can be read as the answer. */
+	public record AskedQuestion(QuestionKind kind, UUID player, long tick) {
+	}
 
 	public CompanionEntity(EntityType<? extends PathfinderMob> type, Level level) {
 		super(type, level);
@@ -246,6 +262,17 @@ public class CompanionEntity extends PathfinderMob {
 			}
 			return;
 		}
+		if (crouchTicks > 0) {
+			crouchTicks--;
+			setPose(crouchTicks > 0 && (crouchTicks / 4) % 2 == 1 ? Pose.CROUCHING : Pose.STANDING);
+		}
+		// Eye contact with whoever is talking to us, unless we're busy working or fighting.
+		if (lastSpeaker != null && level.getGameTime() - lastSpokeAt < 160 && getTarget() == null && order != null && order.kind().isMode()) {
+			ServerPlayer speaker = level.getServer().getPlayerList().getPlayer(lastSpeaker);
+			if (speaker != null && speaker.level() == level && distanceTo(speaker) < 10) {
+				getLookControl().setLookAt(speaker);
+			}
+		}
 		if (tickCount % 40 == 0) {
 			equipBestGear();
 			if (getHealth() < getMaxHealth() && getTarget() == null && tickCount % 80 == 0) {
@@ -270,7 +297,7 @@ public class CompanionEntity extends PathfinderMob {
 	private void finishTask() {
 		CompanionOrder.Kind finished = order.kind();
 		order = createBaseOrder();
-		if (finished == CompanionOrder.Kind.GATHER) {
+		if (finished == CompanionOrder.Kind.GATHER || finished == CompanionOrder.Kind.MINE) {
 			restoreWeapon();
 		}
 	}
@@ -298,7 +325,7 @@ public class CompanionEntity extends PathfinderMob {
 	public void setOrder(CompanionOrder next) {
 		if (order != null && order != next) {
 			order.cancel(this);
-			if (order.kind() == CompanionOrder.Kind.GATHER) {
+			if (order.kind() == CompanionOrder.Kind.GATHER || order.kind() == CompanionOrder.Kind.MINE) {
 				restoreWeapon();
 			}
 		}
@@ -477,7 +504,7 @@ public class CompanionEntity extends PathfinderMob {
 		clearHome();
 		baseMode = CompanionOrder.Kind.FOLLOW;
 		setOrder(new FollowOrder());
-		memory.addEvent("joined {player} on the road");
+		memory.addEvent("I joined {player} on the road");
 		memory.changeAffinity(3);
 		updateRoster();
 	}
@@ -493,7 +520,7 @@ public class CompanionEntity extends PathfinderMob {
 			returnToHubAt = level().getGameTime() + 100;
 		}
 		setOrder(new HomeOrder(home != null ? home : blockPosition()));
-		memory.addEvent("parted ways with {player}");
+		memory.addEvent("I parted ways with {player}");
 		updateRoster();
 	}
 
@@ -540,6 +567,65 @@ public class CompanionEntity extends PathfinderMob {
 
 	public CompanionMemory memory() {
 		return memory;
+	}
+
+	/** What we call this player: the name they asked for, or their own. */
+	public String callName(Player player) {
+		return memory.knownFacts(player.getUUID().toString()).flatMap(PlayerFacts::nickname).orElse(player.getName().getString());
+	}
+
+	public PlayerFacts factsAbout(Player player) {
+		return memory.factsAbout(player.getUUID().toString());
+	}
+
+	/** Asks a player something (a line from {@code key}) and listens for the answer for the next half minute. */
+	public void ask(ServerPlayer player, QuestionKind kind, String key, Map<String, String> vars) {
+		noteSpeaker(player);
+		say(key, vars);
+		asked = new AskedQuestion(kind, player.getUUID(), level().getGameTime());
+	}
+
+	/** The question this player is answering, if we asked them one recently. Asking is forgotten either way. */
+	public @Nullable AskedQuestion takeQuestion(ServerPlayer player) {
+		AskedQuestion question = asked;
+		asked = null;
+		if (question == null || !question.player().equals(player.getUUID()) || level().getGameTime() - question.tick() > 600) {
+			return null;
+		}
+		return question;
+	}
+
+	// ------------------------------------------------------------------ gestures
+
+	/** Crouches back at a player who crouched at us: the oldest hello in Minecraft. */
+	public void crouchBack(ServerPlayer player) {
+		if (isDowned()) {
+			return;
+		}
+		crouchTicks = 16;
+		noteSpeaker(player);
+		long now = level().getGameTime();
+		if (now - lastCrouchHello > 6000) {
+			lastCrouchHello = now;
+			if (isOwnedBy(player)) {
+				memory.changeAffinity(1);
+			}
+			sayMaybe("gesture.crouch", Map.of("player", callName(player)), 0.6);
+		}
+	}
+
+	/** A wave: hello, goodbye, over here. */
+	public void wave() {
+		if (!isDowned()) {
+			swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, true);
+		}
+	}
+
+	/** A little hop, for good news. */
+	public void hop() {
+		if (!isDowned() && onGround() && !isInWater() && order != null && order.kind().isMode()) {
+			getJumpControl().jump();
+		}
 	}
 
 	// ------------------------------------------------------------------ talking
@@ -618,7 +704,7 @@ public class CompanionEntity extends PathfinderMob {
 		all.putIfAbsent("name", companionName());
 		ServerPlayer owner = ownerPlayer();
 		if (owner != null) {
-			all.putIfAbsent("player", owner.getName().getString());
+			all.putIfAbsent("player", callName(owner));
 		}
 		all.putIfAbsent("max", "256");
 		return all;
@@ -729,7 +815,7 @@ public class CompanionEntity extends PathfinderMob {
 	}
 
 	private void equipBestGear() {
-		if (!(order instanceof GatherOrder)) {
+		if (!(order instanceof GatherOrder) && !(order instanceof MineOrder)) {
 			equipBestWeapon();
 		}
 		for (EquipmentSlot slot : new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
@@ -788,7 +874,7 @@ public class CompanionEntity extends PathfinderMob {
 
 	/** Re-checks gear on the next equipment pass (after receiving a weapon or armour). */
 	public void equipFromPackSoon() {
-		if (!(order instanceof GatherOrder)) {
+		if (!(order instanceof GatherOrder) && !(order instanceof MineOrder)) {
 			equipBestGear();
 		}
 	}
@@ -816,7 +902,9 @@ public class CompanionEntity extends PathfinderMob {
 		if (held.isEmpty()) {
 			getLookControl().setLookAt(player);
 			noteSpeaker(serverPlayer);
-			say(greetingKey(player), Map.of("player", player.getName().getString()));
+			Conversations.beginChat(serverPlayer, this);
+			say(greetingKey(player), Map.of("player", callName(player)));
+			wave();
 			maybeHintRecruit(serverPlayer);
 			return InteractionResult.SUCCESS;
 		}
@@ -885,7 +973,7 @@ public class CompanionEntity extends PathfinderMob {
 			setHealth(1.0F);
 			setDowned(true);
 			say("downed", Map.of());
-			memory.addEvent("was knocked down by " + (source.getEntity() != null ? source.getEntity().getName().getString() : "something"));
+			memory.addEvent("I got knocked down by " + (source.getEntity() != null ? (source.getEntity() instanceof Player killer ? killer.getName().getString() : English.withArticle(source.getEntity().getName().getString())) : "something"));
 			return true;
 		}
 		boolean hurt = super.hurtServer(level, source, damage);
@@ -1014,6 +1102,12 @@ public class CompanionEntity extends PathfinderMob {
 		}
 		ValueOutput.TypedOutputList<String> events = output.list("Events", com.mojang.serialization.Codec.STRING);
 		memory.events().forEach(events::add);
+		ValueOutput.TypedOutputList<String> facts = output.list("Facts", com.mojang.serialization.Codec.STRING);
+		memory.allFacts().forEach((id, known) -> {
+			known.nickname().ifPresent(name -> facts.add(id + "|N|" + name));
+			known.likes().forEach(thing -> facts.add(id + "|L|" + thing));
+			known.dislikes().forEach(thing -> facts.add(id + "|D|" + thing));
+		});
 		output.putInt("Affinity", memory.affinity());
 		if (memory.partner() != null) {
 			output.putString("ConversationWith", memory.partner());
@@ -1046,6 +1140,19 @@ public class CompanionEntity extends PathfinderMob {
 			}
 		});
 		input.listOrEmpty("Events", com.mojang.serialization.Codec.STRING).forEach(memory::addEvent);
+		input.listOrEmpty("Facts", com.mojang.serialization.Codec.STRING).forEach(entry -> {
+			String[] parts = entry.split("\\|", 3);
+			if (parts.length == 3) {
+				PlayerFacts known = memory.factsAbout(parts[0]);
+				switch (parts[1]) {
+					case "N" -> known.setNickname(parts[2]);
+					case "L" -> known.like(parts[2]);
+					case "D" -> known.dislike(parts[2]);
+					default -> {
+					}
+				}
+			}
+		});
 		memory.setAffinity(input.getIntOr("Affinity", 0));
 		input.getString("ConversationWith").ifPresent(memory::setPartner);
 		int downed = input.getIntOr("Downed", 0);
