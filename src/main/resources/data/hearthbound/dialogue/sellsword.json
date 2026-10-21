@@ -1,0 +1,359 @@
+{
+  "archetype": "sellsword",
+  "lines": {
+    "greet.stranger": [
+      "You're staring. Need a sword arm, or just lost?",
+      "Name's {name}. I fight, I haul, I don't sing.",
+      "Looking for work, if you've got any. Honest work. Mostly.",
+      "Keep your hands where I can see them, {player}. Habit.",
+      "You've the look of someone who walks into trouble. I could use the pay."
+    ],
+    "greet.owner": [
+      "{player}.",
+      "Still breathing. Good. What's the job?",
+      "Orders?",
+      "Back again. Talk.",
+      "I'm listening. Make it quick, the night won't wait.",
+      "Something on your mind, boss?"
+    ],
+    "recruit.accept": [
+      "Fine. I'll watch your back. Try not to make it hard.",
+      "Deal. Point me at the trouble.",
+      "You've got yourself a sword, {player}.",
+      "Right. Where you go, I go. Within reason.",
+      "Done. I'll keep the monsters off you. The rest is your problem."
+    ],
+    "recruit.party_full": [
+      "You've already got {count} of us. Any more and we're a parade.",
+      "Too many blades in one place gets people cut. You're full up.",
+      "No room. Send one of the others home first."
+    ],
+    "recruit.already": [
+      "I already work for you.",
+      "We had a deal. Still do.",
+      "Already here, {player}. Look behind you."
+    ],
+    "dismiss.accept": [
+      "Fair enough. I'll be around if you need a blade.",
+      "Paid in full. Watch yourself out there.",
+      "Off you go then. Don't die stupid.",
+      "Right. I'll head back. Whistle if it gets ugly."
+    ],
+    "dismiss.not_recruited": [
+      "Can't quit a job I never took.",
+      "Dismiss me? You'd have to hire me first."
+    ],
+    "not_recruited": [
+      "I don't take orders from strangers. Hire me first.",
+      "Ask me to join you. Then we'll talk about orders.",
+      "Nice try. No contract, no work."
+    ],
+    "ack.follow": [
+      "On your heels.",
+      "Lead on.",
+      "Right behind you.",
+      "Moving.",
+      "I'll stay close. Don't run off a cliff.",
+      "Following. Eyes on the treeline."
+    ],
+    "ack.follow.already": [
+      "Already am.",
+      "Turn around. I'm right here.",
+      "I've been following you this whole time."
+    ],
+    "ack.wait": [
+      "Holding here.",
+      "I'll stand watch.",
+      "Not moving. Don't be long.",
+      "I'll hold this spot. Anything ugly comes by, it regrets it.",
+      "Waiting. Shout if you need me."
+    ],
+    "ack.wait.already": [
+      "I'm already holding.",
+      "Still here. Still waiting."
+    ],
+    "ack.gather": [
+      "{count} {item}. On it.",
+      "Fine. {count} {item}. Keep watch while I work.",
+      "Grunt work. I'll get your {count} {item}.",
+      "{count} {item}, coming up. Don't wander off.",
+      "Right. {item}. {count} of them."
+    ],
+    "ack.cancel": [
+      "Dropping it. No more {task}.",
+      "Stopped. What now?",
+      "Fine, forget {task}.",
+      "Calling it off."
+    ],
+    "ack.cancel.nothing": [
+      "Nothing to stop. I'm just standing here.",
+      "I'm not doing anything. Yet."
+    ],
+    "ack.come": [
+      "Coming.",
+      "On my way.",
+      "Hold on, I'm coming to you."
+    ],
+    "ack.attack": [
+      "The {mob}? Done.",
+      "Going for the {mob}.",
+      "{mob}. Mine."
+    ],
+    "ack.give": [
+      "Here. {count} {item}.",
+      "Take it. {count} {item}, all there.",
+      "Hands out. {count} {item}."
+    ],
+    "ack.give.nothing": [
+      "My pack's empty. Nothing to hand over.",
+      "Got nothing on me but a sword and a bad attitude."
+    ],
+    "status.idle": [
+      "Standing around. Give me something to do.",
+      "Nothing. I'm waiting on you."
+    ],
+    "status.follow": [
+      "Following you. Watching the flanks.",
+      "Escort duty. Same as always."
+    ],
+    "status.wait": [
+      "Holding this position, like you said.",
+      "Standing guard here."
+    ],
+    "status.gather": [
+      "Gathering {item}. {have} of {count} so far.",
+      "{have} {item} of {count}. Working on it."
+    ],
+    "status.downed": [
+      "Down. Give me a moment.",
+      "Still on the ground. Not dead."
+    ],
+    "fail.unknown_item": [
+      "\"{item}\"? Never heard of it.",
+      "Don't know what \"{item}\" is. Say it plain.",
+      "No idea what you mean by \"{item}\"."
+    ],
+    "fail.not_gatherable": [
+      "{item}? That's not something I can just dig up.",
+      "I chop and dig. {item} isn't either.",
+      "Can't gather {item}. Try something that grows or sits in the ground."
+    ],
+    "fail.needs_tool": [
+      "I need a {tool} for {item}. Hand one over.",
+      "Can't break that with my fists. Get me a {tool}.",
+      "No {tool}, no {item}."
+    ],
+    "fail.none_found": [
+      "No {item} around here. Not that I can reach.",
+      "Looked. No {item} nearby.",
+      "There's no {item} I can get to. Move us somewhere else."
+    ],
+    "fail.unreachable": [
+      "I can see {item}, but I can't get to it.",
+      "Can't reach the {item}. Too high or walled off."
+    ],
+    "fail.inventory_full": [
+      "Pack's full. Got {have} {item} before it filled.",
+      "No more room. Take some of this off me."
+    ],
+    "fail.count_invalid": [
+      "Give me a real number. Between 1 and {max}.",
+      "That's not a sane amount. {max} at most."
+    ],
+    "fail.downed": [
+      "I'm on the ground bleeding. Ask me later.",
+      "Not now. Can't stand."
+    ],
+    "fail.refuse_target": [
+      "I'm not cutting down a {mob}. Find another sword.",
+      "No. Not the {mob}."
+    ],
+    "fail.no_target": [
+      "Attack what? I don't see it.",
+      "Point at something first."
+    ],
+    "fail.stuck": [
+      "I'm stuck. Can't find a way through.",
+      "Path's blocked. I'm not getting there from here."
+    ],
+    "unclear.generic": [
+      "Say that again. Simpler.",
+      "Not following you.",
+      "What's that supposed to mean?",
+      "Talk straight. What do you want me to do?"
+    ],
+    "unclear.gather_what": [
+      "Gather what?",
+      "Gather. Sure. Gather what, and how much?"
+    ],
+    "unclear.ambiguous": [
+      "Which one? {options}?",
+      "Could mean {options}. Pick."
+    ],
+    "progress.gather": [
+      "{have} {item}. Halfway.",
+      "{have} of {count}. Keep your shirt on."
+    ],
+    "done.gather": [
+      "Got your {count} {item}. Coming back.",
+      "{count} {item}. Done. Bringing them over."
+    ],
+    "done.delivered": [
+      "{count} {item}. As ordered.",
+      "There. {count} {item}. Next.",
+      "All {count} {item}. Don't spend it all at once."
+    ],
+    "partial.gather": [
+      "Only found {have} of the {count} {item}. That's all there is.",
+      "{have} {item}. No more around here. Take it."
+    ],
+    "combat.engage": [
+      "{mob}. I've got it.",
+      "Contact. {mob}.",
+      "Behind me.",
+      "Here we go."
+    ],
+    "combat.kill": [
+      "Handled.",
+      "One less {mob}.",
+      "That's that.",
+      "Next."
+    ],
+    "combat.low_health": [
+      "I'm cut up. Watch yourself.",
+      "Bleeding. Still standing.",
+      "Taking a beating here."
+    ],
+    "combat.retreat": [
+      "Falling back!",
+      "Pulling back. Cover me.",
+      "Need a breather. Back off!"
+    ],
+    "combat.player_low_health": [
+      "You're hurt bad, {player}. Get back.",
+      "{player}, eat something. Now.",
+      "You're in no shape to fight. Behind me."
+    ],
+    "combat.creeper": [
+      "Creeper! Move!",
+      "Green one. Don't let it hug you.",
+      "Creeper. Spread out."
+    ],
+    "downed": [
+      "Argh... down. Not out.",
+      "Give me... a moment.",
+      "That one got me."
+    ],
+    "revived": [
+      "Back on my feet. Where were we?",
+      "I'm up. Let's finish this.",
+      "Takes more than that."
+    ],
+    "move.caught_up": [
+      "There you are. Don't run off like that.",
+      "Caught up. Next time, wait for me.",
+      "Found you. You move fast for someone with no plan."
+    ],
+    "ambient.night": [
+      "Sun's down. Keep your sword out.",
+      "Night. The dead will be walking soon.",
+      "Dark. I'd rather have a wall at my back."
+    ],
+    "ambient.dawn": [
+      "Morning. We lived.",
+      "Sun's up. Let the zombies burn."
+    ],
+    "ambient.rain": [
+      "Rain. Wet leather, wet boots. Lovely.",
+      "Good weather for rust."
+    ],
+    "ambient.thunder": [
+      "Storm. Bad things like storms.",
+      "Thunder. Stay out of the open."
+    ],
+    "ambient.cave": [
+      "Tight quarters. Watch the corners.",
+      "Caves. I hate caves.",
+      "Too dark down here. Light it up."
+    ],
+    "ambient.idle": [
+      "Quiet. Too quiet.",
+      "My sword could use sharpening.",
+      "You ever stand still this long on purpose?",
+      "Nothing to hit. Shame."
+    ],
+    "ambient.biome.forest": ["Trees everywhere. Good cover for ambushes."],
+    "ambient.biome.desert": ["Sand in my boots already. Brilliant.", "Watch for husks. They don't burn."],
+    "ambient.biome.snow": ["Cold enough to freeze a blade to your hand.", "Snow. Strays out here. Watch for arrows."],
+    "ambient.biome.ocean": ["Water. Can't fight what's under it."],
+    "ambient.biome.jungle": ["Can't see ten feet in this green mess."],
+    "ambient.biome.swamp": ["Swamp. Witches and slime. Wonderful."],
+    "ambient.biome.mountain": ["High ground. Finally."],
+    "ambient.biome.plains": ["Open ground. Nowhere for anything to hide. I like it."],
+    "ambient.biome.nether": ["Hot as a forge. Everything here wants us dead.", "Keep away from the edges. Lava doesn't give second chances."],
+    "ambient.biome.end": ["Don't look the tall ones in the eye."],
+    "callout.hostile_behind": [
+      "{mob}, behind you!",
+      "Watch your back. {mob}.",
+      "Something's creeping up on you. {mob}."
+    ],
+    "callout.ore": [
+      "{item} over there. Worth a swing.",
+      "Spotted {item}."
+    ],
+    "callout.lava": [
+      "Lava. Watch your feet.",
+      "Careful. Lava ahead."
+    ],
+    "callout.chest": [
+      "Chest over there. Could be gear.",
+      "There's a chest. Probably not trapped. Probably."
+    ],
+    "talk.hello": ["Hey.", "{player}.", "Mm. Hello."],
+    "talk.who": [
+      "{name}. Sword for hire. That's all you need.",
+      "Soldier, once. Now I hit things for people who pay better.",
+      "I'm the one who stands between you and whatever's hungry tonight."
+    ],
+    "talk.how": [
+      "Alive. That's a good day.",
+      "Sore. Fine. Ask me after the next fight.",
+      "Could use a fight. Or a drink. Either."
+    ],
+    "talk.joke": [
+      "Joke? Fine. A skeleton walks into a fight. Doesn't walk out. That's the joke.",
+      "Creeper asked me for a hug once. Once.",
+      "I knew a man who tried to tame a creeper. Didn't take long. Him, I mean."
+    ],
+    "talk.thanks": ["Don't mention it.", "Part of the job.", "Just keep paying attention."],
+    "talk.compliment": ["Hm. Don't get soft on me.", "...Thanks. Now stop it.", "You're not bad either. For a beginner."],
+    "talk.insult": ["Say that again when I'm not holding a sword.", "Heard worse from a zombie.", "Fine. Keep talking. I'll keep you alive anyway."],
+    "talk.bye": ["Later.", "Watch your back.", "Right."],
+    "talk.likes": [
+      "A good iron sword. A shield that doesn't split. Honest pay.",
+      "Netherite. Never held any. Someday."
+    ],
+    "talk.dislikes": [
+      "Creepers. No honour in exploding.",
+      "Cowards. And people who leave doors open at night."
+    ],
+    "talk.where": [
+      "{biome}. Ground's ground. What matters is what's walking on it.",
+      "{biome}, looks like. I've fought in worse."
+    ],
+    "talk.memory": [
+      "Remember {event}? Good times. Mostly.",
+      "Still thinking about {event}."
+    ],
+    "talk.generic": [
+      "Hm.",
+      "If you say so.",
+      "Sure. Anything else, or are we moving?",
+      "I'm a sword, {player}, not a philosopher.",
+      "Talk later. Keep your eyes open now."
+    ],
+    "gift.received": ["{item}? Useful. Thanks.", "I'll put this {item} to work."],
+    "gift.loved": ["Now that's a {item}. You know how to treat a soldier.", "{item}. Oh, that's nice. Really."],
+    "hurt_by_player": ["Hit me again and we'll have words.", "Watch where you swing!", "Wrong target, {player}."]
+  }
+}

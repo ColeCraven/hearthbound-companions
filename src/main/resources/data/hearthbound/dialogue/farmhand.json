@@ -1,0 +1,325 @@
+{
+  "archetype": "farmhand",
+  "lines": {
+    "greet.stranger": [
+      "Oh! Hello! Sorry, you made me jump. I'm {name}. From the farm. Well, a farm.",
+      "Hi! Are you lost? I'm a bit lost. Not very lost. Medium lost.",
+      "Oh crumbs, a stranger. Er, hello! You're not a zombie, are you?",
+      "I'm {name}. I grow wheat. And carrots. And worry, mostly.",
+      "Hello! Lovely day for it. For what? Anything, really."
+    ],
+    "greet.owner": [
+      "{player}! Oh good, it's you.",
+      "Hello! Is everything all right? It's all right, isn't it?",
+      "Yes? Need something? I can do things. Some things.",
+      "Oh, hi! I was just thinking about potatoes.",
+      "There you are! I feel safer already."
+    ],
+    "recruit.accept": [
+      "Me? Really? Oh! Yes! I'll do my best, honest.",
+      "An adventure! Oh crumbs. All right. I'm in. I think. Yes!",
+      "I've never been further than the next field, but I'll come, {player}.",
+      "Okay! I'll bring snacks."
+    ],
+    "recruit.party_full": [
+      "You've got {count} friends already! I'd only get underfoot.",
+      "Oh, there's no room for me, is there? That's all right. I'll wave."
+    ],
+    "recruit.already": [
+      "I'm already with you! Right here! Hi!",
+      "We're already friends. Travel friends. I hope."
+    ],
+    "dismiss.accept": [
+      "Oh. All right. I'll go home and check on the chickens.",
+      "Okay. Thanks for taking me along. It was scary. In a good way.",
+      "Bye, {player}! Come and visit, I'll bake something."
+    ],
+    "dismiss.not_recruited": [
+      "Dismiss me? I'm not even with you! Am I? I'm confused now."
+    ],
+    "not_recruited": [
+      "Oh, I'd help, but... we're not travelling together. Are we? You could ask!",
+      "I'm not part of your group. I'd like to be, if you asked nicely."
+    ],
+    "ack.follow": [
+      "Coming! Wait for me!",
+      "Right behind you! Very right behind.",
+      "Following! Don't go too fast.",
+      "Okay! I'll stick close. Very close.",
+      "Following you. If anything jumps out, I'm hiding behind you."
+    ],
+    "ack.follow.already": [
+      "I'm already following! I'm just short. Ish.",
+      "Still here! Haven't left!"
+    ],
+    "ack.wait": [
+      "Wait here? On my own? Okay. Okay. Don't be long!",
+      "I'll stay! I'll be brave about it.",
+      "Waiting here. I'll count sheep. There are no sheep. I'll count anyway.",
+      "Staying put. If I scream, come back."
+    ],
+    "ack.wait.already": [
+      "I'm already waiting! Bravely."
+    ],
+    "ack.gather": [
+      "{count} {item}? I can do that! I think!",
+      "Gathering {count} {item}. Just like harvest season.",
+      "Okay! {count} {item}. Watch out for me while I work?",
+      "{count} {item}, coming up. Oh, I love a job I understand."
+    ],
+    "ack.cancel": [
+      "Stopping {task}! Did I do it wrong?",
+      "Oh, okay, I'll stop.",
+      "No more {task}. Got it!"
+    ],
+    "ack.cancel.nothing": [
+      "I wasn't doing anything! I promise!"
+    ],
+    "ack.come": [
+      "Coming! Coming!",
+      "On my way! Don't move!"
+    ],
+    "ack.attack": [
+      "The {mob}?! Okay. Okay. I'll try!",
+      "Oh crumbs. Going for the {mob}!"
+    ],
+    "ack.give": [
+      "Here! {count} {item}. I didn't drop any. Well, I picked them back up.",
+      "{count} {item} for you!"
+    ],
+    "ack.give.nothing": [
+      "My pockets are empty! Except for a seed. You can have the seed."
+    ],
+    "status.idle": [
+      "Nothing! Just standing. Bravely.",
+      "Not doing much. Want me to do something?"
+    ],
+    "status.follow": [
+      "Following you! Staying close.",
+      "Tagging along behind you. Like a duckling."
+    ],
+    "status.wait": [
+      "Waiting here, like you said. It's been fine. Mostly fine.",
+      "Still waiting! Haven't moved an inch."
+    ],
+    "status.gather": [
+      "Gathering {item}! I've got {have} of {count}.",
+      "{have} {item} so far. {count} is the goal!"
+    ],
+    "status.downed": [
+      "I'm on the ground. It's not very comfy."
+    ],
+    "fail.unknown_item": [
+      "\"{item}\"? I don't know what that is. Is it a vegetable?",
+      "Sorry, I've never heard of \"{item}\". Could you say it another way?"
+    ],
+    "fail.not_gatherable": [
+      "{item}? You can't grow or dig that, can you? I can't, anyway.",
+      "Oh, I can't gather {item}. Wood, stone, plants, dirt... those I know!"
+    ],
+    "fail.needs_tool": [
+      "I'd need a {tool} for {item}. I can't do it with my hands, I tried once.",
+      "Could you lend me a {tool}? Then I can get the {item}."
+    ],
+    "fail.none_found": [
+      "I looked everywhere I could reach, and there's no {item}. Sorry!",
+      "No {item} around here. Maybe somewhere else?"
+    ],
+    "fail.unreachable": [
+      "There's {item} up there but I can't get to it!",
+      "I can see the {item}, but it's too far up. Or too far in."
+    ],
+    "fail.inventory_full": [
+      "My bag's full! I got {have} {item} first though.",
+      "I can't carry any more! Take some, please?"
+    ],
+    "fail.count_invalid": [
+      "Oh, that's too many. Or too few. Somewhere from 1 to {max}?"
+    ],
+    "fail.downed": [
+      "I can't, I'm a bit... flat. Right now."
+    ],
+    "fail.refuse_target": [
+      "Hurt a {mob}? No! I raise those! I won't!",
+      "Not the {mob}. Please don't make me."
+    ],
+    "fail.no_target": [
+      "Attack what? I don't see anything. Thank goodness."
+    ],
+    "fail.stuck": [
+      "I'm stuck! I can't get through!",
+      "There's no way through here. I tried. Twice."
+    ],
+    "unclear.generic": [
+      "Sorry, what? I didn't understand.",
+      "Um. I don't know what you mean. Should I follow, wait, or gather something?",
+      "Oh crumbs, say that again? Slower?"
+    ],
+    "unclear.gather_what": [
+      "Gather what, though? I'm good with crops and wood!",
+      "Okay! Gather... what, exactly? And how many?"
+    ],
+    "unclear.ambiguous": [
+      "Do you mean {options}?",
+      "There's more than one kind! {options}?"
+    ],
+    "progress.gather": [
+      "{have} {item}! Halfway there!",
+      "That's {have} of {count}. Going well, I think!"
+    ],
+    "done.gather": [
+      "Got all {count} {item}! Coming back!",
+      "{count} {item}! Done! Heading to you now!"
+    ],
+    "done.delivered": [
+      "Here! {count} {item}! Did I do good?",
+      "All {count} {item}! That's a good harvest.",
+      "{count} {item} for you. Phew!"
+    ],
+    "partial.gather": [
+      "I only found {have} of the {count} {item}. Sorry! There wasn't any more.",
+      "{have} {item} is all there was. I looked really hard!"
+    ],
+    "combat.engage": [
+      "Aaah! A {mob}!",
+      "Oh no oh no, {mob}!",
+      "Stay back! I have a... thing! I'll hit you with it!"
+    ],
+    "combat.kill": [
+      "I got it! I actually got it!",
+      "Is it gone? It's gone. Phew.",
+      "Sorry, {mob}. But also, not sorry."
+    ],
+    "combat.low_health": [
+      "I'm hurt! I'm really hurt!",
+      "Ow, ow, ow!"
+    ],
+    "combat.retreat": [
+      "I'm running away! Sorry!",
+      "Nope! Backing off!",
+      "Help! Falling back!"
+    ],
+    "combat.player_low_health": [
+      "{player}! You're hurt! Eat something, I've seen you with bread!",
+      "Please be careful, {player}, you don't look well!"
+    ],
+    "combat.creeper": [
+      "Creeper! Creeper! Run!",
+      "That green thing's hissing! Get away!"
+    ],
+    "downed": [
+      "Ooh. I'm down. Don't leave me!",
+      "I'm all right. I'm not all right. I'll be all right."
+    ],
+    "revived": [
+      "I'm up! I'm okay! I think!",
+      "Phew. Back on my feet."
+    ],
+    "move.caught_up": [
+      "There you are! I was so worried!",
+      "Found you! Please don't go so fast.",
+      "Oh, thank goodness. I thought I'd lost you forever."
+    ],
+    "ambient.night": [
+      "It's getting dark. I don't like the dark.",
+      "Night's coming. Should we go home? Do we have a home?",
+      "Oh crumbs, it's night. Stay close, okay?"
+    ],
+    "ambient.dawn": [
+      "Morning! The rooster would be crowing now. If we had a rooster.",
+      "The sun's up! We made it!"
+    ],
+    "ambient.rain": [
+      "Rain! Good for the crops. Bad for my socks.",
+      "The fields back home will love this rain."
+    ],
+    "ambient.thunder": [
+      "Thunder! I don't like thunder.",
+      "A storm! Let's find a roof. Any roof."
+    ],
+    "ambient.cave": [
+      "It's very dark in here. Very dark.",
+      "Caves give me the shivers. Do they give you the shivers?",
+      "What was that noise? Was that a noise?"
+    ],
+    "ambient.idle": [
+      "Do you think chickens dream?",
+      "I miss my pumpkins. They're probably fine. Probably.",
+      "My gran says you can tell the weather by the cows. She's usually wrong.",
+      "If we find any seeds, can we plant them? Please?"
+    ],
+    "ambient.biome.forest": ["So many trees. Good wood. Spooky at night though."],
+    "ambient.biome.desert": ["No grass, no water, no crops. How does anything live here?"],
+    "ambient.biome.snow": ["Brr! My nose is going to fall off."],
+    "ambient.biome.ocean": ["That's a lot of water. I can't swim very well. At all, really."],
+    "ambient.biome.jungle": ["Melons! There might be wild melons here!"],
+    "ambient.biome.swamp": ["It smells like the pig pen. But wetter."],
+    "ambient.biome.mountain": ["We're so high up. Don't look down. I looked down."],
+    "ambient.biome.plains": ["Plains! This is good farming land. Really good."],
+    "ambient.biome.nether": ["It's so hot! Nothing grows here. Well, weird things grow here.", "I want to go home. I really want to go home."],
+    "ambient.biome.end": ["Where are we? Why is everything floating? Why is everyone so tall?"],
+    "callout.hostile_behind": [
+      "{player}! Behind you! A {mob}!",
+      "Look out! There's a {mob}!",
+      "Is that a {mob}? That's a {mob}! Behind you!"
+    ],
+    "callout.ore": [
+      "Oh, is that {item}? It looks shiny.",
+      "There's some {item} over there, I think!"
+    ],
+    "callout.lava": [
+      "Lava! Don't step in it! Please!",
+      "Careful, lava!"
+    ],
+    "callout.chest": [
+      "There's a chest! Can we look? Is that allowed?",
+      "A chest over there!"
+    ],
+    "talk.hello": ["Hi!", "Hello, {player}!", "Oh! Hi!"],
+    "talk.who": [
+      "I'm {name}! I'm a farmhand. I milk cows, plant wheat, chase chickens. Mostly the chasing.",
+      "Just a farm kid who wanted to see what's past the next hill. It's another hill. Usually.",
+      "I'm the one who knows when the carrots are ready. Everyone needs one of those."
+    ],
+    "talk.how": [
+      "Good! A bit scared. Mostly good.",
+      "I'm all right! Hungry, though.",
+      "Better now that you're here."
+    ],
+    "talk.joke": [
+      "Why did the scarecrow win an award? He was outstanding in his field! My gran's favourite.",
+      "What do you call a sleeping cow? A bulldozer! Hee.",
+      "Why don't chickens like to fight? They're too chicken. ...That one's about me."
+    ],
+    "talk.thanks": ["Oh! You're welcome!", "Happy to help!", "Anytime! Well, not at night."],
+    "talk.compliment": ["Really? Oh, thank you!", "Nobody's ever said that to me. Except my gran.", "You're nice. Has anyone told you you're nice?"],
+    "talk.insult": ["Oh. That's... okay. I'll try harder.", "That's mean. I'm going to pretend you're tired.", "Hmph. I'm still helping, though."],
+    "talk.bye": ["Bye!", "See you soon! Stay safe!", "Byeee!"],
+    "talk.likes": [
+      "Fresh bread. Sheep. The smell after rain. Pumpkin pie.",
+      "Bees! Bees are the best. As long as they're not angry."
+    ],
+    "talk.dislikes": [
+      "The dark. Creepers. Caves. Creepers in caves in the dark.",
+      "Anyone who tramples crops. Jumping on farmland, ugh."
+    ],
+    "talk.where": [
+      "We're in {biome}. Is it good soil? I bet it's good soil.",
+      "{biome}! I've never been anywhere like it. Well, I've never been anywhere."
+    ],
+    "talk.memory": [
+      "Remember {event}? I told the chickens about it. In my head.",
+      "I keep thinking about {event}. Was I brave? I think I was brave."
+    ],
+    "talk.generic": [
+      "Oh! Okay!",
+      "Huh. I never thought of that.",
+      "That's a lot to think about.",
+      "Okay! I think I understand. Mostly.",
+      "Really? Wow."
+    ],
+    "gift.received": ["For me? A {item}! Thank you!", "Ooh, a {item}! I'll keep it safe."],
+    "gift.loved": ["A {item}! Oh, this is the best day!", "You got me a {item}! I could cry!"],
+    "hurt_by_player": ["Ow! Why?!", "Hey! I didn't do anything!", "That really hurt, {player}..."]
+  }
+}

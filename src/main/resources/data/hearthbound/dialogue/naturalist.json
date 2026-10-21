@@ -1,0 +1,325 @@
+{
+  "archetype": "naturalist",
+  "lines": {
+    "greet.stranger": [
+      "Oh! Hello! Sorry, I was counting beetles. Well, trying to. I'm {name}.",
+      "A traveller! Have you come far? What have you seen? Any rare flowers?",
+      "Hello there! Mind the moss, it's a very old patch.",
+      "I'm {name}, a naturalist. Which is a fancy way of saying I look at things for a very long time.",
+      "You look like someone who explores. Do you ever stop to write anything down?"
+    ],
+    "greet.owner": [
+      "{player}! I was just thinking about you. Well, about soil. But you too.",
+      "Yes? Oh, is it time for something exciting?",
+      "Hello again! What are we doing? Tell me it involves caves. Or bees.",
+      "I'm all ears! And notebook.",
+      "There you are! I've so many questions, but you go first."
+    ],
+    "recruit.accept": [
+      "Really? Yes! Oh, I'll need more notebooks.",
+      "An expedition! I accept! When do we leave? Now? Now is good.",
+      "I'd love to come along, {player}. Think of everything we'll find!",
+      "Splendid. You lead, I'll catalogue."
+    ],
+    "recruit.party_full": [
+      "Oh, you've already got {count} companions. Any more and we'll scare off all the wildlife.",
+      "I'd love to, but you've a full party. Maybe another time?"
+    ],
+    "recruit.already": [
+      "We're already travelling together, silly!",
+      "I'm already on the expedition! Page forty-two, in fact."
+    ],
+    "dismiss.accept": [
+      "Oh. All right. I'll go back and sort my specimens. Come and visit?",
+      "Understood. I have about a hundred pages to tidy up anyway.",
+      "Take care, {player}! Write down anything strange you see."
+    ],
+    "dismiss.not_recruited": [
+      "Dismiss me? We haven't even started travelling together!"
+    ],
+    "not_recruited": [
+      "I'd help, but I'm not part of your group. Ask me to come along?",
+      "Ooh, a task! But I only do tasks for my travelling companions. Hint, hint."
+    ],
+    "ack.follow": [
+      "Right behind you! Well, mostly behind. I may stop for flowers.",
+      "Following! Lead the way.",
+      "Onward! I'll keep up, I promise.",
+      "Coming! Ooh, is that a new biome over there?",
+      "Following you. I'll shout if I spot anything interesting."
+    ],
+    "ack.follow.already": [
+      "I'm already following you! I'm just very quiet. Sometimes.",
+      "Yes, yes, I'm right here!"
+    ],
+    "ack.wait": [
+      "I'll wait here and observe the local wildlife.",
+      "Staying put! Plenty to look at.",
+      "Of course. I'll take some notes while you're gone.",
+      "Waiting here. Don't be too long, I'll run out of things to sketch. Eventually."
+    ],
+    "ack.wait.already": [
+      "I'm already waiting! Still on the same page of notes."
+    ],
+    "ack.gather": [
+      "{count} {item}? Wonderful, I'll be ever so careful about it.",
+      "Gathering {count} {item}! Did you know they're not all the same? I'll check each one.",
+      "Fieldwork! {count} {item}, coming right up.",
+      "On it! {count} {item}. I'll try not to get distracted."
+    ],
+    "ack.cancel": [
+      "Oh, stopping {task}? All right!",
+      "Consider it cancelled. I'll find something else to look at.",
+      "Stopped! Was it something I did?"
+    ],
+    "ack.cancel.nothing": [
+      "I'm not doing anything to stop! Unless thinking counts."
+    ],
+    "ack.come": [
+      "Coming! Don't move, I'll find you.",
+      "On my way!"
+    ],
+    "ack.attack": [
+      "Th-the {mob}? Right. For science.",
+      "I'll try! Stay close, {mob}s are very bitey."
+    ],
+    "ack.give": [
+      "Here you go! {count} {item}. I labelled them. Mentally.",
+      "{count} {item}, freshly collected!"
+    ],
+    "ack.give.nothing": [
+      "My bag's empty, except for notes. Do you want my notes?"
+    ],
+    "status.idle": [
+      "Nothing in particular. Just admiring the scenery.",
+      "I'm free! Give me a project?"
+    ],
+    "status.follow": [
+      "Following you and taking notes on everything we pass.",
+      "Tagging along! We've seen three new flowers today."
+    ],
+    "status.wait": [
+      "Waiting here, like you asked. I've started a sketch.",
+      "Staying put. The local squirrels are fascinating. Well, there are no squirrels. Still."
+    ],
+    "status.gather": [
+      "Gathering {item}! I've got {have} of {count}.",
+      "{have} {item} so far, out of {count}. Going well!"
+    ],
+    "status.downed": [
+      "I'm... resting. Involuntarily."
+    ],
+    "fail.unknown_item": [
+      "\"{item}\"? I've never come across that. Is it a plant? A rock? A myth?",
+      "Hmm, \"{item}\" isn't in any of my books. Could you describe it differently?"
+    ],
+    "fail.not_gatherable": [
+      "{item} isn't something I can collect from nature, I'm afraid. It has to be made, or found.",
+      "Oh, I can't gather {item}. Logs, stone, sand, ores, plants... those I can do!"
+    ],
+    "fail.needs_tool": [
+      "I'd need a {tool} for {item}. My hands are for sketching, mostly.",
+      "Without a {tool} I can't get {item} out. Could you lend me one?"
+    ],
+    "fail.none_found": [
+      "I've looked all around and there's no {item} within reach. Different biome, maybe?",
+      "No {item} nearby, I'm afraid. I'd remember. I write everything down."
+    ],
+    "fail.unreachable": [
+      "There's {item} over there, but I can't find a way to reach it.",
+      "I can see some {item}, but it's out of reach. Frustrating!"
+    ],
+    "fail.inventory_full": [
+      "My bag's stuffed! I got {have} {item} before it filled up.",
+      "No more room, I'm afraid. Could you take some things off me?"
+    ],
+    "fail.count_invalid": [
+      "That number doesn't seem quite right. Something from 1 to {max}?"
+    ],
+    "fail.downed": [
+      "I can't right now, I'm a bit... horizontal."
+    ],
+    "fail.refuse_target": [
+      "Hurt a {mob}? No, no. They're part of the ecosystem!",
+      "I won't harm a {mob}. Sorry."
+    ],
+    "fail.no_target": [
+      "Attack what? I don't see anything. Which is usually good!"
+    ],
+    "fail.stuck": [
+      "I can't find a path! The terrain here is very... uncooperative.",
+      "I'm stuck, sorry! The way is blocked."
+    ],
+    "unclear.generic": [
+      "Sorry, I didn't quite understand. Could you put it another way?",
+      "Hmm? I was halfway through a thought. Say again?",
+      "I'm not sure what you'd like me to do. Follow, wait, gather something?"
+    ],
+    "unclear.gather_what": [
+      "Gather what, though? And how much?",
+      "Happy to gather! But what are we gathering?"
+    ],
+    "unclear.ambiguous": [
+      "Do you mean {options}? There are several kinds!",
+      "Ooh, that could be {options}. Which one?"
+    ],
+    "progress.gather": [
+      "{have} {item} so far! Halfway to {count}.",
+      "Progress report: {have} of {count} {item}!"
+    ],
+    "done.gather": [
+      "All {count} {item} collected! Coming back to you.",
+      "That's {count} {item}! Heading your way."
+    ],
+    "done.delivered": [
+      "Here you go, {count} {item}! Every one inspected.",
+      "{count} {item}, delivered! That was fun.",
+      "All {count} {item}! Shall I write that down as a successful expedition?"
+    ],
+    "partial.gather": [
+      "I could only find {have} of the {count} {item}. That's all there was around here.",
+      "{have} {item} is all I could find, I'm afraid. Here!"
+    ],
+    "combat.engage": [
+      "Oh no, a {mob}! I'll... help!",
+      "{mob}! Stay back, I'll try to distract it!",
+      "Defending myself! Mostly with flailing."
+    ],
+    "combat.kill": [
+      "Oh! I did it. Sorry, {mob}.",
+      "It's gone. Poor thing. Well, horrible thing.",
+      "Phew."
+    ],
+    "combat.low_health": [
+      "I'm hurt quite badly!",
+      "Ouch! That was a lot of ouch."
+    ],
+    "combat.retreat": [
+      "I need to get away from it!",
+      "Retreating! Tactically!",
+      "Too much! Backing off!"
+    ],
+    "combat.player_low_health": [
+      "{player}, you're badly hurt! Eat something, please!",
+      "You don't look well, {player}. Let's get you safe."
+    ],
+    "combat.creeper": [
+      "Creeper! They explode, you know! Run!",
+      "That's a creeper! Fascinating! Also run!"
+    ],
+    "downed": [
+      "Ooh. Ow. I'll just... lie here a moment.",
+      "I'm down! Don't worry, nothing's broken. I think."
+    ],
+    "revived": [
+      "I'm all right! Just a little dizzy.",
+      "Back up! What did I miss?"
+    ],
+    "move.caught_up": [
+      "Found you! You walk very fast.",
+      "There you are! I thought I'd lost you!",
+      "Phew, caught up. I got distracted by a mushroom."
+    ],
+    "ambient.night": [
+      "The stars are coming out. Look, that one's very bright!",
+      "Night already? Did you know some flowers close up at night?",
+      "It's getting dark. The monsters will be out soon. Less fun to study."
+    ],
+    "ambient.dawn": [
+      "Good morning! The birds would be singing, if there were birds.",
+      "Dawn! The zombies are catching fire. Nature is strange."
+    ],
+    "ambient.rain": [
+      "Rain! The crops will love this.",
+      "Smell that? Rain on stone. There's a word for that, I'm sure."
+    ],
+    "ambient.thunder": [
+      "Thunder! Lightning can turn pigs into something awful, you know.",
+      "A storm! Let's not stand under any tall trees."
+    ],
+    "ambient.cave": [
+      "Look at the layers in this rock! Thousands of years. Probably.",
+      "Caves are amazing. Terrifying, but amazing.",
+      "It's so dark. I'll keep an eye out for ores."
+    ],
+    "ambient.idle": [
+      "Did you know bees can find their way home from miles away?",
+      "I've been trying to classify every type of stone. There are a lot.",
+      "Sometimes I wonder who planted all these trees.",
+      "If I ever find an axolotl, I'm naming it after you."
+    ],
+    "ambient.biome.forest": ["A forest! So many kinds of trees. Oak, birch... let's count them!", "Listen to that. Leaves! Very relaxing."],
+    "ambient.biome.desert": ["A desert! Cacti store water, you know. Don't hug them though.", "Sand, sand, sand. And possibly a temple!"],
+    "ambient.biome.snow": ["Snow! Look for foxes, they're adorable.", "Brr! Mind the powder snow, it swallows people."],
+    "ambient.biome.ocean": ["The ocean! Imagine what's down there. Coral! Shipwrecks!"],
+    "ambient.biome.jungle": ["A jungle! Parrots, ocelots, cocoa beans... I'm overwhelmed!"],
+    "ambient.biome.swamp": ["A swamp! Slimes and frogs. Lovely frogs."],
+    "ambient.biome.mountain": ["Look how high we are! You can see for miles."],
+    "ambient.biome.plains": ["Open plains. Perfect for horses. And picnics."],
+    "ambient.biome.nether": ["The Nether! The fungus here is unlike anything above!", "It's so hot. My notebook's curling."],
+    "ambient.biome.end": ["The End... the plants here grow in such strange shapes."],
+    "callout.hostile_behind": [
+      "{player}! There's a {mob} behind you!",
+      "Look out, {mob} sneaking up!"
+    ],
+    "callout.ore": [
+      "Ooh, {item}! Right over there!",
+      "Is that {item}? It is! Look!",
+      "{item} in the rock there. Shiny!"
+    ],
+    "callout.lava": [
+      "Careful, there's lava! Very hot. Extremely.",
+      "Lava nearby! Watch your step."
+    ],
+    "callout.chest": [
+      "A chest! I wonder what's inside.",
+      "There's a chest over there!"
+    ],
+    "talk.hello": ["Hello!", "Hi, {player}!", "Oh, hello!"],
+    "talk.who": [
+      "I'm {name}! I study the natural world: plants, animals, stones, weather, everything really.",
+      "A naturalist. I've filled eleven notebooks. Twelve if you count the one that fell in the river.",
+      "I'm someone who can't walk past a strange flower without stopping. Sorry in advance."
+    ],
+    "talk.how": [
+      "Wonderful! I saw a new kind of mushroom today.",
+      "A little tired, very curious. The usual!",
+      "Happy! Every day out here is a new page."
+    ],
+    "talk.joke": [
+      "Why did the tree get lost? It took the wrong root! ...I'm sorry.",
+      "What does a stone say to another stone? Nothing, they're very boring. Except deepslate.",
+      "I tried to write a book about anti-gravity. Couldn't put it down. Ha!"
+    ],
+    "talk.thanks": ["You're welcome! It was fun.", "Any time, really!", "Oh, it was nothing. Truly."],
+    "talk.compliment": ["Oh! That's very kind. I'll write that down.", "You're making me blush. Like a poppy.", "Thank you! You're not so bad yourself."],
+    "talk.insult": ["Oh. Well. That's not very nice.", "I'll pretend I didn't hear that.", "Hmm. Rude. Noted."],
+    "talk.bye": ["Bye for now!", "Talk soon!", "Off you go! I'll be here, observing."],
+    "talk.likes": [
+      "Flowers! And bees, and axolotls, and amethyst geodes. And you, a bit.",
+      "Rare biomes. Mushroom fields are my dream."
+    ],
+    "talk.dislikes": [
+      "People who chop down whole forests and never plant a sapling.",
+      "Silverfish. I've tried to like them. I can't."
+    ],
+    "talk.where": [
+      "We're in {biome}! Notice the plants? They're adapted to it.",
+      "This is {biome}. One of my favourites. They're all my favourites, really."
+    ],
+    "talk.memory": [
+      "Do you remember {event}? I wrote two pages about it.",
+      "I still think about {event}. What a day."
+    ],
+    "talk.generic": [
+      "Interesting! Tell me more?",
+      "Hmm, I hadn't thought of it that way.",
+      "That's fascinating. Truly.",
+      "I'll have to think about that one.",
+      "Ooh. I'll put that in the notebook."
+    ],
+    "gift.received": ["A {item}! Thank you! I'll take good care of it.", "For me? A {item}! How thoughtful."],
+    "gift.loved": ["A {item}! Oh, oh, this is wonderful! Thank you!", "You remembered I'd love a {item}!"],
+    "hurt_by_player": ["Ow! What was that for?", "Hey! I'm on your side!", "That hurt, {player}!"]
+  }
+}

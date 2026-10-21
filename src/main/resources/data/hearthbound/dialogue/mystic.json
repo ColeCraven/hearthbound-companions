@@ -1,0 +1,322 @@
+{
+  "archetype": "mystic",
+  "lines": {
+    "greet.stranger": [
+      "You found me. Most don't look. I'm {name}.",
+      "Another wanderer. The road brings them all eventually.",
+      "Hm. You have a restless shadow. I like that.",
+      "{name}. I read stars, and bones, and sometimes people.",
+      "Don't stand there gaping. Speak, or leave the silence to me."
+    ],
+    "greet.owner": [
+      "{player}. The stars said you'd come. They say a lot of things.",
+      "Speak.",
+      "You again. Good.",
+      "What do you seek this time?",
+      "I'm listening. The world is too, so choose your words."
+    ],
+    "recruit.accept": [
+      "Fine. I'll walk your road for a while. Roads end. Let's see where.",
+      "Very well. Something tells me you'll be interesting.",
+      "I'll come. Don't expect me to hold your hand in the dark.",
+      "Your fate looks tangled, {player}. I'll help you untangle it."
+    ],
+    "recruit.party_full": [
+      "You've {count} shadows already. Another would be a crowd.",
+      "No. Your little band is full. I prefer to be missed than crowded."
+    ],
+    "recruit.already": [
+      "I already walk with you. Look closer.",
+      "We're already bound. Don't you feel it?"
+    ],
+    "dismiss.accept": [
+      "Then our paths part. They may cross again.",
+      "As you wish. I'll go back to my stars.",
+      "Farewell, {player}. Try not to die. It's dreadfully dull."
+    ],
+    "dismiss.not_recruited": [
+      "You can't release what you never bound."
+    ],
+    "not_recruited": [
+      "I'm not yours to command. Not yet.",
+      "Ask me to walk with you first. Then perhaps I'll listen."
+    ],
+    "ack.follow": [
+      "Lead. I'll trail your shadow.",
+      "Go on. I'm never far.",
+      "I follow. For now.",
+      "Walk. I'll be the quiet behind you.",
+      "Very well."
+    ],
+    "ack.follow.already": [
+      "I'm already your shadow.",
+      "I never stopped following."
+    ],
+    "ack.wait": [
+      "I'll wait. Stillness suits me.",
+      "Here, then. I'll listen to the stones.",
+      "I'll keep this place. Don't take too long, the night gets bored.",
+      "Waiting. Time is a circle anyway."
+    ],
+    "ack.wait.already": [
+      "I'm already waiting. Patiently. Eternally, if needed."
+    ],
+    "ack.gather": [
+      "{count} {item}. Mundane. Fine.",
+      "{count} {item}. Even mystics need firewood.",
+      "{item}, then. {count} of them. I'll be quick about it.",
+      "Gathering {count} {item}. Try to find something stranger for me next time."
+    ],
+    "ack.cancel": [
+      "{task} is forgotten.",
+      "Abandoned. Like most plans.",
+      "Stopped. The threads go slack."
+    ],
+    "ack.cancel.nothing": [
+      "I'm doing nothing. It's an art."
+    ],
+    "ack.come": [
+      "I'm coming.",
+      "Stay where you are. I'll find you."
+    ],
+    "ack.attack": [
+      "The {mob}. Its time is up.",
+      "I'll send the {mob} back to the dark."
+    ],
+    "ack.give": [
+      "Take them. {count} {item}.",
+      "{count} {item}. Use them wisely. Or don't."
+    ],
+    "ack.give.nothing": [
+      "I carry nothing but secrets. Those aren't for giving."
+    ],
+    "status.idle": [
+      "Thinking. About endings, mostly.",
+      "Nothing you'd call doing."
+    ],
+    "status.follow": [
+      "Following your shadow.",
+      "Walking behind you, watching what you don't."
+    ],
+    "status.wait": [
+      "Waiting here, as you asked. The stones and I are getting along.",
+      "Keeping this place. Still."
+    ],
+    "status.gather": [
+      "Gathering {item}. {have} of {count}.",
+      "{have} {item}. {count} is the number you asked for."
+    ],
+    "status.downed": [
+      "Fallen. Briefly."
+    ],
+    "fail.unknown_item": [
+      "\"{item}\"? Not a word the world knows.",
+      "I don't know any \"{item}\". Name it truly."
+    ],
+    "fail.not_gatherable": [
+      "{item} isn't plucked from the earth. It's crafted, or it's found.",
+      "No. {item} doesn't grow, and it doesn't sleep in stone."
+    ],
+    "fail.needs_tool": [
+      "{item} won't yield without a {tool}. Give me one.",
+      "I need a {tool}. Even magic has its limits. Mine is a lack of pickaxes."
+    ],
+    "fail.none_found": [
+      "There's no {item} within reach. The land keeps it elsewhere.",
+      "None. Not a single {item} near us."
+    ],
+    "fail.unreachable": [
+      "I see the {item}. It doesn't want to be reached.",
+      "The {item} is out of my reach."
+    ],
+    "fail.inventory_full": [
+      "I'm laden. {have} {item} gathered before my pack gave up.",
+      "No room left. Lighten me."
+    ],
+    "fail.count_invalid": [
+      "Numbers matter. Between 1 and {max}."
+    ],
+    "fail.downed": [
+      "Not now. I'm busy being on the ground."
+    ],
+    "fail.refuse_target": [
+      "No. The {mob} is not my enemy.",
+      "I won't harm the {mob}. Find your own darkness."
+    ],
+    "fail.no_target": [
+      "There's nothing there. Not even a ghost."
+    ],
+    "fail.stuck": [
+      "The way is shut.",
+      "I can't pass. The stone refuses me."
+    ],
+    "unclear.generic": [
+      "Riddles are my trade, not yours. Say it plainly.",
+      "Hm? Speak clearly.",
+      "I can follow, wait, or gather. Which of those was that?"
+    ],
+    "unclear.gather_what": [
+      "Gather what? Be precise. Item and number."
+    ],
+    "unclear.ambiguous": [
+      "{options}? Choose one.",
+      "That could mean {options}. Which?"
+    ],
+    "progress.gather": [
+      "{have} of {count} {item}. Halfway.",
+      "{have} {item}. Patience."
+    ],
+    "done.gather": [
+      "All {count} {item}. I'm returning.",
+      "{count} {item}. Finished. Coming to you."
+    ],
+    "done.delivered": [
+      "{count} {item}. As foretold.",
+      "Here. {count} {item}. Done.",
+      "{count} {item}. The task is complete."
+    ],
+    "partial.gather": [
+      "Only {have} of {count} {item}. The land gave no more.",
+      "{have} {item}. That's all there was. Take it."
+    ],
+    "combat.engage": [
+      "A {mob}. It came to the wrong shadow.",
+      "{mob}. Mine.",
+      "Ah. Violence."
+    ],
+    "combat.kill": [
+      "Back to the dark with you.",
+      "It's over.",
+      "The {mob} is dust."
+    ],
+    "combat.low_health": [
+      "I'm bleeding. How tiresome.",
+      "That hurt more than I'll admit."
+    ],
+    "combat.retreat": [
+      "I'm pulling back. Don't follow my mistake.",
+      "Retreating. Not fleeing. There's a difference."
+    ],
+    "combat.player_low_health": [
+      "{player}, you're close to the edge. Step back from it.",
+      "Your light's flickering, {player}. Eat."
+    ],
+    "combat.creeper": [
+      "Creeper. It wants to share its ending with you. Decline.",
+      "Creeper. Distance, now."
+    ],
+    "downed": [
+      "Not dead. Just... reconsidering.",
+      "The ground and I are having a moment."
+    ],
+    "revived": [
+      "I rise. Death was busy.",
+      "Back. Did I miss anything dramatic?"
+    ],
+    "move.caught_up": [
+      "Running from me? Futile.",
+      "Found you. I always do.",
+      "There you are. The threads led me right to you."
+    ],
+    "ambient.night": [
+      "Night. Finally, the world is honest.",
+      "The stars are out. They're watching. Don't wave.",
+      "Ah, the dark. My kind of company."
+    ],
+    "ambient.dawn": [
+      "Dawn. Everything gets loud again.",
+      "The sun. Ugh."
+    ],
+    "ambient.rain": [
+      "Rain. The sky is grieving something.",
+      "Listen. Rain hides footsteps."
+    ],
+    "ambient.thunder": [
+      "Thunder. Something old is angry.",
+      "A storm. Lovely. Truly."
+    ],
+    "ambient.cave": [
+      "Deep places remember things.",
+      "Listen to the stone. It's been waiting a long time.",
+      "Sculk grows deeper down. Stay quiet if we find it."
+    ],
+    "ambient.idle": [
+      "Endermen aren't evil. Just shy. And violent.",
+      "Have you ever looked into an enchanting table? It looks back.",
+      "Every structure out there was built by someone who's gone now.",
+      "The Nether is just a room with the fire turned up."
+    ],
+    "ambient.biome.forest": ["Old trees. They've seen more than either of us."],
+    "ambient.biome.desert": ["Deserts are graveyards that forgot their stones."],
+    "ambient.biome.snow": ["Cold, quiet, honest. I approve."],
+    "ambient.biome.ocean": ["The sea keeps its dead in temples. Guardians watch them."],
+    "ambient.biome.jungle": ["Too loud. Too green. Too alive."],
+    "ambient.biome.swamp": ["Witches live here. We'd get along. Or kill each other."],
+    "ambient.biome.mountain": ["Closer to the stars. Good."],
+    "ambient.biome.plains": ["Open sky. Nowhere to hide from the night."],
+    "ambient.biome.nether": ["Home. Well. A home. Someone's.", "The souls in this sand are restless. Walk softly."],
+    "ambient.biome.end": ["The void hums. Do you hear it? No? Lucky."],
+    "callout.hostile_behind": [
+      "{player}. A {mob}, behind you.",
+      "Something walks in your shadow. {mob}."
+    ],
+    "callout.ore": [
+      "{item}. There, in the rock.",
+      "I sense {item} nearby. Well, I see it. Same thing."
+    ],
+    "callout.lava": [
+      "Lava. It's patient. Don't give it a reason.",
+      "Fire below. Mind your step."
+    ],
+    "callout.chest": [
+      "A chest. Someone's secrets, waiting.",
+      "There's a chest. Open it, if you dare."
+    ],
+    "talk.hello": ["Hm.", "{player}.", "Greetings, wanderer."],
+    "talk.who": [
+      "{name}. I study the places between: the Nether, the End, the dark under the world.",
+      "A wanderer. A reader of stars. An occasional problem.",
+      "Someone who knows too much about endings and not enough about lunch."
+    ],
+    "talk.how": [
+      "Alive. It's a habit.",
+      "Contemplative. As always.",
+      "Better at night."
+    ],
+    "talk.joke": [
+      "A joke? Life is the joke. Death is the punchline. ...You wanted something lighter.",
+      "Why did the enderman cross the road? It didn't. It teleported. Endermen don't wait for roads.",
+      "I told a skeleton a secret once. It went right through him."
+    ],
+    "talk.thanks": ["Don't. It makes me uncomfortable.", "Hm. You're welcome.", "Gratitude noted."],
+    "talk.compliment": ["Careful. I might start to like you.", "Flattery. Bold of you.", "...Thank you. Don't make it a habit."],
+    "talk.insult": ["How refreshing. Honesty.", "I've been cursed by better.", "Words. Wind. Nothing more."],
+    "talk.bye": ["Until the next night.", "Go.", "We'll speak again. We always do."],
+    "talk.likes": [
+      "Amethyst. Enchanting tables. The silence of the End.",
+      "Night skies. Endermen. Questions without answers."
+    ],
+    "talk.dislikes": [
+      "Crowds. Sunlight chatter. People who say the Nether is 'just hot'.",
+      "Phantoms. Even I need sleep."
+    ],
+    "talk.where": [
+      "{biome}. It has secrets. Everything does.",
+      "We're in {biome}. Listen and you'll hear its age."
+    ],
+    "talk.memory": [
+      "{event}. I haven't forgotten. I never do.",
+      "Remember {event}? The stars do."
+    ],
+    "talk.generic": [
+      "Hm.",
+      "Perhaps.",
+      "Interesting. In a quiet way.",
+      "The world is stranger than that, but go on.",
+      "I'll consider it. Under the stars."
+    ],
+    "gift.received": ["A {item}. Thoughtful. Strange, but thoughtful.", "Hm. A {item}. I'll keep it."],
+    "gift.loved": ["A {item}... you've been paying attention. I'm touched. Don't tell anyone.", "Oh. A {item}. That's... lovely. Truly."],
+    "hurt_by_player": ["Do that again and I'll curse your boots.", "Careful, {player}.", "Interesting choice. Wrong, but interesting."]
+  }
+}

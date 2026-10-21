@@ -1,0 +1,22 @@
+{
+	"schemaVersion": 1,
+	"id": "hearthbound",
+	"version": "${version}",
+	"name": "Hearthbound Companions",
+	"description": "RPG-style companions for single-player: recruit them, talk to them, and adventure together. Optional local or cloud AI dialogue.",
+	"authors": ["Tekless"],
+	"contact": {},
+	"license": "MIT",
+	"icon": "assets/hearthbound/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["io.github.tekless.hearthbound.Hearthbound"],
+		"client": ["io.github.tekless.hearthbound.client.HearthboundClient"]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

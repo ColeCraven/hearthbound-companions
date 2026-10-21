@@ -1,0 +1,35 @@
+# Gradle
+.gradle/
+build/
+out/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Loom / dev runs (game files, worlds, logs, local configs with secrets)
+run/
+runs/
+remappedSrc/
+*.log
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+bin/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local secrets and machine-specific settings - never commit these
+*.secret.json
+secrets.json
+.env
+.env.*
+local.properties
+companions-secrets.json

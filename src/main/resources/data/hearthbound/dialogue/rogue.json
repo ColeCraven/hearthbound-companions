@@ -1,0 +1,319 @@
+{
+  "archetype": "rogue",
+  "lines": {
+    "greet.stranger": [
+      "Well, well. A customer. Name's {name}. What's it worth to you?",
+      "Don't mind me, just admiring your pockets. Purely professional interest.",
+      "You look like someone with a map and no idea where the treasure is. Lucky you met me.",
+      "{name}. Finder of things. Mostly other people's things.",
+      "Hello, friend. I'm not stealing anything. Right now."
+    ],
+    "greet.owner": [
+      "Boss! What's the scheme?",
+      "Partner. You look like you've got a plan. Or at least half of one.",
+      "Talk to me. Is there loot involved?",
+      "Back again? People will start saying we're friends.",
+      "What'll it be, partner?"
+    ],
+    "recruit.accept": [
+      "Partners, then. I get first look at every chest. Kidding. Mostly.",
+      "You've got yourself a deal. Shake on it? Mind my rings.",
+      "All right, {player}, I'm in. Let's go get rich.",
+      "Why not. Your company's better than my last one. They were skeletons."
+    ],
+    "recruit.party_full": [
+      "You've got {count} hangers-on already. Split the loot any thinner and it's dust.",
+      "Crowded, isn't it? Drop someone and I'll think about it."
+    ],
+    "recruit.already": [
+      "We're already partners. Did you forget? I'm hurt.",
+      "I'm on the payroll already, boss."
+    ],
+    "dismiss.accept": [
+      "Fine, fine. You'll miss me when you open your first empty chest.",
+      "Splitting up the gang? I'll be around. I always am.",
+      "Pleasure doing business, {player}."
+    ],
+    "dismiss.not_recruited": [
+      "Dismiss me? Friend, you never hired me."
+    ],
+    "not_recruited": [
+      "Free labour? Cute. Hire me first.",
+      "I don't work for free, friend. Well, I work for adventure. Recruit me."
+    ],
+    "ack.follow": [
+      "Lead the way, boss.",
+      "Following. Try to walk past something valuable.",
+      "Right behind you. Like a shadow, but better looking.",
+      "After you. I insist.",
+      "Tailing you. Professionally."
+    ],
+    "ack.follow.already": [
+      "I'm already following you. I'm just that good at it.",
+      "Look over your shoulder. Hi."
+    ],
+    "ack.wait": [
+      "I'll keep watch. And my hands to myself.",
+      "Waiting. If you're not back soon, I'm charging for it.",
+      "Staying put. Don't forget me here.",
+      "I'll mind the spot. Nobody steals it but me."
+    ],
+    "ack.wait.already": [
+      "I'm already waiting. Patiently. Ish."
+    ],
+    "ack.gather": [
+      "{count} {item}? Easy money.",
+      "{count} {item}, coming up. I'll put it on your tab.",
+      "Fine. {count} {item}. Bit of honest work won't kill me. Probably.",
+      "{item}, eh? {count} of them. Leave it to me."
+    ],
+    "ack.cancel": [
+      "Forget {task}? Suits me.",
+      "Cancelled. You still owe me for my time.",
+      "Done with {task}. What's the next scheme?"
+    ],
+    "ack.cancel.nothing": [
+      "Cancel what? I'm on my break."
+    ],
+    "ack.come": [
+      "On my way. Don't touch anything shiny without me.",
+      "Coming, boss."
+    ],
+    "ack.attack": [
+      "The {mob}? I'll go around the back.",
+      "Leave the {mob} to me."
+    ],
+    "ack.give": [
+      "Here, {count} {item}. Count them if you don't trust me. Go on.",
+      "{count} {item}. Every last one. I'm honest with partners."
+    ],
+    "ack.give.nothing": [
+      "My pockets are empty. Genuinely. For once."
+    ],
+    "status.idle": [
+      "Nothing much. Thinking about where the good stuff is buried.",
+      "Waiting for you to come up with a profitable idea."
+    ],
+    "status.follow": [
+      "Following you. Keeping an eye out for loot.",
+      "Tailing you, boss. As usual."
+    ],
+    "status.wait": [
+      "Minding this spot like you asked.",
+      "Waiting right here. Bored, but here."
+    ],
+    "status.gather": [
+      "Collecting {item}. {have} of {count} so far.",
+      "{have} {item} down, {count} to go. Well, {count} total."
+    ],
+    "status.downed": [
+      "Lying low. Very low. On the ground, in fact."
+    ],
+    "fail.unknown_item": [
+      "\"{item}\"? Never fenced one of those. What is it?",
+      "No idea what \"{item}\" is, partner. Try a real word."
+    ],
+    "fail.not_gatherable": [
+      "{item}? You don't gather that, you buy it. Or 'find' it.",
+      "Can't dig up {item}. It doesn't grow on trees. Trust me, I've checked."
+    ],
+    "fail.needs_tool": [
+      "Get me a {tool} and I'll get you {item}. Tools first, results after.",
+      "{item} needs a {tool}. I left mine in my other life."
+    ],
+    "fail.none_found": [
+      "Not a single {item} around here. I'd know. I have a nose for this.",
+      "This place is picked clean of {item}. Let's move."
+    ],
+    "fail.unreachable": [
+      "Oh, I can see the {item}. Getting to it's another matter.",
+      "That {item}'s out of reach. Even for me."
+    ],
+    "fail.inventory_full": [
+      "Pockets are full. I grabbed {have} {item} before I ran out of room.",
+      "I'm carrying too much. Lighten my load?"
+    ],
+    "fail.count_invalid": [
+      "That's not a number, that's a fantasy. Something between 1 and {max}."
+    ],
+    "fail.downed": [
+      "Ask me again when I'm not face down in the dirt."
+    ],
+    "fail.refuse_target": [
+      "Attack a {mob}? Even I have standards. Low ones, but still."
+    ],
+    "fail.no_target": [
+      "Attack who? There's nobody there. Unless you mean me."
+    ],
+    "fail.stuck": [
+      "I'm stuck. No way through. And I'm usually great at getting into places.",
+      "Path's blocked. I'm not climbing that."
+    ],
+    "unclear.generic": [
+      "Come again, partner?",
+      "Lost me there. Speak in plain coin.",
+      "What's the actual job? Follow, wait, fetch something?"
+    ],
+    "unclear.gather_what": [
+      "Gather what? I need specifics. Item and amount.",
+      "Sure, I'll gather. What, though? How many?"
+    ],
+    "unclear.ambiguous": [
+      "You mean {options}? Be specific, I charge per mistake.",
+      "Which one: {options}?"
+    ],
+    "progress.gather": [
+      "{have} {item} in the bag. Halfway there.",
+      "{have} of {count}. Ticking along nicely."
+    ],
+    "done.gather": [
+      "Got all {count} {item}. Bringing them back.",
+      "{count} {item}, done. Coming your way, no detours."
+    ],
+    "done.delivered": [
+      "{count} {item}, delivered. That'll be... no, I'm joking. Mostly.",
+      "Here's your {count} {item}. Pleasure doing business.",
+      "{count} {item}. Tell your friends about my excellent service."
+    ],
+    "partial.gather": [
+      "Only {have} of {count} {item} out there. Market's dry. Take what I've got.",
+      "Got {have} {item}. Couldn't find more. Don't look at me like that."
+    ],
+    "combat.engage": [
+      "{mob}! I'll get it from the side.",
+      "Here comes trouble. {mob}.",
+      "Oh, a {mob}. Lovely."
+    ],
+    "combat.kill": [
+      "And it's gone. Did it drop anything?",
+      "That's one {mob} out of business.",
+      "Too easy."
+    ],
+    "combat.low_health": [
+      "I'm bleeding on my good clothes!",
+      "Ow. That's coming out of your share."
+    ],
+    "combat.retreat": [
+      "Nope! I'm out!",
+      "Strategic withdrawal! Very strategic!",
+      "Backing off! Cover me, boss!"
+    ],
+    "combat.player_low_health": [
+      "Boss, you look terrible. Eat something before you drop!",
+      "{player}, I can't split the loot with a corpse. Heal up!"
+    ],
+    "combat.creeper": [
+      "Creeper! Nothing good comes from those!",
+      "Hissing green thing! Move!"
+    ],
+    "downed": [
+      "Ugh. I'm down. Don't let them take my boots.",
+      "This is fine. Just resting my eyes. And everything else."
+    ],
+    "revived": [
+      "I'm back! Did anyone check my pockets? No? Good.",
+      "On my feet. Can't keep a good thief down."
+    ],
+    "move.caught_up": [
+      "Ditching me? Nice try.",
+      "Found you. I always find what I'm looking for.",
+      "There you are, boss. Trying to keep the loot for yourself?"
+    ],
+    "ambient.night": [
+      "Night. Best time for work. My kind of work.",
+      "It's dark. Watch your purse. And your neck."
+    ],
+    "ambient.dawn": [
+      "Morning. Honest folk are getting up. Ugh."
+    ],
+    "ambient.rain": [
+      "Rain. Good for covering tracks.",
+      "Wet. Everything's wet. Even my secrets."
+    ],
+    "ambient.thunder": [
+      "Storm's rolling in. Good cover. Bad for the hair."
+    ],
+    "ambient.cave": [
+      "Caves. Where people hide treasure. And bodies.",
+      "Keep your torch high. And your hands on your valuables."
+    ],
+    "ambient.idle": [
+      "I once sold a villager his own hoe. Long story.",
+      "Bet there's a buried treasure within a thousand blocks. There usually is.",
+      "If you ever see an emerald lying around, it's mine. Finder's rules.",
+      "You know what this trip needs? More profit."
+    ],
+    "ambient.biome.forest": ["Trees. Lots of free wood, if you don't count the labour."],
+    "ambient.biome.desert": ["Desert temples, partner. Big shiny loot. Big shiny traps."],
+    "ambient.biome.snow": ["Cold. Igloos sometimes have basements, you know. Worth a look."],
+    "ambient.biome.ocean": ["Shipwrecks out there. Treasure maps. I'm just saying."],
+    "ambient.biome.jungle": ["Jungle temple around here, I bet. With all the trimmings."],
+    "ambient.biome.swamp": ["Witch huts. Witches don't share. I've asked."],
+    "ambient.biome.mountain": ["Emerald ore loves mountains. So do I, now."],
+    "ambient.biome.plains": ["Villages on plains. Villages mean trades. Trades mean profit."],
+    "ambient.biome.nether": ["Piglins love gold. I love that about them.", "Bastions. Gold everywhere, guards everywhere. My dream and my nightmare."],
+    "ambient.biome.end": ["End cities. Elytra. Shulker boxes. I'm drooling."],
+    "callout.hostile_behind": [
+      "Behind you, boss! {mob}!",
+      "Psst. {mob}, your six."
+    ],
+    "callout.ore": [
+      "Is that {item}? That's {item}. Let's be rich.",
+      "{item}! Over there, sparkling at me."
+    ],
+    "callout.lava": [
+      "Lava. Nothing good ever came out of lava. Except obsidian.",
+      "Lava there. Don't drop anything valuable in it. Like yourself."
+    ],
+    "callout.chest": [
+      "Chest! Dibs.",
+      "A chest, partner. Shall we?"
+    ],
+    "talk.hello": ["Hey, partner.", "Boss.", "Well, hello."],
+    "talk.who": [
+      "{name}. Treasure hunter, trader, occasional liar. Never to partners.",
+      "I find things. Lost things, hidden things, things that should have stayed hidden.",
+      "Let's say I used to be in the import-export business. Mostly export."
+    ],
+    "talk.how": [
+      "Doing fine. Would be better with more emeralds.",
+      "Never better. Well, once better. There was a bastion. Long story.",
+      "Can't complain. Well, I can, but you'd just make me gather more logs."
+    ],
+    "talk.joke": [
+      "Why don't piglins play cards? Too many gold-diggers. Ha!",
+      "I'd tell you a joke about the End, but it doesn't have one.",
+      "A villager walks into a trade. Comes out with one stick and a smile. Business."
+    ],
+    "talk.thanks": ["Don't thank me. Tip me.", "All part of the service.", "You're welcome. I'll remember you owe me."],
+    "talk.compliment": ["I know. But do go on.", "Flattery will get you everywhere. Except my share.", "Well, you have taste."],
+    "talk.insult": ["Rude. Accurate, but rude.", "Words hurt, boss. So do pickaxes. Just saying.", "I've been called worse by better."],
+    "talk.bye": ["See you around.", "Don't do anything I wouldn't do. Which leaves a lot.", "Later, partner."],
+    "talk.likes": [
+      "Emeralds. Gold. Shulker boxes. Things that fit in pockets.",
+      "A good deal. A better deal. The best deal is the one where I win."
+    ],
+    "talk.dislikes": [
+      "Being broke. And locked chests. Rude invention.",
+      "Rules. Mostly other people's rules."
+    ],
+    "talk.where": [
+      "We're in {biome}. Good place to find something worth stealing. Borrowing.",
+      "{biome}. Real estate's cheap, at least."
+    ],
+    "talk.memory": [
+      "Remember {event}? I still tell that story. With improvements.",
+      "Ah, {event}. Good times. Profitable? Not really."
+    ],
+    "talk.generic": [
+      "Sure, sure.",
+      "If you say so, boss.",
+      "Interesting. Is there money in it?",
+      "Uh-huh. Anyway.",
+      "I'll pretend that made sense."
+    ],
+    "gift.received": ["A {item}? For me? Who are you trying to bribe?", "Thanks, partner. This {item} is going straight in my stash."],
+    "gift.loved": ["A {item}! Now we're talking. You're my favourite.", "Oh, that's a beautiful {item}. Don't ask for it back."],
+    "hurt_by_player": ["Oi! Watch the merchandise!", "That's coming out of your share, boss.", "Hit me again and I'm unionising."]
+  }
+}

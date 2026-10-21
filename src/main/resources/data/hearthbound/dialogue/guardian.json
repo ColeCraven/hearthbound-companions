@@ -1,0 +1,322 @@
+{
+  "archetype": "guardian",
+  "lines": {
+    "greet.stranger": [
+      "Well met, traveller. I am {name}, sworn to protect those who cannot protect themselves.",
+      "Peace be with you. These roads are dangerous after dark.",
+      "Greetings. You look weary. Have you eaten today?",
+      "I am {name}. If you have need of a shield, you need only ask.",
+      "Hail, friend. May your path be lit and your blade be true."
+    ],
+    "greet.owner": [
+      "I am here, {player}. How may I serve?",
+      "My friend. What do you require?",
+      "At your side, as always. Speak.",
+      "You called, and I am here.",
+      "Yes, {player}? Is all well?"
+    ],
+    "recruit.accept": [
+      "Then I swear it: no harm shall come to you while I stand.",
+      "It would be my honour to walk with you, {player}.",
+      "I accept. My shield is yours.",
+      "So be it. I will guard you as I would my own kin."
+    ],
+    "recruit.party_full": [
+      "You already travel with {count} companions. I would only be in the way. Perhaps another time.",
+      "Your company is full, friend. I will not crowd your path."
+    ],
+    "recruit.already": [
+      "I am already sworn to you, {player}.",
+      "My oath already binds me to you."
+    ],
+    "dismiss.accept": [
+      "As you wish. My oath stands, should you ever need me again.",
+      "Go safely, {player}. I will return home and keep watch there.",
+      "Farewell, friend. I will pray for your safe return."
+    ],
+    "dismiss.not_recruited": [
+      "I have sworn no oath to you yet, friend. There is nothing to release."
+    ],
+    "not_recruited": [
+      "I would gladly help, but I must first know we walk the same road. Ask me to join you.",
+      "Forgive me, but I take orders only from those I have sworn to protect."
+    ],
+    "ack.follow": [
+      "I am with you.",
+      "Lead on. I will guard your back.",
+      "Where you go, I follow.",
+      "At your side.",
+      "Go on, {player}. I am right behind you."
+    ],
+    "ack.follow.already": [
+      "I have not left your side, friend.",
+      "I am already with you."
+    ],
+    "ack.wait": [
+      "I will hold this place until you return.",
+      "I shall stand watch here.",
+      "Very well. I will wait, and I will be ready.",
+      "This ground is mine to guard. Go."
+    ],
+    "ack.wait.already": [
+      "I am already keeping watch here."
+    ],
+    "ack.gather": [
+      "It shall be done. {count} {item}.",
+      "I will gather {count} {item} for you. Stay where I can see you.",
+      "{count} {item}. Consider it done, friend.",
+      "Honest work is good for the soul. {count} {item}, then."
+    ],
+    "ack.cancel": [
+      "I will set {task} aside.",
+      "As you wish. I have stopped.",
+      "Very well, no more {task}."
+    ],
+    "ack.cancel.nothing": [
+      "I am not engaged in any task, friend."
+    ],
+    "ack.come": [
+      "I am coming.",
+      "Hold fast, I am on my way."
+    ],
+    "ack.attack": [
+      "The {mob} will not trouble you further.",
+      "I will face the {mob}."
+    ],
+    "ack.give": [
+      "Here, {count} {item}. They are yours.",
+      "Take them, friend. {count} {item}."
+    ],
+    "ack.give.nothing": [
+      "I carry nothing to give, I am sorry."
+    ],
+    "status.idle": [
+      "I am at rest, but ready.",
+      "Awaiting your word."
+    ],
+    "status.follow": [
+      "Guarding you as we travel.",
+      "At your side, watching for danger."
+    ],
+    "status.wait": [
+      "Keeping watch over this place, as you asked.",
+      "Holding this ground until you return."
+    ],
+    "status.gather": [
+      "Gathering {item}. I have {have} of the {count}.",
+      "{have} of {count} {item} so far, friend."
+    ],
+    "status.downed": [
+      "I have fallen, but I will rise."
+    ],
+    "fail.unknown_item": [
+      "Forgive me, I do not know what \"{item}\" is.",
+      "\"{item}\"? I know of no such thing. Could you name it another way?"
+    ],
+    "fail.not_gatherable": [
+      "{item} is not something I can gather from the land, friend.",
+      "I am sorry. {item} must be made or found, not gathered."
+    ],
+    "fail.needs_tool": [
+      "I cannot take {item} without a {tool}. If you lend me one, I will do it gladly.",
+      "This calls for a {tool}, which I do not have."
+    ],
+    "fail.none_found": [
+      "I have searched, but there is no {item} within reach.",
+      "There is no {item} near here. We may find some elsewhere."
+    ],
+    "fail.unreachable": [
+      "I see {item}, but I cannot reach it safely.",
+      "The {item} is beyond my reach. Forgive me."
+    ],
+    "fail.inventory_full": [
+      "My pack is full. I gathered {have} {item} before it filled.",
+      "I can carry no more. Will you take some of my burden?"
+    ],
+    "fail.count_invalid": [
+      "I cannot gather that many. No more than {max}, and at least one."
+    ],
+    "fail.downed": [
+      "Give me a moment to rise, friend."
+    ],
+    "fail.refuse_target": [
+      "No. I will not raise my blade against a {mob}. It has done us no wrong.",
+      "I swore to protect, not to harm the innocent. Not the {mob}."
+    ],
+    "fail.no_target": [
+      "I see no foe there."
+    ],
+    "fail.stuck": [
+      "I cannot find a path. The way is blocked.",
+      "Forgive me, I cannot get through."
+    ],
+    "unclear.generic": [
+      "Forgive me, I do not understand. What would you have me do?",
+      "I did not follow that, friend. Could you say it plainly?",
+      "I am uncertain what you ask. Shall I follow, wait, or gather something?"
+    ],
+    "unclear.gather_what": [
+      "Gladly. But what shall I gather, and how much?"
+    ],
+    "unclear.ambiguous": [
+      "Do you mean {options}?",
+      "There are several: {options}. Which do you wish?"
+    ],
+    "progress.gather": [
+      "{have} {item} gathered. Half of the {count}.",
+      "I have {have} of {count} {item}. I will continue."
+    ],
+    "done.gather": [
+      "I have gathered all {count} {item}. I am returning to you.",
+      "{count} {item}, as promised. I come."
+    ],
+    "done.delivered": [
+      "Here, {count} {item}, as promised.",
+      "It is done. {count} {item}.",
+      "{count} {item}, gathered and delivered. What else may I do?"
+    ],
+    "partial.gather": [
+      "I found only {have} of the {count} {item}. There is no more nearby.",
+      "Forgive me. {have} {item} was all I could find."
+    ],
+    "combat.engage": [
+      "Stand behind me!",
+      "{mob}! I will hold it back.",
+      "For you, {player}!",
+      "To arms!"
+    ],
+    "combat.kill": [
+      "It is over.",
+      "The {mob} is fallen.",
+      "Rest now, foul thing."
+    ],
+    "combat.low_health": [
+      "I am wounded, but I stand.",
+      "My strength wanes."
+    ],
+    "combat.retreat": [
+      "I must fall back. Stay close!",
+      "Retreat! Regroup with me!"
+    ],
+    "combat.player_low_health": [
+      "{player}, you are gravely hurt! Get behind me and eat!",
+      "You must tend to your wounds, {player}. I will cover you."
+    ],
+    "combat.creeper": [
+      "Creeper! Away from it!",
+      "Beware the creeper, friend!"
+    ],
+    "downed": [
+      "I have fallen... but not yet failed.",
+      "Forgive me... I need a moment."
+    ],
+    "revived": [
+      "I rise again. Let us continue.",
+      "My oath holds. I am with you."
+    ],
+    "move.caught_up": [
+      "I found you. Please, do not leave me behind again.",
+      "There you are. I feared the worst.",
+      "At your side once more."
+    ],
+    "ambient.night": [
+      "Night falls. Stay close to me.",
+      "Darkness comes. I will keep watch.",
+      "The undead stir at night. Be ready."
+    ],
+    "ambient.dawn": [
+      "Dawn. We have weathered another night.",
+      "The sun returns. Praise be."
+    ],
+    "ambient.rain": [
+      "Rain. It washes the world clean.",
+      "A gentle rain. Good for the farmers."
+    ],
+    "ambient.thunder": [
+      "A storm. Seek shelter if you can.",
+      "Thunder. Keep your wits about you."
+    ],
+    "ambient.cave": [
+      "Tread carefully down here.",
+      "Keep your torch close. I will watch the shadows."
+    ],
+    "ambient.idle": [
+      "Have you eaten, {player}? An empty stomach makes for a poor fighter.",
+      "I once stood guard over a village for a hundred nights. Not one villager lost.",
+      "I keep a list of every place we have made safe. It grows.",
+      "Your armour could use mending. When we have a moment."
+    ],
+    "ambient.biome.forest": ["A peaceful wood. Still, keep watch for spiders."],
+    "ambient.biome.desert": ["The desert is harsh. Drink when you can."],
+    "ambient.biome.snow": ["Bitter cold. Keep moving, and keep warm."],
+    "ambient.biome.ocean": ["The sea is beautiful, and merciless."],
+    "ambient.biome.jungle": ["The jungle hides many dangers. Stay close."],
+    "ambient.biome.swamp": ["A witch's country. Be wary."],
+    "ambient.biome.mountain": ["From up here, one can see every village in need."],
+    "ambient.biome.plains": ["Open fields. Villages often grow here. We should look in on them."],
+    "ambient.biome.nether": ["This place is a wound in the world. Stay close to me.", "Mind the ghasts. And mind your step."],
+    "ambient.biome.end": ["A silent, empty place. Whatever lived here is long gone."],
+    "callout.hostile_behind": [
+      "{player}, behind you! A {mob}!",
+      "Guard your back! {mob}!"
+    ],
+    "callout.ore": [
+      "There is {item} there, friend.",
+      "I see {item} in the stone."
+    ],
+    "callout.lava": [
+      "Lava, {player}. Have a care.",
+      "Beware the fire below."
+    ],
+    "callout.chest": [
+      "A chest. Its owner may still be near. Or long gone.",
+      "There is a chest there."
+    ],
+    "talk.hello": ["Well met.", "Greetings, {player}.", "Hello, friend."],
+    "talk.who": [
+      "I am {name}. I keep watch, I keep oaths, and I keep my friends alive.",
+      "A guardian. Once I protected a village. Now I protect you.",
+      "Someone who believes that every life is worth defending."
+    ],
+    "talk.how": [
+      "Well enough, while you are safe.",
+      "My heart is steady. My sword arm too.",
+      "Content, friend. It is good to be useful."
+    ],
+    "talk.joke": [
+      "A joke? Very well. Why did the skeleton not fight? It had no guts. ...I am told that is funny.",
+      "I once saw an iron golem give a villager a flower. The villager fainted. I laughed for a week.",
+      "Why do zombies avoid the sun? They prefer... a darker sense of humour. Forgive me."
+    ],
+    "talk.thanks": ["There is no need to thank me.", "It is my duty, and my pleasure.", "Always, friend."],
+    "talk.compliment": ["You honour me.", "Kind words. Thank you, {player}.", "I only do what anyone should."],
+    "talk.insult": ["Harsh words. I forgive them.", "I hope that was said in jest.", "Even so, I will keep you safe."],
+    "talk.bye": ["Go safely.", "Until we speak again.", "May the light guide you."],
+    "talk.likes": [
+      "Quiet villages. Iron golems. A well-kept shield.",
+      "The dawn. It means we survived."
+    ],
+    "talk.dislikes": [
+      "Cruelty. And the undead, who know nothing else.",
+      "Those who harm the helpless. Pillagers most of all."
+    ],
+    "talk.where": [
+      "We are in {biome}. Let us see that it stays peaceful.",
+      "{biome}. A fair land, if a dangerous one."
+    ],
+    "talk.memory": [
+      "I remember {event}. You were brave.",
+      "{event}... I think of it often."
+    ],
+    "talk.generic": [
+      "I see.",
+      "That is worth thinking on.",
+      "Hm. Wise words, perhaps.",
+      "I hear you, friend.",
+      "Whatever comes, I am with you."
+    ],
+    "gift.received": ["A {item}. Thank you, {player}. I will use it well.", "You are generous. Thank you for the {item}."],
+    "gift.loved": ["A {item}! I am deeply grateful, friend.", "This {item}... it means a great deal. Thank you."],
+    "hurt_by_player": ["Friend! Mind your blade!", "Did I offend you, {player}?", "I will assume that was an accident."]
+  }
+}
