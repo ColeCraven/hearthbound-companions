@@ -3,9 +3,13 @@
 	"id": "hearthbound",
 	"version": "${version}",
 	"name": "Hearthbound Companions",
-	"description": "RPG-style companions for single-player: recruit them, talk to them, and adventure together. Optional local or cloud AI dialogue.",
+	"description": "RPG-style companions: recruit them, talk to them, and adventure together. Single-player, or on a server with no client mod needed. Optional local or cloud AI dialogue.",
 	"authors": ["Tekless"],
-	"contact": {},
+	"contact": {
+		"homepage": "https://github.com/ColeCraven/hearthbound-companions",
+		"sources": "https://github.com/ColeCraven/hearthbound-companions",
+		"issues": "https://github.com/ColeCraven/hearthbound-companions/issues"
+	},
 	"license": "MIT",
 	"icon": "assets/hearthbound/icon.png",
 	"environment": "*",
