@@ -7,7 +7,7 @@
 **RPG-style companions for Minecraft.**<br>
 Recruit them, chat with them, and go on adventures together.
 
-<a href="https://github.com/ColeCraven/hearthbound-companions/releases/latest"><img src="https://img.shields.io/badge/Download-v0.4.0-2ea44f?style=for-the-badge" alt="Download v0.4.0"></a>
+<a href="https://github.com/ColeCraven/hearthbound-companions/releases/latest"><img src="https://img.shields.io/badge/Download-v0.5.0-2ea44f?style=for-the-badge" alt="Download v0.5.0"></a>
 <a href="#install"><img src="https://img.shields.io/badge/Install-4_easy_steps-3A7BD5?style=for-the-badge" alt="Install in 4 easy steps"></a>
 
 ![Minecraft 26.3](https://img.shields.io/badge/Minecraft-26.3-62B47A)
@@ -55,7 +55,7 @@ the Minecraft version to **26.3** and click **Install**. That adds a Fabric prof
 Launcher.
 
 **2. Download the mod.** From the [latest release](https://github.com/ColeCraven/hearthbound-companions/releases/latest),
-download **`Hearthbound-Companions-0.4.0-install-kit.zip`**. It has the mod, Fabric API (a library
+download **`Hearthbound-Companions-0.5.0-install-kit.zip`**. It has the mod, Fabric API (a library
 the mod needs) and a step-by-step guide.
 
 **3. Drop two files into your `mods` folder.** Unzip the kit and copy both `.jar` files into `mods`:
@@ -76,7 +76,7 @@ Open the `mods` folder in there. If it doesn't exist yet, just make one.
 <summary><b>Using Prism, the Modrinth App or CurseForge instead?</b></summary>
 <br>
 
-Make a new instance for Minecraft 26.3 with Fabric, then drop `hearthbound-0.4.0.jar` and
+Make a new instance for Minecraft 26.3 with Fabric, then drop `hearthbound-0.5.0.jar` and
 [Fabric API](https://modrinth.com/mod/fabric-api) into that instance's `mods` folder. That's it.
 
 </details>
@@ -371,7 +371,7 @@ More detail in [AI_DESIGN.md](docs/AI_DESIGN.md).
 <summary><b>The game won't start, or it says Fabric API is required</b></summary>
 <br>
 
-Make sure both jars from the kit are in your `mods` folder: `hearthbound-0.4.0.jar` and
+Make sure both jars from the kit are in your `mods` folder: `hearthbound-0.5.0.jar` and
 `fabric-api-0.164.0+26.3.jar`. If the error mentions a Minecraft version, re-run the Fabric
 installer and pick 26.3.
 
