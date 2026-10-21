@@ -2,7 +2,8 @@
 
 Hearthbound works on a multiplayer server where **nobody else needs the mod**. Players join with
 plain Minecraft 26.3 and see the companions as player-shaped mannequins, each with a name tag and a
-status line underneath ("Sellsword · free to recruit", "travelling with Tekless"). Everything else
+short grey line underneath (their personality, like "Sellsword", or "with Tekless" once someone has
+recruited them). Everything else
 (talking, recruiting, following, fighting, gathering) happens on the server, so it works the same
 for everyone.
 
@@ -100,6 +101,7 @@ the middle of a message.
 I also ran a copy of my real server (Fabric API, Polymer, Universal Graves, Ledger, Lithium,
 FerriteCore plus Hearthbound) and joined it with Mojang's official, unmodified 26.3 client, after
 checking the client's jar against Mojang's SHA-1. The twelve residents spawned at the hub, rendered
-as mannequins with names and status lines, greeted me in chat, and could be recruited (the label
-changed to "travelling with..." and they followed). The recruited companion was still in the party
-after a server restart.
+as mannequins with names and the line under them, greeted me in chat, and could be recruited (the
+line changed to say who they're with, and they followed). The recruited companion was still in the
+party after a server restart. I checked 0.3.0 the same way: the signed skins and the new grey lines
+show up correctly for the unmodified client.
