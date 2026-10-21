@@ -96,38 +96,53 @@ def hazel():
 
 
 def cass():
-    """Rogue. High dark ponytail, burgundy laced corset, cropped black leather jacket, thigh-high boots."""
+    """Rogue. Treasure hunter: dark waves under a crimson bandana, cream blouse, brown leather vest, crimson sash, tall boots."""
     s = Skin(slim=True)
-    skin, hair = Ramp('#e2b58f'), Ramp('#2a2430')
+    skin, hair = Ramp('#e8b892'), Ramp('#3a2620')
+    crimson = Ramp('#b02a36')
+    leather = Ramp('#7a4a2e')
     P.body_skin(s, skin)
-    P.shirt(s, Ramp('#3e3c46'), arms_to=9)
-    Q.corset(s, Ramp('#7a2a3a'), rows=(3, 9), lace=hex_rgb('#2a2026'))
-    body = Part(s, 'body')
-    for x in range(body.wrap_width):
-        body.paint(x, 10, hex_rgb('#b0303a'))  # crimson sash
-    body.paint(body.front_x(5), 11, hex_rgb('#b0303a'))
+    P.shirt(s, Ramp('#efe6d2'), arms_to=9, neck='v', skin=skin)
     for leg in ('rleg', 'lleg'):
-        Part(s, leg).fill_rows(0, 8, Ramp('#2e2a34'))
-    Q.fitted_boots(s, Ramp('#1e1b22'), top_row=3, buckles=hex_rgb('#b8b8c0'))
-    jacket_ramp = Ramp('#2c2a32')
+        Part(s, leg).fill_rows(0, 8, Ramp('#b49470'))
+    Q.fitted_boots(s, Ramp('#5a3a26'), top_row=4, cuff=Ramp('#7a5236'))
+    # leather vest, open over the blouse
     jacket = Part(s, 'jacket')
-    for y in range(0, 5):
+    for y in range(0, 9):
         for x in range(jacket.wrap_width):
             face, fx = jacket.face_of(x)
-            if face == 'front' and 2 <= fx <= 5 and y > 0:
+            if face == 'front' and 2 <= fx <= 5:
                 continue
-            jacket.paint(x, y, jacket_ramp['lo'] if y == 4 else (jacket_ramp['hi'] if face == 'front' and fx in (1, 6) else jacket_ramp['base']))
-    for arm in ('rsleeve', 'lsleeve'):
-        p = Part(s, arm)
-        p.fill_rows(0, 9, jacket_ramp)
-    P.gloves(s, Ramp('#3b2a22'), rows=(10, 11), fingertips_skin=skin['base'])
-    for fx in (2, 3, 4, 5):
-        jacket.paint(jacket.front_x(fx), 0, hex_rgb('#b0303a'))  # scarf at the throat
-    Q.flowing_hair(s, hair, length=1, fringe='swept', shoulder_locks=False)
-    Q.ponytail(s, hair, length=8)
+            tone = leather['base']
+            if face == 'front' and fx in (1, 6):
+                tone = leather['hi']
+            if y == 8:
+                tone = leather['lo']
+            jacket.paint(x, y, tone)
+    for fx in (1, 6):
+        jacket.paint(jacket.front_x(fx), 3, GOLD)  # brass toggles
+        jacket.paint(jacket.front_x(fx), 6, GOLD)
+    # crimson sash tied at the hip, tails hanging
+    body = Part(s, 'body')
+    for y in (8, 9):
+        for x in range(body.wrap_width):
+            body.paint(x, y, crimson['base'] if y == 8 else crimson['lo'])
+    for y in (9, 10, 11):
+        jacket.paint(jacket.front_x(6), y, crimson['base'] if y < 11 else crimson['lo'])
+    # dagger at the right hip
+    jacket.paint(jacket.front_x(0), 9, hex_rgb('#c8ccd2'))
+    jacket.paint(jacket.front_x(0), 10, hex_rgb('#9aa0a8'))
+    P.bracers(s, leather, rows=(7, 9))
+    P.gloves(s, Ramp('#4a3020'), rows=(10, 11), fingertips_skin=skin['base'])
+    Q.flowing_hair(s, hair, length=4, fringe='swept')
+    # bandana: a band across the brow, knotted at the back with two tails
     hat = Part(s, 'hat')
-    hat.paint(hat.front_x(1), 2, hex_rgb('#4a3a52'))  # a sheen in the dark hair
-    Q.detailed_face(s, skin, eyes=hex_rgb('#9a6a3a'), lash=hex_rgb('#1a1418'), lip=hex_rgb('#b85c6a'), blush=False)
+    for x in range(hat.wrap_width):
+        hat.paint(x, 1, crimson['base'] if x % 4 else crimson['hi'])
+    for bx, y in ((5, 2), (5, 3), (6, 3), (6, 4)):
+        hat.paint(hat.back_x(bx), y, crimson['lo'])
+    hat.paint(hat.front_x(1), 2, hex_rgb('#5a3a30'))  # a sheen in the dark hair
+    Q.detailed_face(s, skin, eyes=hex_rgb('#4a9a6a'), lash=hex_rgb('#1e1410'), lip=hex_rgb('#c4646a'))
     return s
 
 
@@ -169,26 +184,24 @@ def daisy():
 
 
 def rosie():
-    """Farmhand (new look). Honey-blonde waves with a flower crown, puff sleeves, sky-blue laced dress, white apron."""
+    """Farmhand. Honey-blonde waves and a flower crown; puff-sleeved blouse, sky-blue laced bodice, short skirt over leggings, satchel."""
     s = Skin(slim=True)
     skin, hair = Ramp('#f8e0d0'), Ramp('#e6b45e')
     P.body_skin(s, skin)
     blouse = Ramp('#f6f0e4')
-    P.shirt(s, blouse, arms_to=3, neck='round')
-    Q.puff_sleeves(s, blouse, rows=(0, 3))
-    dress = Ramp('#6fa8dc')
-    Part(s, 'body').fill_rows(3, 11, dress)
-    Q.corset(s, Ramp('#5a90c8'), rows=(4, 8), lace=WHITE)
+    P.shirt(s, blouse, arms_to=5, neck='round')
+    P.rolled_sleeves(s, blouse, roll_row=5)
+    Q.puff_sleeves(s, blouse, rows=(0, 2))
+    sky = Ramp('#6fa8dc')
+    Q.corset(s, sky, rows=(3, 9), lace=WHITE)
+    P.belt(s, Ramp('#7a5236'), buckle=GOLD, row=9, layer='body')
+    P.pouch(s, Ramp('#8a5e3c'), col=6, row=10)
     for leg in ('rleg', 'lleg'):
-        Part(s, leg).fill_rows(0, 8, Ramp('#efe8de'))
-    P.boots(s, Ramp('#8a5a3a'), top_row=9)
-    Q.skirt(s, dress, rows=8, front_panel=WHITE, trim=WHITE)
-    jacket = Part(s, 'jacket')
-    for y in range(9, 12):
-        for fx in range(1, 7):
-            jacket.paint(jacket.front_x(fx), y, WHITE if y < 11 else shade(WHITE, -0.06))
-    P.emblem(s, 'rpants', [(2, 3)], hex_rgb('#f07aa0'))  # embroidered flower on the apron
-    P.emblem(s, 'lpants', [(1, 3)], hex_rgb('#f07aa0'))
+        Part(s, leg).fill_rows(0, 8, Ramp('#7a5a42'))
+    Q.fitted_boots(s, Ramp('#8a5a3a'), top_row=6, cuff=Ramp('#d8c8a8'))
+    Q.skirt(s, sky, rows=4, trim=WHITE)
+    P.strap(s, Ramp('#8a5e3c'), direction='down_right', buckle=GOLD)
+    P.emblem(s, 'jacket', [(6, 9)], hex_rgb('#f07aa0'))  # a flower tucked into the satchel strap
     Q.flowing_hair(s, hair, length=6, fringe='part')
     Q.flower_crown(s, hex_rgb('#5aa050'), [hex_rgb('#f07aa0'), WHITE, hex_rgb('#ffd75a')])
     Q.detailed_face(s, skin, eyes=hex_rgb('#5aa0b0'), lash=hex_rgb('#8a5a2a'), lip=hex_rgb('#e88a90'), freckles=True)
@@ -196,30 +209,36 @@ def rosie():
 
 
 def luna():
-    """Mystic (new look). Waist-length silver-lavender hair, midnight gown with gold stars, gold circlet."""
+    """Mystic. Silver-lavender hair and a gold circlet; midnight tunic over leggings, tall boots, violet star-stitched cape."""
     s = Skin(slim=True)
     skin, hair = Ramp('#f2e0dc'), Ramp('#d9d2ec')
     P.body_skin(s, skin)
-    gown = Ramp('#26306a')
-    P.shirt(s, gown, arms_to=9)
+    tunic = Ramp('#26306a')
+    P.shirt(s, tunic, arms_to=9)
     body = Part(s, 'body')
     for fx, y in ((2, 0), (5, 0), (3, 1), (4, 1)):
         body.paint(body.front_x(fx), y, GOLD)  # gold V neckline
-    for x in range(body.wrap_width):
-        body.paint(x, 6, GOLD)  # thin gold belt
     P.emblem(s, 'body', [(3, 2), (4, 2), (3, 4), (4, 4)], GOLD)  # amulet setting
     P.emblem(s, 'body', [(3, 3), (4, 3)], hex_rgb('#9a70e8'))      # amethyst
+    P.belt(s, Ramp('#5a3e2c'), buckle=GOLD, row=7, layer='body')
+    P.pouch(s, Ramp('#6a4a34'), col=1, row=8)
+    for leg in ('rleg', 'lleg'):
+        Part(s, leg).fill_rows(0, 8, Ramp('#2e2a3e'))
+    Q.fitted_boots(s, Ramp('#5a4038'), top_row=5, buckles=GOLD)
+    Q.skirt(s, tunic, rows=4, trim=GOLD)
+    P.bracers(s, Ramp('#6a4a34'), rows=(6, 9))
     for arm in ('rsleeve', 'lsleeve'):
         p = Part(s, arm)
-        for y in range(6, 10):
-            for x in range(p.wrap_width):
-                p.paint(x, y, GOLD if y == 9 else gown['base'])  # flared sleeves with gold cuffs
-    for leg in ('rleg', 'lleg'):
-        Part(s, leg).fill_rows(0, 11, Ramp('#1e2246'))
-    Q.skirt(s, gown, rows=11, trim=GOLD)
-    for leg, stars in (('rpants', ((1, 3), (2, 7), (0, 9))), ('lpants', ((2, 2), (1, 6), (3, 8)))):
-        P.emblem(s, leg, list(stars), hex_rgb('#e8e0ff'))
-    Q.flowing_hair(s, hair, length=10, fringe='part')
+        p.paint(p.front_x(1), 7, GOLD)
+    cape = Ramp('#4a3486')
+    Q.cape(s, cape, trim=GOLD)
+    jacket = Part(s, 'jacket')
+    for bx, y in ((1, 9), (6, 8), (2, 6)):
+        jacket.paint(jacket.back_x(bx), y, hex_rgb('#f0e6b0'))  # stitched stars
+    for leg, bx, y in (('rpants', 1, 2), ('lpants', 2, 3)):
+        p = Part(s, leg)
+        p.paint(p.back_x(bx), y, hex_rgb('#f0e6b0'))
+    Q.flowing_hair(s, hair, length=7, fringe='part')
     Q.circlet(s, GOLD, hex_rgb('#5ac8ff'))
     Q.detailed_face(s, skin, eyes=hex_rgb('#a070e0'), lash=hex_rgb('#3a2a5a'), lip=hex_rgb('#c87a9a'))
     return s

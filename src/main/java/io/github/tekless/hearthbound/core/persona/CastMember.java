@@ -19,21 +19,21 @@ public enum CastMember {
 	EMMETT("Emmett", Archetype.NATURALIST, false, "he/him",
 			"a soft-spoken herbalist, always with a sprig of herbs behind his ear, who knows the use of every root and leaf"),
 	CASS("Cass", Archetype.ROGUE, true, "she/her",
-			"a sharp-tongued treasure hunter who has looted more old tombs than she will ever admit"),
+			"a sharp-tongued treasure hunter in a crimson bandana who has looted more old tombs than she will ever admit"),
 	LUCAS("Lucas", Archetype.ROGUE, false, "he/him",
 			"a silver-tongued thief with a weakness for shiny things and lost causes"),
 	DAISY("Daisy", Archetype.GUARDIAN, true, "she/her",
 			"a paladin of the Dawn with a gold circlet and a long braid, sworn to guard travellers on the wild roads"),
 	CONOBY("Conoby", Archetype.GUARDIAN, false, "he/him",
-			"a grey-bearded knight-protector who has buried too many friends and refuses to lose another"),
+			"a blond, greying old knight in plate and a crimson tabard who has buried too many friends and refuses to lose another"),
 	SAMUEL("Samuel", Archetype.FARMHAND, false, "he/him",
 			"a farm lad who ran off to see the world and still isn't sure it was a good idea"),
 	ROSIE("Rosie", Archetype.FARMHAND, true, "she/her",
-			"a sunny farm girl in a flower crown who can calm any animal and bakes bread whenever she's nervous"),
+			"a sunny farm girl in a flower crown, off on her first real adventure, who can calm any animal and bakes bread whenever she's nervous"),
 	LUNA("Luna", Archetype.MYSTIC, true, "she/her",
-			"a silver-haired mystic in a midnight gown stitched with stars, who reads omens in the night sky and is drawn to the End"),
+			"a silver-haired mystic in a star-stitched travelling cape, who reads omens in the night sky and is drawn to the End"),
 	CASPER("Casper", Archetype.MYSTIC, false, "he/him",
-			"a hooded seer marked with glowing runes, who speaks rarely and notices everything");
+			"a quiet rune-mage in a long coat stitched with glowing runes, who speaks rarely and notices everything");
 
 	/** Skin variants from this value up are cast skins; below are the 18 default player skins. */
 	public static final int SKIN_OFFSET = 100;

@@ -16,14 +16,14 @@ sheet so they stay consistent.
 | **Bram** (he/him) | Sellsword | Short dark hair, salt-and-pepper beard, scar over the brow; oxblood quilted gambeson over mail, one steel pauldron | A scarred veteran who has outlived three mercenary companies |
 | **Hazel** (she/her, slim) | Naturalist | Long auburn hair with a white flower, freckles, green eyes; sage coat over a cream blouse and laced corset, satchel strap | A scholar-ranger who sketches every creature and flower she meets |
 | **Emmett** (he/him) | Naturalist | Dark curls, goatee, a sprig of herbs behind his ear; olive vest, rolled sleeves, green neckerchief, little vials on his belt | A soft-spoken herbalist who knows every root and leaf |
-| **Cass** (she/her, slim) | Rogue | High dark ponytail, side-swept bangs, amber eyes; burgundy laced corset, cropped black leather jacket, crimson sash, thigh-high boots | A sharp-tongued treasure hunter with a few too many tomb stories |
+| **Cass** (she/her, slim) | Rogue | Dark shoulder-length waves under a crimson bandana, green eyes; cream blouse, brown leather vest with brass toggles, crimson sash, a dagger at the hip, tall boots | A sharp-tongued treasure hunter with a few too many tomb stories |
 | **Lucas** (he/him) | Rogue | Tousled chestnut hair, stubble, gold earring; plum doublet with brass buttons over a loose white shirt, bandolier | A silver-tongued thief with a weakness for shiny things |
 | **Daisy** (she/her, slim) | Guardian | Long dark braid over one shoulder, gold circlet; silver breastplate with gold trim, white tabard with a golden sun, royal-blue cape | A paladin of the Dawn, sworn to guard travellers on the wild roads |
-| **Conoby** (he/him) | Guardian | Grey crop and full grey beard; deep-blue surcoat with a silver chevron over mail, steel pauldrons | An old knight-protector who won't lose another friend |
-| **Rosie** (she/her, slim) | Farmhand | Honey-blonde waves and a flower crown, freckles; cream puff-sleeved blouse, sky-blue laced dress, white apron with embroidered flowers | A sunny farm girl who calms animals and bakes when she's nervous |
+| **Conoby** (he/him) | Guardian | Wheat-blond hair and beard going grey at the temples and chin; polished plate over mail, crimson tabard with a silver sword, crimson cape | An old knight-protector who won't lose another friend |
+| **Rosie** (she/her, slim) | Farmhand | Honey-blonde waves and a flower crown, freckles; puff-sleeved blouse with the sleeves rolled up, sky-blue laced bodice and short skirt over leggings, satchel, sturdy boots | A sunny farm girl who calms animals and bakes when she's nervous |
 | **Samuel** (he/him) | Farmhand | Black curls, freckles; faded yellow shirt, patched brown overalls, red kerchief, rolled cuffs, muddy boots | A farm lad still not sure leaving home was a good idea |
-| **Luna** (she/her, slim) | Mystic | Waist-length silver-lavender hair, violet eyes, gold circlet with a blue gem; midnight gown with gold trim and stars, amethyst amulet | A stargazer who reads omens in the night sky |
-| **Casper** (he/him) | Mystic | Ash-grey hood up, amber eyes, glowing teal rune marks; teal tunic, rope belt, wrapped boots | A hooded seer who speaks rarely and notices everything |
+| **Luna** (she/her, slim) | Mystic | Waist-length silver-lavender hair, violet eyes, gold circlet with a blue gem; midnight tunic over leggings, leather bracers, tall buckled boots, violet cape stitched with stars, amethyst amulet | A stargazer who reads omens in the night sky |
+| **Casper** (he/him) | Mystic | Black hair tied back with one silver streak, amber eyes, stubble; long dark-teal coat with silver edges and glowing runes, rune ring on the back, hood down | A rune-mage who speaks rarely and notices everything |
 
 ## Design notes
 
@@ -31,8 +31,8 @@ sheet so they stay consistent.
   rosy lips; long hair frames the face on the outer layer and falls down the back and over the
   shoulders. The men keep simpler, sturdier faces with brows, beards and stubble.
 - **Readable at a distance:** each character has a signature colour (Freya's teal, Bram's
-  oxblood, Hazel's sage, Cass's burgundy, Daisy's white and gold, Luna's midnight blue) and a
-  silhouette detail on the outer layer, such as a fur mantle, hood, ponytail, cape or crown.
+  oxblood, Hazel's sage, Cass's crimson bandana, Conoby's crimson and steel, Daisy's white and gold, Luna's midnight blue) and a
+  silhouette detail on the outer layer, such as a fur mantle, bandana, cape, coat tails or crown.
 - **Practical adventuring gear:** belts, straps, corsets, bracers and boots rather than
   over-the-top costumes, in the spirit of classic fantasy adventures.
 - **Shading:** a four-step colour ramp per material, with cooler shadows and warmer highlights,

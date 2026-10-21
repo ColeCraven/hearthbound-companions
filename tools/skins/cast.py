@@ -9,6 +9,7 @@ import sys
 
 from skinlib import Part, Ramp, Skin, render_preview, save_rgba, shade, hex_rgb
 import pieces as P
+import details as Q
 import women as W
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -95,31 +96,58 @@ def lucas():
 
 
 def conoby():
-    """Guardian. Grey-bearded knight-protector: blue surcoat with a silver tower crest over mail and plate."""
+    """Guardian. Blond older knight: greying wheat-blond hair and beard, polished plate, crimson tabard and cape."""
     s = Skin(slim=False)
-    skin, hair = Ramp('#e8c2a6'), Ramp('#9a9a98')
+    skin, hair = Ramp('#e2b496'), Ramp('#d2b068')
+    grey = hex_rgb('#dcd6c6')
+    steel = Ramp('#a6adb6')
+    crimson = Ramp('#a02a34')
+    gold = hex_rgb('#e2b84c')
     P.body_skin(s, skin)
-    P.chainmail(s, Ramp('#8d9196'), parts=('body', 'rarm', 'larm'), rows=(0, 9))
-    P.trousers(s, Ramp('#3a3a40'))
-    P.boots(s, Ramp('#8a9098'), top_row=8)
-    surcoat = Ramp('#243a6e')
-    P.coat(s, surcoat, rows=(1, 11), open_front=False, sleeves_to=-1, skirt_rows=4)
-    silver = hex_rgb('#c8ccd2')
-    jacket = Part(s, 'jacket')
-    for x in range(jacket.wrap_width):
-        jacket.paint(x, 1, silver)
-    # heraldic chevron with a star above
-    P.emblem(s, 'jacket', [(3, 3), (4, 3), (3, 5), (4, 5), (2, 6), (5, 6), (1, 7), (6, 7)], silver)
-    P.belt(s, Ramp('#4a3020'), buckle=silver, row=8, layer='jacket')
-    steel = Ramp('#a7adb4')
+    P.chainmail(s, Ramp('#8d9196'), parts=('body', 'rarm', 'larm', 'rleg', 'lleg'), rows=(0, 11))
+    P.plate(s, steel, 'body', rows=(0, 8))
+    P.belt(s, Ramp('#5a3a24'), buckle=gold, row=8, layer='body')
+    P.gloves(s, steel, rows=(10, 11))
+    P.boots(s, steel, top_row=6)
+    for leg in ('rpants', 'lpants'):
+        P.plate(s, steel, leg, rows=(4, 5), faces=('front', 'right', 'left'))  # knee guards
     P.pauldron(s, steel, side='right', rows=(0, 3))
     P.pauldron(s, steel, side='left', rows=(0, 3))
-    P.plate(s, steel, 'rpants', rows=(4, 7), faces=('front', 'right', 'left'))
-    P.plate(s, steel, 'lpants', rows=(4, 7), faces=('front', 'right', 'left'))
-    P.gloves(s, Ramp('#6b4a2e'), rows=(9, 11))
-    P.hair(s, hair, 'crop', fringe='none')
-    P.face(s, skin, eyes=hex_rgb('#5a7a9a'), brows=hair['lo'], mouth='stern', lip=hex_rgb('#8a5a50'))
+    P.bracers(s, steel, rows=(6, 9))
+    # crimson tabard down the front, edged in gold, with a silver sword
+    jacket = Part(s, 'jacket')
+    for y in range(2, 12):
+        for fx in range(1, 7):
+            tone = gold if fx in (1, 6) or y == 2 else crimson['base']
+            if y == 11:
+                tone = crimson['lo']
+            jacket.paint(jacket.front_x(fx), y, tone)
+    for fx in (2, 3, 4, 5):
+        jacket.paint(jacket.front_x(fx), 4, gold)  # crossguard
+    jacket.paint(jacket.front_x(3), 3, gold)
+    jacket.paint(jacket.front_x(4), 3, shade(gold, -0.12))
+    for y in range(5, 10):
+        jacket.paint(jacket.front_x(3), y, steel['hi'])
+        jacket.paint(jacket.front_x(4), y, steel['lo'])
+    for leg, cols in (('rpants', (1, 2, 3)), ('lpants', (0, 1, 2))):
+        p = Part(s, leg)
+        for y in range(0, 4):
+            for fx in cols:
+                p.paint(p.front_x(fx), y, crimson['lo'] if y == 3 else crimson['base'])
+    Q.cape(s, crimson, trim=gold)
+    P.hair(s, hair, 'short', fringe='none')
+    head = Part(s, 'head')
+    for x in (head.d - 2, head.d - 1, head.d + head.w, head.d + head.w + 1):
+        for y in (2, 3):
+            head.paint(x, y, grey)  # greying temples
+    for col, row in ((1, 0), (5, 0), (6, 1)):
+        head.paint(head.front_x(col), row, grey)  # silver threads in the blond
+    P.face(s, skin, eyes=hex_rgb('#5a8ac0'), brows=hair['lo'], mouth='neutral', lip=hex_rgb('#9a6a58'))
+    for col in (2, 5):
+        head.paint(head.front_x(col), 5, shade(skin['base'], -0.05))  # tired eyes
     P.beard(s, hair, 'full')
+    for col, row in ((3, 7), (4, 7), (1, 6), (6, 6)):
+        head.paint(head.front_x(col), row, grey)  # grey creeping into the beard
     return s
 
 
@@ -164,47 +192,36 @@ def samuel():
 
 
 def casper():
-    """Mystic. Hooded seer: ash-grey cloak with the hood up, amber eyes, glowing teal rune marks, rope belt."""
+    """Mystic. Quiet rune-mage: black hair tied back with a silver streak, long dark-teal coat stitched with glowing runes."""
     s = Skin(slim=False)
-    skin, hair = Ramp('#4a2f22'), Ramp('#151012')
+    skin, hair = Ramp('#b07a52'), Ramp('#1c1618')
+    coat = Ramp('#1f4f58')
+    glow = hex_rgb('#5ae0d0')
+    silver = hex_rgb('#c8ccd4')
     P.body_skin(s, skin)
-    tunic = Ramp('#2a4f55')
-    P.shirt(s, tunic, arms_to=9)
-    P.trousers(s, Ramp('#2a2826'))
-    P.boots(s, Ramp('#5a5048'), top_row=7)
-    for leg in ('rleg', 'lleg'):
-        p = Part(s, leg)
-        for x in range(p.wrap_width):
-            p.paint(x, 8, hex_rgb('#6e6258'))  # boot wraps
-    cloak = Ramp('#7d7a76')
+    P.shirt(s, Ramp('#e8e0cc'), arms_to=9, neck='v', skin=skin)
+    P.trousers(s, Ramp('#2e2c30'))
+    P.boots(s, Ramp('#4a3426'), top_row=8, cuff=Ramp('#5e4430'))
+    W.open_coat(s, coat, rows=(0, 11), open_cols=(3, 4), sleeves_to=9, cuff=silver, tails=6, edge=silver)
     jacket = Part(s, 'jacket')
-    for y in range(0, 12):
-        for x in range(jacket.wrap_width):
-            face, fx = jacket.face_of(x)
-            if face == 'front' and 2 <= fx <= 5:
-                continue
-            tone = cloak['hi'] if y == 0 else cloak['base']
-            if y >= 2 and x % 3 == 0:
-                tone = cloak['lo']  # long vertical folds
-            if face == 'front' and fx in (1, 6):
-                tone = cloak['hi']  # front edges catch the light
-            if y == 11:
-                tone = cloak['deep']
-            jacket.paint(x, y, tone)
+    for y in (3, 6, 9):
+        jacket.paint(jacket.front_x(2), y, glow)  # runes stitched down the coat edges
+        jacket.paint(jacket.front_x(5), y + 1, glow)
+    for bx, y in ((3, 4), (4, 4), (2, 5), (5, 5), (2, 6), (5, 6), (3, 7), (4, 7)):
+        jacket.paint(jacket.back_x(bx), y, shade(glow, -0.15))  # a rune ring on the back
     for arm in ('rsleeve', 'lsleeve'):
-        Part(s, arm).fill_rows(0, 3, cloak)
-    P.belt(s, Ramp('#a08860'), buckle=hex_rgb('#a08860'), row=8)
-    teal = hex_rgb('#3fb8ad')
-    for arm in ('rarm', 'larm'):
         p = Part(s, arm)
-        p.paint(p.front_x(1), 7, teal)
-    P.hair(s, hair, 'crop', fringe='none')
-    P.face(s, skin, eyes=hex_rgb('#e0c060'), brows=hair['base'], mouth='neutral', lip=hex_rgb('#2e1a14'))
-    P.beard(s, hair, 'short')
+        p.paint(p.front_x(1), 8, glow)
+    P.hood_down(s, coat)
+    P.belt(s, Ramp('#4a3020'), buckle=silver, row=8, layer='body')
+    P.emblem(s, 'body', [(3, 1), (4, 1)], hex_rgb('#3a2a20'))  # pendant cord
+    P.emblem(s, 'body', [(3, 2)], glow)
+    P.hair(s, hair, 'tied', fringe='side')
     head = Part(s, 'head')
-    head.paint(head.front_x(1), 5, teal)
-    head.paint(head.front_x(6), 5, teal)
-    P.hood_up(s, cloak, face_shadow=shade(skin['base'], -0.1))
+    for row in range(0, 3):
+        head.paint(head.front_x(6), row, silver)  # a single silver streak
+    P.face(s, skin, eyes=hex_rgb('#e8b040'), brows=hair['base'], mouth='neutral', lip=hex_rgb('#6e4232'))
+    P.beard(s, hair, 'stubble', skin=skin)
     return s
 
 
