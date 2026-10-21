@@ -246,16 +246,37 @@
       "I keep a list of every place we have made safe. It grows.",
       "Your armour could use mending. When we have a moment."
     ],
-    "ambient.biome.forest": ["A peaceful wood. Still, keep watch for spiders."],
-    "ambient.biome.desert": ["The desert is harsh. Drink when you can."],
-    "ambient.biome.snow": ["Bitter cold. Keep moving, and keep warm."],
-    "ambient.biome.ocean": ["The sea is beautiful, and merciless."],
-    "ambient.biome.jungle": ["The jungle hides many dangers. Stay close."],
-    "ambient.biome.swamp": ["A witch's country. Be wary."],
-    "ambient.biome.mountain": ["From up here, one can see every village in need."],
-    "ambient.biome.plains": ["Open fields. Villages often grow here. We should look in on them."],
-    "ambient.biome.nether": ["This place is a wound in the world. Stay close to me.", "Mind the ghasts. And mind your step."],
-    "ambient.biome.end": ["A silent, empty place. Whatever lived here is long gone."],
+    "ambient.biome.forest": [
+      "A peaceful wood. Still, keep watch for spiders."
+    ],
+    "ambient.biome.desert": [
+      "The desert is harsh. Drink when you can."
+    ],
+    "ambient.biome.snow": [
+      "Bitter cold. Keep moving, and keep warm."
+    ],
+    "ambient.biome.ocean": [
+      "The sea is beautiful, and merciless."
+    ],
+    "ambient.biome.jungle": [
+      "The jungle hides many dangers. Stay close."
+    ],
+    "ambient.biome.swamp": [
+      "A witch's country. Be wary."
+    ],
+    "ambient.biome.mountain": [
+      "From up here, one can see every village in need."
+    ],
+    "ambient.biome.plains": [
+      "Open fields. Villages often grow here. We should look in on them."
+    ],
+    "ambient.biome.nether": [
+      "This place is a wound in the world. Stay close to me.",
+      "Mind the ghasts. And mind your step."
+    ],
+    "ambient.biome.end": [
+      "A silent, empty place. Whatever lived here is long gone."
+    ],
     "callout.hostile_behind": [
       "{player}, behind you! A {mob}!",
       "Guard your back! {mob}!"
@@ -272,7 +293,11 @@
       "A chest. Its owner may still be near. Or long gone.",
       "There is a chest there."
     ],
-    "talk.hello": ["Well met.", "Greetings, {player}.", "Hello, friend."],
+    "talk.hello": [
+      "Well met.",
+      "Greetings, {player}.",
+      "Hello, friend."
+    ],
     "talk.who": [
       "I am {name}. I keep watch, I keep oaths, and I keep my friends alive.",
       "A guardian. Once I protected a village. Now I protect you.",
@@ -288,10 +313,26 @@
       "I once saw an iron golem give a villager a flower. The villager fainted. I laughed for a week.",
       "Why do zombies avoid the sun? They prefer... a darker sense of humour. Forgive me."
     ],
-    "talk.thanks": ["There is no need to thank me.", "It is my duty, and my pleasure.", "Always, friend."],
-    "talk.compliment": ["You honour me.", "Kind words. Thank you, {player}.", "I only do what anyone should."],
-    "talk.insult": ["Harsh words. I forgive them.", "I hope that was said in jest.", "Even so, I will keep you safe."],
-    "talk.bye": ["Go safely.", "Until we speak again.", "May the light guide you."],
+    "talk.thanks": [
+      "There is no need to thank me.",
+      "It is my duty, and my pleasure.",
+      "Always, friend."
+    ],
+    "talk.compliment": [
+      "You honour me.",
+      "Kind words. Thank you, {player}.",
+      "I only do what anyone should."
+    ],
+    "talk.insult": [
+      "Harsh words. I forgive them.",
+      "I hope that was said in jest.",
+      "Even so, I will keep you safe."
+    ],
+    "talk.bye": [
+      "Go safely.",
+      "Until we speak again.",
+      "May the light guide you."
+    ],
     "talk.likes": [
       "Quiet villages. Iron golems. A well-kept shield.",
       "The dawn. It means we survived."
@@ -315,8 +356,30 @@
       "I hear you, friend.",
       "Whatever comes, I am with you."
     ],
-    "gift.received": ["A {item}. Thank you, {player}. I will use it well.", "You are generous. Thank you for the {item}."],
-    "gift.loved": ["A {item}! I am deeply grateful, friend.", "This {item}... it means a great deal. Thank you."],
-    "hurt_by_player": ["Friend! Mind your blade!", "Did I offend you, {player}?", "I will assume that was an accident."]
+    "gift.received": [
+      "A {item}. Thank you, {player}. I will use it well.",
+      "You are generous. Thank you for the {item}."
+    ],
+    "gift.loved": [
+      "A {item}! I am deeply grateful, friend.",
+      "This {item}... it means a great deal. Thank you."
+    ],
+    "hurt_by_player": [
+      "Friend! Mind your blade!",
+      "Did I offend you, {player}?",
+      "I will assume that was an accident."
+    ],
+    "fail.owner_gone": [
+      "I gathered your {item}, but I cannot find you. I will keep them safe.",
+      "You are gone from my sight, friend. Your {item} are safe with me."
+    ],
+    "fail.unsupported": [
+      "Forgive me, I cannot {action}. I can follow, wait, gather, carry, and defend you.",
+      "That is not a skill I possess. To {action} is beyond me."
+    ],
+    "fail.give_missing": [
+      "I carry no {item}, friend.",
+      "I have no {item} to give. Shall I gather some?"
+    ]
   }
 }

@@ -243,16 +243,37 @@
       "If you ever see an emerald lying around, it's mine. Finder's rules.",
       "You know what this trip needs? More profit."
     ],
-    "ambient.biome.forest": ["Trees. Lots of free wood, if you don't count the labour."],
-    "ambient.biome.desert": ["Desert temples, partner. Big shiny loot. Big shiny traps."],
-    "ambient.biome.snow": ["Cold. Igloos sometimes have basements, you know. Worth a look."],
-    "ambient.biome.ocean": ["Shipwrecks out there. Treasure maps. I'm just saying."],
-    "ambient.biome.jungle": ["Jungle temple around here, I bet. With all the trimmings."],
-    "ambient.biome.swamp": ["Witch huts. Witches don't share. I've asked."],
-    "ambient.biome.mountain": ["Emerald ore loves mountains. So do I, now."],
-    "ambient.biome.plains": ["Villages on plains. Villages mean trades. Trades mean profit."],
-    "ambient.biome.nether": ["Piglins love gold. I love that about them.", "Bastions. Gold everywhere, guards everywhere. My dream and my nightmare."],
-    "ambient.biome.end": ["End cities. Elytra. Shulker boxes. I'm drooling."],
+    "ambient.biome.forest": [
+      "Trees. Lots of free wood, if you don't count the labour."
+    ],
+    "ambient.biome.desert": [
+      "Desert temples, partner. Big shiny loot. Big shiny traps."
+    ],
+    "ambient.biome.snow": [
+      "Cold. Igloos sometimes have basements, you know. Worth a look."
+    ],
+    "ambient.biome.ocean": [
+      "Shipwrecks out there. Treasure maps. I'm just saying."
+    ],
+    "ambient.biome.jungle": [
+      "Jungle temple around here, I bet. With all the trimmings."
+    ],
+    "ambient.biome.swamp": [
+      "Witch huts. Witches don't share. I've asked."
+    ],
+    "ambient.biome.mountain": [
+      "Emerald ore loves mountains. So do I, now."
+    ],
+    "ambient.biome.plains": [
+      "Villages on plains. Villages mean trades. Trades mean profit."
+    ],
+    "ambient.biome.nether": [
+      "Piglins love gold. I love that about them.",
+      "Bastions. Gold everywhere, guards everywhere. My dream and my nightmare."
+    ],
+    "ambient.biome.end": [
+      "End cities. Elytra. Shulker boxes. I'm drooling."
+    ],
     "callout.hostile_behind": [
       "Behind you, boss! {mob}!",
       "Psst. {mob}, your six."
@@ -269,7 +290,11 @@
       "Chest! Dibs.",
       "A chest, partner. Shall we?"
     ],
-    "talk.hello": ["Hey, partner.", "Boss.", "Well, hello."],
+    "talk.hello": [
+      "Hey, partner.",
+      "Boss.",
+      "Well, hello."
+    ],
     "talk.who": [
       "{name}. Treasure hunter, trader, occasional liar. Never to partners.",
       "I find things. Lost things, hidden things, things that should have stayed hidden.",
@@ -285,10 +310,26 @@
       "I'd tell you a joke about the End, but it doesn't have one.",
       "A villager walks into a trade. Comes out with one stick and a smile. Business."
     ],
-    "talk.thanks": ["Don't thank me. Tip me.", "All part of the service.", "You're welcome. I'll remember you owe me."],
-    "talk.compliment": ["I know. But do go on.", "Flattery will get you everywhere. Except my share.", "Well, you have taste."],
-    "talk.insult": ["Rude. Accurate, but rude.", "Words hurt, boss. So do pickaxes. Just saying.", "I've been called worse by better."],
-    "talk.bye": ["See you around.", "Don't do anything I wouldn't do. Which leaves a lot.", "Later, partner."],
+    "talk.thanks": [
+      "Don't thank me. Tip me.",
+      "All part of the service.",
+      "You're welcome. I'll remember you owe me."
+    ],
+    "talk.compliment": [
+      "I know. But do go on.",
+      "Flattery will get you everywhere. Except my share.",
+      "Well, you have taste."
+    ],
+    "talk.insult": [
+      "Rude. Accurate, but rude.",
+      "Words hurt, boss. So do pickaxes. Just saying.",
+      "I've been called worse by better."
+    ],
+    "talk.bye": [
+      "See you around.",
+      "Don't do anything I wouldn't do. Which leaves a lot.",
+      "Later, partner."
+    ],
     "talk.likes": [
       "Emeralds. Gold. Shulker boxes. Things that fit in pockets.",
       "A good deal. A better deal. The best deal is the one where I win."
@@ -312,8 +353,30 @@
       "Uh-huh. Anyway.",
       "I'll pretend that made sense."
     ],
-    "gift.received": ["A {item}? For me? Who are you trying to bribe?", "Thanks, partner. This {item} is going straight in my stash."],
-    "gift.loved": ["A {item}! Now we're talking. You're my favourite.", "Oh, that's a beautiful {item}. Don't ask for it back."],
-    "hurt_by_player": ["Oi! Watch the merchandise!", "That's coming out of your share, boss.", "Hit me again and I'm unionising."]
+    "gift.received": [
+      "A {item}? For me? Who are you trying to bribe?",
+      "Thanks, partner. This {item} is going straight in my stash."
+    ],
+    "gift.loved": [
+      "A {item}! Now we're talking. You're my favourite.",
+      "Oh, that's a beautiful {item}. Don't ask for it back."
+    ],
+    "hurt_by_player": [
+      "Oi! Watch the merchandise!",
+      "That's coming out of your share, boss.",
+      "Hit me again and I'm unionising."
+    ],
+    "fail.owner_gone": [
+      "Got your {item}, boss, but you skipped town. I'll hold them. Probably.",
+      "You ran off. I've still got the {item}. Honest."
+    ],
+    "fail.unsupported": [
+      "{action}? Not in my skill set, partner. I follow, wait, fetch, fight and carry.",
+      "I don't {action}. Ask me to fetch something shiny instead."
+    ],
+    "fail.give_missing": [
+      "No {item} on me. Check my pockets if you like.",
+      "I'm fresh out of {item}. Want me to go find some?"
+    ]
   }
 }

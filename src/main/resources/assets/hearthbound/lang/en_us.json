@@ -1,0 +1,12 @@
+{
+  "entity.hearthbound.companion": "Companion",
+  "item.hearthbound.companion_spawn_egg": "Companion Spawn Egg",
+  "container.hearthbound.companion": "%s's Pack",
+  "message.hearthbound.died": "%s has fallen. Their belongings lie where they fell.",
+  "message.hearthbound.no_such_companion": "No companion called \"%s\" is close enough to hear you.",
+  "message.hearthbound.no_party": "You aren't travelling with any companions. Talk to one and ask them to join you.",
+  "message.hearthbound.ai_paused": "[Hearthbound] The AI dialogue service isn't responding, so companions will use their own words for a couple of minutes. Orders still work.",
+  "key.category.hearthbound.main": "Hearthbound Companions",
+  "key.hearthbound.talk": "Talk to companion",
+  "key.hearthbound.toggle_hud": "Show/hide party list"
+}

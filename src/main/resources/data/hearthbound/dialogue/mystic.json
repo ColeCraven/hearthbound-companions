@@ -246,16 +246,37 @@
       "Every structure out there was built by someone who's gone now.",
       "The Nether is just a room with the fire turned up."
     ],
-    "ambient.biome.forest": ["Old trees. They've seen more than either of us."],
-    "ambient.biome.desert": ["Deserts are graveyards that forgot their stones."],
-    "ambient.biome.snow": ["Cold, quiet, honest. I approve."],
-    "ambient.biome.ocean": ["The sea keeps its dead in temples. Guardians watch them."],
-    "ambient.biome.jungle": ["Too loud. Too green. Too alive."],
-    "ambient.biome.swamp": ["Witches live here. We'd get along. Or kill each other."],
-    "ambient.biome.mountain": ["Closer to the stars. Good."],
-    "ambient.biome.plains": ["Open sky. Nowhere to hide from the night."],
-    "ambient.biome.nether": ["Home. Well. A home. Someone's.", "The souls in this sand are restless. Walk softly."],
-    "ambient.biome.end": ["The void hums. Do you hear it? No? Lucky."],
+    "ambient.biome.forest": [
+      "Old trees. They've seen more than either of us."
+    ],
+    "ambient.biome.desert": [
+      "Deserts are graveyards that forgot their stones."
+    ],
+    "ambient.biome.snow": [
+      "Cold, quiet, honest. I approve."
+    ],
+    "ambient.biome.ocean": [
+      "The sea keeps its dead in temples. Guardians watch them."
+    ],
+    "ambient.biome.jungle": [
+      "Too loud. Too green. Too alive."
+    ],
+    "ambient.biome.swamp": [
+      "Witches live here. We'd get along. Or kill each other."
+    ],
+    "ambient.biome.mountain": [
+      "Closer to the stars. Good."
+    ],
+    "ambient.biome.plains": [
+      "Open sky. Nowhere to hide from the night."
+    ],
+    "ambient.biome.nether": [
+      "Home. Well. A home. Someone's.",
+      "The souls in this sand are restless. Walk softly."
+    ],
+    "ambient.biome.end": [
+      "The void hums. Do you hear it? No? Lucky."
+    ],
     "callout.hostile_behind": [
       "{player}. A {mob}, behind you.",
       "Something walks in your shadow. {mob}."
@@ -272,7 +293,11 @@
       "A chest. Someone's secrets, waiting.",
       "There's a chest. Open it, if you dare."
     ],
-    "talk.hello": ["Hm.", "{player}.", "Greetings, wanderer."],
+    "talk.hello": [
+      "Hm.",
+      "{player}.",
+      "Greetings, wanderer."
+    ],
     "talk.who": [
       "{name}. I study the places between: the Nether, the End, the dark under the world.",
       "A wanderer. A reader of stars. An occasional problem.",
@@ -288,10 +313,26 @@
       "Why did the enderman cross the road? It didn't. It teleported. Endermen don't wait for roads.",
       "I told a skeleton a secret once. It went right through him."
     ],
-    "talk.thanks": ["Don't. It makes me uncomfortable.", "Hm. You're welcome.", "Gratitude noted."],
-    "talk.compliment": ["Careful. I might start to like you.", "Flattery. Bold of you.", "...Thank you. Don't make it a habit."],
-    "talk.insult": ["How refreshing. Honesty.", "I've been cursed by better.", "Words. Wind. Nothing more."],
-    "talk.bye": ["Until the next night.", "Go.", "We'll speak again. We always do."],
+    "talk.thanks": [
+      "Don't. It makes me uncomfortable.",
+      "Hm. You're welcome.",
+      "Gratitude noted."
+    ],
+    "talk.compliment": [
+      "Careful. I might start to like you.",
+      "Flattery. Bold of you.",
+      "...Thank you. Don't make it a habit."
+    ],
+    "talk.insult": [
+      "How refreshing. Honesty.",
+      "I've been cursed by better.",
+      "Words. Wind. Nothing more."
+    ],
+    "talk.bye": [
+      "Until the next night.",
+      "Go.",
+      "We'll speak again. We always do."
+    ],
     "talk.likes": [
       "Amethyst. Enchanting tables. The silence of the End.",
       "Night skies. Endermen. Questions without answers."
@@ -315,8 +356,30 @@
       "The world is stranger than that, but go on.",
       "I'll consider it. Under the stars."
     ],
-    "gift.received": ["A {item}. Thoughtful. Strange, but thoughtful.", "Hm. A {item}. I'll keep it."],
-    "gift.loved": ["A {item}... you've been paying attention. I'm touched. Don't tell anyone.", "Oh. A {item}. That's... lovely. Truly."],
-    "hurt_by_player": ["Do that again and I'll curse your boots.", "Careful, {player}.", "Interesting choice. Wrong, but interesting."]
+    "gift.received": [
+      "A {item}. Thoughtful. Strange, but thoughtful.",
+      "Hm. A {item}. I'll keep it."
+    ],
+    "gift.loved": [
+      "A {item}... you've been paying attention. I'm touched. Don't tell anyone.",
+      "Oh. A {item}. That's... lovely. Truly."
+    ],
+    "hurt_by_player": [
+      "Do that again and I'll curse your boots.",
+      "Careful, {player}.",
+      "Interesting choice. Wrong, but interesting."
+    ],
+    "fail.owner_gone": [
+      "I hold your {item}. You, however, have vanished.",
+      "You're gone. The {item} wait with me."
+    ],
+    "fail.unsupported": [
+      "To {action}? No. I follow, wait, gather, carry and fight.",
+      "{action} is not among my talents."
+    ],
+    "fail.give_missing": [
+      "I carry no {item}.",
+      "No {item}. Ask the earth, not me. Or ask me to gather some."
+    ]
   }
 }

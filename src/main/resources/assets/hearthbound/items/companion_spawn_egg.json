@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "hearthbound:item/companion_spawn_egg"
+  }
+}

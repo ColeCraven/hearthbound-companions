@@ -248,16 +248,40 @@
       "Sometimes I wonder who planted all these trees.",
       "If I ever find an axolotl, I'm naming it after you."
     ],
-    "ambient.biome.forest": ["A forest! So many kinds of trees. Oak, birch... let's count them!", "Listen to that. Leaves! Very relaxing."],
-    "ambient.biome.desert": ["A desert! Cacti store water, you know. Don't hug them though.", "Sand, sand, sand. And possibly a temple!"],
-    "ambient.biome.snow": ["Snow! Look for foxes, they're adorable.", "Brr! Mind the powder snow, it swallows people."],
-    "ambient.biome.ocean": ["The ocean! Imagine what's down there. Coral! Shipwrecks!"],
-    "ambient.biome.jungle": ["A jungle! Parrots, ocelots, cocoa beans... I'm overwhelmed!"],
-    "ambient.biome.swamp": ["A swamp! Slimes and frogs. Lovely frogs."],
-    "ambient.biome.mountain": ["Look how high we are! You can see for miles."],
-    "ambient.biome.plains": ["Open plains. Perfect for horses. And picnics."],
-    "ambient.biome.nether": ["The Nether! The fungus here is unlike anything above!", "It's so hot. My notebook's curling."],
-    "ambient.biome.end": ["The End... the plants here grow in such strange shapes."],
+    "ambient.biome.forest": [
+      "A forest! So many kinds of trees. Oak, birch... let's count them!",
+      "Listen to that. Leaves! Very relaxing."
+    ],
+    "ambient.biome.desert": [
+      "A desert! Cacti store water, you know. Don't hug them though.",
+      "Sand, sand, sand. And possibly a temple!"
+    ],
+    "ambient.biome.snow": [
+      "Snow! Look for foxes, they're adorable.",
+      "Brr! Mind the powder snow, it swallows people."
+    ],
+    "ambient.biome.ocean": [
+      "The ocean! Imagine what's down there. Coral! Shipwrecks!"
+    ],
+    "ambient.biome.jungle": [
+      "A jungle! Parrots, ocelots, cocoa beans... I'm overwhelmed!"
+    ],
+    "ambient.biome.swamp": [
+      "A swamp! Slimes and frogs. Lovely frogs."
+    ],
+    "ambient.biome.mountain": [
+      "Look how high we are! You can see for miles."
+    ],
+    "ambient.biome.plains": [
+      "Open plains. Perfect for horses. And picnics."
+    ],
+    "ambient.biome.nether": [
+      "The Nether! The fungus here is unlike anything above!",
+      "It's so hot. My notebook's curling."
+    ],
+    "ambient.biome.end": [
+      "The End... the plants here grow in such strange shapes."
+    ],
     "callout.hostile_behind": [
       "{player}! There's a {mob} behind you!",
       "Look out, {mob} sneaking up!"
@@ -275,7 +299,11 @@
       "A chest! I wonder what's inside.",
       "There's a chest over there!"
     ],
-    "talk.hello": ["Hello!", "Hi, {player}!", "Oh, hello!"],
+    "talk.hello": [
+      "Hello!",
+      "Hi, {player}!",
+      "Oh, hello!"
+    ],
     "talk.who": [
       "I'm {name}! I study the natural world: plants, animals, stones, weather, everything really.",
       "A naturalist. I've filled eleven notebooks. Twelve if you count the one that fell in the river.",
@@ -291,10 +319,26 @@
       "What does a stone say to another stone? Nothing, they're very boring. Except deepslate.",
       "I tried to write a book about anti-gravity. Couldn't put it down. Ha!"
     ],
-    "talk.thanks": ["You're welcome! It was fun.", "Any time, really!", "Oh, it was nothing. Truly."],
-    "talk.compliment": ["Oh! That's very kind. I'll write that down.", "You're making me blush. Like a poppy.", "Thank you! You're not so bad yourself."],
-    "talk.insult": ["Oh. Well. That's not very nice.", "I'll pretend I didn't hear that.", "Hmm. Rude. Noted."],
-    "talk.bye": ["Bye for now!", "Talk soon!", "Off you go! I'll be here, observing."],
+    "talk.thanks": [
+      "You're welcome! It was fun.",
+      "Any time, really!",
+      "Oh, it was nothing. Truly."
+    ],
+    "talk.compliment": [
+      "Oh! That's very kind. I'll write that down.",
+      "You're making me blush. Like a poppy.",
+      "Thank you! You're not so bad yourself."
+    ],
+    "talk.insult": [
+      "Oh. Well. That's not very nice.",
+      "I'll pretend I didn't hear that.",
+      "Hmm. Rude. Noted."
+    ],
+    "talk.bye": [
+      "Bye for now!",
+      "Talk soon!",
+      "Off you go! I'll be here, observing."
+    ],
     "talk.likes": [
       "Flowers! And bees, and axolotls, and amethyst geodes. And you, a bit.",
       "Rare biomes. Mushroom fields are my dream."
@@ -318,8 +362,30 @@
       "I'll have to think about that one.",
       "Ooh. I'll put that in the notebook."
     ],
-    "gift.received": ["A {item}! Thank you! I'll take good care of it.", "For me? A {item}! How thoughtful."],
-    "gift.loved": ["A {item}! Oh, oh, this is wonderful! Thank you!", "You remembered I'd love a {item}!"],
-    "hurt_by_player": ["Ow! What was that for?", "Hey! I'm on your side!", "That hurt, {player}!"]
+    "gift.received": [
+      "A {item}! Thank you! I'll take good care of it.",
+      "For me? A {item}! How thoughtful."
+    ],
+    "gift.loved": [
+      "A {item}! Oh, oh, this is wonderful! Thank you!",
+      "You remembered I'd love a {item}!"
+    ],
+    "hurt_by_player": [
+      "Ow! What was that for?",
+      "Hey! I'm on your side!",
+      "That hurt, {player}!"
+    ],
+    "fail.owner_gone": [
+      "I've got the {item}, but where did you go? I'll keep them safe!",
+      "You disappeared! Don't worry, I'm holding your {item}."
+    ],
+    "fail.unsupported": [
+      "Oh, I don't know how to {action}, I'm afraid. I can follow, wait, gather things, fetch them, and keep you company!",
+      "{action}? That's beyond me. Gathering and following I can do!"
+    ],
+    "fail.give_missing": [
+      "I don't have any {item}, sorry! Shall I gather some?",
+      "No {item} in my bag. Just notes and pebbles."
+    ]
   }
 }

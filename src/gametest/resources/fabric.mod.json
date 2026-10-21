@@ -5,7 +5,8 @@
 	"name": "Hearthbound Companions tests",
 	"environment": "*",
 	"entrypoints": {
-		"fabric-gametest": ["io.github.tekless.hearthbound.test.SmokeGameTest"]
+		"fabric-gametest": ["io.github.tekless.hearthbound.test.SmokeGameTest", "io.github.tekless.hearthbound.test.CompanionGameTests"],
+		"fabric-client-gametest": ["io.github.tekless.hearthbound.test.CompanionClientGameTest"]
 	},
 	"depends": {
 		"hearthbound": "*"
