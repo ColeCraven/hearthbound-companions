@@ -398,7 +398,9 @@
       "Right.",
       "Noted.",
       "Is that so.",
-      "Mm. Keep walking, keep talking."
+      "Mm. Keep walking, keep talking.",
+      "Keep talking. I'm listening, mostly.",
+      "Fair."
     ],
     "gift.received": [
       "{item}? Useful. Thanks.",
@@ -533,7 +535,9 @@
       "Don't know. Don't much care.",
       "Ask me something I can hit.",
       "No idea. Ask the clever one.",
-      "Couldn't tell you."
+      "Couldn't tell you.",
+      "Beats me.",
+      "Ask the next one. I might know that."
     ],
     "ack.build": [
       "{thing}? Fine. Stand back.",
@@ -760,6 +764,51 @@
     "gift.flower": [
       "Found this {item}. Don't read into it.",
       "Here. Picked this {item}. It was in the way."
+    ],
+    "ask.join_first": [
+      "Not on your crew yet. Want me to sign on first, then do it?",
+      "I don't work for strangers. Say yes and I'll join, then get it done.",
+      "Join you first, then the job? Say yes."
+    ],
+    "ask.build_what": [
+      "Build what? {things}. Pick one.",
+      "I can do {things}. Which?",
+      "{things}. Which one do you want?"
+    ],
+    "talk.why": [
+      "Because that's how it is.",
+      "Reasons. Mostly practical ones.",
+      "Long story. Short answer: it works."
+    ],
+    "talk.really": [
+      "Really.",
+      "Would I lie to you?",
+      "Yes. Don't make me say it twice."
+    ],
+    "talk.more": [
+      "There's not much more to it.",
+      "That's the short of it. The long of it is boring.",
+      "Ask me something specific."
+    ],
+    "talk.and_you": [
+      "Me? Still standing.",
+      "I'm fine. You?",
+      "Same as always. Sharp and a bit sore."
+    ],
+    "talk.mean": [
+      "Meant what I said.",
+      "Plain enough, I thought. Ask it another way.",
+      "Say what you want to know, straight."
+    ],
+    "talk.mention.mob": [
+      "{thing}? Keep your guard up around those.",
+      "Ah, {thing}. I've bled for less.",
+      "{thing}. Not a fight I'd pick, not one I'd run from."
+    ],
+    "talk.mention.thing": [
+      "{thing}. Useful, if you can carry it.",
+      "{thing}? Fine by me.",
+      "Hm. {thing}. Go on."
     ]
   }
 }

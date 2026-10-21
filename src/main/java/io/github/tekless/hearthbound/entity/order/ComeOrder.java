@@ -13,6 +13,16 @@ public final class ComeOrder implements CompanionOrder {
 	private TaskStatus status = TaskStatus.RUNNING;
 	private int ticks;
 	private int repathCooldown;
+	/** What to do on arrival, for orders given to a companion who was far away ("gather wood near me"). */
+	private final java.util.function.Consumer<CompanionEntity> then;
+
+	public ComeOrder() {
+		this(null);
+	}
+
+	public ComeOrder(java.util.function.Consumer<CompanionEntity> then) {
+		this.then = then;
+	}
 
 	@Override
 	public Kind kind() {
@@ -36,6 +46,14 @@ public final class ComeOrder implements CompanionOrder {
 		if (companion.distanceTo(owner) <= 2.5) {
 			companion.getNavigation().stop();
 			status = TaskStatus.SUCCEEDED;
+			if (then != null) {
+				then.accept(companion);
+			}
+			return;
+		}
+		if (then != null && ++ticks > TIMEOUT) {
+			ticks = 0; // there is a job waiting at the other end, so keep trying (the teleport does the rest)
+			companion.requestCatchUp(owner);
 			return;
 		}
 		if (++ticks > TIMEOUT || (stuck.update(companion.getX(), companion.getZ(), true) && stuck.consecutiveStuck() >= 3)) {

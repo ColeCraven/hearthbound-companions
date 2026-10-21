@@ -3,7 +3,7 @@
   "item.hearthbound.companion_spawn_egg": "Companion Spawn Egg",
   "container.hearthbound.companion": "%s's Pack",
   "message.hearthbound.died": "%s has fallen. Their belongings lie where they fell.",
-  "message.hearthbound.no_such_companion": "No companion called \"%s\" is close enough to hear you.",
+  "message.hearthbound.no_such_companion": "No companion called \"%s\" is around.",
   "message.hearthbound.no_party": "You aren't travelling with any companions. Talk to one and ask them to join you.",
   "message.hearthbound.ai_paused": "[Hearthbound] The AI dialogue service isn't responding, so companions will use their own words for a couple of minutes. Orders still work.",
   "key.category.hearthbound.main": "Hearthbound Companions",
@@ -17,5 +17,9 @@
   "label.hearthbound.downed": "knocked down",
   "message.hearthbound.chatting": "You're talking with %1$s. Just keep typing, no @ needed. Say bye when you're done.",
   "message.hearthbound.help_hint": "Type /companion help to see everything you can ask.",
-  "message.hearthbound.recruited_tip": "%1$s is with you now. Chat away, or try \"%1$s, go mining\" or \"build a shelter\". /companion help lists the rest."
+  "message.hearthbound.recruited_tip": "%1$s is with you now. Chat away, or try \"%1$s, go mining\" or \"build a shelter\". /companion help lists the rest.",
+  "message.hearthbound.other_dimension": "%s is in another dimension, so they can't hear you from here.",
+  "message.hearthbound.not_loaded": "%s is too far away to hear you (their part of the world isn't loaded). Go back near them and try again.",
+  "message.hearthbound.heard_by": "Heard by: %s",
+  "message.hearthbound.unreachable": "Could not reach: %s"
 }

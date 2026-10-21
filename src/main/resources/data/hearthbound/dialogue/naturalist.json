@@ -365,7 +365,9 @@
       "Oh, really?",
       "Huh! I like that.",
       "Go on, I'm listening.",
-      "Mm-hm! Wait, is that a new kind of flower?"
+      "Mm-hm! Wait, is that a new kind of flower?",
+      "Mm, tell me more about that?",
+      "I'm still thinking it over, in a nice way."
     ],
     "gift.received": [
       "A {item}! Thank you! I'll take good care of it.",
@@ -496,7 +498,9 @@
       "Ooh, good question. I don't know! Let's find out.",
       "Hmm. I'd have to look that up. If only I had a library.",
       "I'm not sure. But I love that you asked.",
-      "That's one for the notebook. Under 'mysteries'."
+      "That's one for the notebook. Under 'mysteries'.",
+      "I'm not sure, but I'd love to find out.",
+      "Good question. I'll think on it."
     ],
     "ack.build": [
       "Ooh, a building project! {thing} it is.",
@@ -723,6 +727,51 @@
       "I picked this {item} for you. I thought you'd like it.",
       "Here! This {item} reminded me of you.",
       "For you. This {item} was the prettiest one I found."
+    ],
+    "ask.join_first": [
+      "I'm not travelling with you yet. Shall I join you first, and then do it?",
+      "Happy to! Do you want me to come along first? Say yes and I will.",
+      "I'd love to help. Join up first, then the work?"
+    ],
+    "ask.build_what": [
+      "Ooh, what shall I build? {things}?",
+      "I can manage {things}. Which one would you like?",
+      "{things}. Which sounds right?"
+    ],
+    "talk.why": [
+      "Oh, there's a reason for most things, if you watch long enough.",
+      "Good question. I think it comes down to how things grow.",
+      "Because everything is connected, somehow."
+    ],
+    "talk.really": [
+      "Really! I wouldn't make it up.",
+      "Truly. I've seen it myself.",
+      "Yes! Surprising, isn't it?"
+    ],
+    "talk.more": [
+      "Oh, there's loads more. Where shall I start?",
+      "I could go on all day. Stop me if I do.",
+      "Well, there's a bit more to it, actually."
+    ],
+    "talk.and_you": [
+      "Me? Quite well. The air out here helps.",
+      "I'm good, thank you for asking!",
+      "Happy, mostly. And curious. You?"
+    ],
+    "talk.mean": [
+      "Oh, sorry, was I unclear? Let me try again.",
+      "I mean it plainly, I think. What part is odd?",
+      "Ask me again, gently? I'll do better."
+    ],
+    "talk.mention.mob": [
+      "{thing}! Fascinating creatures, in their way.",
+      "Oh, {thing}. I've watched them for hours. From a distance.",
+      "{thing}? Tell me what you saw."
+    ],
+    "talk.mention.thing": [
+      "{thing}! I do love that.",
+      "Ah, {thing}. There's more to that than you'd think.",
+      "{thing}? Now that's interesting."
     ]
   }
 }

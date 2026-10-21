@@ -359,7 +359,8 @@
       "Indeed.",
       "I hear you.",
       "Is that so? Tell me more, if you wish.",
-      "Mm. Stay close, friend."
+      "Mm. Stay close, friend.",
+      "That is worth thinking on. Go on."
     ],
     "gift.received": [
       "A {item}. Thank you, {player}. I will use it well.",
@@ -488,7 +489,9 @@
       "I do not know. But we can find out together.",
       "A fair question. I wish I had a fair answer.",
       "That is beyond me, I am afraid.",
-      "Hm. Let me think on that while I keep watch."
+      "Hm. Let me think on that while I keep watch.",
+      "I do not know. I wish I did.",
+      "A fine question. I have no answer yet."
     ],
     "ack.build": [
       "I will build {thing}. It will be sturdy.",
@@ -714,6 +717,51 @@
     "gift.flower": [
       "I found this {item}. It made me think of you.",
       "For you, friend. This {item} grew by the path."
+    ],
+    "ask.join_first": [
+      "I do not yet walk with you. Shall I join you first, and then see to it? Say yes.",
+      "Gladly, but I should join you properly first. Yes?",
+      "Let me pledge to your company first, then I will do it. Yes?"
+    ],
+    "ask.build_what": [
+      "What shall I raise? {things}?",
+      "I can build {things}. Which will serve you?",
+      "{things}. Tell me which, and I will begin."
+    ],
+    "talk.why": [
+      "Because it is right, or the nearest thing to it.",
+      "A fair question. The answer is duty, mostly.",
+      "I have thought on it long. It comes to this: it is what I must do."
+    ],
+    "talk.really": [
+      "Truly. I would not say it otherwise.",
+      "Yes. You have my word.",
+      "I do not speak idly. Yes."
+    ],
+    "talk.more": [
+      "There is more, though it is not all easy to tell.",
+      "If you wish to hear it, I will speak on.",
+      "A little more, then. Listen well."
+    ],
+    "talk.and_you": [
+      "I am well, and glad of your company.",
+      "Steady, thank you. And yourself?",
+      "Well enough. Better for asking."
+    ],
+    "talk.mean": [
+      "Forgive me. I will say it plainly.",
+      "I meant only what I said. What troubles you in it?",
+      "Let me put it another way."
+    ],
+    "talk.mention.mob": [
+      "{thing}. A real danger. Stay behind me.",
+      "Ah, {thing}. I have met them. I will not flinch.",
+      "{thing}? Tell me where, and I will watch for them."
+    ],
+    "talk.mention.thing": [
+      "{thing}. A good thing to speak of.",
+      "{thing}? That is worth remembering.",
+      "Ah, {thing}. Go on, I am listening."
     ]
   }
 }

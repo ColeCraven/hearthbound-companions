@@ -76,16 +76,53 @@ public final class Conversations {
 	/** "@Rosie" somewhere in the middle of a message, e.g. "hey @rosie, how are you?". */
 	private static final Pattern AT_MENTION = Pattern.compile("(?:^|\\s)@([A-Za-z]+)[,:;!?.]*");
 	private static final CommandParser PARSER = new CommandParser(Conversations::isMobName);
-	/** A minute of silence ends a conversation. */
-	private static final long CHAT_TIMEOUT_TICKS = 1200;
-	/** Walk further away than this and the conversation is over. */
-	private static final double CHAT_RANGE = 10;
-	/** With nobody else around, chat goes to a companion you're looking at this close, or the nearest one. */
-	private static final double LOOK_RANGE = 6;
-	private static final double NEAREST_RANGE = 5;
+	/** Three minutes of silence ends a conversation. */
+	private static final long CHAT_TIMEOUT_TICKS = 3600;
+	/** Walk (well) out of earshot and the conversation is over. */
+	private static final double CHAT_RANGE = 64;
+	/** With nobody else around, chat goes to the companion you're looking at, or your nearest party member. */
+	private static final double LOOK_RANGE = 24;
+	private static final double NEAREST_RANGE = 64;
+	/** Strangers only answer plain chat when you're right next to them. */
+	private static final double STRANGER_RANGE = 8;
+	/** Companions further away than this walk over (or catch up) before starting a job at the player. */
+	private static final double TRAVEL_FIRST = 24;
 	/** "Other players nearby" for deciding whether plain chat might be meant for them instead. */
 	private static final double COMPANY_RANGE = 24;
+	private static final String BUILD_THINGS = "a shelter, a wall or a bridge";
 	private static final Map<UUID, Chat> CHATS = new HashMap<>();
+	/** The short thread of each conversation, so "why?" and "tell me more" have something to lean on. */
+	private static final Map<UUID, Context> CONTEXTS = new HashMap<>();
+	/** A task a stranger was asked to do, waiting for their "yes, I'll join you first". */
+	private static final Map<UUID, Intent> PENDING_JOIN = new HashMap<>();
+	private static final java.util.Set<TalkTopic> REPLAYABLE = java.util.EnumSet.of(TalkTopic.HOW, TalkTopic.LIKES, TalkTopic.DISLIKES,
+			TalkTopic.WHO, TalkTopic.STORY, TalkTopic.PLACE, TalkTopic.PLAN, TalkTopic.FOOD, TalkTopic.JOKE, TalkTopic.MEMORY, TalkTopic.WHERE);
+	private static final java.util.Set<String> BIOME_WORDS = java.util.Set.of("forest", "desert", "jungle", "swamp", "ocean", "mountains",
+			"mountain", "plains", "caves", "cave", "village", "nether", "taiga", "savanna", "badlands", "tundra");
+	private static final java.util.Set<String> EXTRA_ITEM_WORDS = java.util.Set.of("iron", "gold", "copper", "wood", "ores");
+	private static final java.util.Set<String> VAGUE_WORDS = java.util.Set.of("this", "that", "it", "something", "anything", "a", "an", "the",
+			"thing", "things", "stuff", "one", "whatever", "here", "there", "nice", "cool", "small", "simple", "useful", "quick", "little",
+			"for", "me", "us", "you", "like", "can", "want", "over", "some", "good", "else");
+	private static final java.util.Set<String> HUNT_WORDS = java.util.Set.of("animals", "animal", "game", "food", "meat", "something to eat");
+
+	/** What the conversation with one companion is about. */
+	private static final class Context {
+		TalkTopic topic;
+		long tick;
+		String subject;
+		String lastItem;
+	}
+
+	private enum Group {
+		/** The player's party: everyone with them, or close by. */
+		PARTY,
+		/** Every companion the player owns, wherever they are. */
+		EVERYONE
+	}
+
+	private enum Reach {
+		HERE, OTHER_DIMENSION, UNLOADED, NONE
+	}
 	private static final Map<UUID, Long> HINTED = new HashMap<>();
 	/** Players who've had the "now try..." tip after recruiting someone this session. */
 	private static final java.util.Set<UUID> RECRUIT_TIPS = new java.util.HashSet<>();
@@ -120,7 +157,7 @@ public final class Conversations {
 			// A mention further into the message only counts if a companion by that name is close by,
 			// so "@Steve look at this" between players is left alone.
 			Matcher mention = AT_MENTION.matcher(text);
-			if (!mention.find() || (isGroupName(mention.group(1)) ? party(player).isEmpty() : nearbyNamed(player, mention.group(1), true).isEmpty())) {
+			if (!mention.find() || (isGroupName(mention.group(1)) ? CompanionTracker.ownedBy(player).isEmpty() : reach(player, mention.group(1), true) == Reach.NONE)) {
 				if (text.contains("@")) {
 					return false; // talking to (or about) someone else
 				}
@@ -138,17 +175,98 @@ public final class Conversations {
 				body = "hello";
 			}
 		}
-		List<CompanionEntity> targets = isGroupName(name) ? party(player) : nearbyNamed(player, name, fuzzy);
+		Group group = groupOf(name);
+		if (group == Group.EVERYONE) {
+			return sayToEveryone(player, body);
+		}
+		List<CompanionEntity> targets = group == Group.PARTY ? party(player) : nearbyNamed(player, name, fuzzy);
 		if (targets.isEmpty()) {
-			player.sendSystemMessage(Texts.tr(isGroupName(name) ? "message.hearthbound.no_party" : "message.hearthbound.no_such_companion", name)
-					.withStyle(ChatFormatting.GRAY));
+			String key = group != null ? "message.hearthbound.no_party" : switch (reach(player, name, fuzzy)) {
+				case OTHER_DIMENSION -> "message.hearthbound.other_dimension";
+				case UNLOADED -> "message.hearthbound.not_loaded";
+				default -> "message.hearthbound.no_such_companion";
+			};
+			player.sendSystemMessage(Texts.tr(key, name).withStyle(ChatFormatting.GRAY));
 			return true;
 		}
-		boolean group = isGroupName(name);
 		for (CompanionEntity companion : targets) {
-			handleMessage(player, companion, body, !group);
+			handleMessage(player, companion, body, group == null);
+		}
+		if (group == Group.PARTY && targets.size() > 1) {
+			report(player, targets, List.of());
 		}
 		return true;
+	}
+
+	/** {@code @everyone}: every companion the player has, wherever they are, with a note on who couldn't hear. */
+	public static boolean sayToEveryone(ServerPlayer player, String body) {
+		List<CompanionEntity> heard = new ArrayList<>();
+		List<String> missed = new ArrayList<>();
+		java.util.Set<UUID> loaded = new java.util.HashSet<>();
+		for (CompanionEntity companion : CompanionTracker.ownedBy(player)) {
+			loaded.add(companion.getUUID());
+			if (companion.level() == player.level()) {
+				heard.add(companion);
+			} else {
+				missed.add(shortName(companion) + " (another dimension)");
+			}
+		}
+		for (Map.Entry<String, CompanionRoster.Entry> entry : CompanionRoster.get(player.level().getServer()).entries().entrySet()) {
+			if (player.getUUID().toString().equals(entry.getValue().owner) && !loaded.stream().anyMatch(id -> id.toString().equals(entry.getKey()))) {
+				missed.add(entry.getValue().name.split(" ")[0] + " (not loaded, too far away)");
+			}
+		}
+		if (heard.isEmpty() && missed.isEmpty()) {
+			player.sendSystemMessage(Texts.tr("message.hearthbound.no_party").withStyle(ChatFormatting.GRAY));
+			return true;
+		}
+		for (CompanionEntity companion : heard) {
+			handleMessage(player, companion, body, false);
+		}
+		report(player, heard, missed);
+		return true;
+	}
+
+	/** One short grey line saying who heard a group message and who couldn't. */
+	private static void report(ServerPlayer player, List<CompanionEntity> heard, List<String> missed) {
+		if (!heard.isEmpty()) {
+			player.sendSystemMessage(Texts.tr("message.hearthbound.heard_by", String.join(", ", heard.stream().map(Conversations::shortName).toList()))
+					.withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+		}
+		if (!missed.isEmpty()) {
+			player.sendSystemMessage(Texts.tr("message.hearthbound.unreachable", String.join(", ", missed)).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+		}
+	}
+
+	private static String shortName(CompanionEntity companion) {
+		return companion.companionName().split(" ")[0];
+	}
+
+	private static Group groupOf(String name) {
+		String n = name.toLowerCase(Locale.ROOT);
+		if (n.equals("everyone")) {
+			return Group.EVERYONE;
+		}
+		return n.equals("all") || n.equals("party") || n.equals("team") || n.equals("companions") ? Group.PARTY : null;
+	}
+
+	/** Whether a named companion is here, loaded in another dimension, known but not loaded, or unknown. */
+	private static Reach reach(ServerPlayer player, String name, boolean fuzzy) {
+		if (!nearbyNamed(player, name, fuzzy).isEmpty()) {
+			return Reach.HERE;
+		}
+		String wanted = name.toLowerCase(Locale.ROOT).replaceAll("[^a-z]", "");
+		for (CompanionEntity companion : CompanionTracker.ownedBy(player)) {
+			if (firstName(companion).equals(wanted)) {
+				return Reach.OTHER_DIMENSION;
+			}
+		}
+		for (CompanionRoster.Entry entry : CompanionRoster.get(player.level().getServer()).entries().values()) {
+			if (player.getUUID().toString().equals(entry.owner) && entry.name.toLowerCase(Locale.ROOT).split(" ")[0].replaceAll("[^a-z]", "").equals(wanted)) {
+				return Reach.UNLOADED;
+			}
+		}
+		return Reach.NONE;
 	}
 
 	/**
@@ -178,7 +296,13 @@ public final class Conversations {
 		if (looked != null) {
 			return looked;
 		}
-		return CompanionTracker.near(player, NEAREST_RANGE).stream()
+		// Your own party first (however far they've wandered); a stranger only if you're right beside them.
+		CompanionEntity mine = CompanionTracker.near(player, NEAREST_RANGE).stream().filter(c -> c.isOwnedBy(player))
+				.min(Comparator.comparingDouble(c -> c.distanceToSqr(player))).orElse(null);
+		if (mine != null) {
+			return mine;
+		}
+		return CompanionTracker.near(player, STRANGER_RANGE).stream()
 				.min(Comparator.comparingDouble(c -> c.distanceToSqr(player))).orElse(null);
 	}
 
@@ -203,6 +327,8 @@ public final class Conversations {
 	/** Forgets every conversation (the world closed). */
 	public static void reset() {
 		CHATS.clear();
+		CONTEXTS.clear();
+		PENDING_JOIN.clear();
 		HINTED.clear();
 		RECRUIT_TIPS.clear();
 	}
@@ -239,8 +365,7 @@ public final class Conversations {
 	}
 
 	private static boolean isGroupName(String name) {
-		String n = name.toLowerCase(Locale.ROOT);
-		return n.equals("all") || n.equals("everyone") || n.equals("party") || n.equals("team") || n.equals("companions");
+		return groupOf(name) != null;
 	}
 
 	/** Companions within earshot with that name (case-insensitive, first name, exact only). */
@@ -281,19 +406,21 @@ public final class Conversations {
 		return companion.companionName().toLowerCase(Locale.ROOT).split(" ")[0].replaceAll("[^a-z]", "");
 	}
 
-	/** The player's recruited companions in the same dimension. */
+	/** The player's recruited companions in the same dimension who are following or close by. */
 	public static List<CompanionEntity> party(ServerPlayer player) {
 		List<CompanionEntity> party = new ArrayList<>();
 		for (CompanionEntity companion : CompanionTracker.ownedBy(player)) {
-			if (companion.level() == player.level()) {
+			if (companion.level() == player.level()
+					&& (companion.baseMode() == CompanionOrder.Kind.FOLLOW || companion.distanceTo(player) <= ADDRESS_RANGE)) {
 				party.add(companion);
 			}
 		}
 		return party;
 	}
 
+	/** Every loaded companion in the player's dimension, however far away. */
 	private static List<CompanionEntity> nearby(ServerPlayer player) {
-		return CompanionTracker.near(player, ADDRESS_RANGE);
+		return CompanionTracker.near(player, 3.0E7);
 	}
 
 	/** Counts every companion travelling with the player, including ones in unloaded chunks. */
@@ -325,22 +452,191 @@ public final class Conversations {
 			return;
 		}
 		switch (result) {
-			case ParseResult.Command command -> execute(player, companion, command.intent());
+			case ParseResult.Command command -> orderFromChat(player, companion, command.intent());
 			case ParseResult.Share share -> share(player, companion, share, text);
-			case ParseResult.Talk talk -> {
-				if (!AiDialogue.tryConverse(player, companion, text, null)) {
-					talk(player, companion, talk.topic());
+			case ParseResult.Talk talk -> converse(player, companion, text, talk.topic());
+			case ParseResult.Unclear unclear -> {
+				if (unclear.reason() == ParseResult.UnclearReason.GATHER_WHAT) {
+					companion.ask(player, QuestionKind.GATHER_WHAT, "unclear.gather_what", Map.of());
+				} else {
+					companion.say("unclear.generic", Map.of());
 				}
 			}
-			case ParseResult.Unclear unclear -> companion.say(
-					unclear.reason() == ParseResult.UnclearReason.GATHER_WHAT ? "unclear.gather_what" : "unclear.generic", Map.of());
 			case ParseResult.Unsupported unsupported -> companion.say("fail.unsupported", Map.of("action", unsupported.action()));
-			case ParseResult.Unrecognised unrecognised -> {
-				if (!AiDialogue.tryConverse(player, companion, text, null)) {
-					talk(player, companion, TalkTopic.GENERIC);
-				}
+			case ParseResult.Unrecognised unrecognised -> converse(player, companion, text, TalkTopic.GENERIC);
+		}
+	}
+
+	private static Context context(CompanionEntity companion) {
+		return CONTEXTS.computeIfAbsent(companion.getUUID(), id -> new Context());
+	}
+
+	/** Small talk: the AI model if one is set up, else a line about what was actually mentioned, else the topic's lines. */
+	private static void converse(ServerPlayer player, CompanionEntity companion, String text, TalkTopic topic) {
+		if (AiDialogue.tryConverse(player, companion, text, null)) {
+			return;
+		}
+		if (topic == TalkTopic.GENERIC || topic == TalkTopic.QUESTION) {
+			String[] mention = findMention(text);
+			if (mention != null) {
+				context(companion).subject = mention[1];
+				companion.say(mention[0], Map.of("thing", mention[1]));
+				return;
 			}
 		}
+		talk(player, companion, topic);
+	}
+
+	/** A creature, item or place the player brought up, so the reply can be about it: {key, thing} or null. */
+	private static String[] findMention(String text) {
+		String[] words = text.toLowerCase(Locale.ROOT).replaceAll("[^a-z ]", " ").trim().split("\\s+");
+		for (int i = 0; i < words.length; i++) {
+			if (i + 1 < words.length && isMobName(words[i] + " " + words[i + 1])) {
+				return new String[] {"talk.mention.mob", words[i] + " " + words[i + 1]};
+			}
+			if (words[i].length() >= 3 && isMobName(words[i])) {
+				return new String[] {"talk.mention.mob", words[i]};
+			}
+		}
+		for (String word : words) {
+			if (word.length() < 4) {
+				continue;
+			}
+			String single = CommandParserAccess.singular(word);
+			boolean item = EXTRA_ITEM_WORDS.contains(word) || BIOME_WORDS.contains(word);
+			if (!item) {
+				Identifier key = Identifier.tryParse("minecraft:" + single);
+				item = key != null && BuiltInRegistries.ITEM.containsKey(key);
+			}
+			if (item) {
+				return new String[] {"talk.mention.thing", word};
+			}
+		}
+		return null;
+	}
+
+	private static boolean isTask(IntentType type) {
+		return type == IntentType.GATHER || type == IntentType.BUILD || type == IntentType.MINE || type == IntentType.ATTACK;
+	}
+
+	private static boolean isDemonstrative(String phrase) {
+		return phrase != null && java.util.Set.of("that", "this", "it", "those", "these", "them").contains(phrase.toLowerCase(Locale.ROOT).trim());
+	}
+
+	/** "build this", "build something": no real subject, so we ask rather than guess. */
+	private static boolean isVague(String phrase) {
+		if (phrase == null || phrase.isBlank()) {
+			return true;
+		}
+		for (String word : phrase.toLowerCase(Locale.ROOT).split("\\s+")) {
+			if (!VAGUE_WORDS.contains(word)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * An order typed in chat. "This" and "that" are worked out from what the player is looking at (or the
+	 * last thing they were working on); when that doesn't settle it, the companion asks one short question,
+	 * and the next message is taken as the answer.
+	 */
+	private static void orderFromChat(ServerPlayer player, CompanionEntity companion, Intent intent) {
+		if (!companion.isRecruited() && isTask(intent.type()) && !companion.isDowned()) {
+			PENDING_JOIN.put(companion.getUUID(), intent);
+			companion.ask(player, QuestionKind.JOIN_FIRST, "ask.join_first", Map.of());
+			return;
+		}
+		Context ctx = context(companion);
+		Intent resolved = intent;
+		if (intent.type() == IntentType.GATHER && isDemonstrative(intent.item())) {
+			String pointed = lookedAtBlockPhrase(player);
+			if (pointed == null) {
+				pointed = ctx.lastItem;
+			}
+			if (pointed == null) {
+				companion.ask(player, QuestionKind.GATHER_WHAT, "unclear.gather_what", Map.of());
+				return;
+			}
+			resolved = intent.withItem(pointed);
+		} else if (intent.type() == IntentType.BUILD && Blueprint.Kind.byPhrase(intent.item()).isEmpty() && isVague(intent.item())) {
+			companion.ask(player, QuestionKind.BUILD_WHAT, "ask.build_what", Map.of("things", BUILD_THINGS));
+			return;
+		}
+		Outcome outcome = apply(player, companion, resolved);
+		if (outcome.accepted() && resolved.type() == IntentType.GATHER && resolved.item() != null) {
+			ctx.lastItem = resolved.item();
+		}
+		if (outcome.lineKey() != null) {
+			if ("fail.no_target".equals(outcome.lineKey())) {
+				companion.ask(player, QuestionKind.TARGET_WHAT, outcome.lineKey(), outcome.vars());
+			} else {
+				companion.say(outcome.lineKey(), outcome.vars());
+			}
+		}
+	}
+
+	/** The block under the crosshair as an item phrase ("oak log", "iron ore"), or null if there isn't one. */
+	private static String lookedAtBlockPhrase(ServerPlayer player) {
+		Vec3 eye = player.getEyePosition();
+		Vec3 end = eye.add(player.getViewVector(1.0F).scale(24));
+		net.minecraft.world.phys.BlockHitResult hit = player.level().clip(new net.minecraft.world.level.ClipContext(eye, end,
+				net.minecraft.world.level.ClipContext.Block.OUTLINE, net.minecraft.world.level.ClipContext.Fluid.NONE, player));
+		if (hit.getType() != net.minecraft.world.phys.HitResult.Type.BLOCK) {
+			return null;
+		}
+		net.minecraft.world.item.Item item = player.level().getBlockState(hit.getBlockPos()).getBlock().asItem();
+		if (item == net.minecraft.world.item.Items.AIR) {
+			return null;
+		}
+		String phrase = BuiltInRegistries.ITEM.getKey(item).getPath().replace('_', ' ');
+		// Pointing at something that can't be collected (bedrock, a barrier) is the same as pointing at nothing.
+		return GatherCatalog.resolve(phrase) instanceof GatherCatalog.Resolution.Gatherable ? phrase : null;
+	}
+
+	/** Reads the reply to a task question ("A shelter, a wall or a bridge?" / "Gather what?" / "Attack what?" / "Want me to join first?"). */
+	private static boolean answerTask(ServerPlayer player, CompanionEntity companion, CompanionEntity.AskedQuestion asked, String text, ParseResult result) {
+		switch (asked.kind()) {
+			case BUILD_WHAT -> {
+				if (Blueprint.Kind.byPhrase(text).isPresent()) {
+					orderFromChat(player, companion, Intent.build(text));
+					return true;
+				}
+			}
+			case GATHER_WHAT -> {
+				if (PARSER.parse("gather " + text) instanceof ParseResult.Command command && command.intent().type() == IntentType.GATHER
+						&& command.intent().item() != null && !isDemonstrative(command.intent().item())) {
+					orderFromChat(player, companion, command.intent());
+					return true;
+				}
+			}
+			case TARGET_WHAT -> {
+				if (PARSER.parse("attack " + text) instanceof ParseResult.Command command && command.intent().type() == IntentType.ATTACK
+						&& command.intent().target() != null) {
+					orderFromChat(player, companion, command.intent());
+					return true;
+				}
+			}
+			case JOIN_FIRST -> {
+				Intent pending = PENDING_JOIN.remove(companion.getUUID());
+				TalkTopic topic = result instanceof ParseResult.Talk talk ? talk.topic() : null;
+				if (pending != null && topic == TalkTopic.YES) {
+					Outcome joined = recruit(player, companion);
+					companion.say(joined.lineKey(), joined.vars());
+					if (joined.accepted()) {
+						orderFromChat(player, companion, pending);
+					}
+					return true;
+				}
+				if (pending != null && topic == TalkTopic.NO) {
+					companion.say("ask.skip", Map.of());
+					return true;
+				}
+			}
+			default -> {
+			}
+		}
+		return false;
 	}
 
 	/** Small talk that can't be the answer to a "what" question: "haha" is not someone's favourite thing. */
@@ -357,6 +653,13 @@ public final class Conversations {
 	private static boolean answer(ServerPlayer player, CompanionEntity companion, CompanionEntity.AskedQuestion asked, String text, ParseResult result) {
 		if (result instanceof ParseResult.Command || result instanceof ParseResult.Share) {
 			return false;
+		}
+		if (answerTask(player, companion, asked, text, result)) {
+			return true;
+		}
+		if (asked.kind() == QuestionKind.BUILD_WHAT || asked.kind() == QuestionKind.GATHER_WHAT || asked.kind() == QuestionKind.TARGET_WHAT
+				|| asked.kind() == QuestionKind.JOIN_FIRST) {
+			return false; // they changed the subject; treat it as a fresh message
 		}
 		TalkTopic topic = result instanceof ParseResult.Talk talk ? talk.topic() : null;
 		boolean couldBeAThing = topic == null || !NOT_AN_ANSWER.contains(topic);
@@ -492,6 +795,20 @@ public final class Conversations {
 			return Outcome.no("fail.downed", Map.of());
 		}
 		CompanionOrder.Kind current = companion.order().kind();
+		if ((type == IntentType.GATHER || type == IntentType.BUILD || type == IntentType.MINE)
+				&& companion.level() == player.level() && companion.distanceTo(player) > TRAVEL_FIRST) {
+			// Too far away to work at the player's spot: come over first, then start (ComeOrder teleports if it must).
+			companion.setOrder(new ComeOrder(arrived -> {
+				ServerPlayer owner = arrived.ownerPlayer();
+				if (owner != null) {
+					Outcome outcome = apply(owner, arrived, intent);
+					if (outcome.lineKey() != null) {
+						arrived.say(outcome.lineKey(), outcome.vars());
+					}
+				}
+			}));
+			return Outcome.yes("ack.come", Map.of());
+		}
 		return switch (type) {
 			case FOLLOW -> {
 				if (current == CompanionOrder.Kind.FOLLOW) {
@@ -685,13 +1002,10 @@ public final class Conversations {
 		if (target == player || target instanceof CompanionEntity || target instanceof Player) {
 			return Outcome.no("fail.refuse_target", Map.of("mob", name));
 		}
-		Archetype archetype = companion.archetype();
+		// Anyone can fight; nobody hurts villagers, golems or pets.
 		boolean protectedTarget = target instanceof AbstractVillager || target instanceof IronGolem
 				|| (target instanceof TamableAnimal tame && tame.isTame());
-		if (archetype.refuses(Archetype.TargetRefusal.VILLAGERS_AND_PETS) && protectedTarget) {
-			return Outcome.no("fail.refuse_target", Map.of("mob", name));
-		}
-		if (archetype.refuses(Archetype.TargetRefusal.FARM_ANIMALS) && target instanceof Animal) {
+		if (protectedTarget) {
 			return Outcome.no("fail.refuse_target", Map.of("mob", name));
 		}
 		// Never someone else's pet or mount, whatever the personality.
@@ -737,6 +1051,10 @@ public final class Conversations {
 					.min(Comparator.comparingDouble(e -> e.distanceToSqr(player))).orElse(null);
 		}
 		String wanted = CommandParserAccess.singular(phrase.toLowerCase(Locale.ROOT));
+		if (HUNT_WORDS.contains(phrase.toLowerCase(Locale.ROOT))) {
+			return player.level().getEntitiesOfClass(Animal.class, area, e -> e.isAlive() && !(e instanceof TamableAnimal tame && tame.isTame()))
+					.stream().min(Comparator.comparingDouble(e -> e.distanceToSqr(player))).orElse(null);
+		}
 		return player.level().getEntitiesOfClass(LivingEntity.class, area, e -> e.isAlive() && !(e instanceof CompanionEntity) && e != player
 						&& e.getType().getDescription().getString().toLowerCase(Locale.ROOT).equals(wanted))
 				.stream().min(Comparator.comparingDouble(e -> e.distanceToSqr(player))).orElse(null);
@@ -745,6 +1063,15 @@ public final class Conversations {
 	/** Answers small talk with scripted lines (used when no AI model is configured or it fails). */
 	public static void talk(ServerPlayer player, CompanionEntity companion, TalkTopic topic) {
 		String biome = biomeName(companion);
+		Context ctx = context(companion);
+		long now = companion.level().getGameTime();
+		// "and you?" and "tell me more" lean on what we were just talking about.
+		if ((topic == TalkTopic.MORE || topic == TalkTopic.AND_YOU) && ctx.topic != null && now - ctx.tick < 2400) {
+			topic = ctx.topic;
+		} else if (REPLAYABLE.contains(topic)) {
+			ctx.topic = topic;
+			ctx.tick = now;
+		}
 		List<String> events = companion.memory().events();
 		// Shared events belong to whoever the companion travels with.
 		if (topic == TalkTopic.MEMORY && (events.isEmpty() || !companion.isOwnedBy(player))) {

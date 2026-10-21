@@ -359,7 +359,9 @@
       "Mm.",
       "I see.",
       "Curious.",
-      "Go on. I'm listening, even if it doesn't look like it."
+      "Go on. I'm listening, even if it doesn't look like it.",
+      "Mm. Go on.",
+      "Perhaps. Say more."
     ],
     "gift.received": [
       "A {item}. Thoughtful. Strange, but thoughtful.",
@@ -493,7 +495,9 @@
       "Some questions are better left open.",
       "I don't know. Few things are certain. Fewer are interesting.",
       "Ask the stars. I'll translate.",
-      "Hm. A question for another night."
+      "Hm. A question for another night.",
+      "I do not know. That is also an answer.",
+      "Hm. Ask the stars. They won't reply either."
     ],
     "ack.build": [
       "{thing}. Fine. Walls are just slow magic.",
@@ -719,6 +723,51 @@
     "gift.flower": [
       "This {item} was growing alone. Now it's yours.",
       "Here. This {item} looked like it wanted to be given away."
+    ],
+    "ask.join_first": [
+      "I walk alone, for now. Shall I join you, then do it? Say yes.",
+      "Join first, then work. If you want that, say yes.",
+      "I am not yours yet. Say yes, and I will be, and the work will follow."
+    ],
+    "ask.build_what": [
+      "Build what? {things}. Be precise.",
+      "{things}. One of them.",
+      "I can shape {things}. Choose."
+    ],
+    "talk.why": [
+      "Because the pattern allows it.",
+      "Why is a deep well. Shallow answer: because.",
+      "Ask me again when the moon is up."
+    ],
+    "talk.really": [
+      "Yes. Really.",
+      "I rarely say what is not so.",
+      "Truly. Though truth bends a little."
+    ],
+    "talk.more": [
+      "There is more. There is always more, underneath.",
+      "A little more, if you listen.",
+      "Enough for now. The rest unfolds."
+    ],
+    "talk.and_you": [
+      "I am. Which is most of it.",
+      "Quiet. Content. You?",
+      "Well. In my own odd way."
+    ],
+    "talk.mean": [
+      "I meant what I said. Perhaps sideways.",
+      "Listen again. It will come.",
+      "Do not chase the meaning. Let it find you."
+    ],
+    "talk.mention.mob": [
+      "{thing}. They have their own dark logic.",
+      "Ah. {thing}. Be watchful.",
+      "{thing}? I have felt them near, at times."
+    ],
+    "talk.mention.thing": [
+      "{thing}. Interesting. Go on.",
+      "{thing}? There is more in that than most see.",
+      "Hm. {thing}. Noted."
     ]
   }
 }

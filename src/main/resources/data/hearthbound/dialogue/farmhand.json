@@ -362,7 +362,9 @@
       "Oh, really?",
       "Wow!",
       "Hehe. Okay!",
-      "I'm listening! Sorry, I was looking at a sheep."
+      "I'm listening! Sorry, I was looking at a sheep.",
+      "Oh! Interesting! Go on!",
+      "Hm! I'll think on that!"
     ],
     "gift.received": [
       "For me? A {item}! Thank you!",
@@ -496,7 +498,9 @@
       "Um. I don't know! Sorry!",
       "That's a hard one. My gran would know.",
       "I'm not sure. Do you know?",
-      "Ooh. Hm. No idea!"
+      "Ooh. Hm. No idea!",
+      "Gosh, I don't know! Do you?",
+      "Ooh, good one. I'm not sure!"
     ],
     "ack.build": [
       "Ooh! I can build {thing}! I think!",
@@ -723,6 +727,51 @@
       "I picked this {item} for you! It's pretty. Here!",
       "Here! This {item} is for you!",
       "Look, this {item}! It's yours now."
+    ],
+    "ask.join_first": [
+      "Oh! I'm not with you yet. Want me to join up first and then do it? Say yes!",
+      "I'd love to, but we're not travelling together. Join first, then the job? Yes?",
+      "Sure! But can I join you first? Say yes!"
+    ],
+    "ask.build_what": [
+      "Ooh, build what? {things}?",
+      "I can do {things}! Which one?",
+      "{things}! Pick one, please!"
+    ],
+    "talk.why": [
+      "Hm, I'm not sure! It just seems right.",
+      "My ma always said it was just how things go.",
+      "Good question! Wish I knew."
+    ],
+    "talk.really": [
+      "Yes, really! Honest!",
+      "Really, really. I wouldn't fib!",
+      "Oh yeah! Cross my heart!"
+    ],
+    "talk.more": [
+      "Oh, there's more! Hang on, let me think.",
+      "I can tell you more, if you like!",
+      "A bit more, sure. Where was I?"
+    ],
+    "talk.and_you": [
+      "Me? I'm good! Really good!",
+      "Pretty well! Better with you here!",
+      "Happy as a pig in clover. You?"
+    ],
+    "talk.mean": [
+      "Oh, sorry! Was that muddled? I'll try again!",
+      "Hm? I meant what I said! I think!",
+      "Um, ask me again? Slowly?"
+    ],
+    "talk.mention.mob": [
+      "{thing}! Oh, those scare me a bit!",
+      "Ooh, {thing}! Stay close, okay?",
+      "{thing}? Yikes. I'll be brave. Mostly."
+    ],
+    "talk.mention.thing": [
+      "{thing}! Oh, I like that!",
+      "Ooh, {thing}! Tell me more!",
+      "{thing}? That's a good one!"
     ]
   }
 }

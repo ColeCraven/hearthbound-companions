@@ -96,6 +96,11 @@ class LineBankTest {
 		REQUIRED.put("react.challenge", plus(base, "advancement"));
 		REQUIRED.put("gift.food", plus(base, "item"));
 		REQUIRED.put("gift.flower", plus(base, "item"));
+		// Task questions and conversation relevance (0.4).
+		REQUIRED.put("ask.join_first", base);
+		REQUIRED.put("ask.build_what", plus(base, "things"));
+		REQUIRED.put("talk.mention.mob", plus(base, "thing"));
+		REQUIRED.put("talk.mention.thing", plus(base, "thing"));
 	}
 
 	private static Set<String> plus(Set<String> base, String... extra) {

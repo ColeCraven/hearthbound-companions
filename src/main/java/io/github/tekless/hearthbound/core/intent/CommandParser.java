@@ -60,7 +60,7 @@ public final class CommandParser {
 	private static final Pattern GIVE = Pattern.compile("^(give|hand|pass|toss|throw|drop) (me |us )?(over )?(.*)$");
 	private static final Pattern HAND_OVER = Pattern.compile("^hand (it |them |everything |that |those )?over\\b(.*)$");
 	private static final Pattern ATTACK = Pattern.compile(
-			"^(attack|kill|fight|hit|slay|smite|charge|go after|take down|take out|get|deal with|shoot) (.+)$");
+			"^(attack|kill|fight|hit|slay|smite|charge|go after|take down|take out|get|deal with|shoot|hunt|slaughter|butcher) (.+)$");
 	private static final Pattern HELP_FIGHT = Pattern.compile("^(help me (fight|kill|with) |defend me( from)? |protect me from )(.+)$");
 	private static final Pattern DEFEND_ME = Pattern.compile("^(help me fight|defend me|fight with me|to arms|attack|fight|charge|kill them|get them|sic em|attack them|fight them)$");
 	private static final Pattern FOLLOW = Pattern.compile(
@@ -97,10 +97,16 @@ public final class CommandParser {
 			"cook", "smelt", "brew", "enchant", "sell", "buy", "fish", "teleport", "tp", "explore", "scout", "map", "sing",
 			"dance", "jump", "open", "close", "light", "place", "put", "repair", "fix", "heal", "cure", "feed", "shear",
 			"milk", "read", "write", "climb", "sail", "steal", "rob", "burn", "break", "destroy",
-			"hunt", "trade", "kiss", "marry", "eat", "drink");
+			"trade", "kiss", "marry", "eat", "drink");
 	private static final Set<String> PRONOUN_TARGETS = Set.of(
 			"that", "it", "this", "him", "her", "them", "those", "these", "that one", "this one", "that thing", "this thing",
-			"the enemy", "the monster", "the mob", "enemies", "monsters", "mobs");
+			"the enemy", "the monster", "the mob", "enemies", "monsters", "mobs", "enemy", "monster", "mob", "hostile", "hostiles",
+				"baddie", "baddies", "creature", "creatures", "thing", "one", "guy", "guys", "bad guy", "bad guys", "anything", "anyone",
+				"something", "everything", "everyone");
+	/** "collect that", "get more of this": the player points at it instead of naming it. */
+	private static final Set<String> DEMO_WORDS = Set.of("that", "this", "it", "those", "these", "them", "more", "same", "one", "ones",
+			"block", "blocks", "thing", "things", "stuff", "of", "the", "some", "over", "there", "here", "kind", "type", "material",
+			"materials", "again", "i", "am", "im", "looking", "at", "pointing");
 	private static final Set<String> NON_ITEMS = Set.of(
 			"help", "a hand", "hand", "you", "your help", "rest", "a rest", "sleep", "a break", "break", "some rest", "time",
 			"a moment", "a minute", "going", "lost", "out of here", "ready", "moving", "to work", "started", "inside", "out",
@@ -136,6 +142,11 @@ public final class CommandParser {
 	private static final Pattern T_PLAN = Pattern.compile("\\b(what should we do|where should we go|any (ideas|plans)|what now|what next|what do you want to do|"
 			+ "lets do something|im bored|i am bored|so bored|got any plans|what (shall|should) we do|where to next|where do we go)\\b");
 	private static final Pattern T_YES = Pattern.compile("^(yes|yeah|yea|yep|yup|ya|sure|ok|okay|k|alright|all right|of course|definitely|absolutely|sounds good|i guess|indeed|right|true|exactly|agreed|deal)$");
+	private static final Pattern T_WHY = Pattern.compile("^(but )?(why|why not|why is that|why is that so|why do you say that|how come|why though|why so|how so|and why)$");
+	private static final Pattern T_REALLY = Pattern.compile("^(really|really now|seriously|is that so|is that true|are you sure|you sure|for real|youre kidding|are you serious|oh really|truly|honestly|is it|oh yeah)$");
+	private static final Pattern T_AND_YOU = Pattern.compile("^(and you|what about you|how about you|and yourself|yourself|what about yourself|how about yourself|and what about you|you)$");
+	private static final Pattern T_MORE = Pattern.compile("^(tell me more|more|go on|continue|and then|keep going|what else|carry on|go ahead|elaborate|say more|like what|such as|for example|go on then|anything else|is that all|then what)$");
+	private static final Pattern T_MEAN = Pattern.compile("^(what do you mean|what does that mean|what was that|huh|what|come again|say what|pardon|sorry what|i dont understand|i dont get it|what are you talking about|wdym|eh|meaning|what is that supposed to mean|i dont follow|say again|say that again)$");
 	private static final Pattern T_NO = Pattern.compile("^(no|nah|nope|not really|never|no way|i dont think so|not now|maybe not|naw)$");
 	private static final Pattern T_LAUGH = Pattern.compile("\\b(ha(ha)+|he(he)+|lol|lmao|rofl|xd|thats (so )?funny|hilarious|good one)\\b");
 	private static final Pattern T_FONDNESS = Pattern.compile("\\b(i (like|love) you|love you|i missed you|missed you|glad (youre|you are) here|"
@@ -346,7 +357,14 @@ public final class CommandParser {
 					if (verb.contains("chop") || verb.contains("cut")) {
 						return command(Intent.gather("logs", quantity.value()));
 					}
+					List<String> pointed = rest.subList(quantity.consumed(), rest.size());
+					if (!pointed.isEmpty() && DEMO_WORDS.containsAll(pointed)) {
+						return command(Intent.gather("that", quantity.value()));
+					}
 					return new ParseResult.Unclear(ParseResult.UnclearReason.GATHER_WHAT);
+				}
+				if (item.equals("it") || item.equals("them")) {
+					return command(Intent.gather("that", quantity.value()));
 				}
 				if (NON_ITEMS.contains(item)) {
 					return null;
@@ -439,6 +457,21 @@ public final class CommandParser {
 		}
 		if (T_NO.matcher(c).matches()) {
 			return TalkTopic.NO;
+		}
+		if (T_WHY.matcher(c).matches()) {
+			return TalkTopic.WHY;
+		}
+		if (T_REALLY.matcher(c).matches()) {
+			return TalkTopic.REALLY;
+		}
+		if (T_AND_YOU.matcher(c).matches()) {
+			return TalkTopic.AND_YOU;
+		}
+		if (T_MORE.matcher(c).matches()) {
+			return TalkTopic.MORE;
+		}
+		if (T_MEAN.matcher(c).matches()) {
+			return TalkTopic.MEAN;
 		}
 		if (T_PLAN.matcher(c).find()) {
 			return TalkTopic.PLAN;
@@ -588,7 +621,7 @@ public final class CommandParser {
 
 	private static String cleanTarget(String target) {
 		List<String> words = new ArrayList<>(Arrays.asList(target.trim().split(" ")));
-		while (!words.isEmpty() && Set.of("the", "a", "an", "those", "these", "that", "this").contains(words.get(0)) && words.size() > 1) {
+		while (!words.isEmpty() && Set.of("the", "a", "an", "those", "these", "that", "this", "nearest", "closest", "nearby", "other").contains(words.get(0)) && words.size() > 1) {
 			words.remove(0);
 		}
 		while (words.size() > 1 && Set.of("now", "please", "for", "me", "over", "there", "here").contains(words.get(words.size() - 1))) {

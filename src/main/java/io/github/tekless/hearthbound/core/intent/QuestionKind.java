@@ -10,6 +10,14 @@ public enum QuestionKind {
 	DISLIKE,
 	/** "How are you holding up?" Answered with sympathy or cheer. */
 	HOW,
+	/** "A shelter, a wall or a bridge?" The reply says what to build. */
+	BUILD_WHAT,
+	/** "Gather what?" The reply names the item. */
+	GATHER_WHAT,
+	/** "Attack what?" The reply names the creature. */
+	TARGET_WHAT,
+	/** A stranger asked to work: "Want me to join you first?" A yes recruits and runs the pending order. */
+	JOIN_FIRST,
 	/** Anything else; any reply gets a short, honest acknowledgement. */
 	OPEN
 }

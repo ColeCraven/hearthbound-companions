@@ -36,6 +36,12 @@ public enum TalkTopic {
 	ABOUT_ME,
 	/** "Are we friends?" How they feel about the player, from affinity. */
 	BOND,
+	/** Follow-ups that lean on what was just said: "why?", "really?", "and you?", "tell me more", "what do you mean?". */
+	WHY,
+	REALLY,
+	AND_YOU,
+	MORE,
+	MEAN,
 	/** Any other question; a reply in character that doesn't pretend to know the answer. */
 	QUESTION,
 	GENERIC;

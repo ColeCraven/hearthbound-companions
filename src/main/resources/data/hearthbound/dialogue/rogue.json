@@ -356,7 +356,9 @@
       "Sure.",
       "Mhm. Riveting.",
       "Right, right.",
-      "Uh-huh. Hey, is that a chest?"
+      "Uh-huh. Hey, is that a chest?",
+      "Is that so? Go on.",
+      "Right, right. And then?"
     ],
     "gift.received": [
       "A {item}? For me? Who are you trying to bribe?",
@@ -487,7 +489,9 @@
       "Good question. Here's a better one: what's it worth to you?",
       "No idea. Want me to make something up?",
       "Couldn't say. Wouldn't say, maybe.",
-      "Ask me again when there's money in it."
+      "Ask me again when there's money in it.",
+      "Couldn't tell you. Could find out, for a fee.",
+      "No idea, boss. Guess away."
     ],
     "ack.build": [
       "Building {thing}? For you, partner, sure.",
@@ -713,6 +717,51 @@
     "gift.flower": [
       "Here. Picked this {item}. Don't tell anyone I'm sweet.",
       "For you. This {item}. Free of charge, for once."
+    ],
+    "ask.join_first": [
+      "I'm not on the payroll yet. Join up first, then I do the job? Say yes.",
+      "Free work for a stranger? No. Sign me on and it's a deal. Yes?",
+      "Hire me first, partner, then I'll do it. Yes?"
+    ],
+    "ask.build_what": [
+      "Build what, boss? {things}.",
+      "{things}. Take your pick.",
+      "I can do {things}. What'll it be?"
+    ],
+    "talk.why": [
+      "Why not, is my usual answer.",
+      "Profit, mostly. Or fun. Sometimes both.",
+      "Long story, and it costs extra."
+    ],
+    "talk.really": [
+      "Really. Would I kid a friend?",
+      "Cross my heart. Mostly.",
+      "Absolutely. Check for yourself, if you're nervous."
+    ],
+    "talk.more": [
+      "Oh, there's more. There's always more. For a price.",
+      "Alright, a bit more, since it's you.",
+      "That's most of it. The rest is gossip."
+    ],
+    "talk.and_you": [
+      "Me? Better than I look. Which isn't hard.",
+      "Living the dream. You?",
+      "Can't complain. Well, I can. I won't."
+    ],
+    "talk.mean": [
+      "Meant what I said. Which part lost you?",
+      "Come again? I'll say it slower.",
+      "Don't overthink it, boss."
+    ],
+    "talk.mention.mob": [
+      "{thing}? Nasty. Profitable, sometimes.",
+      "Ha, {thing}. Don't turn your back on them.",
+      "{thing}. I have stories. None end well."
+    ],
+    "talk.mention.thing": [
+      "{thing}? Now you're talking.",
+      "Ooh, {thing}. Worth a coin or two.",
+      "{thing}. Keep going, I'm intrigued."
     ]
   }
 }
