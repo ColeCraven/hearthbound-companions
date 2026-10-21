@@ -191,6 +191,10 @@ public class MultiplayerGameTests {
 		Conversations.handleMessage(owner, companion, "how are you?");
 		helper.assertValueEqual(companion.memory().lines().stream().filter(l -> l.fromPlayer()).count(), 1L,
 				"the stranger's words were forgotten when the owner spoke");
+		helper.assertTrue(Conversations.onChat(owner, "hey @sigrun, how are you?"), "an @name mid-message reaches her");
+		helper.assertTrue(companion.memory().lines().stream().anyMatch(l -> l.fromPlayer() && l.text().equals("hey how are you?")),
+				"with the name taken out");
+		helper.assertFalse(Conversations.onChat(owner, "look at this @Steve"), "mentions of other players are left alone");
 		remove(helper, owner, stranger);
 		helper.succeed();
 	}

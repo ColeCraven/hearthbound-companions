@@ -144,6 +144,23 @@ run `/companion summon hazel`. Walk up, right-click to say hi, then type `@Hazel
 
 Press **H** to hide the little party list in the corner.
 
+## Playing on a server
+
+You can also run it on a multiplayer server, and your friends don't need to install anything. With
+[Polymer](https://modrinth.com/mod/polymer) on the server, companions show up for unmodded players as
+player-shaped mannequins with a name tag and a little status line ("Sellsword · free to recruit").
+Talking, recruiting and orders all work exactly the same.
+
+On my own server the whole cast lives in the spawn hub, hanging around until someone asks them
+along. Each player gets their own party, only you can give your companions orders, nobody can hurt
+someone else's companion, and they won't break blocks near the hub or anyone's builds.
+
+<p align="center">
+  <img src="docs/images/server/vanilla-client-hub.png" width="70%" alt="The cast at the hub, seen from an unmodded client">
+</p>
+
+Setup, the hub config and the multiplayer rules are in [docs/SERVER.md](docs/SERVER.md).
+
 ## Settings
 
 The config lives at `config/hearthbound.json` and gets created the first time you play.
@@ -198,8 +215,8 @@ python tools/skins/cast.py
 
 ## Testing
 
-I tried to test this properly instead of just eyeballing it. There are 106 unit tests (the chat
-parser, the gathering logic, the AI response handling), 15 tests that run inside a real game
+I tried to test this properly instead of just eyeballing it. There are 113 unit tests (the chat
+parser, the gathering logic, the AI response handling), 20 tests that run inside a real game
 server (gathering logs and handing them over, cancelling halfway, catching up after a teleport,
 saving and loading), and a few scripted runs in the actual game client. One of those drops two
 companions into a normal generated world, walks them across the terrain, fights zombies at night,
@@ -216,7 +233,9 @@ The full write-up, including what still needs testing, is in [TESTING.md](docs/T
   come back.
 - Melee only for now, no bows.
 - Talking happens in the chat box. A proper conversation screen is on my list.
-- English only, and I've only played it in single-player.
+- English only.
+- On a server, unmodded players see default skins unless you set up signed skins or the resource
+  pack ([how](docs/SERVER.md#skins-for-players-without-the-mod)).
 - I haven't tried the AI side with a live model yet. It's tested against fake servers, but I still
   need to sit down with Ollama and play.
 

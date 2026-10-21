@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased: server support (2026-10-21)
+
+- Runs on a dedicated server with no client mod needed: with Polymer installed, companions are sent
+  to unmodded players as mannequins with their skin, name and a status line.
+- Hub residents: the cast can live at a configured spawn hub, spawn there once, greet visitors and
+  return there when dismissed. `/companion hub list|spawn|home`.
+- Multiplayer rules: only the owner gives orders ("I'm with ..." lines for everyone else),
+  strangers can't hurt companions, companions never target players or others' pets, replies reach
+  the owner, the speaker and anyone nearby, no gathering in protected areas or next to builds, no
+  looting other players' items, `@name` works anywhere in a message.
+- Per-speaker conversation memory, a per-player AI rate limit and a cap on concurrent AI requests.
+- A world roster and loaded-companion tracker replace large entity scans.
+- Redrawn skins for Cass, Conoby, Samuel and Casper; travel outfits for Rosie and Luna.
+
 ## 0.1.0 - preview (2026-10-20)
 
 First public preview for Minecraft Java 26.3 (Fabric).

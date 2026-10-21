@@ -39,3 +39,6 @@ snapshots/
 
 # Local Polymer jars (copied from the server's polymer-bundled jar; otherwise fetched from maven.nucleoid.xyz)
 libs/
+
+# Packaged downloads (zips, install kits)
+dist/

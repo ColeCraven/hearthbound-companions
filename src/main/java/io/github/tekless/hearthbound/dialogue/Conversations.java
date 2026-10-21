@@ -59,6 +59,8 @@ public final class Conversations {
 	private static final double ADDRESS_RANGE = 64;
 	private static final Pattern AT_ADDRESS = Pattern.compile("^@(\\S+)\\s*(.*)$", Pattern.DOTALL);
 	private static final Pattern NAME_ADDRESS = Pattern.compile("^([A-Za-z]+)\\s*[,:]\\s*(.+)$", Pattern.DOTALL);
+	/** "@Rosie" somewhere in the middle of a message, e.g. "hey @rosie, how are you?". */
+	private static final Pattern AT_MENTION = Pattern.compile("(?:^|\\s)@([A-Za-z]+)[,:;!?.]*");
 	private static final CommandParser PARSER = new CommandParser(Conversations::isMobName);
 
 	private Conversations() {
@@ -81,7 +83,18 @@ public final class Conversations {
 			name = named.group(1);
 			body = named.group(2);
 		} else {
-			return false;
+			// A mention further into the message only counts if a companion by that name is close by,
+			// so "@Steve look at this" between players is left alone.
+			Matcher mention = AT_MENTION.matcher(text);
+			if (!mention.find() || (isGroupName(mention.group(1)) ? party(player).isEmpty() : nearbyNamed(player, mention.group(1)).isEmpty())) {
+				return false;
+			}
+			name = mention.group(1);
+			body = (text.substring(0, mention.start()) + " " + text.substring(mention.end())).replaceAll("\\s+", " ").trim()
+					.replaceAll("^[,:;]+\\s*|\\s*[,:;]+$", "");
+			if (body.isEmpty()) {
+				body = "hello";
+			}
 		}
 		List<CompanionEntity> targets = isGroupName(name) ? party(player) : nearbyNamed(player, name);
 		if (targets.isEmpty()) {
