@@ -4,6 +4,8 @@ import io.github.tekless.hearthbound.Hearthbound;
 import io.github.tekless.hearthbound.ai.AiDialogue;
 import io.github.tekless.hearthbound.core.intent.Answers;
 import io.github.tekless.hearthbound.core.intent.CommandParser;
+import io.github.tekless.hearthbound.core.intent.GroupAddress;
+import io.github.tekless.hearthbound.core.intent.ProjectParser;
 import io.github.tekless.hearthbound.core.intent.Intent;
 import io.github.tekless.hearthbound.core.intent.IntentType;
 import io.github.tekless.hearthbound.core.intent.NameMatch;
@@ -21,11 +23,14 @@ import io.github.tekless.hearthbound.entity.order.CompanionOrder;
 import io.github.tekless.hearthbound.entity.order.FollowOrder;
 import io.github.tekless.hearthbound.entity.order.GatherOrder;
 import io.github.tekless.hearthbound.entity.order.GiveOrder;
+import io.github.tekless.hearthbound.entity.order.ProjectOrder;
+import io.github.tekless.hearthbound.entity.order.Projects;
 import io.github.tekless.hearthbound.entity.order.MineOrder;
 import io.github.tekless.hearthbound.entity.order.WaitOrder;
 import io.github.tekless.hearthbound.world.CompanionRoster;
 import io.github.tekless.hearthbound.world.CompanionTracker;
 import io.github.tekless.hearthbound.world.GatherCatalog;
+import io.github.tekless.hearthbound.world.Obey;
 import io.github.tekless.hearthbound.world.WorldRules;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -145,6 +150,10 @@ public final class Conversations {
 	 */
 	public static boolean onChat(ServerPlayer player, String raw) {
 		String text = raw.trim();
+		GroupAddress.Result groupAddress = GroupAddress.parse(text);
+		if (groupAddress != null && onGroupChat(player, groupAddress)) {
+			return true;
+		}
 		String name;
 		String body;
 		Matcher at = AT_ADDRESS.matcher(text);
@@ -202,6 +211,138 @@ public final class Conversations {
 		return true;
 	}
 
+	// ------------------------------------------------------------------ groups without an @name
+
+	/** "Everyone close by" for plain group talk. */
+	private static final double GROUP_RANGE = 48;
+	/** Role groups reach further, since "my farmers" means the farmers wherever they are working. */
+	private static final double ROLE_RANGE = 128;
+	private static final int MAX_GROUP = 12;
+	/** Asked for more detail: tells the group handler that one companion should ask and the rest wait. */
+	private static final Outcome QUESTION = Outcome.no("ask", Map.of());
+
+	/**
+	 * "Everyone, follow me", "hey guys", "all my builders, ...", "@farmers harvest". Whoever is addressed and
+	 * allowed to listen (yours, or anyone in obey mode) gets the order; one of them answers, and a grey line
+	 * says who heard.
+	 *
+	 * @return true if this was group talk and it was dealt with
+	 */
+	private static boolean onGroupChat(ServerPlayer player, GroupAddress.Result group) {
+		String body = group.body();
+		Optional<ProjectParser.Plan> project = ProjectParser.parse(body);
+		ParseResult parsed = PARSER.parse(body, List.of());
+		boolean order = project.isPresent() || parsed instanceof ParseResult.Command || parsed instanceof ParseResult.Unclear;
+		if (!group.explicit() && ((!group.vocative() && !order) || (!order && !aloneWithCompanions(player)))) {
+			return false; // chat that merely mentions a group, or is for the other players
+		}
+		List<CompanionEntity> heard = groupRecipients(player, group);
+		if (heard.isEmpty()) {
+			boolean strangers = !Obey.active(player) && CompanionTracker.near(player, GROUP_RANGE).stream().anyMatch(c -> !c.isRecruited());
+			if (strangers && (order || group.explicit())) {
+				player.sendSystemMessage(Texts.tr("message.hearthbound.group_strangers").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+				return true;
+			}
+			if (group.explicit()) {
+				player.sendSystemMessage(Texts.tr("message.hearthbound.group_none").withStyle(ChatFormatting.GRAY));
+				return true;
+			}
+			return false;
+		}
+		List<CompanionEntity> told = heard;
+		if (project.isPresent()) {
+			List<CompanionEntity> collectors = project.get().collectors() ? helpers(player, Role.COLLECTOR, heard) : List.of();
+			List<CompanionEntity> builders = project.get().builders() ? helpers(player, Role.BUILDER, heard) : List.of();
+			Projects.Launch launch = Projects.launch(player, heard, collectors, builders, project.get());
+			if (!launch.involved().isEmpty()) {
+				heard.get(0).say("project.ack.group", Map.of("plan", launch.plan()));
+				told = new ArrayList<>(new java.util.LinkedHashSet<>(java.util.stream.Stream.concat(heard.stream(), launch.involved().stream()).toList()));
+			}
+		} else if (parsed instanceof ParseResult.Command command) {
+			groupOrder(player, heard, command.intent());
+		} else {
+			handleMessage(player, heard.get(0), body, true);
+			told = List.of(heard.get(0));
+		}
+		report(player, told, List.of());
+		return true;
+	}
+
+	/** Companions this player can speak to as a group: their own, plus anyone else in obey mode; nearest first. */
+	private static List<CompanionEntity> groupRecipients(ServerPlayer player, GroupAddress.Result group) {
+		java.util.Set<CompanionEntity> party = new java.util.HashSet<>(party(player));
+		List<CompanionEntity> found = new ArrayList<>();
+		for (CompanionEntity companion : CompanionTracker.near(player, 3.0E7)) {
+			if (companion.isDowned() || !listens(player, companion)) {
+				continue;
+			}
+			if (group.scope() == GroupAddress.Scope.ROLE && companion.role() != group.role()) {
+				continue;
+			}
+			double distance = companion.distanceTo(player);
+			boolean close = group.scope() == GroupAddress.Scope.NEARBY ? distance <= GROUP_RANGE || party.contains(companion)
+					: distance <= ROLE_RANGE || companion.isOwnedBy(player);
+			if (close) {
+				found.add(companion);
+			}
+		}
+		found.sort(Comparator.comparingDouble(c -> c.distanceToSqr(player)));
+		return found.size() > MAX_GROUP ? new ArrayList<>(found.subList(0, MAX_GROUP)) : found;
+	}
+
+	/** Their own companions always; anyone else only when the player has obey mode on. */
+	private static boolean listens(ServerPlayer player, CompanionEntity companion) {
+		return companion.isOwnedBy(player) || (!companion.isRecruited() && Obey.active(player));
+	}
+
+	/** Nearby companions of one role who were not addressed, for "work with the collectors". */
+	private static List<CompanionEntity> helpers(ServerPlayer player, Role role, List<CompanionEntity> addressed) {
+		return CompanionTracker.near(player, GROUP_RANGE).stream()
+				.filter(c -> c.role() == role && !c.isDowned() && !addressed.contains(c) && listens(player, c))
+				.sorted(Comparator.comparingDouble(c -> c.distanceToSqr(player))).limit(4).toList();
+	}
+
+	/**
+	 * One order to a whole group: everyone tries it silently; one that took it answers, and the others are
+	 * named if they could not.
+	 */
+	private static void groupOrder(ServerPlayer player, List<CompanionEntity> heard, Intent intent) {
+		List<CompanionEntity> refused = new ArrayList<>();
+		CompanionEntity speaker = null;
+		Outcome spoken = null;
+		CompanionEntity refuser = null;
+		Outcome refusal = null;
+		for (CompanionEntity companion : heard) {
+			Outcome outcome = orderFromChat(player, companion, intent, true);
+			if (outcome == QUESTION) {
+				orderFromChat(player, heard.get(0), intent, false); // one of them asks; the answer goes to that one
+				beginChat(player, heard.get(0));
+				return;
+			}
+			if (outcome.accepted()) {
+				if (speaker == null) {
+					speaker = companion;
+					spoken = outcome;
+				}
+			} else {
+				refused.add(companion);
+				if (refuser == null) {
+					refuser = companion;
+					refusal = outcome;
+				}
+			}
+		}
+		if (speaker != null && spoken.lineKey() != null) {
+			speaker.say(spoken.lineKey(), spoken.vars());
+		} else if (speaker == null && refuser != null && refusal.lineKey() != null) {
+			refuser.say(refusal.lineKey(), refusal.vars());
+		}
+		if (speaker != null && !refused.isEmpty()) {
+			player.sendSystemMessage(Texts.tr("message.hearthbound.group_couldnt", String.join(", ", refused.stream().map(Conversations::shortName).toList()))
+					.withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+		}
+	}
+
 	/** {@code @everyone}: every companion the player has, wherever they are, with a note on who couldn't hear. */
 	public static boolean sayToEveryone(ServerPlayer player, String body) {
 		List<CompanionEntity> heard = new ArrayList<>();
@@ -229,6 +370,61 @@ public final class Conversations {
 		}
 		report(player, heard, missed);
 		return true;
+	}
+
+	/** Who a command word reached: companions to act on now, and notes on those who couldn't be reached. */
+	public record Targets(List<CompanionEntity> loaded, List<String> missed) {
+	}
+
+	/**
+	 * Resolves "Hazel", "party", "everyone" or a role ("builders") to the companions this player may command:
+	 * their own, plus anyone else when obey mode is on. Only loaded companions in the player's dimension are
+	 * returned; the rest are listed in {@code missed} with the reason.
+	 */
+	public static Targets commandable(ServerPlayer player, String who) {
+		String word = who.toLowerCase(Locale.ROOT);
+		Group group = groupOf(word);
+		GroupAddress.Result role = GroupAddress.parse("@" + word);
+		List<CompanionEntity> loaded = new ArrayList<>();
+		List<String> missed = new ArrayList<>();
+		if (group == Group.EVERYONE) {
+			for (CompanionEntity companion : CompanionTracker.near(player, 3.0E7)) {
+				if (listens(player, companion)) {
+					loaded.add(companion);
+				}
+			}
+			for (CompanionEntity companion : CompanionTracker.ownedBy(player)) {
+				if (companion.level() != player.level()) {
+					missed.add(shortName(companion) + " (another dimension)");
+				}
+			}
+			for (CompanionRoster.Entry entry : CompanionRoster.get(player.level().getServer()).entries().values()) {
+				boolean here = CompanionTracker.ownedBy(player).stream().anyMatch(c -> c.companionName().equals(entry.name));
+				if (player.getUUID().toString().equals(entry.owner) && !here) {
+					missed.add(entry.name.split(" ")[0] + " (not loaded, too far away)");
+				}
+			}
+		} else if (group == Group.PARTY) {
+			party(player).stream().filter(c -> listens(player, c)).forEach(loaded::add);
+		} else if (role != null) {
+			loaded.addAll(groupRecipients(player, role));
+		} else {
+			for (CompanionEntity companion : nearbyNamed(player, who, true)) {
+				if (listens(player, companion)) {
+					loaded.add(companion);
+				} else {
+					missed.add(shortName(companion) + " (not with you; turn on /companion obey)");
+				}
+			}
+			if (loaded.isEmpty() && missed.isEmpty()) {
+				missed.add(who + switch (reach(player, who, true)) {
+					case OTHER_DIMENSION -> " (another dimension)";
+					case UNLOADED -> " (not loaded, too far away)";
+					default -> " (no such companion)";
+				});
+			}
+		}
+		return new Targets(loaded, missed);
 	}
 
 	/** One short grey line saying who heard a group message and who couldn't. */
@@ -548,10 +744,18 @@ public final class Conversations {
 	 * and the next message is taken as the answer.
 	 */
 	private static void orderFromChat(ServerPlayer player, CompanionEntity companion, Intent intent) {
-		if (!companion.isRecruited() && isTask(intent.type()) && !companion.isDowned()) {
+		orderFromChat(player, companion, intent, false);
+	}
+
+	/**
+	 * @param quiet part of a group order: say nothing, and answer {@link #QUESTION} instead of asking
+	 * @return what happened, or null if the companion asked something back
+	 */
+	private static Outcome orderFromChat(ServerPlayer player, CompanionEntity companion, Intent intent, boolean quiet) {
+		if (!companion.isRecruited() && isTask(intent.type()) && !companion.isDowned() && !Obey.active(player)) {
 			PENDING_JOIN.put(companion.getUUID(), intent);
 			companion.ask(player, QuestionKind.JOIN_FIRST, "ask.join_first", Map.of());
-			return;
+			return null;
 		}
 		Context ctx = context(companion);
 		Intent resolved = intent;
@@ -561,13 +765,19 @@ public final class Conversations {
 				pointed = ctx.lastItem;
 			}
 			if (pointed == null) {
+				if (quiet) {
+					return QUESTION;
+				}
 				companion.ask(player, QuestionKind.GATHER_WHAT, "unclear.gather_what", Map.of());
-				return;
+				return null;
 			}
 			resolved = intent.withItem(pointed);
 		} else if (intent.type() == IntentType.BUILD && Blueprint.Kind.byPhrase(intent.item()).isEmpty() && isVague(intent.item())) {
+			if (quiet) {
+				return QUESTION;
+			}
 			companion.ask(player, QuestionKind.BUILD_WHAT, "ask.build_what", Map.of("things", BUILD_THINGS));
-			return;
+			return null;
 		}
 		if (intent.type() == IntentType.ATTACK && "get".equals(intent.item())) {
 			// "get that": a creature under the crosshair is a target; a block is something to collect.
@@ -583,6 +793,9 @@ public final class Conversations {
 			ctx.failVars = outcome.vars();
 			ctx.failTick = companion.level().getGameTime();
 		}
+		if (quiet) {
+			return outcome;
+		}
 		if (outcome.lineKey() != null) {
 			if ("fail.no_target".equals(outcome.lineKey())) {
 				companion.ask(player, QuestionKind.TARGET_WHAT, outcome.lineKey(), outcome.vars());
@@ -593,6 +806,7 @@ public final class Conversations {
 		if (outcome.accepted() && "ack.come".equals(outcome.lineKey()) == false) {
 			roleRemark(companion, resolved);
 		}
+		return outcome;
 	}
 
 	/** Now and then, a word on whether this is the sort of job they're good at (or not). */
@@ -830,7 +1044,14 @@ public final class Conversations {
 			String owner = companion.ownerName() != null ? companion.ownerName() : "someone else";
 			return Outcome.no("recruit.taken", Map.of("owner", owner));
 		}
-		if (!companion.isRecruited()) {
+		boolean obeying = !companion.isRecruited() && Obey.active(player);
+		if (obeying) {
+			companion.setCommander(player);
+			if (type == IntentType.FOLLOW || type == IntentType.RECRUIT) {
+				return recruit(player, companion);
+			}
+		}
+		if (!companion.isRecruited() && !obeying) {
 			return switch (type) {
 				case RECRUIT, FOLLOW, COME -> recruit(player, companion);
 				case DISMISS -> Outcome.no("dismiss.not_recruited", Map.of());
@@ -846,7 +1067,7 @@ public final class Conversations {
 				&& companion.level() == player.level() && companion.distanceTo(player) > TRAVEL_FIRST) {
 			// Too far away to work at the player's spot: come over first, then start (ComeOrder teleports if it must).
 			companion.setOrder(new ComeOrder(arrived -> {
-				ServerPlayer owner = arrived.ownerPlayer();
+				ServerPlayer owner = arrived.commanderPlayer();
 				if (owner != null) {
 					Outcome outcome = apply(owner, arrived, intent);
 					if (outcome.lineKey() != null) {
@@ -899,6 +1120,13 @@ public final class Conversations {
 				}
 				companion.openInventory(player);
 				yield Outcome.yes("talk.hello", Map.of());
+			}
+			case HOME -> {
+				boolean now = "teleport".equals(intent.target());
+				if (!io.github.tekless.hearthbound.world.Homes.send(companion, now)) {
+					yield Outcome.no("fail.no_home", Map.of());
+				}
+				yield Outcome.yes(now ? "ack.home.teleport" : "ack.home", Map.of());
 			}
 			case RECRUIT -> Outcome.no("recruit.already", Map.of());
 			case DISMISS -> {
@@ -1053,9 +1281,17 @@ public final class Conversations {
 		if (target == null) {
 			return Outcome.no("fail.no_target", Map.of());
 		}
-		String name = target.getName().getString().toLowerCase(Locale.ROOT);
-		if (target == player || target instanceof CompanionEntity || target instanceof Player) {
+		boolean person = target instanceof Player || target instanceof CompanionEntity;
+		String name = target instanceof CompanionEntity other ? shortName(other) : target instanceof Player other ? other.getName().getString()
+				: target.getName().getString().toLowerCase(Locale.ROOT);
+		// Never the one giving the order, never their own owner or themselves, and nobody who is already down.
+		if (target == player || target == companion || (target instanceof Player other && (other.isSpectator() || companion.isOwnedBy(other)))
+				|| (target instanceof CompanionEntity other && other.isDowned())) {
 			return Outcome.no("fail.refuse_target", Map.of("mob", name));
+		}
+		// Fighting a player is only ever on the commander's say-so, and only where PvP is allowed.
+		if (target instanceof Player && !((ServerLevel) player.level()).isPvpAllowed()) {
+			return Outcome.no("fail.pvp_off", Map.of("mob", name));
 		}
 		// Anyone can fight; nobody hurts villagers, golems or pets.
 		boolean protectedTarget = target instanceof AbstractVillager || target instanceof IronGolem
@@ -1068,6 +1304,9 @@ public final class Conversations {
 			return Outcome.no("fail.refuse_target", Map.of("mob", name));
 		}
 		companion.setOrder(new AttackOrder(target, name));
+		if (person) {
+			companion.directAt(target); // after setOrder, which clears any earlier direction
+		}
 		companion.setTarget(target);
 		return Outcome.yes("ack.attack", Map.of("mob", name));
 	}
@@ -1087,6 +1326,7 @@ public final class Conversations {
 			}
 			case MINE -> Outcome.yes("status.mine", Map.of("count", Integer.toString(((MineOrder) order).stepsDone())));
 			case BUILD -> Outcome.yes("status.build", Map.of("thing", ((BuildOrder) order).blueprint().kind().label()));
+			case PROJECT -> Outcome.yes("status.build", Map.of("thing", order instanceof ProjectOrder project ? project.label() : "a farm"));
 			default -> Outcome.yes("status.idle", Map.of());
 		};
 	}
@@ -1105,8 +1345,42 @@ public final class Conversations {
 			return player.level().getEntitiesOfClass(LivingEntity.class, area, e -> e instanceof Enemy && e.isAlive()).stream()
 					.min(Comparator.comparingDouble(e -> e.distanceToSqr(player))).orElse(null);
 		}
-		String wanted = CommandParserAccess.singular(phrase.toLowerCase(Locale.ROOT));
-		if (HUNT_WORDS.contains(phrase.toLowerCase(Locale.ROOT))) {
+		String lowered = phrase.toLowerCase(Locale.ROOT).trim();
+		// A named player or companion, or "that player" under the crosshair: only ever because they were named or pointed at.
+		if (player.getName().getString().equalsIgnoreCase(lowered)) {
+			return player; // refused by the caller: nobody fights the one giving the order
+		}
+		ServerPlayer namedPlayer = null;
+		for (ServerPlayer other : player.level().getServer().getPlayerList().getPlayers()) {
+			if (other.level() == player.level() && other.getName().getString().equalsIgnoreCase(lowered) && other.distanceTo(player) < 64
+					&& (namedPlayer == null || other.distanceToSqr(player) < namedPlayer.distanceToSqr(player))) {
+				namedPlayer = other;
+			}
+		}
+		if (namedPlayer != null) {
+			return namedPlayer;
+		}
+		List<CompanionEntity> named = nearbyNamed(player, lowered, false);
+		if (!named.isEmpty()) {
+			return named.get(0);
+		}
+		if (lowered.matches("(that|this|the) (player|companion|person|one|guy|girl)")) {
+			Vec3 eye = player.getEyePosition();
+			Vec3 end = eye.add(player.getViewVector(1.0F).scale(24));
+			LivingEntity pointed = null;
+			double closest = Double.MAX_VALUE;
+			for (LivingEntity candidate : player.level().getEntitiesOfClass(LivingEntity.class, area,
+					e -> (e instanceof Player p && p != player && !p.isSpectator()) || e instanceof CompanionEntity)) {
+				Optional<Vec3> hit = candidate.getBoundingBox().inflate(0.3).clip(eye, end);
+				if (hit.isPresent() && eye.distanceToSqr(hit.get()) < closest) {
+					closest = eye.distanceToSqr(hit.get());
+					pointed = candidate;
+				}
+			}
+			return pointed;
+		}
+		String wanted = CommandParserAccess.singular(lowered);
+		if (HUNT_WORDS.contains(lowered)) {
 			return player.level().getEntitiesOfClass(Animal.class, area, e -> e.isAlive() && !(e instanceof TamableAnimal tame && tame.isTame()))
 					.stream().min(Comparator.comparingDouble(e -> e.distanceToSqr(player))).orElse(null);
 		}

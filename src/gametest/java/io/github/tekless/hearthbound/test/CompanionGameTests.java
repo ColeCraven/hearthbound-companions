@@ -331,7 +331,7 @@ public class CompanionGameTests {
 			helper.assertTrue(Conversations.apply(player, member, Intent.of(IntentType.RECRUIT)).accepted(), "recruited " + member.companionName());
 		}
 		Conversations.Outcome full = Conversations.apply(player, stranger, Intent.of(IntentType.RECRUIT));
-		helper.assertFalse(full.accepted(), "party limit enforced");
+		helper.assertFalse(full.accepted(), "party limit enforced (limit " + io.github.tekless.hearthbound.Hearthbound.config().partyLimit() + ", size " + Conversations.partySize(player) + ", " + full.lineKey() + ")");
 		helper.assertValueEqual(full.lineKey(), "recruit.party_full", "explains the party is full");
 		removePlayer(helper, player);
 		helper.succeed();

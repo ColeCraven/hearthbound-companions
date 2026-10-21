@@ -104,7 +104,7 @@ public final class Exchanges {
 			return;
 		}
 		List<CompanionEntity> residents = CompanionTracker.all().stream()
-				.filter(c -> c.isHubResident() && !c.isRecruited() && free(c)).toList();
+				.filter(c -> !c.isRecruited() && free(c)).toList();
 		for (int i = 0; i < residents.size(); i++) {
 			for (int j = i + 1; j < residents.size(); j++) {
 				CompanionEntity a = residents.get(i);

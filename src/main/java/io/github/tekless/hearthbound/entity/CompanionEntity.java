@@ -112,6 +112,10 @@ public class CompanionEntity extends PathfinderMob {
 
 	private Archetype archetype = Archetype.SELLSWORD;
 	private @Nullable UUID ownerId;
+	/** Whoever is giving an unrecruited companion orders right now (obey mode); forgotten when the job ends. */
+	private @Nullable UUID commanderId;
+	/** The player or companion this one has been told to fight. Nobody else is ever a target. */
+	private @Nullable UUID directedId;
 	private @Nullable BlockPos home;
 	private CompanionOrder order;
 	/** What to go back to when a task (gather, give, come, attack) ends. */
@@ -219,16 +223,79 @@ public class CompanionEntity extends PathfinderMob {
 		};
 	}
 
-	/** Never fight a player or a fellow companion, whatever happened. */
+	/**
+	 * Never fight a player or a fellow companion on their own: only the one they were told to fight, never
+	 * their own owner or the one commanding them, never a player while PvP is off, and not a companion
+	 * who is already knocked down.
+	 */
 	@Override
 	public boolean canAttack(LivingEntity target) {
-		if (target instanceof Player) {
-			return false;
-		}
-		if (target instanceof CompanionEntity) {
-			return false;
+		if (target instanceof Player || target instanceof CompanionEntity) {
+			if (directedId == null || !directedId.equals(target.getUUID()) || isDowned()) {
+				return false;
+			}
+			if (target instanceof Player player) {
+				if (isOwnedBy(player) || player.getUUID().equals(commanderId) || player.isSpectator()
+						|| !(level() instanceof ServerLevel serverLevel) || !serverLevel.isPvpAllowed()) {
+					return false;
+				}
+			}
+			if (target instanceof CompanionEntity other && (other == this || other.isDowned())) {
+				return false;
+			}
+			return target.isAlive(); // told to, so even on peaceful difficulty
 		}
 		return super.canAttack(target);
+	}
+
+	/** Fight this player or companion (the commander said so). Cleared by {@link #clearDirected()}. */
+	public void directAt(LivingEntity target) {
+		directedId = target.getUUID();
+	}
+
+	public void clearDirected() {
+		directedId = null;
+	}
+
+	/** Who an unrecruited companion is taking orders from at the moment (obey mode), or null. */
+	public @Nullable ServerPlayer commanderPlayer() {
+		ServerPlayer owner = ownerPlayer();
+		if (owner != null || commanderId == null || !(level() instanceof ServerLevel serverLevel)) {
+			return owner;
+		}
+		return serverLevel.getServer().getPlayerList().getPlayer(commanderId);
+	}
+
+	public void setCommander(ServerPlayer player) {
+		commanderId = isRecruited() ? null : player.getUUID();
+	}
+
+	/** Moves items to another companion's pack (what is left over stays here). */
+	public int giveTo(CompanionEntity other, Predicate<ItemStack> filter, int max) {
+		int given = 0;
+		for (int slot = 0; slot < inventory.getContainerSize() && given < max; slot++) {
+			ItemStack stack = inventory.getItem(slot);
+			if (stack.isEmpty() || !filter.test(stack)) {
+				continue;
+			}
+			ItemStack moved = inventory.removeItem(slot, Math.min(stack.getCount(), max - given));
+			ItemStack rest = other.inventory().addItem(moved);
+			given += moved.getCount() - rest.getCount();
+			if (!rest.isEmpty()) {
+				inventory.addItem(rest);
+			}
+		}
+		return given;
+	}
+
+	/** Makes this spot their home (where an unrecruited companion lives; where they go when sent home). */
+	public void setHomePos(BlockPos pos) {
+		home = pos.immutable();
+		clearHome();
+		if (!isRecruited() && order != null && order.kind() == CompanionOrder.Kind.HOME) {
+			order = new HomeOrder(home);
+		}
+		updateRoster();
 	}
 
 	// ------------------------------------------------------------------ ticking
@@ -296,6 +363,8 @@ public class CompanionEntity extends PathfinderMob {
 
 	private void finishTask() {
 		CompanionOrder.Kind finished = order.kind();
+		commanderId = null;
+		directedId = null;
 		order = createBaseOrder();
 		if (finished == CompanionOrder.Kind.GATHER || finished == CompanionOrder.Kind.MINE) {
 			restoreWeapon();
@@ -520,6 +589,7 @@ public class CompanionEntity extends PathfinderMob {
 
 	public void recruit(ServerPlayer player) {
 		ownerId = player.getUUID();
+		commanderId = null;
 		entityData.set(DATA_OWNER_NAME, player.getName().getString());
 		if (!hubResident) {
 			home = blockPosition();

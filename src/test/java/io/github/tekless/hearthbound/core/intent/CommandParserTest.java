@@ -47,7 +47,7 @@ class CommandParserTest {
 			"I could use your help, RECRUIT",
 			"you're dismissed, DISMISS",
 			"you can go home now, DISMISS",
-			"go home, DISMISS",
+			"go home, HOME",
 			"I don't need you anymore, DISMISS"
 	})
 	void recognisesSimpleOrders(String message, IntentType expected) {

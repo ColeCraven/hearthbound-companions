@@ -53,6 +53,7 @@ public final class CommitmentGuard {
 			case ATTACK -> verb.matches("attack|kill|fight|slay|get|hunt");
 			case BUILD -> verb.matches("build|make|place|put|get");
 			case MINE -> verb.matches("mine|dig|head|go|get|find");
+			case HOME -> verb.matches("go|head|walk|return|come|teleport|send");
 			case CANCEL, STATUS, INVENTORY, RECRUIT, DISMISS -> verb.matches("follow|wait|stay|come|head|give|hand");
 		};
 	}

@@ -868,6 +868,70 @@
     "talk.sky.day": [
       "Lovely day! Great for planting! Or walking!",
       "Sun's out! My favourite!"
+    ],
+    "project.ack.group": [
+      "Right then: {plan}.",
+      "Got it. {plan}. Let's get on with it.",
+      "Understood: {plan}."
+    ],
+    "project.short": [
+      "I'm short of blocks for {thing}: I need {need} and I've got {have}. Sorting out some wood first.",
+      "Not enough blocks for {thing} yet ({have} of {need}). I'll get more."
+    ],
+    "project.blocked.materials": [
+      "I can't find enough to build {thing}. I need {need} blocks and only have {have}.",
+      "No luck: I still need {need} blocks for {thing} and I've only got {have}."
+    ],
+    "project.blocked.site": [
+      "There's no good spot for {thing} near here. Too uneven, too cluttered, or too close to someone's build.",
+      "I can't find room for {thing} around here."
+    ],
+    "project.blocked.water": [
+      "There's no water near enough for a farm, and I'm not carrying a water bucket.",
+      "A farm needs water, and I can't find any nearby."
+    ],
+    "project.blocked.seeds": [
+      "I've got no seeds or crops to plant, so the farm will have to wait.",
+      "Nothing to sow: I'm not carrying any seeds, carrots or potatoes."
+    ],
+    "project.blocked.hoe": [
+      "I need a hoe, and I can't make one from what I'm carrying.",
+      "No hoe, and not enough wood on me to make one."
+    ],
+    "project.nofurnace": [
+      "I've no cobblestone for a furnace, so the storehouse will just get its chest for now."
+    ],
+    "project.farm.planted": [
+      "The farm is sown: {count} plots planted.",
+      "All planted. That's {count} plots in the ground."
+    ],
+    "project.farm.harvest": [
+      "I brought in {count} {item} from the farm.",
+      "Harvested {count} {item} so far."
+    ],
+    "project.farm.stored": [
+      "Put {count} food into the storehouse.",
+      "Stored {count} food in the chest."
+    ],
+    "ack.home": [
+      "Heading home.",
+      "On my way home, then."
+    ],
+    "ack.home.teleport": [
+      "Straight home, then.",
+      "Home I go."
+    ],
+    "fail.no_home": [
+      "I don't have a home to go to yet.",
+      "No home set for me. Try /companion sethome."
+    ],
+    "fail.pvp_off": [
+      "Fighting {mob} isn't allowed here, since PvP is switched off.",
+      "PvP is off on this server, so I won't fight {mob}."
+    ],
+    "combat.spar_over": [
+      "That's enough. {mob} is down.",
+      "{mob} has had enough. We're done."
     ]
   }
 }

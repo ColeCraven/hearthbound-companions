@@ -16,6 +16,8 @@ public enum IntentType {
 	INVENTORY,
 	RECRUIT,
 	DISMISS,
+	/** Go back to their own home; the target is "walk" or "teleport". Nobody is dismissed. */
+	HOME,
 	/** Build a simple structure; the item names it ("shelter", "wall", "bridge"). */
 	BUILD,
 	/** Dig: the target is "tunnel", "down" or "trip" (down then along); the count is how far. */

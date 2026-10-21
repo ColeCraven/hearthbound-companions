@@ -21,5 +21,8 @@
   "message.hearthbound.other_dimension": "%s is in another dimension, so they can't hear you from here.",
   "message.hearthbound.not_loaded": "%s is too far away to hear you (their part of the world isn't loaded). Go back near them and try again.",
   "message.hearthbound.heard_by": "Heard by: %s",
-  "message.hearthbound.unreachable": "Could not reach: %s"
+  "message.hearthbound.unreachable": "Could not reach: %s",
+  "message.hearthbound.group_couldnt": "Couldn't do that: %s",
+  "message.hearthbound.group_none": "Nobody who listens to you is close enough to hear that.",
+  "message.hearthbound.group_strangers": "Nobody nearby is with you yet. Recruit them first, or turn on /companion obey so everyone takes your orders."
 }

@@ -78,6 +78,7 @@ public final class HubResidents {
 	/** Runs once a second from the server tick. */
 	public static void tick(MinecraftServer server) {
 		if (!enabled()) {
+			Exchanges.hubTick(server); // wanderers chat with each other whether or not there is a hub
 			return;
 		}
 		Optional<ServerLevel> found = hubLevel(server);
@@ -104,21 +105,27 @@ public final class HubResidents {
 		}
 		int index = 0;
 		for (CastMember member : missing) {
-			CompanionEntity companion = ModEntities.COMPANION.create(level, EntitySpawnReason.EVENT);
-			if (companion == null) {
-				continue;
-			}
-			BlockPos spot = findSpot(level, companion, hub, index++, missing.size());
-			companion.snapTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, level.getRandom().nextFloat() * 360, 0);
-			companion.initIdentity(member);
-			companion.finalizeSpawn(level, level.getCurrentDifficultyAt(spot), EntitySpawnReason.EVENT, null);
-			companion.giveStarterGear();
-			companion.makeHubResident(hub);
-			level.addFreshEntity(companion);
-			roster.noteLoaded(companion);
-			Hearthbound.LOGGER.info("{} moved into the hub at {}", member.displayName(), spot.toShortString());
+			spawnOne(level, hub, member, index++, missing.size());
 		}
 		return missing.size();
+	}
+
+	/** Creates one cast member at the hub, as a resident. */
+	public static boolean spawnOne(ServerLevel level, BlockPos hub, CastMember member, int index, int count) {
+		CompanionEntity companion = ModEntities.COMPANION.create(level, EntitySpawnReason.EVENT);
+		if (companion == null) {
+			return false;
+		}
+		BlockPos spot = findSpot(level, companion, hub, index, count);
+		companion.snapTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, level.getRandom().nextFloat() * 360, 0);
+		companion.initIdentity(member);
+		companion.finalizeSpawn(level, level.getCurrentDifficultyAt(spot), EntitySpawnReason.EVENT, null);
+		companion.giveStarterGear();
+		companion.makeHubResident(hub);
+		level.addFreshEntity(companion);
+		CompanionRoster.get(level.getServer()).noteLoaded(companion);
+		Hearthbound.LOGGER.info("{} moved into the hub at {}", member.displayName(), spot.toShortString());
+		return true;
 	}
 
 	/** Puts a dismissed resident back at the hub (from wherever they are, any dimension). */

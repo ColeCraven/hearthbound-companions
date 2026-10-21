@@ -38,9 +38,15 @@ public final class CommandParser {
 			"^(stop|cancel|abort|halt|enough|nevermind|never mind|forget it|forget that|forget about it|quit|stand down|call it off|drop it|belay that|thats enough|scratch that|no stop)"
 					+ "( (it|that|this|now|everything|all|the task|your task|the job|what youre doing|what you are doing|doing that|that task|gathering|collecting|mining|chopping|digging|fighting|attacking|working))*$");
 	private static final Pattern DISMISS = Pattern.compile(
-			"\\b(dismiss(ed)?|youre dismissed|you are dismissed|go (back )?home|head (back )?home|return home|"
+			"\\b(dismiss(ed)?|youre dismissed|you are dismissed|you (can|may|should) (go|head|return)( back)? home|"
 					+ "you (can|may) (go|leave)( home| now)?$|leave (the|my|our) (party|group|team)|part ways|"
 					+ "i (dont|do not|no longer) need you|youre free to go|you are free to go|youre fired|you are fired|i release you)\\b");
+	/** "Teleport home", "go home now": straight there instead of walking. */
+	private static final Pattern HOME_NOW = Pattern.compile(
+			"\\b(teleport|tp|warp|beam|zap)( yourself| yourselves| back| straight| right)* (to )?(your )?home\\b"
+					+ "|\\b(go|head|return|get)( back)?( to your)? home (right |straight )?(now|away|immediately|instantly|at once)\\b");
+	/** "Go home", "head back home": walk there, and stay a companion. */
+	private static final Pattern HOME_WALK = Pattern.compile("\\b(go|head|return|walk|get)( back)?( to your)? home\\b|\\bsend (them|yourself|yourselves)( back)? home\\b");
 	private static final Pattern RECRUIT = Pattern.compile(
 			"\\b(join (me|us|my party|the party|my group|my team|our party)|(be|become) my (companion|follower|partner|ally|sidekick)|"
 					+ "travel with me|adventure with me|(i|we) could use (your|a|some) (help|hand|sword|company)|i need your help|"
@@ -211,6 +217,14 @@ public final class CommandParser {
 		String unstripped = String.join(" ", tokens.stream().filter(t -> !names.contains(t)).toList());
 		if (DISMISS.matcher(unstripped).find() && !RECRUIT.matcher(unstripped).find() && !LETS_HOME.matcher(unstripped).find()) {
 			return command(Intent.of(IntentType.DISMISS));
+		}
+		if (!LETS_HOME.matcher(unstripped).find()) {
+			if (HOME_NOW.matcher(unstripped).find()) {
+				return command(new Intent(IntentType.HOME, null, null, "teleport"));
+			}
+			if (HOME_WALK.matcher(unstripped).find()) {
+				return command(new Intent(IntentType.HOME, null, null, "walk"));
+			}
 		}
 		// "hi there" is a greeting, even though "hi" on its own is a filler word in front of orders.
 		if (T_HELLO.matcher(unstripped).matches()) {

@@ -78,6 +78,8 @@ public final class Hearthbound implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
 			ai = null;
 			Conversations.reset();
+			io.github.tekless.hearthbound.entity.order.Projects.reset();
+			io.github.tekless.hearthbound.world.Storehouses.reset();
 			io.github.tekless.hearthbound.world.Exchanges.reset();
 			Moments.reset();
 			Gestures.reset();

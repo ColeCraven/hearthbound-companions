@@ -34,7 +34,7 @@ public final class ComeOrder implements CompanionOrder {
 		if (status.isFinished()) {
 			return;
 		}
-		ServerPlayer owner = companion.ownerPlayer();
+		ServerPlayer owner = companion.commanderPlayer();
 		if (owner == null) {
 			status = TaskStatus.FAILED;
 			return;

@@ -46,6 +46,10 @@ public final class GatherOrder implements CompanionOrder, GatherWorld<BlockPos> 
 
 	private BlockPos pathTarget;
 	private int repathCooldown;
+	/** Project work: keep what is gathered, or hand it to another companion, and say nothing on the way. */
+	private boolean quiet;
+	private boolean keep;
+	private CompanionEntity recipient;
 
 	public GatherOrder(CompanionEntity companion, GatherSpec spec, int goal) {
 		this(companion, spec, goal, -1);
@@ -62,6 +66,20 @@ public final class GatherOrder implements CompanionOrder, GatherWorld<BlockPos> 
 
 	public GatherSpec spec() {
 		return spec;
+	}
+
+	/** Keeps the haul in the pack instead of bringing it to the owner, and stays quiet (a project reports for itself). */
+	public GatherOrder keepForSelf() {
+		this.keep = true;
+		this.quiet = true;
+		return this;
+	}
+
+	/** Brings the haul to another companion instead of the owner (collectors supplying builders). */
+	public GatherOrder deliverTo(CompanionEntity other) {
+		this.recipient = other;
+		this.quiet = true;
+		return this;
 	}
 
 	public int goal() {
@@ -86,6 +104,9 @@ public final class GatherOrder implements CompanionOrder, GatherWorld<BlockPos> 
 	}
 
 	private void report(GatherMachine.Event event) {
+		if (quiet) {
+			return;
+		}
 		Map<String, String> vars = Map.of(
 				"item", spec.displayName(),
 				"count", Integer.toString(machine.goal()),
@@ -255,13 +276,36 @@ public final class GatherOrder implements CompanionOrder, GatherWorld<BlockPos> 
 
 	@Override
 	public boolean ownerAvailable() {
-		ServerPlayer owner = companion.ownerPlayer();
+		if (keep) {
+			return true;
+		}
+		if (recipient != null) {
+			return recipient.isAlive() && !recipient.isRemoved();
+		}
+		ServerPlayer owner = companion.commanderPlayer();
 		return owner != null && owner.isAlive();
 	}
 
 	@Override
 	public Move returnToOwner() {
-		ServerPlayer owner = companion.ownerPlayer();
+		if (keep) {
+			return Move.ARRIVED;
+		}
+		if (recipient != null) {
+			if (recipient.level() != companion.level()) {
+				return Move.UNREACHABLE;
+			}
+			if (companion.distanceTo(recipient) <= 3.0) {
+				companion.getNavigation().stop();
+				return Move.ARRIVED;
+			}
+			if (--repathCooldown <= 0 || companion.getNavigation().isDone()) {
+				repathCooldown = 10;
+				companion.getNavigation().moveTo(recipient, 1.1);
+			}
+			return stuck.update(companion.getX(), companion.getZ(), true) && stuck.consecutiveStuck() >= 6 ? Move.UNREACHABLE : Move.MOVING;
+		}
+		ServerPlayer owner = companion.commanderPlayer();
 		if (owner == null) {
 			return Move.UNREACHABLE;
 		}
@@ -285,7 +329,15 @@ public final class GatherOrder implements CompanionOrder, GatherWorld<BlockPos> 
 
 	@Override
 	public int deliver(int max) {
-		ServerPlayer owner = companion.ownerPlayer();
+		if (keep) {
+			return max;
+		}
+		if (recipient != null) {
+			int passed = companion.giveTo(recipient, spec.counts(), max);
+			companion.restoreWeapon();
+			return passed;
+		}
+		ServerPlayer owner = companion.commanderPlayer();
 		if (owner == null) {
 			return 0;
 		}

@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public final class Blueprint {
 	public enum Kind {
-		SHELTER("a shelter"), WALL("a wall"), BRIDGE("a bridge"), CAMP("a camp");
+		SHELTER("a shelter"), WALL("a wall"), BRIDGE("a bridge"), CAMP("a camp"), HOUSE("a house"), STOREHOUSE("a storehouse");
 
 		private final String label;
 
@@ -30,6 +30,9 @@ public final class Blueprint {
 
 		public static Optional<Kind> byPhrase(String phrase) {
 			String p = phrase == null ? "" : phrase.toLowerCase(Locale.ROOT).trim();
+			if (p.matches(".*\\b(storehouse|storeroom|store room|pantry|larder|kitchen|cookhouse)s?\\b.*")) {
+				return Optional.of(STOREHOUSE);
+			}
 			if (p.matches(".*\\b(camp|campsite|campfire|bonfire)s?\\b.*")) {
 				return Optional.of(CAMP);
 			}
@@ -47,7 +50,10 @@ public final class Blueprint {
 	}
 
 	/** A block to place. Doorway spots get a door if the builder carries one, else stay open. */
-	public record Spot(BlockPos pos, boolean doorway) {
+	public record Spot(BlockPos pos, boolean doorway, boolean gap) {
+		public Spot(BlockPos pos, boolean doorway) {
+			this(pos, doorway, false);
+		}
 	}
 
 	private final Kind kind;
@@ -89,7 +95,7 @@ public final class Blueprint {
 		List<BlockPos> clear = new ArrayList<>();
 		List<BlockPos> ground = new ArrayList<>();
 		switch (kind) {
-			case SHELTER -> {
+			case SHELTER, HOUSE, STOREHOUSE -> {
 				// 5x5 outside, 3x3 inside, walls 3 high, flat roof; doorway in the middle of the near wall.
 				BlockPos corner = feet.relative(facing, 2).relative(right, -2);
 				for (int y = 0; y <= 3; y++) {
@@ -101,7 +107,9 @@ public final class Blueprint {
 								spots.add(new Spot(pos, false)); // roof
 							} else if (edge) {
 								boolean doorway = f == 0 && r == 2 && y <= 1;
-								spots.add(new Spot(pos, doorway));
+								// A cottage gets a window gap in each side wall, at head height.
+								boolean window = kind == Kind.HOUSE && y == 1 && f == 2 && (r == 0 || r == 4);
+								spots.add(new Spot(pos, doorway, window));
 							} else {
 								clear.add(pos);
 							}
@@ -160,7 +168,7 @@ public final class Blueprint {
 	public List<BlockPos> openSpots(ServerLevel level) {
 		List<BlockPos> open = new ArrayList<>();
 		for (Spot spot : spots) {
-			if (!spot.doorway() && isOpen(level.getBlockState(spot.pos()))) {
+			if (!spot.doorway() && !spot.gap() && isOpen(level.getBlockState(spot.pos()))) {
 				open.add(spot.pos());
 			}
 		}

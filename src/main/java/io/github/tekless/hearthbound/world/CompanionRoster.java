@@ -101,6 +101,15 @@ public final class CompanionRoster {
 		}
 	}
 
+	/** Drops every record of this cast character (their body is missing and is being replaced). */
+	public boolean forgetCast(CastMember member) {
+		boolean removed = data.companions.values().removeIf(entry -> member.id().equals(entry.cast));
+		if (removed) {
+			dirty = true;
+		}
+		return removed;
+	}
+
 	// ---------------------------------------------------------------- queries
 
 	/** Companions travelling with this player, loaded or not. */

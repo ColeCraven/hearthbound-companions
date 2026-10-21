@@ -26,9 +26,20 @@ public final class AttackOrder implements CompanionOrder {
 		if (status.isFinished()) {
 			return;
 		}
+		boolean person = target instanceof net.minecraft.world.entity.player.Player || target instanceof CompanionEntity;
+		if (person && (target.isRemoved() || (target instanceof CompanionEntity other && other.isDowned()))) {
+			// Sparring, or the other player left: it's over, and nobody is killed.
+			status = TaskStatus.SUCCEEDED;
+			companion.clearDirected();
+			companion.setTarget(null);
+			companion.getNavigation().stop();
+			companion.say("combat.spar_over", Map.of("mob", targetName));
+			return;
+		}
 		if (!target.isAlive()) {
 			status = TaskStatus.SUCCEEDED;
-			companion.say("combat.kill", Map.of("mob", targetName));
+			companion.clearDirected();
+			companion.say(person ? "combat.spar_over" : "combat.kill", Map.of("mob", targetName));
 			return;
 		}
 		if (target.isRemoved() || target.level() != companion.level() || companion.distanceTo(target) > 40) {
@@ -44,6 +55,7 @@ public final class AttackOrder implements CompanionOrder {
 
 	@Override
 	public void cancel(CompanionEntity companion) {
+		companion.clearDirected();
 		if (!status.isFinished()) {
 			status = TaskStatus.CANCELLED;
 		}

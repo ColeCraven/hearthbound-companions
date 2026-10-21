@@ -31,6 +31,10 @@ public final class HearthboundConfig {
 	private transient Path file;
 	/** How often companions do things of their own accord while you stand still: 0 = never, 1 = normal, 2 = often. */
 	public double autonomy = 1.0;
+	/** Single player: every companion in the world takes orders from the host, recruited or not. On unless you turn it off. */
+	public boolean obeyAll = true;
+	/** Dedicated servers: operators (by UUID) who turned obey mode on for themselves. */
+	public List<String> obeyPlayers = new ArrayList<>();
 	public Ai ai = new Ai();
 	public Server server = new Server();
 

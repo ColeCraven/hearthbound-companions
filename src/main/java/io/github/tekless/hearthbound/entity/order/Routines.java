@@ -54,19 +54,27 @@ public final class Routines {
 
 	/** A job that suits this companion's role and the surroundings, or nothing. */
 	public static Optional<Pastimes.Pastime> pick(CompanionEntity companion, ServerPlayer owner) {
-		if (!enabled() || !(companion.level() instanceof ServerLevel level) || !allowed(companion, level)) {
+		return pickAround(companion, owner.blockPosition());
+	}
+
+	/**
+	 * The same jobs for a companion who is not travelling with anyone: they work around a spot of their own
+	 * (their home) with the same limits - never in protected areas, beside player builds, or from chests.
+	 */
+	public static Optional<Pastimes.Pastime> pickAround(CompanionEntity companion, BlockPos centre) {
+		if (!enabled() || !(companion.level() instanceof ServerLevel level) || !allowed(companion, level, centre)) {
 			return Optional.empty();
 		}
 		return switch (companion.role()) {
-			case COLLECTOR -> Forage.find(level, companion, owner).map(pos -> (Pastimes.Pastime) new Forage(pos));
-			case FARMER -> Harvest.find(level, companion, owner).map(pos -> (Pastimes.Pastime) new Harvest(pos));
-			case GUARDIAN -> hostileNear(level, companion, owner).map(mob -> (Pastimes.Pastime) new Hunt(mob));
-			case BUILDER -> Torch.find(level, companion, owner).map(pos -> (Pastimes.Pastime) new Torch(pos));
+			case COLLECTOR -> Forage.find(level, companion, centre).map(pos -> (Pastimes.Pastime) new Forage(pos));
+			case FARMER -> Harvest.find(level, companion, centre).map(pos -> (Pastimes.Pastime) new Harvest(pos));
+			case GUARDIAN -> hostileNear(level, companion, centre).map(mob -> (Pastimes.Pastime) new Hunt(mob));
+			case BUILDER -> Torch.find(level, companion, centre).map(pos -> (Pastimes.Pastime) new Torch(pos));
 		};
 	}
 
-	private static boolean allowed(CompanionEntity companion, ServerLevel level) {
-		if (companion.distanceToSqr(companion.ownerPlayer() == null ? companion.position() : companion.ownerPlayer().position()) > 20 * 20) {
+	private static boolean allowed(CompanionEntity companion, ServerLevel level, BlockPos centre) {
+		if (companion.distanceToSqr(Vec3.atCenterOf(centre)) > 20 * 20) {
 			return false;
 		}
 		int free = 0;
@@ -92,8 +100,7 @@ public final class Routines {
 	}
 
 	/** Nearest position (to the companion) inside the area around the owner that passes {@code test}. */
-	private static Optional<BlockPos> nearest(ServerLevel level, CompanionEntity companion, ServerPlayer owner, java.util.function.Predicate<BlockPos> test) {
-		BlockPos center = owner.blockPosition();
+	private static Optional<BlockPos> nearest(ServerLevel level, CompanionEntity companion, BlockPos center, java.util.function.Predicate<BlockPos> test) {
 		BlockPos best = null;
 		double bestDistance = Double.MAX_VALUE;
 		for (BlockPos pos : BlockPos.betweenClosed(center.offset(-RANGE, -4, -RANGE), center.offset(RANGE, 4, RANGE))) {
@@ -120,8 +127,8 @@ public final class Routines {
 		return true;
 	}
 
-	private static Optional<LivingEntity> hostileNear(ServerLevel level, CompanionEntity companion, ServerPlayer owner) {
-		List<LivingEntity> mobs = level.getEntitiesOfClass(LivingEntity.class, owner.getBoundingBox().inflate(16),
+	private static Optional<LivingEntity> hostileNear(ServerLevel level, CompanionEntity companion, BlockPos centre) {
+		List<LivingEntity> mobs = level.getEntitiesOfClass(LivingEntity.class, new net.minecraft.world.phys.AABB(centre).inflate(16),
 				e -> e instanceof Enemy && e.isAlive() && companion.distanceToSqr(e) < 24 * 24);
 		return mobs.stream().min(java.util.Comparator.comparingDouble(companion::distanceToSqr));
 	}
@@ -136,7 +143,7 @@ public final class Routines {
 			this.pos = pos;
 		}
 
-		static Optional<BlockPos> find(ServerLevel level, CompanionEntity c, ServerPlayer owner) {
+		static Optional<BlockPos> find(ServerLevel level, CompanionEntity c, BlockPos owner) {
 			Optional<BlockPos> log = nearest(level, c, owner, pos -> level.getBlockState(pos).is(BlockTags.LOGS) && WorldRules.mayBreak(level, pos));
 			if (log.isPresent()) {
 				return log;
@@ -196,7 +203,7 @@ public final class Routines {
 			this.pos = pos;
 		}
 
-		static Optional<BlockPos> find(ServerLevel level, CompanionEntity c, ServerPlayer owner) {
+		static Optional<BlockPos> find(ServerLevel level, CompanionEntity c, BlockPos owner) {
 			return nearest(level, c, owner, pos -> level.getBlockState(pos).getBlock() instanceof CropBlock crop && crop.isMaxAge(level.getBlockState(pos)));
 		}
 
@@ -295,7 +302,7 @@ public final class Routines {
 			this.pos = pos;
 		}
 
-		static Optional<BlockPos> find(ServerLevel level, CompanionEntity c, ServerPlayer owner) {
+		static Optional<BlockPos> find(ServerLevel level, CompanionEntity c, BlockPos owner) {
 			if (c.countCarried(s -> s.is(Items.TORCH)) == 0) {
 				return Optional.empty();
 			}

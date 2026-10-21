@@ -195,6 +195,7 @@ public final class AiService {
 			case CANCEL -> "ack.cancel.nothing";
 			case RECRUIT -> "recruit.accept";
 			case DISMISS -> "dismiss.accept";
+			case HOME -> "ack.home";
 			case BUILD -> "ack.build";
 			case MINE -> "ack.mine";
 			case STATUS, INVENTORY -> "talk.generic";

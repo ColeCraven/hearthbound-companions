@@ -78,6 +78,19 @@ class LineBankTest {
 		for (String biome : List.of("forest", "desert", "snow", "ocean", "jungle", "swamp", "mountain", "plains", "nether", "end")) {
 			REQUIRED.put("ambient.biome." + biome, base);
 		}
+		REQUIRED.put("project.ack.group", plus(base, "plan"));
+		REQUIRED.put("project.short", plus(base, "thing", "need", "have"));
+		REQUIRED.put("project.blocked.materials", plus(base, "thing", "need", "have"));
+		REQUIRED.put("project.blocked.site", plus(base, "thing"));
+		for (String key : List.of("project.blocked.water", "project.blocked.seeds", "project.blocked.hoe", "project.nofurnace", "ack.home",
+				"ack.home.teleport", "fail.no_home")) {
+			REQUIRED.put(key, base);
+		}
+		REQUIRED.put("project.farm.planted", plus(base, "count"));
+		REQUIRED.put("project.farm.harvest", plus(base, "count", "item"));
+		REQUIRED.put("project.farm.stored", plus(base, "count"));
+		REQUIRED.put("fail.pvp_off", plus(base, "mob"));
+		REQUIRED.put("combat.spar_over", plus(base, "mob"));
 		REQUIRED.put("talk.role", plus(base, "biome", "event", "role", "skills"));
 		for (String sky : List.of("talk.sky.rain", "talk.sky.night", "talk.sky.day")) {
 			REQUIRED.put(sky, base);

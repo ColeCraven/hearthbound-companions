@@ -21,6 +21,10 @@ import io.github.tekless.hearthbound.Hearthbound;
 import io.github.tekless.hearthbound.config.HearthboundConfig;
 import io.github.tekless.hearthbound.world.CompanionTracker;
 import io.github.tekless.hearthbound.world.HubResidents;
+import io.github.tekless.hearthbound.world.Homes;
+import io.github.tekless.hearthbound.world.Obey;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
+import net.minecraft.core.BlockPos;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -44,6 +48,15 @@ public final class CompanionCommands {
 			CompanionTracker.near(player, 64).forEach(c -> builder.suggest(c.companionName().split(" ")[0]));
 		}
 		return builder.buildFuture();
+	};
+
+	/** A name, or party, everyone, or a role. */
+	private static final SuggestionProvider<CommandSourceStack> WHO = (context, builder) -> {
+		ServerPlayer player = context.getSource().getPlayer();
+		if (player != null) {
+			CompanionTracker.near(player, 64).forEach(c -> builder.suggest(c.companionName().split(" ")[0]));
+		}
+		return SharedSuggestionProvider.suggest(List.of("party", "everyone", "builders", "farmers", "collectors", "guardians"), builder);
 	};
 
 	private CompanionCommands() {
@@ -120,6 +133,27 @@ public final class CompanionCommands {
 				.then(Commands.argument("mode", StringArgumentType.word())
 						.suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("on", "off"), b))
 						.executes(ctx -> autonomy(ctx, StringArgumentType.getString(ctx, "mode")))));
+		root.then(Commands.literal("sethome")
+				.then(Commands.argument("who", StringArgumentType.word()).suggests(WHO)
+						.executes(ctx -> setHome(ctx, null))
+						.then(Commands.literal("here").executes(ctx -> setHome(ctx, null)))
+						.then(Commands.argument("pos", BlockPosArgument.blockPos())
+								.executes(ctx -> setHome(ctx, BlockPosArgument.getBlockPos(ctx, "pos"))))));
+		root.then(Commands.literal("home")
+				.then(Commands.argument("who", StringArgumentType.word()).suggests(WHO)
+						.executes(ctx -> goHome(ctx, false))
+						.then(Commands.literal("teleport").executes(ctx -> goHome(ctx, true)))));
+		root.then(Commands.literal("tphome")
+				.then(Commands.argument("who", StringArgumentType.word()).suggests(WHO)
+						.executes(ctx -> goHome(ctx, true))));
+		for (String word : List.of("obey", "lead")) {
+			root.then(Commands.literal(word)
+					.requires(CompanionCommands::mayConfigure)
+					.executes(ctx -> obey(ctx, null))
+					.then(Commands.argument("mode", StringArgumentType.word())
+							.suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("on", "off"), b))
+							.executes(ctx -> obey(ctx, StringArgumentType.getString(ctx, "mode")))));
+		}
 		root.then(Commands.literal("hub")
 				.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
 				.then(Commands.literal("list").executes(CompanionCommands::hubList))
@@ -166,7 +200,7 @@ public final class CompanionCommands {
 			case "low" -> "Only now and then. Replies, confirmations and warnings are unchanged.";
 			case "high" -> "They'll chat plenty, and talk to each other more.";
 			default -> "The default: comments now and then, and the odd chat between them.";
-		} + " Options: off, low, normal, high."), false);
+		} + " It applies to every companion in the world. Options: off, low, normal, high."), false);
 		return 1;
 	}
 
@@ -181,7 +215,7 @@ public final class CompanionCommands {
 			config.save();
 		}
 		ctx.getSource().sendSuccess(() -> Component.literal(config.routines
-				? "Autonomy is on. While they follow you and you stand still, collectors gather logs and stone, farmers harvest and replant, guardians hunt hostile mobs and builders light dark spots. Your orders always come first, and they leave protected areas and your builds alone."
+				? "Autonomy is on for every companion in the world. While they follow you and you stand still, or while they pass the time around their own home, collectors gather logs and stone, farmers harvest and replant, guardians hunt hostile mobs and builders light dark spots. Your orders always come first, and they leave protected areas, your builds and your chests alone."
 				: "Autonomy is off. Companions only do what you ask. Turn it on with /companion autonomy on."), false);
 		return 1;
 	}
@@ -219,20 +253,107 @@ public final class CompanionCommands {
 		return spawned;
 	}
 
-	/** Sends a companion back to the hub, ending their travels with whoever had them. */
-	private static int hubHome(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-		ServerPlayer player = ctx.getSource().getPlayerOrException();
-		CompanionEntity companion = find(ctx, player);
-		if (companion == null) {
+	/**
+	 * Sends a companion back to the hub, ending their travels with whoever had them. Works from the console.
+	 * If the world has a record of them but no body is loaded anywhere, they are respawned at the hub, since
+	 * the caller asked for exactly that.
+	 */
+	private static int hubHome(CommandContext<CommandSourceStack> ctx) {
+		CommandSourceStack source = ctx.getSource();
+		String name = StringArgumentType.getString(ctx, "name");
+		if (!HubResidents.enabled()) {
+			source.sendFailure(Component.literal("The hub is off. Set server.hub in config/hearthbound.json and restart."));
 			return 0;
 		}
-		HubResidents.hubPos().ifPresent(companion::makeHubResident);
-		if (companion.isRecruited()) {
-			companion.dismiss();
+		String wanted = name.toLowerCase(Locale.ROOT);
+		CompanionEntity companion = CompanionTracker.all().stream()
+				.filter(c -> c.companionName().toLowerCase(Locale.ROOT).split(" ")[0].equals(wanted))
+				.min(java.util.Comparator.comparingDouble(c -> source.getPosition().distanceToSqr(c.position()))).orElse(null);
+		if (companion != null) {
+			HubResidents.hubPos().ifPresent(companion::makeHubResident);
+			if (companion.isRecruited()) {
+				companion.dismiss();
+			}
+			HubResidents.sendHome(companion);
+			source.sendSuccess(() -> Component.literal(companion.companionName() + " is back at the hub."), true);
+			return 1;
 		}
-		HubResidents.sendHome(companion);
-		ctx.getSource().sendSuccess(() -> Component.literal(companion.companionName() + " is back at the hub."), true);
+		CastMember member = CastMember.byName(name).orElse(null);
+		var level = HubResidents.hubLevel(source.getServer());
+		var hub = HubResidents.hubPos();
+		if (member == null || level.isEmpty() || hub.isEmpty()) {
+			source.sendFailure(Component.literal("No companion called " + name + " is loaded. Only cast characters can be respawned."));
+			return 0;
+		}
+		CompanionRoster roster = CompanionRoster.get(source.getServer());
+		CompanionRoster.Entry entry = roster.entryForCast(member);
+		level.get().getChunkAt(hub.get());
+		roster.forgetCast(member);
+		if (!HubResidents.spawnOne(level.get(), hub.get(), member, 0, 1)) {
+			source.sendFailure(Component.literal("Could not spawn " + member.displayName() + "."));
+			return 0;
+		}
+		String was = entry == null ? "was not in the world yet" : entry.ownerName != null ? "was recorded as travelling with " + entry.ownerName + " but no body is loaded" : "had no loaded body";
+		source.sendSuccess(() -> Component.literal(member.displayName() + " " + was + ", so they have been respawned at the hub. "
+				+ "If the original turns up later, remove one of them."), true);
 		return 1;
+	}
+
+	/** {@code /companion obey [on|off]}: let every companion in the world take your orders, recruited or not. */
+	private static int obey(CommandContext<CommandSourceStack> ctx, String mode) throws CommandSyntaxException {
+		ServerPlayer player = ctx.getSource().getPlayerOrException();
+		if (mode != null) {
+			if (!mode.equalsIgnoreCase("on") && !mode.equalsIgnoreCase("off")) {
+				ctx.getSource().sendFailure(Component.literal("Say on or off."));
+				return 0;
+			}
+			Obey.set(player, mode.equalsIgnoreCase("on"));
+		}
+		boolean on = Obey.active(player);
+		ctx.getSource().sendSuccess(() -> Component.literal(on
+				? "Obey mode is on. Every companion in the world takes orders from you, whether you recruited them or not. They only join you if you ask, and go back to their own business when the job is done."
+				: "Obey mode is off. Companions only take orders from the people they travel with. Turn it on with /companion obey on."), false);
+		return 1;
+	}
+
+	/** {@code /companion sethome <who> [here|x y z]}. */
+	private static int setHome(CommandContext<CommandSourceStack> ctx, BlockPos at) throws CommandSyntaxException {
+		ServerPlayer player = ctx.getSource().getPlayerOrException();
+		Conversations.Targets targets = Conversations.commandable(player, StringArgumentType.getString(ctx, "who"));
+		BlockPos pos = at != null ? at : player.blockPosition();
+		targets.loaded().forEach(c -> Homes.set(c, pos));
+		reportTargets(ctx.getSource(), targets, "Home set to " + pos.toShortString() + " for ");
+		return targets.loaded().size();
+	}
+
+	/** {@code /companion home <who> [teleport]} and {@code /companion tphome <who>}. */
+	private static int goHome(CommandContext<CommandSourceStack> ctx, boolean teleport) throws CommandSyntaxException {
+		ServerPlayer player = ctx.getSource().getPlayerOrException();
+		Conversations.Targets targets = Conversations.commandable(player, StringArgumentType.getString(ctx, "who"));
+		List<CompanionEntity> went = new java.util.ArrayList<>();
+		List<String> missed = new java.util.ArrayList<>(targets.missed());
+		for (CompanionEntity companion : targets.loaded()) {
+			if (Homes.send(companion, teleport)) {
+				went.add(companion);
+			} else {
+				missed.add(companion.companionName().split(" ")[0] + " (no home yet; use /companion sethome)");
+			}
+		}
+		if (!went.isEmpty()) {
+			went.get(0).say(teleport ? "ack.home.teleport" : "ack.home", java.util.Map.of());
+		}
+		reportTargets(ctx.getSource(), new Conversations.Targets(went, missed), (teleport ? "Teleported home: " : "Heading home: "));
+		return went.size();
+	}
+
+	private static void reportTargets(CommandSourceStack source, Conversations.Targets targets, String prefix) {
+		if (!targets.loaded().isEmpty()) {
+			String names = String.join(", ", targets.loaded().stream().map(c -> c.companionName().split(" ")[0]).toList());
+			source.sendSuccess(() -> Component.literal(prefix + names + "."), false);
+		}
+		if (!targets.missed().isEmpty()) {
+			source.sendFailure(Component.literal("Could not reach: " + String.join(", ", targets.missed()) + "."));
+		}
 	}
 
 	private static int summon(CommandContext<CommandSourceStack> ctx, String archetypeId, String name, String skinId, String model)

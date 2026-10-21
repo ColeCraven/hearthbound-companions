@@ -35,7 +35,8 @@ public interface CompanionOrder {
 		ATTACK,
 		MINE,
 		BUILD,
-		HOME;
+		HOME,
+		PROJECT;
 
 		/** Follow and wait are standing modes; the others are tasks that end. */
 		public boolean isMode() {

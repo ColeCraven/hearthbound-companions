@@ -91,6 +91,6 @@ class ChatOrdersParserTest {
 		assertEquals(IntentType.FOLLOW, intent("let's go home").type());
 		assertEquals(IntentType.FOLLOW, intent("ok we should head back home").type());
 		assertEquals(IntentType.DISMISS, intent("you can go home now").type());
-		assertEquals(IntentType.DISMISS, intent("go home").type());
+		assertEquals(IntentType.HOME, intent("go home").type());
 	}
 }
