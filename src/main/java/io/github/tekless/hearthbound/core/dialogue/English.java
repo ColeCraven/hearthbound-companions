@@ -18,4 +18,15 @@ public final class English {
 		}
 		return ("aeiou".indexOf(lower.charAt(0)) >= 0 ? "an " : "a ") + lower;
 	}
+
+	/** "Hazel" / "Hazel and Luna" / "Hazel, Luna and Daisy". */
+	public static String list(java.util.List<String> items) {
+		if (items.isEmpty()) {
+			return "";
+		}
+		if (items.size() == 1) {
+			return items.get(0);
+		}
+		return String.join(", ", items.subList(0, items.size() - 1)) + " and " + items.get(items.size() - 1);
+	}
 }

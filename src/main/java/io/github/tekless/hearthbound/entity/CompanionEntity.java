@@ -142,6 +142,25 @@ public class CompanionEntity extends PathfinderMob {
 	/** Counts down while crouching back at someone (two quick bobs). */
 	private int crouchTicks;
 	private long lastCrouchHello = -100000;
+	/** Hunger, rest and company, for companions who live somewhere (see DailyRoutine). */
+	private final io.github.tekless.hearthbound.core.life.Needs needs = new io.github.tekless.hearthbound.core.life.Needs();
+	private io.github.tekless.hearthbound.core.life.Schedule.@Nullable Traits traits;
+	/** Woken by someone: stays up until this game time. */
+	private long awakeUntil = -1;
+	/** A guardian walking their rounds at home: hostile mobs near home are fair game. */
+	private boolean onWatch;
+	/** Their own little flower bed (a multi-day project): one corner, flowers planted, the day of the last one. */
+	private @Nullable BlockPos gardenAt;
+	private int gardenPlanted;
+	private long gardenDay = -1;
+	/** Has had the few things of their own a home life starts with (food, seeds, torches). */
+	private boolean stocked;
+	/** When (which day) they last tried or mentioned something, so nobody keeps at a thing that can't work. */
+	private final Map<String, Long> lastTried = new HashMap<>();
+	/** Tests only: daily life on or off for this one companion, whatever the config says (null: the config decides). */
+	private @Nullable Boolean dailyLife;
+	/** Tests only: the time of day this companion sees (null: the world's clock). */
+	private @Nullable Long testClock;
 
 	/** A question this companion asked, so the player's next words can be read as the answer. */
 	public record AskedQuestion(QuestionKind kind, UUID player, long tick) {
@@ -196,8 +215,18 @@ public class CompanionEntity extends PathfinderMob {
 		goalSelector.addGoal(5, new OrderGoal());
 		goalSelector.addGoal(6, new OpenDoorGoal(this, true));
 		goalSelector.addGoal(7, new IdleStrollGoal());
-		goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+		goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F) {
+			@Override
+			public boolean canUse() {
+				return !isSleeping() && super.canUse();
+			}
+		});
+		goalSelector.addGoal(9, new RandomLookAroundGoal(this) {
+			@Override
+			public boolean canUse() {
+				return !isSleeping() && super.canUse();
+			}
+		});
 
 		targetSelector.addGoal(1, new HurtByTargetGoal(this, CompanionEntity.class, Player.class));
 		targetSelector.addGoal(2, new DefendOwnerGoal());
@@ -206,8 +235,12 @@ public class CompanionEntity extends PathfinderMob {
 	}
 
 	private boolean wantsToEngage(LivingEntity target, ServerLevel level) {
-		if (!(target instanceof Enemy) || target instanceof Creeper || isDowned() || !isRecruited()) {
+		if (!(target instanceof Enemy) || target instanceof Creeper || isDowned() || (!isRecruited() && !onWatch) || isSleeping()) {
 			return false;
+		}
+		if (!isRecruited()) {
+			// On their rounds at home: anything hostile that comes close to home.
+			return home != null && target.blockPosition().distSqr(home) < 24 * 24 && distanceTo(target) < 12;
 		}
 		if (getHealth() / getMaxHealth() < archetype.retreatHealth()) {
 			return false;
@@ -257,17 +290,24 @@ public class CompanionEntity extends PathfinderMob {
 		directedId = null;
 	}
 
-	/** Who an unrecruited companion is taking orders from at the moment (obey mode), or null. */
+	/**
+	 * Who this companion is taking orders from right now: someone using obey mode on them (a companion who
+	 * travels with nobody, or an admin overriding another player's companion) while that person is online,
+	 * otherwise the player they travel with, or null.
+	 */
 	public @Nullable ServerPlayer commanderPlayer() {
-		ServerPlayer owner = ownerPlayer();
-		if (owner != null || commanderId == null || !(level() instanceof ServerLevel serverLevel)) {
-			return owner;
+		if (commanderId != null && level() instanceof ServerLevel serverLevel) {
+			ServerPlayer commander = serverLevel.getServer().getPlayerList().getPlayer(commanderId);
+			if (commander != null) {
+				return commander;
+			}
 		}
-		return serverLevel.getServer().getPlayerList().getPlayer(commanderId);
+		return ownerPlayer();
 	}
 
+	/** The player giving the current order. Their own owner clears any obey-mode commander. */
 	public void setCommander(ServerPlayer player) {
-		commanderId = isRecruited() ? null : player.getUUID();
+		commanderId = isOwnedBy(player) ? null : player.getUUID();
 	}
 
 	/** Moves items to another companion's pack (what is left over stays here). */
@@ -291,6 +331,7 @@ public class CompanionEntity extends PathfinderMob {
 	/** Makes this spot their home (where an unrecruited companion lives; where they go when sent home). */
 	public void setHomePos(BlockPos pos) {
 		home = pos.immutable();
+		forgetArea();
 		clearHome();
 		if (!isRecruited() && order != null && order.kind() == CompanionOrder.Kind.HOME) {
 			order = new HomeOrder(home);
@@ -346,6 +387,9 @@ public class CompanionEntity extends PathfinderMob {
 				heal(1.0F);
 			}
 		}
+		if (isSleeping() && (getTarget() != null || !(order instanceof HomeOrder))) {
+			stopSleeping();
+		}
 		if (returnToHubAt >= 0 && level.getGameTime() >= returnToHubAt) {
 			returnToHubAt = -1;
 			if (!isRecruited()) {
@@ -392,6 +436,9 @@ public class CompanionEntity extends PathfinderMob {
 
 	/** Replaces the current order. Standing modes (follow/wait) also become the base mode. */
 	public void setOrder(CompanionOrder next) {
+		if (isSleeping() && order != next) {
+			stopSleeping();
+		}
 		if (order != null && order != next) {
 			order.cancel(this);
 			if (order.kind() == CompanionOrder.Kind.GATHER || order.kind() == CompanionOrder.Kind.MINE) {
@@ -596,6 +643,7 @@ public class CompanionEntity extends PathfinderMob {
 		}
 		returnToHubAt = -1;
 		clearHome();
+		forgetArea();
 		baseMode = CompanionOrder.Kind.FOLLOW;
 		setOrder(new FollowOrder());
 		memory.addEvent("I joined {player} on the road");
@@ -613,6 +661,7 @@ public class CompanionEntity extends PathfinderMob {
 			// Walk off for a few seconds, then make their own way back to the hub.
 			returnToHubAt = level().getGameTime() + 100;
 		}
+		forgetArea();
 		setOrder(new HomeOrder(home != null ? home : blockPosition()));
 		memory.addEvent("I parted ways with {player}");
 		updateRoster();
@@ -632,6 +681,7 @@ public class CompanionEntity extends PathfinderMob {
 	public void makeHubResident(BlockPos hub) {
 		hubResident = true;
 		home = hub.immutable();
+		forgetArea();
 		if (!isRecruited()) {
 			setOrder(new HomeOrder(home));
 		}
@@ -645,6 +695,138 @@ public class CompanionEntity extends PathfinderMob {
 	/** How far an unrecruited companion strolls from home. */
 	public int homeRadius() {
 		return hubResident ? Math.max(3, Hearthbound.config().server.hub.wanderRadius) : 3;
+	}
+
+	// ------------------------------------------------------------------ daily life
+
+	/** The home area is worked out again next time (their home moved, or they joined or left someone). */
+	private void forgetArea() {
+		if (level() instanceof ServerLevel serverLevel) {
+			io.github.tekless.hearthbound.life.HomeAreas.get(serverLevel.getServer()).forgetMember(this);
+		}
+	}
+
+	public io.github.tekless.hearthbound.core.life.Needs needs() {
+		return needs;
+	}
+
+	/** When this companion gets up, eats and turns in: their personality, nudged a little by who they are. */
+	public io.github.tekless.hearthbound.core.life.Schedule.Traits lifeTraits() {
+		if (traits == null || !archetype.id().equals(tracedArchetype)) {
+			tracedArchetype = archetype.id();
+			traits = io.github.tekless.hearthbound.core.life.Schedule.Traits.of(archetype.id(), getUUID().getMostSignificantBits() ^ getUUID().getLeastSignificantBits());
+		}
+		return traits;
+	}
+
+	private String tracedArchetype = "";
+
+	/** Gets up (someone needs them) and stays up for half a minute. */
+	public void wakeUp() {
+		if (isSleeping()) {
+			stopSleeping();
+		}
+		awakeUntil = level().getGameTime() + 600;
+	}
+
+	/** Whether this companion follows a daily schedule when at home (the config's {@code dailyLife}, unless a test says otherwise). */
+	public boolean dailyLifeEnabled() {
+		return dailyLife != null ? dailyLife : Hearthbound.config().dailyLife;
+	}
+
+	/** Tests only: switch daily life on or off for this companion (null to follow the config). */
+	public void setDailyLife(@Nullable Boolean enabled) {
+		dailyLife = enabled;
+	}
+
+	/** The world's clock (time of day plus whole days), as this companion's day sees it. */
+	public long clockTime() {
+		return testClock != null ? testClock : level().getOverworldClockTime();
+	}
+
+	/** Tests only: fix the time of day this companion lives by (null for the real clock). */
+	public void setTestClock(@Nullable Long clock) {
+		testClock = clock;
+	}
+
+	/**
+	 * True (and noted) if {@code what} hasn't been tried or said in the last {@code days} days: how initiatives and
+	 * "we could do with a bed" are kept from repeating.
+	 */
+	public boolean tryEvery(String what, long day, int days) {
+		Long last = lastTried.get(what);
+		if (last != null && day >= last && day - last < days) {
+			return false;
+		}
+		lastTried.put(what, day);
+		return true;
+	}
+
+	public long awakeUntil() {
+		return awakeUntil;
+	}
+
+	public void setOnWatch(boolean watching) {
+		onWatch = watching;
+	}
+
+	/** Someone spoke to them in the last few seconds and is still close by. */
+	public boolean isBeingTalkedTo() {
+		if (lastSpeaker == null || !(level() instanceof ServerLevel serverLevel) || serverLevel.getGameTime() - lastSpokeAt > 160) {
+			return false;
+		}
+		ServerPlayer speaker = serverLevel.getServer().getPlayerList().getPlayer(lastSpeaker);
+		return speaker != null && speaker.level() == level() && distanceTo(speaker) < 10;
+	}
+
+	public @Nullable BlockPos gardenAt() {
+		return gardenAt;
+	}
+
+	public void setGardenAt(BlockPos corner) {
+		gardenAt = corner.immutable();
+	}
+
+	public int gardenPlanted() {
+		return gardenPlanted;
+	}
+
+	public long gardenDay() {
+		return gardenDay;
+	}
+
+	public void plantedInGarden(long day) {
+		gardenPlanted++;
+		gardenDay = day;
+	}
+
+	/**
+	 * The few things of their own someone who lives somewhere starts with, once: a little food for meals, and
+	 * something their work uses, which is also what they can offer in return for a favour.
+	 */
+	public void stockPack() {
+		if (stocked) {
+			return;
+		}
+		stocked = true;
+		switch (role()) {
+			case FARMER -> {
+				inventory.addItem(new ItemStack(net.minecraft.world.item.Items.BREAD, 6));
+				inventory.addItem(new ItemStack(net.minecraft.world.item.Items.WHEAT_SEEDS, 12));
+			}
+			case COLLECTOR -> {
+				inventory.addItem(new ItemStack(net.minecraft.world.item.Items.APPLE, 6));
+				inventory.addItem(new ItemStack(net.minecraft.world.item.Items.EMERALD, 1));
+			}
+			case BUILDER -> {
+				inventory.addItem(new ItemStack(net.minecraft.world.item.Items.BREAD, 3));
+				inventory.addItem(new ItemStack(net.minecraft.world.item.Items.TORCH, 12));
+			}
+			case GUARDIAN -> {
+				inventory.addItem(new ItemStack(net.minecraft.world.item.Items.COOKED_BEEF, 4));
+				inventory.addItem(new ItemStack(net.minecraft.world.item.Items.IRON_INGOT, 2));
+			}
+		}
 	}
 
 	private void updateRoster() {
@@ -1006,6 +1188,9 @@ public class CompanionEntity extends PathfinderMob {
 			Gifts.receive(this, serverPlayer, held);
 			return InteractionResult.SUCCESS;
 		}
+		if (io.github.tekless.hearthbound.life.Favours.receive(this, serverPlayer, held)) {
+			return InteractionResult.SUCCESS;
+		}
 		return InteractionResult.PASS;
 	}
 
@@ -1189,6 +1374,12 @@ public class CompanionEntity extends PathfinderMob {
 			task.putInt("Baseline", gather.baseline());
 		}
 		output.putInt("Downed", isDowned() ? downedTicks : 0);
+		output.putIntArray("Needs", new int[] {needs.hunger(), needs.tiredness(), needs.loneliness()});
+		output.putBoolean("Stocked", stocked);
+		if (gardenAt != null) {
+			output.putIntArray("Garden", new int[] {gardenAt.getX(), gardenAt.getY(), gardenAt.getZ(), gardenPlanted});
+			output.putLong("GardenDay", gardenDay);
+		}
 		inventory.storeAsItemList(output.list("Inventory", ItemStack.CODEC));
 		ValueOutput.TypedOutputList<String> chat = output.list("Conversation", com.mojang.serialization.Codec.STRING);
 		for (CompanionMemory.Line line : memory.lines()) {
@@ -1257,6 +1448,16 @@ public class CompanionEntity extends PathfinderMob {
 		});
 		memory.setAffinity(input.getIntOr("Affinity", 0));
 		input.getString("ConversationWith").ifPresent(memory::setPartner);
+		input.getIntArray("Needs").filter(a -> a.length == 3).ifPresent(a -> {
+			io.github.tekless.hearthbound.core.life.Needs saved = new io.github.tekless.hearthbound.core.life.Needs(a[0], a[1], a[2]);
+			needs.copyFrom(saved);
+		});
+		stocked = input.getBooleanOr("Stocked", false);
+		input.getIntArray("Garden").filter(a -> a.length == 4).ifPresent(a -> {
+			gardenAt = new BlockPos(a[0], a[1], a[2]);
+			gardenPlanted = a[3];
+		});
+		gardenDay = input.getLongOr("GardenDay", -1L);
 		int downed = input.getIntOr("Downed", 0);
 		if (downed > 0) {
 			entityData.set(DATA_DOWNED, true);
@@ -1375,8 +1576,9 @@ public class CompanionEntity extends PathfinderMob {
 
 		@Override
 		public boolean canUse() {
-			return !isRecruited() && !isDowned() && super.canUse()
-					&& (home == null || home.distSqr(blockPosition()) < 100);
+			return !isRecruited() && !isDowned() && !isSleeping() && super.canUse()
+					&& (home == null || home.distSqr(blockPosition()) < 100)
+					&& !(order instanceof HomeOrder homeOrder && homeOrder.activity() != null); // daily life decides where they go
 		}
 	}
 

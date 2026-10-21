@@ -18,7 +18,11 @@ import net.minecraft.server.level.ServerPlayer;
  */
 public final class Exchanges {
 	public enum Topic {
-		WEATHER, ROAD, FOOD, TEASING;
+		WEATHER, ROAD, FOOD, TEASING,
+		/** Daily life at home: a meal together, a story by the fire, the full-moon festival. */
+		MEAL, STORY, FESTIVAL,
+		/** Two who get on well, two who don't, and the players they know. */
+		FRIENDS, RIVALS, PEOPLE;
 
 		String key(String step) {
 			return "exchange." + name().toLowerCase(java.util.Locale.ROOT) + "." + step;
@@ -119,13 +123,47 @@ public final class Exchanges {
 					continue;
 				}
 				LAST_FOR_PAIR.put(pair, now);
-				start(witness, a, b, pickTopic(a, a.getRandom().nextInt(100)));
+				start(witness, a, b, pickNeighbourTopic(server, a, b, a.getRandom().nextInt(100)));
 			}
 		}
 	}
 
 	private static boolean free(CompanionEntity c) {
 		return c.isAlive() && !c.isDowned() && c.getTarget() == null && c.order().kind().isMode();
+	}
+
+	/** Neighbours talk about each other (friends warmly, rivals less so), the players they know, or the usual. */
+	static Topic pickNeighbourTopic(MinecraftServer server, CompanionEntity a, CompanionEntity b, int roll) {
+		int bond = io.github.tekless.hearthbound.life.HomeAreas.get(server).bond(a.getUUID(), b.getUUID());
+		if (bond >= io.github.tekless.hearthbound.core.life.Bonds.FRIENDS && roll < 35) {
+			return Topic.FRIENDS;
+		}
+		if (bond <= io.github.tekless.hearthbound.core.life.Bonds.RIVALS && roll < 35) {
+			return Topic.RIVALS;
+		}
+		if (roll >= 80 && knownPlayer(server, a) != null) {
+			return Topic.PEOPLE;
+		}
+		return pickTopic(a, roll);
+	}
+
+	/** A player this companion knows by name (they told them what to call them, or they're online), or null. */
+	static String knownPlayer(MinecraftServer server, CompanionEntity companion) {
+		for (Map.Entry<String, io.github.tekless.hearthbound.core.memory.PlayerFacts> known : companion.memory().allFacts().entrySet()) {
+			java.util.Optional<String> nick = known.getValue().nickname();
+			if (nick.isPresent()) {
+				return nick.get();
+			}
+			try {
+				ServerPlayer online = server.getPlayerList().getPlayer(UUID.fromString(known.getKey()));
+				if (online != null) {
+					return online.getName().getString();
+				}
+			} catch (IllegalArgumentException e) {
+				// not a player id
+			}
+		}
+		return null;
 	}
 
 	/** Weather talk when it is raining or dark, otherwise the road, food, or a little teasing. */
@@ -146,8 +184,14 @@ public final class Exchanges {
 		String thing = switch (topic) {
 			case WEATHER -> a.level().isRaining() ? "the rain" : "the dark";
 			case ROAD -> Conversations.biomeName(a);
-			case FOOD -> "a proper meal";
-			case TEASING -> b.companionName().split(" ")[0];
+			case FOOD, MEAL -> "a proper meal";
+			case TEASING, FRIENDS, RIVALS -> b.companionName().split(" ")[0];
+			case STORY -> "the old days";
+			case FESTIVAL -> "the full moon";
+			case PEOPLE -> {
+				String known = a.level() instanceof net.minecraft.server.level.ServerLevel level ? knownPlayer(level.getServer(), a) : null;
+				yield known != null ? known : "our visitors";
+			}
 		};
 		Map<String, String> toB = Map.of("other", a.companionName().split(" ")[0], "thing", thing);
 		Map<String, String> toA = Map.of("other", b.companionName().split(" ")[0], "thing", thing);

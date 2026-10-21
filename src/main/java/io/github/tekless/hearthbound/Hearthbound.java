@@ -74,7 +74,10 @@ public final class Hearthbound implements ModInitializer {
 			SkinProfiles.load(configDir);
 			CompanionRoster.get(server);
 		});
-		ServerLifecycleEvents.SERVER_STOPPING.register(server -> CompanionRoster.close());
+		ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+			CompanionRoster.close();
+			io.github.tekless.hearthbound.life.HomeAreas.close();
+		});
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
 			ai = null;
 			Conversations.reset();
@@ -83,6 +86,8 @@ public final class Hearthbound implements ModInitializer {
 			io.github.tekless.hearthbound.world.Exchanges.reset();
 			Moments.reset();
 			Gestures.reset();
+			io.github.tekless.hearthbound.life.LifeTicker.reset();
+			io.github.tekless.hearthbound.life.Favours.reset();
 		});
 
 		// "@Hazel follow me" in normal chat. Runs on the server thread after the message is shown.
@@ -125,13 +130,14 @@ public final class Hearthbound implements ModInitializer {
 			return;
 		}
 		HubResidents.tick(server);
+		io.github.tekless.hearthbound.life.LifeTicker.tick(server);
 		if (server.getTickCount() % 200 == 0) {
 			CompanionRoster.get(server).save();
 		}
 		for (ServerPlayer player : server.getPlayerList().getPlayers()) {
 			for (CompanionEntity companion : Conversations.party(player)) {
 				if (companion.baseMode() == CompanionOrder.Kind.FOLLOW && companion.order().kind() == CompanionOrder.Kind.FOLLOW
-						&& companion.distanceTo(player) > 48) {
+						&& companion.commanderPlayer() == player && companion.distanceTo(player) > 48) {
 					// Long teleports (/tp, ender pearls): catch up before our chunk unloads.
 					companion.teleportNear(player);
 				}
@@ -142,10 +148,11 @@ public final class Hearthbound implements ModInitializer {
 	}
 
 	private static void bringFollowers(ServerPlayer player, ServerLevel origin) {
-		for (CompanionEntity companion : CompanionTracker.ownedBy(player)) {
+		for (CompanionEntity companion : CompanionTracker.all()) {
 			// Only loaded companions are here, i.e. the ones that were near the player when they left.
+			// That includes someone following this player in obey mode.
 			// Knocked-down followers come too: otherwise they'd be stranded in an unloaded chunk.
-			if (companion.level() == origin && companion.baseMode() == CompanionOrder.Kind.FOLLOW) {
+			if (companion.level() == origin && companion.baseMode() == CompanionOrder.Kind.FOLLOW && companion.commanderPlayer() == player) {
 				boolean moved = companion.teleportNear(player);
 				LOGGER.info("{} followed {} from {}: {}", companion.companionName(), player.getName().getString(),
 						origin.dimension().identifier(), moved ? "ok" : "no safe spot");

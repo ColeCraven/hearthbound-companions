@@ -213,6 +213,26 @@ public final class Projects {
 		return new Launch(involved, String.join(", ", parts), problems);
 	}
 
+	/**
+	 * A small shelter a builder puts up for themselves near home when nobody there has a roof (autonomy only):
+	 * a clear site nearby, wood chopped and crafted into planks if they're short, and an honest stop if there's no
+	 * wood to be had. Null when there is nowhere suitable to build.
+	 */
+	public static ProjectOrder ownShelter(ServerLevel level, BlockPos home) {
+		List<Site> sites = findSites(level, home, 1);
+		if (sites.isEmpty()) {
+			return null;
+		}
+		Site site = sites.get(0);
+		Blueprint blueprint = Blueprint.plan(Blueprint.Kind.SHELTER, site.feet(), site.facing(), level);
+		reserve(level, site);
+		List<ProjectOrder.Step> steps = new ArrayList<>();
+		steps.add(new ProjectSteps.Materials(blueprint, false, 2, 1));
+		steps.add(new ProjectSteps.Craft(Blueprint.Kind.SHELTER, true));
+		steps.add(new ProjectSteps.Build(blueprint, site.feet(), site.facing()));
+		return new ProjectOrder("a shelter of our own", steps, () -> free(level, site));
+	}
+
 	private static void start(ServerPlayer player, CompanionEntity companion, CompanionOrder order) {
 		companion.setCommander(player);
 		companion.setOrder(order);

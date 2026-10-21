@@ -21,6 +21,8 @@ public final class HomeOrder implements CompanionOrder {
 	/** A job of their own choosing around home (autonomy), for companions not travelling with anyone. */
 	private io.github.tekless.hearthbound.entity.Pastimes.Pastime job;
 	private int jobCooldown = 400;
+	/** Their day, when daily life is on: sleep, work, meals, evenings together. */
+	private io.github.tekless.hearthbound.life.DailyRoutine routine;
 
 	public HomeOrder(BlockPos home) {
 		this.home = home.immutable();
@@ -35,8 +37,29 @@ public final class HomeOrder implements CompanionOrder {
 		return Kind.HOME;
 	}
 
+	/** What their day has them doing, or null when daily life isn't running for them. */
+	public io.github.tekless.hearthbound.core.life.Activity activity() {
+		return routine != null ? routine.activity() : null;
+	}
+
 	@Override
 	public void tick(CompanionEntity companion) {
+		if (io.github.tekless.hearthbound.life.DailyRoutine.enabledFor(companion)) {
+			if (job != null) {
+				job.stop(companion);
+				job = null;
+			}
+			if (routine == null) {
+				routine = new io.github.tekless.hearthbound.life.DailyRoutine(companion);
+				companion.stockPack();
+			}
+			routine.tick(companion, home);
+			return;
+		}
+		if (routine != null) {
+			routine.stop(companion);
+			routine = null;
+		}
 		if (job != null) {
 			if (!job.tick(companion, null)) {
 				job.stop(companion);
@@ -117,6 +140,9 @@ public final class HomeOrder implements CompanionOrder {
 			job.stop(companion);
 			job = null;
 		}
+		if (routine != null) {
+			routine.stop(companion);
+		}
 		companion.getNavigation().stop();
 	}
 
@@ -127,6 +153,6 @@ public final class HomeOrder implements CompanionOrder {
 
 	@Override
 	public String describe() {
-		return "heading home";
+		return routine != null ? routine.describe() : "heading home";
 	}
 }

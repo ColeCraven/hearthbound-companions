@@ -334,6 +334,16 @@ public final class Routines {
 		return new ItemStack(state.getBlock().asItem()).getHoverName().getString().toLowerCase(Locale.ROOT);
 	}
 
+	/** Harvesting one ripe crop and replanting it (a farmer's chore at a farm they look after). */
+	public static Pastimes.Pastime harvestAt(BlockPos pos) {
+		return new Harvest(pos);
+	}
+
+	/** Whether this companion may do another block of work this minute (the same cap as their own jobs). */
+	public static boolean hasAllowance(CompanionEntity companion) {
+		return companion.level() instanceof ServerLevel level && withinCap(companion, level);
+	}
+
 	/** Used by tests: forget the per-minute allowance. */
 	public static void resetAllowance() {
 		WORK.clear();

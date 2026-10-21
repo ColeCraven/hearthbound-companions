@@ -29,7 +29,8 @@ public final class FollowOrder implements CompanionOrder {
 
 	@Override
 	public void tick(CompanionEntity companion) {
-		ServerPlayer owner = companion.ownerPlayer();
+		// Usually the owner; someone using obey mode on them for now, if that's who said "follow me".
+		ServerPlayer owner = companion.commanderPlayer();
 		if (owner == null || owner.isSpectator()) {
 			companion.getNavigation().stop();
 			moving = false;

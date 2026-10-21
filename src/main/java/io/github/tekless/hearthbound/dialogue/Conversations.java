@@ -290,9 +290,12 @@ public final class Conversations {
 		return found.size() > MAX_GROUP ? new ArrayList<>(found.subList(0, MAX_GROUP)) : found;
 	}
 
-	/** Their own companions always; anyone else only when the player has obey mode on. */
-	private static boolean listens(ServerPlayer player, CompanionEntity companion) {
-		return companion.isOwnedBy(player) || (!companion.isRecruited() && Obey.active(player));
+	/**
+	 * Their own companions always; with obey mode (the host or an operator) every companion in the world,
+	 * including ones who travel with other players.
+	 */
+	public static boolean listens(ServerPlayer player, CompanionEntity companion) {
+		return companion.isOwnedBy(player) || Obey.active(player);
 	}
 
 	/** Nearby companions of one role who were not addressed, for "work with the collectors". */
@@ -641,6 +644,9 @@ public final class Conversations {
 			beginChat(player, companion);
 		}
 		CompanionEntity.AskedQuestion asked = companion.takeQuestion(player);
+		if (companion.isSleeping()) {
+			companion.wakeUp(); // talking to someone in bed gets them up
+		}
 		companion.noteSpeaker(player);
 		companion.memory().talkingWith(player.getUUID().toString());
 		companion.memory().addPlayerLine(text);
@@ -1040,22 +1046,24 @@ public final class Conversations {
 	/** Validates and performs an intent without speaking (so AI replies can be checked first). */
 	public static Outcome apply(ServerPlayer player, CompanionEntity companion, Intent intent) {
 		IntentType type = intent.type();
-		if (companion.isRecruited() && !companion.isOwnedBy(player)) {
+		boolean override = !companion.isOwnedBy(player) && Obey.active(player);
+		if (companion.isRecruited() && !companion.isOwnedBy(player) && (!override || type == IntentType.RECRUIT)) {
+			// Someone else's companion: only obey mode reaches them, and even then they don't change sides.
 			String owner = companion.ownerName() != null ? companion.ownerName() : "someone else";
 			return Outcome.no("recruit.taken", Map.of("owner", owner));
 		}
-		boolean obeying = !companion.isRecruited() && Obey.active(player);
-		if (obeying) {
+		boolean obeying = !companion.isRecruited() && override;
+		if (companion.isOwnedBy(player) || override) {
 			companion.setCommander(player);
-			if (type == IntentType.FOLLOW || type == IntentType.RECRUIT) {
-				return recruit(player, companion);
-			}
+		}
+		if (obeying && (type == IntentType.FOLLOW || type == IntentType.RECRUIT)) {
+			return recruit(player, companion);
 		}
 		if (!companion.isRecruited() && !obeying) {
 			return switch (type) {
 				case RECRUIT, FOLLOW, COME -> recruit(player, companion);
 				case DISMISS -> Outcome.no("dismiss.not_recruited", Map.of());
-				case STATUS -> Outcome.yes("status.idle", Map.of());
+				case STATUS -> status(companion);
 				default -> Outcome.no("not_recruited", Map.of());
 			};
 		}
@@ -1137,9 +1145,9 @@ public final class Conversations {
 	}
 
 	private static Outcome recruit(ServerPlayer player, CompanionEntity companion) {
-		int limit = Hearthbound.config().partyLimit();
+		int limit = Hearthbound.config().partyLimitFor(player.getUUID());
 		int size = partySize(player);
-		if (size >= limit) {
+		if (limit > 0 && size >= limit) {
 			return Outcome.no("recruit.party_full", Map.of("count", Integer.toString(size)));
 		}
 		companion.recruit(player);
@@ -1327,6 +1335,15 @@ public final class Conversations {
 			case MINE -> Outcome.yes("status.mine", Map.of("count", Integer.toString(((MineOrder) order).stepsDone())));
 			case BUILD -> Outcome.yes("status.build", Map.of("thing", ((BuildOrder) order).blueprint().kind().label()));
 			case PROJECT -> Outcome.yes("status.build", Map.of("thing", order instanceof ProjectOrder project ? project.label() : "a farm"));
+			case HOME -> {
+				if (order instanceof io.github.tekless.hearthbound.entity.order.HomeOrder home && home.activity() != null) {
+					// Their day at home: what they're up to, and a favour they're after, if any.
+					String favour = io.github.tekless.hearthbound.life.Favours.describe(companion);
+					yield Outcome.yes(favour != null ? "status.favour" : "status.life", Map.of("thing", home.describe(), "favour", favour == null ? "" : favour,
+							"mood", companion.needs().mood()));
+				}
+				yield Outcome.yes("status.idle", Map.of());
+			}
 			default -> Outcome.yes("status.idle", Map.of());
 		};
 	}

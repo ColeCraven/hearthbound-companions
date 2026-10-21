@@ -118,6 +118,16 @@ public final class Pastimes {
 		return Optional.of(options.get(companion.getRandom().nextInt(options.size())));
 	}
 
+	/** Picking one wild flower (for a companion's garden, say). */
+	public static Pastime pickFlower(BlockPos pos) {
+		return new PickFlower(pos);
+	}
+
+	/** Walking over to something and looking at it for a while. */
+	public static Pastime study(BlockPos pos, String thing) {
+		return new Study(pos, null, thing);
+	}
+
 	// ------------------------------------------------------------------ activities
 
 	/** Walk over to something interesting and look at it for a while. */
@@ -379,7 +389,7 @@ public final class Pastimes {
 	}
 
 	/** True when nothing crafted is nearby - so we only pick flowers in the wild, not from a garden. */
-	static boolean isWild(ServerLevel level, BlockPos pos) {
+	public static boolean isWild(ServerLevel level, BlockPos pos) {
 		if (WorldRules.isProtected(level, pos)) {
 			return false;
 		}
