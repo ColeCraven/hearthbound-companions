@@ -77,4 +77,20 @@ class ChatOrdersParserTest {
 		assertEquals("coal", intent("dig for coal").item());
 		assertEquals("skeleton", intent("go fight that skeleton").target());
 	}
+
+	@ParameterizedTest
+	@CsvSource({"what's your favourite food,LIKES", "what are you good at,ROLE", "what's your role,ROLE", "what is your job,ROLE", "it's getting dark,SKY",
+			"it's raining,SKY", "what time is it,SKY", "I'm back,HELLO", "I just died,SAD", "can you fight?,QUESTION"})
+	void conversationalPhrasesLandOnTheRightTopic(String message, TalkTopic topic) {
+		ParseResult result = parser.parse(message, List.of("Hazel"));
+		assertEquals(topic, assertInstanceOf(ParseResult.Talk.class, result, message).topic(), message);
+	}
+
+	@Test
+	void letsGoHomeMeansComeAlongNotYoureDismissed() {
+		assertEquals(IntentType.FOLLOW, intent("let's go home").type());
+		assertEquals(IntentType.FOLLOW, intent("ok we should head back home").type());
+		assertEquals(IntentType.DISMISS, intent("you can go home now").type());
+		assertEquals(IntentType.DISMISS, intent("go home").type());
+	}
 }

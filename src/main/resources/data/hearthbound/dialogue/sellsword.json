@@ -885,6 +885,26 @@
     "fail.camp_campfire": [
       "A camp needs a fire. I haven't got a campfire on me.",
       "No campfire in my pack. Get me one."
+    ],
+    "talk.role": [
+      "{role}. {skills}. That's what I'm best at. The rest I'll do anyway.",
+      "I'm a {role}. Good at {skills}. Ask for anything else and I'll manage."
+    ],
+    "talk.sky": [
+      "Sky's doing what it does.",
+      "Weather's weather."
+    ],
+    "talk.sky.rain": [
+      "Rain. Gets in the joints.",
+      "Wet. Keep your powder dry. Figure of speech."
+    ],
+    "talk.sky.night": [
+      "Dark. Keep your eyes sharp.",
+      "Night. Good time to be awake and armed."
+    ],
+    "talk.sky.day": [
+      "Fine enough day.",
+      "Clear. Good for marching."
     ]
   }
 }

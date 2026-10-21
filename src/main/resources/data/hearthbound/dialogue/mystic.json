@@ -844,6 +844,26 @@
     "fail.camp_campfire": [
       "A camp needs a flame. I carry no campfire.",
       "No campfire. No camp. Bring me fire."
+    ],
+    "talk.role": [
+      "I am a {role}. {skills}. The rest I can do, with less love.",
+      "My gift is {skills}. Other work, I do quietly."
+    ],
+    "talk.sky": [
+      "The sky is always saying something.",
+      "Mm. The sky. Always watching."
+    ],
+    "talk.sky.rain": [
+      "Rain. The world washing its face.",
+      "Listen. The rain keeps its own time."
+    ],
+    "talk.sky.night": [
+      "Night. At last.",
+      "The dark is honest. I like it."
+    ],
+    "talk.sky.day": [
+      "Daylight. Loud, but fine.",
+      "Bright. I'll squint through it."
     ]
   }
 }

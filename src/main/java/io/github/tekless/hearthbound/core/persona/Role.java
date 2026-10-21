@@ -44,6 +44,16 @@ public enum Role {
 		this.weak = weak;
 	}
 
+	/** What they are best at, for lines like "I'm best at {skills}". */
+	public String skills() {
+		return switch (this) {
+			case GUARDIAN -> "fighting, defending and hunting";
+			case BUILDER -> "building, digging and tunnels";
+			case COLLECTOR -> "gathering, mining and scouting";
+			case FARMER -> "crops, animals and food";
+		};
+	}
+
 	public String id() {
 		return name().toLowerCase(Locale.ROOT);
 	}

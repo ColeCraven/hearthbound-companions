@@ -848,6 +848,26 @@
     "fail.camp_campfire": [
       "Aw, I don't have a campfire! Can you give me one?",
       "I can't do a camp without a campfire! Sorry!"
+    ],
+    "talk.role": [
+      "I'm a {role}! I'm best at {skills}! But I'll try anything!",
+      "I'm good with {skills}! Other stuff, I'm still learning!"
+    ],
+    "talk.sky": [
+      "Look at that sky! Pretty!",
+      "The sky's so big out here!"
+    ],
+    "talk.sky.rain": [
+      "Rain! The crops will love it! If we had crops.",
+      "Ooh, rain! I love the smell of it!"
+    ],
+    "talk.sky.night": [
+      "It's getting dark! Can we stay close?",
+      "Night time! I'm a bit nervous! But fine!"
+    ],
+    "talk.sky.day": [
+      "Lovely day! Great for planting! Or walking!",
+      "Sun's out! My favourite!"
     ]
   }
 }

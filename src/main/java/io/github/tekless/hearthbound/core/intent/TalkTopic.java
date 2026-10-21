@@ -42,6 +42,10 @@ public enum TalkTopic {
 	AND_YOU,
 	MORE,
 	MEAN,
+	/** "What are you good at?": their role, in their own voice. */
+	ROLE,
+	/** Weather and time of day: "it's getting dark", "it's raining", "what time is it?" */
+	SKY,
 	/** Any other question; a reply in character that doesn't pretend to know the answer. */
 	QUESTION,
 	GENERIC;

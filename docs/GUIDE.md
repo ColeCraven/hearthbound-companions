@@ -145,6 +145,7 @@ taken from chests or storage, and nothing if their pack is nearly full.
 
 - **Follow-ups work.** "Why?", "really?", "and you?", "tell me more" and "what do you mean?" all
   lean on what you were just talking about.
+- **They answer about themselves.** "What are you good at?" gets their role, and remarks about the weather or the time of day get a fitting reply. After a refusal, "why?" repeats the real reason.
 - **They pick up what you mention.** Say you saw a creeper, or that you found some iron, and the
   reply is about that.
 - **They remember you.** `call me Captain`, `I love the ocean`, `I hate spiders`, then

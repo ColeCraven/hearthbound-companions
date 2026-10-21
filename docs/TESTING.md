@@ -18,11 +18,11 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 
 ## Automated tests
 
-### Unit tests (JUnit 5): 264 passing
+### Unit tests (JUnit 5): 275 passing
 
 | Suite | Covers |
 |---|---|
-| `ChatOrdersParserTest` (42) | "this" and "that" (collect that, fight that, get that), build with no subject, hunt, "go and kill", "I need a shelter", "set up camp", and the follow-ups "why?", "really?", "and you?", "tell me more", "what do you mean?" |
+| `ChatOrdersParserTest` (53) | "this" and "that" (collect that, fight that, get that), build with no subject, hunt, "go and kill", "I need a shelter", "set up camp", the follow-ups "why?", "really?", "and you?", "tell me more", "what do you mean?", and conversational phrasing landing on the right topic ("what are you good at?", "it's getting dark", "let's go home" is not a dismissal) |
 | `CommandParserTest` (114) | Every order type, politeness and addressing ("Hazel, could you..."), quantities in digits/words/stacks/dozens, "chop trees" = logs, attack vs gather ("get that zombie" vs "get some logs"), give-all vs give-item, build and dig orders ("dig down 30", "bridge this gap"), "mine some iron" is still gathering, small-talk topics, telling a companion about yourself ("call me Captain", "I hate spiders"), and the things that aren't facts ("I love it here", "call me when you're done"), unsupported actions, non-items ("I need help") |
 | `AnswersTest` (42) | Reading replies to a companion's own questions: the thing in "has to be the ocean", a nickname in "just call me the boss", non-answers ("dunno", "you") left alone, mood ("not bad" is good, "not great" is bad), and forgiving `@name` matching (short forms and one-letter typos) |
 | `PlayerFactsTest` (6) | Likes match the world ignoring plurals and articles ("diamonds" for diamond ore), changing your mind, keeping the most recent few, the "you go by..., you like..." summary, facts kept per player, and memories stored as full clauses even from old saves |
@@ -35,7 +35,7 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 | `CompanionMemoryTest` (3) | Switching conversation partner forgets the previous player's lines but keeps shared events and affinity |
 | `HttpModelsTest` (7) | Ollama / OpenAI-compatible / Anthropic request shapes and response parsing against a local fake server; refusal, HTTP 401, timeout and unreachable server all fail cleanly |
 
-### Server GameTests: 48 passing (plus a smoke test)
+### Server GameTests: 49 passing (plus a smoke test)
 
 These run in a real Minecraft server world on every `./gradlew build`:
 
@@ -83,6 +83,7 @@ These run in a real Minecraft server world on every `./gradlew build`:
 | `buildsACampWithAFire` | No campfire: refused with the reason; with one, a campfire and seats appear |
 | `companionsChatToEachOther` | A short exchange between two companions: opening line, then the answer |
 | `oldCastNamesLoadAsTheNewCharacters` / `aCustomNameOnACastSkinIsLeftAlone` | Companions saved under the pre-0.4 names (with their old voices) load as the new characters with the right voice and role; a custom name on a cast skin is left alone |
+| `whyAfterARefusalGivesTheRealReason` | Refused to build for lack of blocks, then "why?" gets the same real reason again |
 | `crouchingTwiceGetsACrouchBack` | Two quick crouches while looking at a companion: they crouch back |
 | `anAdvancementGetsAReaction` | Completing "Stone Age" gets a line from the nearest companion (this also proves the mixin is applied) |
 | `aLevelMilestoneGetsAReaction` | Reaching level 10 gets a reaction |

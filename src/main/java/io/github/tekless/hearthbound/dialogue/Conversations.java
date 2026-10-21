@@ -1141,6 +1141,11 @@ public final class Conversations {
 		String event = events.isEmpty() ? "we set out" : events.get(companion.getRandom().nextInt(events.size())).replace("{player}", "you");
 		String key = topic.lineKey();
 		Map<String, String> vars = new HashMap<>(Map.of("biome", biome, "event", event, "player", companion.callName(player)));
+		vars.put("role", companion.role().label().toLowerCase(Locale.ROOT));
+		vars.put("skills", companion.role().skills());
+		if (topic == TalkTopic.SKY) {
+			key = companion.level().isRaining() ? "talk.sky.rain" : companion.level().isDarkOutside() ? "talk.sky.night" : "talk.sky.day";
+		}
 		if (topic == TalkTopic.ABOUT_ME) {
 			Optional<PlayerFacts> known = companion.memory().knownFacts(player.getUUID().toString());
 			if (known.isPresent()) {

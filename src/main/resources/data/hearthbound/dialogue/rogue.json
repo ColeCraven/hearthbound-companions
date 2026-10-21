@@ -838,6 +838,26 @@
     "fail.camp_campfire": [
       "No campfire, no camp, boss. Find me one.",
       "A camp without a fire? Bad idea. I need a campfire."
+    ],
+    "talk.role": [
+      "{role}, boss. {skills}. Everything else, I wing it.",
+      "I'm the {role} of this outfit. {skills}. Ask me something harder."
+    ],
+    "talk.sky": [
+      "Sky's behaving, for once.",
+      "Weather, boss. Can't pick it, can't rob it."
+    ],
+    "talk.sky.rain": [
+      "Rain covers footsteps. I'm not complaining.",
+      "Wet again. At least the guards stay indoors."
+    ],
+    "talk.sky.night": [
+      "Night. My favourite working hours.",
+      "Dark's good cover. Don't tell the others."
+    ],
+    "talk.sky.day": [
+      "Bright out. Hard to hide in.",
+      "Nice day for a stroll. Or a heist."
     ]
   }
 }

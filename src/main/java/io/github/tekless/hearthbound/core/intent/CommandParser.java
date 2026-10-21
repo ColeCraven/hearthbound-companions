@@ -53,7 +53,7 @@ public final class CommandParser {
 			"\\b(what are you (doing|up to)|whatre you doing|whatcha doing|^status$|^report$|status report|progress|"
 					+ "how is (the|your) \\w+ going|hows (the|your) \\w+ going|are you (done|finished)( yet)?|"
 					+ "how many (do you have|have you got|did you get|have you (got|gathered|collected))|"
-					+ "what is your (task|job|order)|whats your (task|job|order)|what are your orders)\\b");
+					+ "what is your (task|order)|whats your (task|order)|what are your orders)\\b");
 	private static final Pattern COME = Pattern.compile(
 			"^((come|get|run|hurry|walk) (over )?(here|back)( to me)?( now)?|come on (over )?here|come over( here| to me)?|come (to|towards) me|over here|here|to me|"
 					+ "come back|get back( here)?|return( to me)?|come closer|come here)$");
@@ -118,7 +118,7 @@ public final class CommandParser {
 			"your inventory", "everything you have", "everything youve got", "all your stuff", "all your items",
 			"all of your stuff", "all of your items", "your things", "the goods", "all you have");
 
-	private static final Pattern T_HELLO = Pattern.compile("^(hi|hello|hey|heya|hiya|greetings|good (morning|afternoon|evening|day)|howdy|yo|sup|whats up|hail|well met|hullo|hi there|hello there|hey there)( \\w+)?$");
+	private static final Pattern T_HELLO = Pattern.compile("^(hi|hello|hey|heya|hiya|greetings|good (morning|afternoon|evening|day)|howdy|yo|sup|whats up|hail|well met|hullo|hi there|hello there|hey there|im back|i am back|back again|im here)( \\w+)?$");
 	private static final Pattern T_HOW = Pattern.compile("\\b(how are (you|ya)|how r u|how do you feel|you (ok|okay|alright)\\b|are you (ok|okay|alright|hurt|well|good)|how (are )?you (doing|holding up)|hows it going|how is it going|hows life)");
 	private static final Pattern T_WHO = Pattern.compile("\\b(who are you|whats your name|what is your name|tell me (about|something about) (yourself|you)|introduce yourself|where are you from|whats your story|who r u|what do you do)\\b");
 	private static final Pattern T_JOKE = Pattern.compile("\\b(joke|make me laugh|something funny|cheer me up|funny story)\\b");
@@ -147,12 +147,18 @@ public final class CommandParser {
 	private static final Pattern T_AND_YOU = Pattern.compile("^(and you|what about you|how about you|and yourself|yourself|what about yourself|how about yourself|and what about you|you)$");
 	private static final Pattern T_MORE = Pattern.compile("^(tell me more|more|go on|continue|and then|keep going|what else|carry on|go ahead|elaborate|say more|like what|such as|for example|go on then|anything else|is that all|then what)$");
 	private static final Pattern T_MEAN = Pattern.compile("^(what do you mean|what does that mean|what was that|huh|what|come again|say what|pardon|sorry what|i dont understand|i dont get it|what are you talking about|wdym|eh|meaning|what is that supposed to mean|i dont follow|say again|say that again)$");
+	private static final Pattern T_ROLE = Pattern.compile("\\b(whats your (role|job|speciality|specialty|skill|strength|strong suit)|what is your (role|job|speciality|specialty|skill|strength)|"
+			+ "what are you (best|good) at|what do you do best|what are you best at|what is your thing|whats your thing)\\b");
+	private static final Pattern T_SKY = Pattern.compile("\\b((its|it is|looks like|looks|getting|gets|going to) (raining|rain|rainy|dark|night|late|snowing|stormy|sunny|cold|a (nice|lovely|beautiful|good) day|getting dark|getting late)"
+			+ "|what time is it|is it (night|morning|day|raining)|nightfall|sunset|sunrise|storm|thunder|(wow|look) (at )?the (sky|stars|moon|sun|rain))\\b");
+	/** "Let's go home" means come along, not "you're dismissed". */
+	private static final Pattern LETS_HOME = Pattern.compile("(^| )(lets|let us|we should|we could|time to|can we|shall we|we need to) (go|head|return|get) (back )?(home|back)");
 	private static final Pattern T_NO = Pattern.compile("^(no|nah|nope|not really|never|no way|i dont think so|not now|maybe not|naw)$");
 	private static final Pattern T_LAUGH = Pattern.compile("\\b(ha(ha)+|he(he)+|lol|lmao|rofl|xd|thats (so )?funny|hilarious|good one)\\b");
 	private static final Pattern T_FONDNESS = Pattern.compile("\\b(i (like|love) you|love you|i missed you|missed you|glad (youre|you are) here|"
 			+ "(youre|you are) (my )?(best friend|a good friend|my friend|family)|good friend|best companion|i trust you|i like having you)\\b");
 	private static final Pattern T_SAD = Pattern.compile("\\b((im|i am|i feel|feeling) (sad|down|lonely|upset|tired|exhausted|scared|lost|awful|terrible|bad)|"
-			+ "i died|i lost (everything|my stuff|all my|my)|bad day|this sucks|i give up|im sorry|i am sorry)\\b");
+			+ "i (just )?died|i lost (everything|my stuff|all my|my)|bad day|this sucks|i give up|im sorry|i am sorry)\\b");
 	private static final Pattern T_FOOD = Pattern.compile("\\b(are you hungry|hungry|food|dinner|lunch|breakfast|snack|something to eat|lets eat|cook)\\b");
 	private static final Pattern T_HELP = Pattern.compile("\\b(what can (you|u) do|what are you (able|good) to do|what do you know how to do|what can i (say|ask|tell you)"
 			+ "|how does this work|what are your (skills|abilities|commands)|list (your )?commands|^help$|^help me$|what (orders|commands) do you)\\b");
@@ -203,7 +209,7 @@ public final class CommandParser {
 		List<String> tokens = tokenize(message);
 		Set<String> names = lowerNames(addresseeNames);
 		String unstripped = String.join(" ", tokens.stream().filter(t -> !names.contains(t)).toList());
-		if (DISMISS.matcher(unstripped).find() && !RECRUIT.matcher(unstripped).find()) {
+		if (DISMISS.matcher(unstripped).find() && !RECRUIT.matcher(unstripped).find() && !LETS_HOME.matcher(unstripped).find()) {
 			return command(Intent.of(IntentType.DISMISS));
 		}
 		// "hi there" is a greeting, even though "hi" on its own is a filler word in front of orders.
@@ -222,6 +228,10 @@ public final class CommandParser {
 			return shared;
 		}
 		ParseResult command = FEELING.matcher(c).find() ? null : parseCommand(c, tokens);
+		if (command instanceof ParseResult.Command cmd && cmd.intent().type() == IntentType.ATTACK && cmd.intent().target() == null
+				&& cmd.intent().item() == null && message.trim().endsWith("?") && DEFEND_ME.matcher(c).matches()) {
+			return new ParseResult.Talk(TalkTopic.QUESTION); // "can you fight?" is a question, not an order
+		}
 		if (command != null) {
 			return command;
 		}
@@ -245,6 +255,9 @@ public final class CommandParser {
 		}
 		if (CANCEL.matcher(c).matches()) {
 			return command(Intent.of(IntentType.CANCEL));
+		}
+		if (LETS_HOME.matcher(c).find()) {
+			return command(Intent.of(IntentType.FOLLOW)); // "let's go home" means come along
 		}
 		if (DISMISS.matcher(c).find()) {
 			return command(Intent.of(IntentType.DISMISS));
@@ -445,6 +458,9 @@ public final class CommandParser {
 	}
 
 	private static TalkTopic parseTopic(String c, List<String> tokens) {
+		if (T_ROLE.matcher(c).find()) {
+			return TalkTopic.ROLE;
+		}
 		if (T_HELP.matcher(c).find()) {
 			return TalkTopic.HELP;
 		}
@@ -499,8 +515,14 @@ public final class CommandParser {
 		if (T_LAUGH.matcher(c).find()) {
 			return TalkTopic.LAUGH;
 		}
+		if (T_LIKES.matcher(c).find()) {
+			return TalkTopic.LIKES; // "what's your favourite food?" is about tastes, not hunger
+		}
 		if (T_FOOD.matcher(c).find()) {
 			return TalkTopic.FOOD;
+		}
+		if (T_SKY.matcher(c).find()) {
+			return TalkTopic.SKY;
 		}
 		if (T_JOKE.matcher(c).find()) {
 			return TalkTopic.JOKE;

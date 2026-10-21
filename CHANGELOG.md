@@ -32,6 +32,10 @@ this release is about making chat reliable and relevant.
 
 **Conversation**
 - Follow-ups work: "why?", "really?", "and you?", "tell me more", "what do you mean?".
+  After a refusal, "why?" gets the real reason again.
+- "What are you good at?" gets an answer about their role, and comments about the weather or the time of
+  day get a reply that fits. "What's your favourite food?" is about tastes, not hunger, and "let's go
+  home" means come along rather than "you're dismissed".
 - They pick up on creatures, items and places you mention.
 - A line is never repeated back to back, even in different situations, and comments wait for a
   pause in the conversation. Warnings still come straight through.

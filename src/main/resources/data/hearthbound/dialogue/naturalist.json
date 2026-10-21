@@ -848,6 +848,26 @@
     "fail.camp_campfire": [
       "I'd love to set up camp, but I haven't a campfire. Could you give me one?",
       "Oh, no campfire in my pack. I can't make camp without one."
+    ],
+    "talk.role": [
+      "I'm a {role}, so {skills} are what I do best. But I'll try anything!",
+      "My strengths are {skills}. I'm happy to turn my hand to the rest."
+    ],
+    "talk.sky": [
+      "Isn't the sky wonderful?",
+      "I do love watching the sky change."
+    ],
+    "talk.sky.rain": [
+      "Rain! Everything smells wonderful after it.",
+      "Listen to it on the leaves. Lovely."
+    ],
+    "talk.sky.night": [
+      "Night! The owls will be out soon.",
+      "The stars come out in the dark. I never tire of it."
+    ],
+    "talk.sky.day": [
+      "A lovely day. Look at the light on the leaves.",
+      "Such a good day for walking."
     ]
   }
 }

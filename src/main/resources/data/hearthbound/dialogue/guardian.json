@@ -838,6 +838,26 @@
     "fail.camp_campfire": [
       "I would make camp gladly, but I carry no campfire.",
       "A camp needs a hearth. I have no campfire. Could you provide one?"
+    ],
+    "talk.role": [
+      "I am a {role}. I am best at {skills}, though I will help in any way I can.",
+      "My strength lies in {skills}. I will not refuse any honest task."
+    ],
+    "talk.sky": [
+      "The sky is a fine thing to watch under.",
+      "I find the sky steadying."
+    ],
+    "talk.sky.rain": [
+      "Rain. We will manage. Stay close.",
+      "Rain softens the roads. Keep your footing."
+    ],
+    "talk.sky.night": [
+      "Night falls. Keep watch with me.",
+      "The dark is when vigilance counts."
+    ],
+    "talk.sky.day": [
+      "A fair day. May it stay so.",
+      "The day is clear. Good for travelling."
     ]
   }
 }

@@ -437,9 +437,9 @@ python tools/skins/cast.py
 <summary><b>Testing</b></summary>
 <br>
 
-I tried to test this properly instead of just eyeballing it. There are 264 unit tests (the chat
+I tried to test this properly instead of just eyeballing it. There are 275 unit tests (the chat
 parser, reading answers to the companions' own questions, the gathering logic, the AI response
-handling), 49 tests that run inside a real game server (gathering logs and handing them over,
+handling), 50 tests that run inside a real game server (gathering logs and handing them over,
 digging a tunnel, stopping before lava, building a shelter, a bridge and a camp, orders typed in
 plain chat with several companions around, "collect that" at a log, a question and its answer,
 remembering a nickname, reacting to an advancement, saving and loading), and a few scripted runs in the actual game client.

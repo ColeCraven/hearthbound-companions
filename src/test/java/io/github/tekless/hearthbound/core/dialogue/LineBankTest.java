@@ -78,6 +78,10 @@ class LineBankTest {
 		for (String biome : List.of("forest", "desert", "snow", "ocean", "jungle", "swamp", "mountain", "plains", "nether", "end")) {
 			REQUIRED.put("ambient.biome." + biome, base);
 		}
+		REQUIRED.put("talk.role", plus(base, "biome", "event", "role", "skills"));
+		for (String sky : List.of("talk.sky.rain", "talk.sky.night", "talk.sky.day")) {
+			REQUIRED.put(sky, base);
+		}
 		// Getting to know the player.
 		REQUIRED.put("fact.nickname", plus(base, "nick"));
 		REQUIRED.put("fact.like", plus(base, "thing"));

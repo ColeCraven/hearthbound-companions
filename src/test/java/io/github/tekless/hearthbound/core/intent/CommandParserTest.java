@@ -260,6 +260,6 @@ class CommandParserTest {
 
 	@Test
 	void freeFormChatIsUnrecognised() {
-		assertInstanceOf(ParseResult.Unrecognised.class, parser.parse("the sunset is pretty tonight", List.of()));
+		assertInstanceOf(ParseResult.Unrecognised.class, parser.parse("my cousin makes terrible soup", List.of()));
 	}
 }
