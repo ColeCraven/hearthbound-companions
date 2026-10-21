@@ -15,7 +15,8 @@ final class HelpText {
 				Component.literal("Hearthbound Companions").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
 				section("Talking"),
 				item("@Name hi", " then just keep typing. Say bye when you're done."),
-				item("@all ...", " talks to everyone travelling with you."),
+				item("@party ...", " (or ", "@all", ") talks to everyone with you. ", "@everyone", " reaches every companion you have, wherever they are."),
+				item("/companion tell Name|party|everyone message", " does the same from the command line."),
 				item("G", " opens chat with the name of whoever you're looking at. Right-click someone to say hi."),
 				item("call me Captain", " · ", "I love the ocean", " · ", "I hate spiders", " They remember, and bring it up."),
 				item("what do you know about me?", " · ", "are we friends?"),
@@ -25,16 +26,21 @@ final class HelpText {
 				section("Orders"),
 				item("follow me", " · ", "wait here", " · ", "come here", " · ", "stop", " · ", "what are you doing?"),
 				item("get me 16 oak logs", " · ", "give me everything", " · ", "attack that", " (look at it)"),
+				item("collect that", " · ", "build this", " (look at a block, or answer their question)"),
+				plain("Anyone can do any job. Guardians fight best, builders build and dig fastest, collectors gather quickest, farmers farm best."),
 				section("Digging (needs a pickaxe)"),
 				item("go mining", " digs down, then along, picking up ores."),
 				item("dig a tunnel", " · ", "dig down 20", " · torches go up if they carry some."),
 				section("Building (from blocks in their pack)"),
 				item("build a shelter", " · ", "build a wall", " · ", "build a bridge", " (across water or a gap ahead)"),
+				item("set up camp", " (a campfire and three seats, needs a campfire in their pack)"),
 				section("Gifts and gear"),
 				plain("Right-click with an item to give it. Blocks, torches and doors go over as a whole stack."),
 				plain("Sneak + right-click to open their pack. They wear armour and use the best sword you give them."),
 				section("Commands"),
-				item("/companion list", " · ", "/companion help"));
+				item("/companion list", " · ", "/companion help", " · ", "/companion tell"),
+				item("/companion chattiness off|low|normal|high", " how much they say unprompted"),
+				item("/companion autonomy on|off", " let idle companions pick sensible jobs of their own"));
 	}
 
 	private static Component section(String title) {

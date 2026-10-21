@@ -563,6 +563,11 @@ public final class Conversations {
 			companion.ask(player, QuestionKind.BUILD_WHAT, "ask.build_what", Map.of("things", BUILD_THINGS));
 			return;
 		}
+		if (intent.type() == IntentType.ATTACK && "get".equals(intent.item())) {
+			// "get that": a creature under the crosshair is a target; a block is something to collect.
+			String block = lookedAtCreature(player) == null ? lookedAtBlockPhrase(player) : null;
+			resolved = block != null ? Intent.gather(block, null) : Intent.attack(null);
+		}
 		Outcome outcome = apply(player, companion, resolved);
 		if (outcome.accepted() && resolved.type() == IntentType.GATHER && resolved.item() != null) {
 			ctx.lastItem = resolved.item();
@@ -597,6 +602,14 @@ public final class Conversations {
 		} else if (role.isWeakAt(task)) {
 			companion.say("role.weak", Map.of("task", task.verb()));
 		}
+	}
+
+	private static LivingEntity lookedAtCreature(ServerPlayer player) {
+		Vec3 eye = player.getEyePosition();
+		Vec3 end = eye.add(player.getViewVector(1.0F).scale(24));
+		EntityHitResult hit = ProjectileUtil.getEntityHitResult(player, eye, end, player.getBoundingBox().inflate(24),
+				e -> e instanceof LivingEntity && !(e instanceof CompanionEntity) && e.isPickable(), 24 * 24);
+		return hit != null && hit.getEntity() instanceof LivingEntity living ? living : null;
 	}
 
 	/** The block under the crosshair as an item phrase ("oak log", "iron ore"), or null if there isn't one. */

@@ -1,12 +1,70 @@
 # Changelog
 
+## 0.4.0 - orders that land, roles, and a renamed cast (2026-10-21)
+
+Playtesting showed companions ignoring plain requests and answering things nobody asked, so most of
+this release is about making chat reliable and relevant.
+
+**Orders in normal chat**
+- Plain chat now goes somewhere sensible. Alone, it reaches the companion you're looking at (up to
+  24 blocks), or your nearest party member (up to 64 blocks), or a stranger standing right beside
+  you. Before, it was ignored unless someone was within five or six blocks.
+- "This" and "that" work. `collect that` collects the block under your crosshair (or what they were
+  last collecting), `fight that enemy` goes for what you're looking at, and `get that` works out
+  which you meant.
+- If a request is too vague (`build this`, `gather`, `attack` with nothing in sight) they ask one
+  short question ("A shelter, a wall, a bridge or a camp?") and use your next message as the answer.
+- A stranger asked to do a job offers to join you first, and starts the job when you say yes.
+- Anyone can do any job now. The only refusals left are not hurting villagers, golems, pets,
+  players or other companions.
+- More everyday phrasing is understood: `come on over here`, `dig for coal`, `dig that out`,
+  `go and kill the spiders`, `hunt some pigs`, `I need a shelter`, `let's build something`.
+- Companions further than 24 blocks away walk over (or catch up) before starting a gather, dig or
+  build at your spot.
+- `set up camp` builds a campfire with three seats, from a campfire and a few blocks in their pack.
+
+**Talking to the right people**
+- `@Name` reaches any loaded companion in your dimension, at any distance. Companions in another
+  dimension or an unloaded chunk get a clear message instead of silence.
+- `@party` (or `@all`) is everyone with you. `@everyone` is every companion you have, wherever they
+  are. Both report who heard it and who couldn't.
+- `/companion tell <name|party|everyone> <message>`.
+
+**Conversation**
+- Follow-ups work: "why?", "really?", "and you?", "tell me more", "what do you mean?".
+- They pick up on creatures, items and places you mention.
+- A line is never repeated back to back, even in different situations, and comments wait for a
+  pause in the conversation. Warnings still come straight through.
+- About 500 new lines across the six voices and the cast.
+- Short chats between companions (two to four lines about the weather, the road, food or each
+  other) when several travel with you, and when hub residents meet. They're never read as orders.
+
+**Roles and a renamed cast**
+- Every companion has a role separate from their personality: Guardian, Builder, Collector or
+  Farmer. Roles make jobs faster or tougher, never impossible. The role is the grey line under a
+  stranger's name on servers.
+- Eight cast members were renamed, and some changed role and voice. Old saves, rosters, config files
+  and `/companion summon` still find them by their old names. See [CAST.md](docs/CAST.md).
+- Charlie, Cole, Birintan and AJ have lines of their own, and Charlie picks herbs for his pipe.
+
+**Settings**
+- `/companion chattiness off|low|normal|high`: how much they say unprompted. Replies, confirmations
+  and danger warnings always get through.
+- `/companion autonomy on|off`: optional self-chosen jobs for idle companions (collectors chop and
+  mine surface stone, farmers harvest and replant, guardians hunt nearby hostiles, builders light
+  dark spots). Off by default, with caps and no touching protected areas or player builds.
+
+**Docs**
+- New [GUIDE.md](docs/GUIDE.md): a reference for every command and action, what needs what, and what
+  isn't built yet.
+
 ## 0.3.0 - real work, and companions who get to know you (2026-10-21)
 
 - Talk without @ once you're chatting: name a companion once (or right-click them) and keep typing.
   The conversation ends when you say bye, walk off or go quiet for a minute. With other players
   around, plain chat only goes to a companion you're facing, so chat between friends is left alone.
   On your own, plain chat goes to the companion you're looking at, or the nearest one.
-- `@name` forgives short forms and typos (`@ros`, `@rsoie` for Honey) when only one name fits and
+- `@name` forgives short forms and typos (`@hon`, `@hoeny` for Honey) when only one name fits and
   no player has that name.
 - They remember what you tell them: "call me Captain", "I love the ocean", "I hate spiders". The
   nickname is used from then on, likes and dislikes come up when they turn up in the world, and

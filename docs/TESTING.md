@@ -1,7 +1,7 @@
 # Testing
 
 This is how I test the mod, what I've actually checked, and what I haven't got to yet. Last
-updated 2026-10-21 (v0.3 preview).
+updated 2026-10-21 (v0.4).
 
 ## How to run
 
@@ -18,23 +18,24 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 
 ## Automated tests
 
-### Unit tests (JUnit 5): 219 passing
+### Unit tests (JUnit 5): 264 passing
 
 | Suite | Covers |
 |---|---|
-| `CommandParserTest` (115) | Every order type, politeness and addressing ("Hazel, could you..."), quantities in digits/words/stacks/dozens, "chop trees" = logs, attack vs gather ("get that zombie" vs "get some logs"), give-all vs give-item, build and dig orders ("dig down 30", "bridge this gap"), "mine some iron" is still gathering, small-talk topics, telling a companion about yourself ("call me Captain", "I hate spiders"), and the things that aren't facts ("I love it here", "call me when you're done"), unsupported actions, non-items ("I need help") |
+| `ChatOrdersParserTest` (42) | "this" and "that" (collect that, fight that, get that), build with no subject, hunt, "go and kill", "I need a shelter", "set up camp", and the follow-ups "why?", "really?", "and you?", "tell me more", "what do you mean?" |
+| `CommandParserTest` (114) | Every order type, politeness and addressing ("Hazel, could you..."), quantities in digits/words/stacks/dozens, "chop trees" = logs, attack vs gather ("get that zombie" vs "get some logs"), give-all vs give-item, build and dig orders ("dig down 30", "bridge this gap"), "mine some iron" is still gathering, small-talk topics, telling a companion about yourself ("call me Captain", "I hate spiders"), and the things that aren't facts ("I love it here", "call me when you're done"), unsupported actions, non-items ("I need help") |
 | `AnswersTest` (42) | Reading replies to a companion's own questions: the thing in "has to be the ocean", a nickname in "just call me the boss", non-answers ("dunno", "you") left alone, mood ("not bad" is good, "not great" is bad), and forgiving `@name` matching (short forms and one-letter typos) |
 | `PlayerFactsTest` (6) | Likes match the world ignoring plurals and articles ("diamonds" for diamond ore), changing your mind, keeping the most recent few, the "you go by..., you like..." summary, facts kept per player, and memories stored as full clauses even from old saves |
 | `GatherMachineTest` (9) | Success only after full delivery; nothing found (no invented items); partial delivery when supply runs out; unreachable targets skipped then explained; missing tool fails before moving; full pack brings back what fits; cancel is immediate and final; owner leaving keeps the items |
 | `MovementPolicyTest` (5) | Follow band, hysteresis, hurry and teleport thresholds, dimension/cliff/stuck teleport, stuck detection windows |
-| `LineBankTest` (17) | Every personality has lines for every situation the game uses; placeholders match what code supplies; frequent situations have 3+ variants; personalities don't share lines; selector cycles through all variants and never repeats back-to-back; a filled-in word that starts a sentence is capitalised; articles agree with what fills them ("an apple", "some sweet berries") |
+| `LineBankTest` (19) | Every personality has lines for every situation the game uses, including the 0.4 keys (questions, mentions, role remarks, chats between companions, routines); per-character files only use placeholders the game supplies; placeholders match what code supplies; frequent situations have 3+ variants; personalities don't share lines; selector cycles through all variants and never repeats back-to-back; a filled-in word that starts a sentence is capitalised; articles agree with what fills them ("an apple", "some sweet berries") |
 | `AiContractTest` (7) | Model JSON parsing, intent allow-list, count clamping, formatting-code stripping, promise guard, prompt-injection containment (player text, including what they told the companion about themselves, can't close a data block), schema validity |
-| `CastMemberTest` (4) | Cast names unique and not reused by wanderers; one woman and one man per personality; every cast member has a valid 64x64 skin; skin variants round-trip |
+| `CastMemberTest` (6) | Cast names unique and not reused by wanderers; every role has at least two characters; old names still find the right character; roles are fair (never below 80%); every cast member has a valid 64x64 skin; skin variants round-trip |
 | `RateLimiterTest` (4) | Per-player AI limit per rolling minute; refused requests don't use up the allowance; 0 means unlimited |
 | `CompanionMemoryTest` (3) | Switching conversation partner forgets the previous player's lines but keeps shared events and affinity |
 | `HttpModelsTest` (7) | Ollama / OpenAI-compatible / Anthropic request shapes and response parsing against a local fake server; refusal, HTTP 401, timeout and unreachable server all fail cleanly |
 
-### Server GameTests: 32 passing (plus a smoke test)
+### Server GameTests: 46 passing (plus a smoke test)
 
 These run in a real Minecraft server world on every `./gradlew build`:
 
@@ -46,8 +47,8 @@ These run in a real Minecraft server world on every `./gradlew build`:
 | `cancellingStopsTheTask` | Cancel mid-gather: acknowledged, back to following, and no logs broken afterwards |
 | `followerTeleportsWhenLeftBehind` | Owner moved 40 blocks away: companion catches up onto solid ground |
 | `essentialCompanionsAreDownedNotKilled` | Lethal damage knocks down instead of killing |
-| `guardianRefusesToAttackVillagers` | Personality refusal is enforced by game code |
-| `strangersDontTakeOrdersAndPartyIsLimited` | Unrecruited companions refuse orders; the 4th recruit is refused |
+| `guardianRefusesToAttackVillagers` | The ethical refusal (no villagers) is enforced by game code, for every companion |
+| `strangersDontTakeOrdersAndPartyIsLimited` | Unrecruited companions don't take orders directly (in chat they offer to join first); the 4th recruit is refused |
 | `saveAndLoadKeepsIdentityOrdersAndMemory` | Save/load round trip keeps name, archetype, skin + slim flag, owner, wait order, inventory, conversation, events, and the player's nickname, likes and dislikes |
 | `giveHandsOverCarriedItems` / `cannotGiveWhatYouDontHave` | Exactly the requested items are handed over; asking for something they don't carry is refused with a reason |
 | `dismissedCompanionsWalkHome` | Dismissal removes them from the party and they walk back to where they were recruited |
@@ -67,6 +68,20 @@ These run in a real Minecraft server world on every `./gradlew build`:
 | `bridgesWater` | A bridge across a water channel, three blocks from the pack |
 | `aNicknameIsUsedFromThenOn` | "call me Captain" changes what they call you; "don't call me that" changes it back |
 | `answersToTheirQuestionsAreRemembered` | A reply to "what's your favourite thing?" is remembered; "nah" to a nickname keeps their own name; a bad mood gets sympathy; an order straight after a question is still an order; "what do you know about me?" says it back |
+| `chatOrderReachesTheRightCompanion` | Three companions, `@name wait here` reaches only that one; then plain "follow me" goes to the one you're talking to |
+| `buildThisAsksOneQuestionThenBuilds` | "build this" gets "which one?", nothing starts, then "a shelter please" starts a shelter |
+| `collectThatGathersTheBlockYouAreLookingAt` | Looking at an oak log and saying "collect that" starts gathering oak logs |
+| `collectThatWithNothingInSightAsksWhat` | Nothing in sight: they ask what, and the answer ("8 cobblestone") is used |
+| `stopAndReplaceTasks` | "stop" cancels the task for real, and a new order cancels the old one |
+| `strangerOffersToJoinThenDoesTheJob` | A stranger asked to gather offers to join; "yes" recruits them and starts the job |
+| `farCompanionComesBeforeWorking` | Asked to gather from 40 blocks away: they say they're coming and travel first |
+| `everyoneHearsAtOnce` | `@everyone` and `@party` both reach every companion you have |
+| `followUpsLeanOnTheTopic` | "tell me more" stays on the story, "why?" gets a why, a mentioned creeper is picked up |
+| `farmerHarvestsAndReplantsOnlyWhenAutonomyIsOn` | Nothing by itself with autonomy off; with it on, a ripe crop is harvested, replanted, and the harvest is in the pack |
+| `routinesLeaveProtectedAndBuiltAreasAlone` | A log beside planks is left alone; a lone log is fair game |
+| `buildersLightDarkSpotsOnlyWithTorches` | No torches in the pack, no torch job |
+| `buildsACampWithAFire` | No campfire: refused with the reason; with one, a campfire and seats appear |
+| `companionsChatToEachOther` | A short exchange between two companions: opening line, then the answer |
 | `crouchingTwiceGetsACrouchBack` | Two quick crouches while looking at a companion: they crouch back |
 | `anAdvancementGetsAReaction` | Completing "Stone Age" gets a line from the nearest companion (this also proves the mixin is applied) |
 | `aLevelMilestoneGetsAReaction` | Reaching level 10 gets a reaction |

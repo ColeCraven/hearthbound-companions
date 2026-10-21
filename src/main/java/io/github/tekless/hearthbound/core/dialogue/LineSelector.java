@@ -21,6 +21,7 @@ public final class LineSelector {
 
 	private final Random random;
 	private final Map<String, Deque<Integer>> recent = new HashMap<>();
+	private String lastText = "";
 
 	public LineSelector(Random random) {
 		this.random = random;
@@ -41,7 +42,14 @@ public final class LineSelector {
 			return "...";
 		}
 		int index = chooseIndex(usedKey, options.size());
-		return fill(options.get(index), vars);
+		String text = fill(options.get(index), vars);
+		if (text.equals(lastText) && options.size() > 1) {
+			// The same words twice in a row sound like a stuck record, even across different situations.
+			index = chooseIndex(usedKey, options.size());
+			text = fill(options.get(index), vars);
+		}
+		lastText = text;
+		return text;
 	}
 
 	private int chooseIndex(String key, int size) {

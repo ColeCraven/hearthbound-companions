@@ -35,7 +35,9 @@ girl is scared of the dark and won't stop talking about her gran.
 
 - **Just talk.** It all happens in normal chat. Say hi once and keep typing, like you would with a friend.
 - **They get to know you.** Tell them your nickname or what you love, and they remember it and bring it up later.
-- **They pull their weight.** Gathering, mining trips, tunnels, shelters, walls and bridges.
+- **They pull their weight.** Gathering, mining trips, tunnels, shelters, walls, bridges and camps.
+- **Everyone has a role.** Guardians fight best, builders build and dig fastest, collectors gather
+  quickest and farmers farm best, but anyone can do any job.
 - **They never fake it.** If they say they'll do something, the game is really doing it. If they can't, they tell you why.
 - **Works on servers** with nothing for your friends to install.
 
@@ -106,8 +108,14 @@ Forgot something? `/companion help` lists everything you can say and do, right i
 Say hi with `@Honey hi!` (or right-click her) and after that you can keep chatting like you would
 with anyone: "how are you?", "tell me about your family", "what should we do today?". No @ needed
 until you say bye or wander off, and a typo in a name (`@rsoie`) still gets through. Orders work
-the same way: `@Hazel follow me`, `Charlie, get me 16 oak logs`, `@all wait here`. Press <kbd>G</kbd>
+the same way: `@Hazel follow me`, `Charlie, get me 16 oak logs`, `@party wait here`. Press <kbd>G</kbd>
 and the chat opens with the name of whoever you're looking at already filled in.
+
+You can say "this" and "that" too: look at a log and say `collect that`, or look at a zombie and say
+`fight that`. If a request is too vague (`build this`) they ask one short question and use your
+answer. `@party` is everyone with you, and `@everyone` is every companion you have, wherever they are
+(they have to be in the same dimension and in a loaded chunk to hear you, and you get a short report
+of who did). The full list is in [GUIDE.md](docs/GUIDE.md).
 
 Every personality has well over a hundred situations of their own dialogue, so you're not hearing
 the same line over and over.
@@ -138,7 +146,12 @@ proper jobs:
   "dig a tunnel" and "dig down 20" do one or the other. They need a pickaxe, put torches up if they
   carry some, and stop before lava, water or a big drop.
 - **Build.** "build a shelter", "build a wall" or "build a bridge" (across water or a gap in front of
-  you), using blocks from their pack. A shelter gets a door and a torch if they have them.
+  you), using blocks from their pack. A shelter gets a door and a torch if they have them. "set up
+  camp" puts down a campfire with three seats, if they carry a campfire.
+- **Roles.** Guardians hit harder and take more punishment, builders place and dig faster,
+  collectors gather faster and farmers harvest crops faster. Nobody is ever blocked from a job,
+  and they'll tell you whether it suits them. On a server the role is the grey line under a
+  stranger's name.
 
 <p align="center">
   <img src="docs/images/building.png" width="49%" alt="Cole next to the shelter he just built from planks in his pack">
@@ -153,7 +166,13 @@ need a pickaxe, the ground's too uneven to build on, they're short on blocks.
 Stand still for a bit and they get bored. Hazel goes to study a flower, Maddie grabs loot you left
 lying around (and admits it), Honey pets the nearest cow, the fighters walk a little guard circuit,
 and Luna stares at the stars at night. They drop it the second you move or give an order. They
-also nag you to eat, suggest finding shelter before dark, and bicker with each other.
+also nag you to eat, suggest finding shelter before dark, and have short chats with each other.
+If you'd like them to be more useful on their own, `/companion autonomy on` lets idle companions
+pick jobs that suit their role (chopping a tree, harvesting a ripe crop, lighting a dark spot,
+dealing with a nearby zombie). It's off by default, and your orders always win.
+
+Too chatty? `/companion chattiness low` (or `off`) quietens the comments. They still answer you,
+confirm orders and warn you about danger.
 
 On the move they keep a comfortable distance, hurry when you sprint off, and if you get separated
 (or jump through a portal) they catch up next to you on safe ground. They warn you about creepers
@@ -200,24 +219,24 @@ thrown out and the companion tells you the real reason instead.
 
 ## Meet the cast
 
-There are twelve characters, two for each personality, and every one of them has their own
+There are twelve characters, each with a role and a voice, and every one of them has their own
 hand-made skin. You'll also meet wanderers who use the game's default skins (all nine of them,
 with wide or slim arms).
 
-| | Personality | Who they are |
-|---|---|---|
-| **Dasha** | Sellsword | Golden-haired shieldmaiden from the north. Charges anything with teeth. |
-| **Charlie** | Sellsword | Scarred veteran who has outlived three mercenary companies. Not a talker. |
-| **Hazel** | Naturalist | Auburn-haired ranger who stops to sketch every flower you walk past. |
-| **Birintan** | Naturalist | Gentle herbalist with a sprig of something behind his ear. |
-| **Maddie** | Rogue | Treasure hunter with a sharp tongue. Pockets anything you leave on the ground. |
-| **AJ** | Rogue | Smooth-talking thief who calls you "partner" and means it, mostly. |
-| **Daisy** | Guardian | Paladin with a gold circlet and a long braid. Will not hurt a villager, ever. |
-| **Cole** | Guardian | Retired rogue-knight with a rapier and a devilish grin. Has lost enough friends already. |
-| **Honey** | Farmhand | Flower crown, first real adventure, nervous about caves, adores every cow she meets. |
-| **Samuel** | Farmhand | Farm lad who still isn't sure leaving home was a good idea. |
-| **Luna** | Mystic | Silver-haired stargazer in a star-stitched cape. Likes the night more than you do. |
-| **Luke** | Mystic | Young sorcerer in an emerald robe. Says very little, notices everything. |
+| | Role | Voice | Who they are |
+|---|---|---|---|
+| **Charlie** | Guardian | Sellsword | Gruff, funny veteran with a clay pipe and a pouch of herbs. Has outlived three mercenary companies. |
+| **Dasha** | Guardian | Guardian | Golden-haired shieldmaiden from the north. Charges anything with teeth. |
+| **AJ** | Guardian | Rogue | The funny one. Keeps trying his luck and never gets anywhere. Takes it well. |
+| **Cole** | Guardian | Rogue | Cheeky, quick-witted adventurer with a rapier and a devilish grin. |
+| **Maddie** | Builder | Rogue | Sharp-tongued builder in a crimson bandana. Pockets anything you leave on the ground. |
+| **Birintan** | Builder | Naturalist | Curious, clever herbalist with a sprig of something behind his ear. Works out how it all fits together. |
+| **Luke** | Builder | Mystic | Young sorcerer in an emerald robe who shapes stone like a spell. Says very little, notices everything. |
+| **Hazel** | Collector | Naturalist | Auburn-haired ranger who stops to sketch every flower you walk past. |
+| **Daisy** | Collector | Guardian | Woodland warden with a gold circlet and a long braid. Will not hurt a villager, ever. |
+| **Luna** | Collector | Mystic | Silver-haired stargazer in a star-stitched cape. Likes the night more than you do. |
+| **Samuel** | Farmer | Farmhand | Farm lad who still isn't sure leaving home was a good idea. |
+| **Honey** | Farmer | Farmhand | Flower crown, first real adventure, nervous about caves, adores every cow she meets. |
 
 <p align="center">
   <img src="docs/images/cast/group-1.png" width="32%" alt="Dasha, Charlie, Hazel and Birintan">
@@ -240,13 +259,17 @@ personalities differ in [PERSONALITIES.md](docs/PERSONALITIES.md).
 | Get your stuff back | `@Name give me everything` | `/companion give Name` |
 | Fight something | look at it, `@Name attack that` | |
 | Dig | `@Name go mining`, `dig a tunnel`, `dig down 20` | |
-| Build | `@Name build a shelter` (or a wall, or a bridge) | |
+| Build | `@Name build a shelter` (or a wall, a bridge, `set up camp`) | |
+| Use what you're looking at | `collect that`, `fight that`, `build this` (they ask what you mean if it's unclear) | |
 | Tell them about you | `call me Captain`, `I love the ocean` | |
 | Check on them | `@Name what are you doing?` | `/companion list` |
 | Stop a task | `@Name stop` | `/companion cancel Name` |
 | Swap items | sneak + right-click them | `/companion inventory Name` |
 | Let them go | `@Name you're dismissed` | `/companion dismiss Name` |
-| Talk to everyone at once | `@all follow me` | |
+| Talk to everyone with you | `@party follow me` (or `@all`) | `/companion tell party follow me` |
+| Talk to every companion you have | `@everyone come to me` | `/companion tell everyone come to me` |
+| Make them quieter | | `/companion chattiness low` (or `off`, `normal`, `high`) |
+| Let them pick their own jobs | | `/companion autonomy on` |
 | See everything | `@Name what can you do?` | `/companion help` |
 
 | Key | What it does |
@@ -264,7 +287,7 @@ personalities differ in [PERSONALITIES.md](docs/PERSONALITIES.md).
 You can run Hearthbound on a multiplayer server too, and your friends don't need to install
 anything. With [Polymer](https://modrinth.com/mod/polymer) on the server, companions show up for
 unmodded players as player-shaped mannequins with a name tag and a short grey line under it (their
-personality, or who they're travelling with). Talking, recruiting and orders all work exactly the
+role, or who they're travelling with). Talking, recruiting and orders all work exactly the
 same.
 
 On my own server the whole cast lives at a hub, hanging around until someone asks them along. Each
@@ -293,6 +316,7 @@ The config lives at `config/hearthbound.json` and gets created the first time yo
 | `partyLimit` | `3` | How many companions you can have at once |
 | `ambientChatter` | `1.0` | How much they talk on their own (0 is silent, 2 is very chatty) |
 | `autonomy` | `1.0` | How often they wander off to do their own thing |
+| `routines` | `false` | Let idle companions pick jobs that suit their role (`/companion autonomy on`) |
 | `ai.provider` | `none` | `none`, `ollama`, `openai` or `anthropic` |
 
 </details>
@@ -413,11 +437,12 @@ python tools/skins/cast.py
 <summary><b>Testing</b></summary>
 <br>
 
-I tried to test this properly instead of just eyeballing it. There are 219 unit tests (the chat
+I tried to test this properly instead of just eyeballing it. There are 264 unit tests (the chat
 parser, reading answers to the companions' own questions, the gathering logic, the AI response
-handling), 33 tests that run inside a real game server (gathering logs and handing them over,
-digging a tunnel, stopping before lava, building a shelter and a bridge, remembering a nickname,
-reacting to an advancement, saving and loading), and a few scripted runs in the actual game client.
+handling), 47 tests that run inside a real game server (gathering logs and handing them over,
+digging a tunnel, stopping before lava, building a shelter, a bridge and a camp, orders typed in
+plain chat with several companions around, "collect that" at a log, a question and its answer,
+remembering a nickname, reacting to an advancement, saving and loading), and a few scripted runs in the actual game client.
 One of those drops two companions into a normal generated world, walks them across the terrain,
 fights zombies at night, goes to the Nether and back, then quits and reloads the world to check
 nothing got lost. It caught a couple of real bugs along the way.

@@ -60,4 +60,21 @@ class ChatOrdersParserTest {
 		ParseResult result = parser.parse(message, List.of("Hazel"));
 		assertEquals(topic, assertInstanceOf(ParseResult.Talk.class, result, message).topic(), message);
 	}
+
+	@ParameterizedTest
+	@CsvSource({"come on over here,COME", "get over here,COME", "lets build something,BUILD", "I need a shelter,BUILD", "I want a bridge,BUILD",
+			"set up camp,BUILD", "go fight that skeleton,ATTACK", "go and kill the spiders,ATTACK", "hunt some pigs,ATTACK",
+			"dig that out,GATHER", "break that block,GATHER", "dig for coal,GATHER"})
+	void everydayPhrasingIsUnderstood(String message, IntentType type) {
+		assertEquals(type, intent(message).type(), message);
+	}
+
+	@Test
+	void getThatIsLeftForTheGameToDecide() {
+		Intent intent = intent("get that");
+		assertEquals(IntentType.ATTACK, intent.type());
+		assertEquals("get", intent.item());
+		assertEquals("coal", intent("dig for coal").item());
+		assertEquals("skeleton", intent("go fight that skeleton").target());
+	}
 }

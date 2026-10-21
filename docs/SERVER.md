@@ -2,7 +2,7 @@
 
 Hearthbound works on a multiplayer server where **nobody else needs the mod**. Players join with
 plain Minecraft 26.3 and see the companions as player-shaped mannequins, each with a name tag and a
-short grey line underneath (their personality, like "Sellsword", or "with Tekless" once someone has
+short grey line underneath (their role, like "Guardian", or "with Tekless" once someone has
 recruited them). Everything else
 (talking, recruiting, following, fighting, gathering) happens on the server, so it works the same
 for everyone.
@@ -91,9 +91,23 @@ surroundings. Tell your friends if you turn it on.
 
 The easiest setup is Ollama on the server machine. It's free, and nothing leaves that machine.
 
+## Talking to companions on a server
+
+- `@Name` reaches that companion if they are loaded and in your dimension, at any distance.
+  `@party` (or `@all`) is everyone with you, `@everyone` is every companion you have, and
+  `/companion tell <name|party|everyone> <message>` does the same from the command line. You get
+  a short grey report of who heard it and who couldn't.
+- Companions in unloaded chunks can't hear you or act. Messages aren't queued: go back near them.
+- Other players' companions don't take your orders, and yours don't take theirs.
+- `/companion chattiness` and `/companion autonomy` change the world's settings and are saved in
+  `config/hearthbound.json`. On a server they need operator rights.
+- There's nothing to do after updating: old cast names in saved worlds,
+  the roster and config files keyed by cast name (such as `hearthbound-skins.json` and
+  `server.hub.residents`) still work. See [CAST.md](CAST.md#renamed-in-04).
+
 ## How I tested it
 
-There are 33 in-game server tests, 7 of them for multiplayer: stranger orders refused, stranger
+There are 47 in-game server tests, 7 of them for multiplayer: stranger orders refused, stranger
 damage blocked, companions never targeting players, protected areas and the build guard, the hub
 spawning each resident once and taking them back, replies and per-speaker memory, `@name` in the
 middle of a message, and plain chat carrying on a conversation.

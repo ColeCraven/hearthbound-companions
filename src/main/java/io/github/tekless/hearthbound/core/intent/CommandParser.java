@@ -55,7 +55,7 @@ public final class CommandParser {
 					+ "how many (do you have|have you got|did you get|have you (got|gathered|collected))|"
 					+ "what is your (task|job|order)|whats your (task|job|order)|what are your orders)\\b");
 	private static final Pattern COME = Pattern.compile(
-			"^((come|get|run|hurry|walk) (over )?(here|back)( to me)?( now)?|come (to|towards) me|over here|here|to me|"
+			"^((come|get|run|hurry|walk) (over )?(here|back)( to me)?( now)?|come on (over )?here|come over( here| to me)?|come (to|towards) me|over here|here|to me|"
 					+ "come back|get back( here)?|return( to me)?|come closer|come here)$");
 	private static final Pattern GIVE = Pattern.compile("^(give|hand|pass|toss|throw|drop) (me |us )?(over )?(.*)$");
 	private static final Pattern HAND_OVER = Pattern.compile("^hand (it |them |everything |that |those )?over\\b(.*)$");
@@ -80,7 +80,7 @@ public final class CommandParser {
 			"gather me", "collect me", "get me", "fetch me", "grab me", "bring me", "find me", "mine me", "chop me",
 			"gather us", "collect us", "get us", "fetch us", "grab us", "bring us", "find us",
 			"i need", "we need", "i want", "we want", "i could use", "we could use", "we are out of", "were out of", "im out of",
-			"gather up", "pick up", "round up", "dig up", "cut down", "chop down",
+			"gather up", "pick up", "round up", "dig up", "dig out", "cut down", "chop down", "break", "destroy", "smash",
 			"gather", "collect", "get", "fetch", "grab", "chop", "cut", "mine", "dig", "harvest", "bring", "find",
 			"acquire", "obtain", "scavenge", "pick");
 	private static final Pattern MINE_TRIP = Pattern.compile("^((lets|time to|we should|you should|start|go|keep) )*(go )?(mining|digging)\\b.*|"
@@ -89,14 +89,14 @@ public final class CommandParser {
 			+ "|\\bstaircase (down|downwards)\\b|\\b(dig|mine) \\d+ (blocks? )?down\\b");
 	private static final Pattern MINE_TUNNEL = Pattern.compile("\\b(dig|mine|make|cut|carve|bore) (out )?(me |us )?(a |another )?tunnel\\b|\\btunnel (forward|ahead|through|straight|this way|that way)\\b"
 			+ "|\\b(dig|mine) (forward|ahead|straight ahead|straight|through (here|this|that|there))\\b|^tunnel\\b");
-	private static final Pattern BUILD = Pattern.compile("^(build|construct|put up|set up|throw up|make|knock up|raise)( me| us)?( a| an| some| the| another)?( (?<thing>.+))?$");
+	private static final Pattern BUILD = Pattern.compile("^(lets |let us )?(build|construct|put up|set up|throw up|make|knock up|raise)( me| us)?( a| an| some| the| another)?( (?<thing>.+))?$");
 	private static final Pattern BRIDGE_VERB = Pattern.compile("^bridge (this|that|the|over|across)?\\b.*|\\b(get|take) us (across|over)\\b");
 	private static final Pattern DIGITS = Pattern.compile("\\b(\\d{1,3})\\b");
 	private static final Set<String> UNSUPPORTED_VERBS = Set.of(
 			"craft", "make", "plant", "sow", "farm", "breed", "tame", "ride", "fly", "swim", "sleep",
 			"cook", "smelt", "brew", "enchant", "sell", "buy", "fish", "teleport", "tp", "explore", "scout", "map", "sing",
 			"dance", "jump", "open", "close", "light", "place", "put", "repair", "fix", "heal", "cure", "feed", "shear",
-			"milk", "read", "write", "climb", "sail", "steal", "rob", "burn", "break", "destroy",
+			"milk", "read", "write", "climb", "sail", "steal", "rob", "burn",
 			"trade", "kiss", "marry", "eat", "drink");
 	private static final Set<String> PRONOUN_TARGETS = Set.of(
 			"that", "it", "this", "him", "her", "them", "those", "these", "that one", "this one", "that thing", "this thing",
@@ -106,7 +106,7 @@ public final class CommandParser {
 	/** "collect that", "get more of this": the player points at it instead of naming it. */
 	private static final Set<String> DEMO_WORDS = Set.of("that", "this", "it", "those", "these", "them", "more", "same", "one", "ones",
 			"block", "blocks", "thing", "things", "stuff", "of", "the", "some", "over", "there", "here", "kind", "type", "material",
-			"materials", "again", "i", "am", "im", "looking", "at", "pointing");
+			"materials", "again", "i", "am", "im", "looking", "at", "pointing", "out");
 	private static final Set<String> NON_ITEMS = Set.of(
 			"help", "a hand", "hand", "you", "your help", "rest", "a rest", "sleep", "a break", "break", "some rest", "time",
 			"a moment", "a minute", "going", "lost", "out of here", "ready", "moving", "to work", "started", "inside", "out",
@@ -314,7 +314,11 @@ public final class CommandParser {
 		return command(Intent.give(item, quantity.value()));
 	}
 
+	private static final Pattern GO_ATTACK = Pattern.compile("^(go and|go) (?=(attack|kill|fight|hit|slay|smite|charge|take down|take out|deal with|shoot|hunt|slaughter|butcher) )");
+	private static final Pattern BUILDABLE = Pattern.compile("(^| )(shelter|house|hut|cabin|bridge|wall|camp|campsite|tent|base|cottage)s?($| )");
+
 	private ParseResult parseAttack(String c) {
+		c = GO_ATTACK.matcher(c).replaceFirst("");
 		if (DEFEND_ME.matcher(c).matches()) {
 			return command(Intent.attack(null));
 		}
@@ -335,6 +339,10 @@ public final class CommandParser {
 		}
 		if (verb.equals("hit") && !pronoun && !mob) {
 			return null;
+		}
+		if (verb.equals("get") && pronoun) {
+			// "get that" could mean fetch it or fight it; the game decides from what the player is looking at.
+			return command(new Intent(IntentType.ATTACK, "get", null, null));
 		}
 		return command(Intent.attack(pronoun ? null : target));
 	}
@@ -363,7 +371,10 @@ public final class CommandParser {
 					}
 					return new ParseResult.Unclear(ParseResult.UnclearReason.GATHER_WHAT);
 				}
-				if (item.equals("it") || item.equals("them")) {
+				if (BUILDABLE.matcher(item).find()) {
+					return command(Intent.build(item));
+				}
+				if (item.equals("it") || item.equals("them") || item.equals("block") || item.equals("blocks")) {
 					return command(Intent.gather("that", quantity.value()));
 				}
 				if (NON_ITEMS.contains(item)) {
@@ -596,7 +607,7 @@ public final class CommandParser {
 	/** Removes articles and location/politeness tails from an item phrase: "the oak logs nearby" -> "oak logs". */
 	static String cleanItemPhrase(List<String> words) {
 		List<String> w = new ArrayList<>(words);
-		Set<String> leading = Set.of("of", "the", "some", "more", "any", "a", "an", "few", "those", "these", "that", "this", "your", "my", "extra");
+		Set<String> leading = Set.of("of", "the", "some", "more", "any", "a", "an", "few", "those", "these", "that", "this", "your", "my", "extra", "for");
 		while (!w.isEmpty() && leading.contains(w.get(0))) {
 			w.remove(0);
 		}
@@ -604,7 +615,7 @@ public final class CommandParser {
 				List.of("nearby"), List.of("around", "here"), List.of("over", "there"), List.of("from", "around", "here"),
 				List.of("if", "you", "can"), List.of("too"), List.of("as", "well"), List.of("for", "me"), List.of("for", "us"),
 				List.of("please"), List.of("now"), List.of("from", "the", "trees"), List.of("from", "that", "tree"),
-				List.of("around"), List.of("here"), List.of("there"), List.of("quickly"));
+				List.of("around"), List.of("here"), List.of("there"), List.of("quickly"), List.of("out"));
 		boolean changed = true;
 		while (changed && !w.isEmpty()) {
 			changed = false;
@@ -621,7 +632,7 @@ public final class CommandParser {
 
 	private static String cleanTarget(String target) {
 		List<String> words = new ArrayList<>(Arrays.asList(target.trim().split(" ")));
-		while (!words.isEmpty() && Set.of("the", "a", "an", "those", "these", "that", "this", "nearest", "closest", "nearby", "other").contains(words.get(0)) && words.size() > 1) {
+		while (!words.isEmpty() && Set.of("the", "a", "an", "those", "these", "that", "this", "nearest", "closest", "nearby", "other", "some", "any", "all").contains(words.get(0)) && words.size() > 1) {
 			words.remove(0);
 		}
 		while (words.size() > 1 && Set.of("now", "please", "for", "me", "over", "there", "here").contains(words.get(words.size() - 1))) {

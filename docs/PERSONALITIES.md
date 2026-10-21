@@ -1,9 +1,11 @@
 # Personalities
 
-Each companion is built from one of six archetypes, a name and a look: either one of the twelve
-named [cast](CAST.md) characters with their own outfit, or a wanderer in one of the 18 default
-skins. Two companions of the same archetype share a voice and a way of helping, but not a name,
-look or memories.
+Each companion is built from a voice (one of six archetypes), a role, a name and a look: either one
+of the twelve named [cast](CAST.md) characters with their own outfit, or a wanderer in one of the
+18 default skins. Two companions with the same voice share a way of talking and a way of acting in
+a fight, but not a name, look or memories.
+
+The voice is how they talk. The role is what they're good at: see "Roles" below.
 
 I didn't want the archetype to be a coat of paint over the same follower. It changes:
 
@@ -16,7 +18,7 @@ I didn't want the archetype to be a coat of paint over the same follower. It cha
 
 | | Sellsword | Naturalist | Rogue | Guardian | Farmhand | Mystic |
 |---|---|---|---|---|---|---|
-| Cast ([see them](CAST.md)) | Charlie, Dasha | Hazel, Birintan | Maddie, AJ | Daisy, Cole | Samuel, Honey | Luna, Luke |
+| Cast ([see them](CAST.md)) | Charlie | Hazel, Birintan | Maddie, AJ, Cole | Dasha, Daisy | Samuel, Honey | Luna, Luke |
 | Wanderer names | Torvald, Greta, Osric | Elowen, Linnea, Ivy | Jory, Lark, Vesper | Aveline, Gareth, Tristan | Odo, Bess, Clem | Nyx, Thorne, Orrin |
 | Voice | Terse, blunt, soldier's slang | Long, excited sentences, asks questions | Quick quips, teasing, "partner" | Formal, sincere, old-fashioned courtesy | Rambling, nervous, homely sayings | Dry, cryptic, short poetic lines |
 | Humour | Deadpan understatement | Puns and trivia | Sarcasm and teasing | Earnest, gentle | Self-deprecating, accidental | Dark, gallows humour |
@@ -28,7 +30,40 @@ I didn't want the archetype to be a coat of paint over the same follower. It cha
 | Follow distance | 3-4 (escort) | 4-6 (wanders to look) | 3-5 | 2-3 (closest) | 2-4, tighter at night | 5-7 (aloof) |
 | Calls out | Hostiles, gear | Ores, rare biomes, structures | Chests, valuables | Your low health, threats to villagers | Hostiles early (jumpy) | Lava, sculk, endermen |
 | Chattiness | Low | High | Medium-high | Medium | High when scared | Low |
-| Hard refusals | - | Won't strip-mine rare plants | - | Won't attack villagers, golems or pets | Won't attack farm animals | - |
+| Hard refusals | - | - | - | - | - | - |
+
+Nobody refuses a job because of their personality any more. The one thing every companion
+refuses, whatever their voice, is hurting villagers, iron golems, tamed pets, other companions or
+players.
+
+## Roles
+
+A role never stops anyone doing a job. It makes some jobs quicker and others a little slower.
+
+| Role | Strong at | Weaker at | What it changes |
+|---|---|---|---|
+| Guardian | Fighting, defending, hunting | Farming | 40% more damage, 4 extra health |
+| Builder | Building, digging, tunnels | Fighting | Places and digs 40% faster |
+| Collector | Gathering, mining ores | Building | Gathers 40% faster |
+| Farmer | Crops, animals, food | Digging | Harvests crops 40% faster when autonomy is on |
+
+The weaker ones are about 15% slower. Now and then a companion mentions whether a job suits them.
+The cast roles are in [CAST.md](CAST.md), and wanderers get a role that fits their voice
+(sellsword and guardian: Guardian; naturalist and rogue: Collector; mystic: Builder; farmhand:
+Farmer). On servers the role is the grey line under a stranger's name.
+
+## Individual voices
+
+Four cast members have lines of their own on top of their voice
+(`data/hearthbound/dialogue/cast/<name>.json`). Their lines are mixed in with the voice's lines, so
+they sound like themselves and everything still works if a key is missing.
+
+- **Charlie** is gruff and funny, and loves the herbs he smokes in his pipe. When you stand still
+  he picks wild flowers and herbs for it.
+- **Cole** is cheeky and clever. He talks like a rogue who's read the whole book.
+- **Birintan** is curious and clever, and wonders out loud how everything works.
+- **AJ** is the funny one who keeps trying his luck and never succeeds. It's harmless and
+  self-deprecating, and he takes every no with a grin.
 
 ## Free will: what they do on their own
 
@@ -47,8 +82,10 @@ order or a fight starts.
 | Mystic | Stargazes at night, studies obsidian, amethyst, sculk and lava, prowls the edges |
 
 They also make suggestions (eat, find shelter before dark, hand over some of your full pack),
-banter with each other, and react to gifts according to their tastes. Suggestions are only ever
-words. Apart from these small, harmless pastimes, companions don't do anything you didn't ask for.
+chat with each other, and react to gifts according to their tastes. Suggestions are only ever
+words. Apart from these small, harmless pastimes, companions don't do anything you didn't ask for,
+unless you switch on `/companion autonomy on`. Then a pastime can also be a real job that suits
+their role (details in [GUIDE.md](GUIDE.md#implemented-settings-you-can-change-in-game)).
 
 ## Avoiding repetition
 
