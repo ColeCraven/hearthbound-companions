@@ -17,8 +17,38 @@ public final class CompanionMemory {
 	private final Deque<Line> lines = new ArrayDeque<>();
 	private final Deque<String> events = new ArrayDeque<>();
 	private int affinity;
+	/** Who the remembered conversation is with (a player id), or null if nobody yet. */
+	private String partner;
 
 	public record Line(boolean fromPlayer, String text) {
+	}
+
+	/**
+	 * Starts listening to someone. If it's a different person from the remembered conversation,
+	 * that conversation is forgotten, so one player's words never reach another player (or an AI
+	 * prompt written for them). Shared events and affinity stay.
+	 *
+	 * @return true if an earlier conversation with someone else was dropped
+	 */
+	public boolean talkingWith(String partnerId) {
+		if (partnerId.equals(partner)) {
+			return false;
+		}
+		boolean dropped = partner != null && !lines.isEmpty();
+		if (partner != null) {
+			lines.clear();
+		}
+		partner = partnerId;
+		return dropped;
+	}
+
+	public String partner() {
+		return partner;
+	}
+
+	/** Restores the partner from a save (doesn't clear anything). */
+	public void setPartner(String partnerId) {
+		partner = partnerId;
 	}
 
 	public void addPlayerLine(String text) {
@@ -73,5 +103,6 @@ public final class CompanionMemory {
 		lines.clear();
 		events.clear();
 		affinity = 0;
+		partner = null;
 	}
 }

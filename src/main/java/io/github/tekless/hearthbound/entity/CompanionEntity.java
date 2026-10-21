@@ -7,14 +7,17 @@ import io.github.tekless.hearthbound.core.memory.CompanionMemory;
 import io.github.tekless.hearthbound.core.persona.Archetype;
 import io.github.tekless.hearthbound.core.task.FollowPolicy;
 import io.github.tekless.hearthbound.core.task.TaskStatus;
+import io.github.tekless.hearthbound.dialogue.Texts;
 import io.github.tekless.hearthbound.entity.order.ComeOrder;
 import io.github.tekless.hearthbound.entity.order.CompanionOrder;
 import io.github.tekless.hearthbound.entity.order.FollowOrder;
 import io.github.tekless.hearthbound.entity.order.GatherOrder;
 import io.github.tekless.hearthbound.entity.order.HomeOrder;
 import io.github.tekless.hearthbound.entity.order.WaitOrder;
+import io.github.tekless.hearthbound.world.CompanionRoster;
 import io.github.tekless.hearthbound.world.GatherCatalog;
 import io.github.tekless.hearthbound.world.GatherSpec;
+import io.github.tekless.hearthbound.world.HubResidents;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -91,6 +94,10 @@ public class CompanionEntity extends PathfinderMob {
 	private static final EntityDataAccessor<Integer> DATA_SKIN = SynchedEntityData.defineId(CompanionEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Boolean> DATA_DOWNED = SynchedEntityData.defineId(CompanionEntity.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<String> DATA_ARCHETYPE = SynchedEntityData.defineId(CompanionEntity.class, EntityDataSerializers.STRING);
+	/** Name of the player they travel with ("" when free); shown to players without the mod. */
+	private static final EntityDataAccessor<String> DATA_OWNER_NAME = SynchedEntityData.defineId(CompanionEntity.class, EntityDataSerializers.STRING);
+	/** Players within this distance hear what a companion says, besides its owner. */
+	private static final double HEARING_RANGE = 16;
 
 	private final SimpleContainer inventory = new SimpleContainer(INVENTORY_SIZE);
 	private final CompanionMemory memory = new CompanionMemory();
@@ -109,6 +116,14 @@ public class CompanionEntity extends PathfinderMob {
 	private int toolSlotSwapped = -1;
 	private int talkCooldown;
 	private long lastGiftTime = -100000;
+	/** Lives at the server's hub when nobody has recruited them. */
+	private boolean hubResident;
+	/** Game time at which a dismissed hub resident heads back to the hub, or -1. */
+	private long returnToHubAt = -1;
+	/** Whoever spoke to this companion last, so they hear the answer wherever they stand. */
+	private @Nullable UUID lastSpeaker;
+	private long lastSpokeAt;
+	private final Map<UUID, Long> hintedAt = new HashMap<>();
 	/** Situation key of the last scripted line (useful for tests and debugging). */
 	private String lastLineKey = "";
 
@@ -141,6 +156,12 @@ public class CompanionEntity extends PathfinderMob {
 		builder.define(DATA_SKIN, 0);
 		builder.define(DATA_DOWNED, false);
 		builder.define(DATA_ARCHETYPE, Archetype.SELLSWORD.id());
+		builder.define(DATA_OWNER_NAME, "");
+	}
+
+	/** Synced fields whose change alters how players without the mod see this companion. */
+	public static boolean affectsLook(int dataId) {
+		return dataId == DATA_SKIN.id() || dataId == DATA_DOWNED.id() || dataId == DATA_OWNER_NAME.id() || dataId == DATA_ARCHETYPE.id();
 	}
 
 	// ------------------------------------------------------------------ AI goals
@@ -182,10 +203,10 @@ public class CompanionEntity extends PathfinderMob {
 		};
 	}
 
-	/** Never fight the owner or fellow companions, whatever happened. */
+	/** Never fight a player or a fellow companion, whatever happened. */
 	@Override
 	public boolean canAttack(LivingEntity target) {
-		if (target instanceof Player player && player.getUUID().equals(ownerId)) {
+		if (target instanceof Player) {
 			return false;
 		}
 		if (target instanceof CompanionEntity) {
@@ -229,6 +250,12 @@ public class CompanionEntity extends PathfinderMob {
 			equipBestGear();
 			if (getHealth() < getMaxHealth() && getTarget() == null && tickCount % 80 == 0) {
 				heal(1.0F);
+			}
+		}
+		if (returnToHubAt >= 0 && level.getGameTime() >= returnToHubAt) {
+			returnToHubAt = -1;
+			if (!isRecruited()) {
+				HubResidents.sendHome(this);
 			}
 		}
 		if (order == null) {
@@ -442,19 +469,73 @@ public class CompanionEntity extends PathfinderMob {
 
 	public void recruit(ServerPlayer player) {
 		ownerId = player.getUUID();
-		home = blockPosition();
+		entityData.set(DATA_OWNER_NAME, player.getName().getString());
+		if (!hubResident) {
+			home = blockPosition();
+		}
+		returnToHubAt = -1;
+		clearHome();
 		baseMode = CompanionOrder.Kind.FOLLOW;
 		setOrder(new FollowOrder());
 		memory.addEvent("joined {player} on the road");
 		memory.changeAffinity(3);
+		updateRoster();
 	}
 
 	public void dismiss() {
 		ownerId = null;
+		entityData.set(DATA_OWNER_NAME, "");
 		baseMode = CompanionOrder.Kind.HOME;
 		setTarget(null);
+		if (hubResident && HubResidents.hubPos().isPresent()) {
+			home = HubResidents.hubPos().get();
+			// Walk off for a few seconds, then make their own way back to the hub.
+			returnToHubAt = level().getGameTime() + 100;
+		}
 		setOrder(new HomeOrder(home != null ? home : blockPosition()));
 		memory.addEvent("parted ways with {player}");
+		updateRoster();
+	}
+
+	/** Name of the player this companion travels with, or null. */
+	public @Nullable String ownerName() {
+		String name = entityData.get(DATA_OWNER_NAME);
+		return name.isEmpty() ? null : name;
+	}
+
+	public boolean isHubResident() {
+		return hubResident;
+	}
+
+	/** Makes this companion live at the hub: that's home, and where they go back to when dismissed. */
+	public void makeHubResident(BlockPos hub) {
+		hubResident = true;
+		home = hub.immutable();
+		if (!isRecruited()) {
+			setOrder(new HomeOrder(home));
+		}
+		updateRoster();
+	}
+
+	public @Nullable BlockPos home() {
+		return home;
+	}
+
+	/** How far an unrecruited companion strolls from home. */
+	public int homeRadius() {
+		return hubResident ? Math.max(3, Hearthbound.config().server.hub.wanderRadius) : 3;
+	}
+
+	private void updateRoster() {
+		if (level() instanceof ServerLevel serverLevel) {
+			CompanionRoster.get(serverLevel.getServer()).noteLoaded(this);
+		}
+	}
+
+	/** Remembers who is talking to us, so they hear the reply even if they stand far off. */
+	public void noteSpeaker(ServerPlayer player) {
+		lastSpeaker = player.getUUID();
+		lastSpokeAt = level().getGameTime();
 	}
 
 	public CompanionMemory memory() {
@@ -492,14 +573,12 @@ public class CompanionEntity extends PathfinderMob {
 		memory.addCompanionLine(text);
 		talkCooldown = 40;
 		Component message = chatLine(text);
-		ServerPlayer owner = ownerPlayer();
-		if (owner != null) {
-			owner.sendSystemMessage(message);
-		} else {
-			for (ServerPlayer player : serverLevel.players()) {
-				if (player.distanceTo(this) < 24) {
-					player.sendSystemMessage(message);
-				}
+		// The owner always hears; so does whoever just spoke to us, and anyone standing close by.
+		UUID speaker = lastSpeaker != null && serverLevel.getGameTime() - lastSpokeAt < 200 ? lastSpeaker : null;
+		for (ServerPlayer player : serverLevel.getServer().getPlayerList().getPlayers()) {
+			boolean near = player.level() == serverLevel && player.distanceTo(this) < HEARING_RANGE;
+			if (isOwnedBy(player) || player.getUUID().equals(speaker) || near) {
+				player.sendSystemMessage(message);
 			}
 		}
 	}
@@ -716,7 +795,7 @@ public class CompanionEntity extends PathfinderMob {
 
 	public void openInventory(ServerPlayer player) {
 		player.openMenu(new SimpleMenuProvider((id, playerInventory, p) -> new ChestMenu(net.minecraft.world.inventory.MenuType.GENERIC_9x2, id, playerInventory, inventory, 2),
-				Component.translatable("container.hearthbound.companion", companionName())));
+				Texts.tr("container.hearthbound.companion", companionName())));
 	}
 
 	// ------------------------------------------------------------------ interaction
@@ -736,7 +815,9 @@ public class CompanionEntity extends PathfinderMob {
 		ItemStack held = player.getItemInHand(hand);
 		if (held.isEmpty()) {
 			getLookControl().setLookAt(player);
+			noteSpeaker(serverPlayer);
 			say(greetingKey(player), Map.of("player", player.getName().getString()));
+			maybeHintRecruit(serverPlayer);
 			return InteractionResult.SUCCESS;
 		}
 		if (isOwnedBy(player) && !Gifts.isTool(held)) {
@@ -744,6 +825,20 @@ public class CompanionEntity extends PathfinderMob {
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;
+	}
+
+	/** Tells a stranger how to ask this companion along (at most every five minutes). */
+	private void maybeHintRecruit(ServerPlayer player) {
+		if (isRecruited()) {
+			return;
+		}
+		long now = level().getGameTime();
+		Long last = hintedAt.get(player.getUUID());
+		if (last == null || now - last > 6000) {
+			hintedAt.put(player.getUUID(), now);
+			player.sendSystemMessage(Texts.tr("message.hearthbound.recruit_hint", companionName().split(" ")[0])
+					.withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+		}
 	}
 
 	private String greetingKey(Player player) {
@@ -771,6 +866,9 @@ public class CompanionEntity extends PathfinderMob {
 
 	@Override
 	public boolean hurtServer(ServerLevel level, DamageSource source, float damage) {
+		if (source.getEntity() instanceof Player player && !isOwnedBy(player) && !Hearthbound.config().server.otherPlayersCanHurt) {
+			return false; // someone else's companion (or a hub resident) is off limits; ops can still use /kill
+		}
 		if (source.getEntity() instanceof Player player && isOwnedBy(player) && !player.isCreative()) {
 			// Friendly fire: a small grudge, never a fight back.
 			memory.changeAffinity(-2);
@@ -817,7 +915,7 @@ public class CompanionEntity extends PathfinderMob {
 		ServerPlayer owner = ownerPlayer();
 		super.die(source);
 		if (owner != null) {
-			owner.sendSystemMessage(Component.translatable("message.hearthbound.died", companionName()).withStyle(ChatFormatting.GRAY));
+			owner.sendSystemMessage(Texts.tr("message.hearthbound.died", companionName()).withStyle(ChatFormatting.GRAY));
 		}
 	}
 
@@ -843,12 +941,9 @@ public class CompanionEntity extends PathfinderMob {
 		if (getCustomName() == null) {
 			// Usually one of the named cast who isn't already around; sometimes a wanderer in a default skin.
 			java.util.List<io.github.tekless.hearthbound.core.persona.CastMember> free = new java.util.ArrayList<>();
-			java.util.Set<String> taken = new java.util.HashSet<>();
-			for (CompanionEntity other : level.getLevel().getEntitiesOfClass(CompanionEntity.class, getBoundingBox().inflate(512), e -> e != this)) {
-				taken.add(other.companionName());
-			}
+			CompanionRoster roster = CompanionRoster.get(level.getLevel().getServer());
 			for (io.github.tekless.hearthbound.core.persona.CastMember member : io.github.tekless.hearthbound.core.persona.CastMember.values()) {
-				if (!taken.contains(member.displayName())) {
+				if (!roster.castExists(member)) {
 					free.add(member);
 				}
 			}
@@ -867,7 +962,7 @@ public class CompanionEntity extends PathfinderMob {
 	}
 
 	/** A weapon (and a piece of armour for fighters) that suits the personality. */
-	private void giveStarterGear() {
+	public void giveStarterGear() {
 		switch (archetype) {
 			case SELLSWORD -> {
 				setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(net.minecraft.world.item.Items.IRON_SWORD));
@@ -898,6 +993,10 @@ public class CompanionEntity extends PathfinderMob {
 			output.putIntArray("Home", new int[] {home.getX(), home.getY(), home.getZ()});
 		}
 		output.putString("BaseMode", baseMode.name());
+		if (ownerName() != null) {
+			output.putString("OwnerName", ownerName());
+		}
+		output.putBoolean("HubResident", hubResident);
 		if (waitPost != null) {
 			output.putIntArray("WaitPost", new int[] {waitPost.getX(), waitPost.getY(), waitPost.getZ()});
 		}
@@ -916,6 +1015,9 @@ public class CompanionEntity extends PathfinderMob {
 		ValueOutput.TypedOutputList<String> events = output.list("Events", com.mojang.serialization.Codec.STRING);
 		memory.events().forEach(events::add);
 		output.putInt("Affinity", memory.affinity());
+		if (memory.partner() != null) {
+			output.putString("ConversationWith", memory.partner());
+		}
 	}
 
 	@Override
@@ -924,6 +1026,8 @@ public class CompanionEntity extends PathfinderMob {
 		setArchetype(Archetype.byId(input.getStringOr("Archetype", "sellsword")).orElse(Archetype.SELLSWORD));
 		setSkinVariant(input.getIntOr("Skin", 0));
 		ownerId = input.getString("Owner").map(UUID::fromString).orElse(null);
+		entityData.set(DATA_OWNER_NAME, ownerId == null ? "" : input.getStringOr("OwnerName", ""));
+		hubResident = input.getBooleanOr("HubResident", false);
 		home = input.getIntArray("Home").filter(a -> a.length == 3).map(a -> new BlockPos(a[0], a[1], a[2])).orElse(null);
 		waitPost = input.getIntArray("WaitPost").filter(a -> a.length == 3).map(a -> new BlockPos(a[0], a[1], a[2])).orElse(null);
 		try {
@@ -943,6 +1047,7 @@ public class CompanionEntity extends PathfinderMob {
 		});
 		input.listOrEmpty("Events", com.mojang.serialization.Codec.STRING).forEach(memory::addEvent);
 		memory.setAffinity(input.getIntOr("Affinity", 0));
+		input.getString("ConversationWith").ifPresent(memory::setPartner);
 		int downed = input.getIntOr("Downed", 0);
 		if (downed > 0) {
 			entityData.set(DATA_DOWNED, true);

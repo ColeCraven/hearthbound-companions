@@ -8,11 +8,13 @@ import io.github.tekless.hearthbound.core.ai.CommitmentGuard;
 import io.github.tekless.hearthbound.core.ai.HttpModels;
 import io.github.tekless.hearthbound.core.ai.LanguageModel;
 import io.github.tekless.hearthbound.core.ai.PromptBuilder;
+import io.github.tekless.hearthbound.core.ai.RateLimiter;
 import io.github.tekless.hearthbound.core.intent.Intent;
 import io.github.tekless.hearthbound.core.intent.IntentType;
 import io.github.tekless.hearthbound.core.intent.TalkTopic;
 import io.github.tekless.hearthbound.core.memory.CompanionMemory;
 import io.github.tekless.hearthbound.dialogue.Conversations;
+import io.github.tekless.hearthbound.dialogue.Texts;
 import io.github.tekless.hearthbound.entity.CompanionEntity;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
@@ -50,14 +52,19 @@ public final class AiService {
 	private final MinecraftServer server;
 	private final boolean sharePlayerName;
 	private final Map<UUID, AtomicInteger> generations = new ConcurrentHashMap<>();
+	private final RateLimiter perPlayer;
+	private final int maxConcurrent;
+	private final AtomicInteger inFlight = new AtomicInteger();
 	private int consecutiveFailures;
 	private long pausedUntil;
 	private boolean warnedPlayer;
 
-	private AiService(LanguageModel model, MinecraftServer server, boolean sharePlayerName) {
+	private AiService(LanguageModel model, MinecraftServer server, HearthboundConfig.Ai config) {
 		this.model = model;
 		this.server = server;
-		this.sharePlayerName = sharePlayerName;
+		this.sharePlayerName = config.sharePlayerName;
+		this.perPlayer = new RateLimiter(config.maxRequestsPerPlayerPerMinute);
+		this.maxConcurrent = config.maxConcurrentRequests <= 0 ? Integer.MAX_VALUE : config.maxConcurrentRequests;
 	}
 
 	/** Creates the service from config, or returns null when AI is off or misconfigured. */
@@ -106,7 +113,7 @@ public final class AiService {
 			}
 		}
 		Hearthbound.LOGGER.info("AI dialogue enabled: {}", model.describe());
-		return new AiService(model, server, ai.sharePlayerName);
+		return new AiService(model, server, ai);
 	}
 
 	/** Starts an AI reply. Returns false (caller uses scripts) if the provider is paused. */
@@ -114,11 +121,17 @@ public final class AiService {
 		if (System.currentTimeMillis() < pausedUntil) {
 			return false;
 		}
+		// Shared servers: over the limits, the companion simply answers in its own words.
+		if (inFlight.get() >= maxConcurrent || !perPlayer.tryAcquire(player.getUUID().toString(), System.currentTimeMillis())) {
+			return false;
+		}
+		inFlight.incrementAndGet();
 		int generation = generations.computeIfAbsent(companion.getUUID(), id -> new AtomicInteger()).incrementAndGet();
 		PromptBuilder.Context context = snapshot(player, companion);
 		PromptBuilder.Prompt prompt = PromptBuilder.build(context, message);
 		long started = System.currentTimeMillis();
 		model.complete(prompt).whenComplete((raw, error) -> server.execute(() -> {
+			inFlight.decrementAndGet();
 			if (error != null) {
 				onFailure(player, companion, generation, error.getMessage());
 				return;
@@ -203,7 +216,7 @@ public final class AiService {
 			consecutiveFailures = 0;
 			if (!warnedPlayer && !player.hasDisconnected()) {
 				warnedPlayer = true;
-				player.sendSystemMessage(Component.translatable("message.hearthbound.ai_paused").withStyle(ChatFormatting.GRAY));
+				player.sendSystemMessage(Texts.tr("message.hearthbound.ai_paused").withStyle(ChatFormatting.GRAY));
 			}
 		}
 		if (stillCurrent(player, companion, generation)) {

@@ -16,7 +16,10 @@ import io.github.tekless.hearthbound.entity.order.FollowOrder;
 import io.github.tekless.hearthbound.entity.order.GatherOrder;
 import io.github.tekless.hearthbound.entity.order.GiveOrder;
 import io.github.tekless.hearthbound.entity.order.WaitOrder;
+import io.github.tekless.hearthbound.world.CompanionRoster;
+import io.github.tekless.hearthbound.world.CompanionTracker;
 import io.github.tekless.hearthbound.world.GatherCatalog;
+import io.github.tekless.hearthbound.world.WorldRules;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -82,7 +85,7 @@ public final class Conversations {
 		}
 		List<CompanionEntity> targets = isGroupName(name) ? party(player) : nearbyNamed(player, name);
 		if (targets.isEmpty()) {
-			player.sendSystemMessage(Component.translatable(isGroupName(name) ? "message.hearthbound.no_party" : "message.hearthbound.no_such_companion", name)
+			player.sendSystemMessage(Texts.tr(isGroupName(name) ? "message.hearthbound.no_party" : "message.hearthbound.no_such_companion", name)
 					.withStyle(ChatFormatting.GRAY));
 			return true;
 		}
@@ -115,8 +118,8 @@ public final class Conversations {
 	/** The player's recruited companions in the same dimension. */
 	public static List<CompanionEntity> party(ServerPlayer player) {
 		List<CompanionEntity> party = new ArrayList<>();
-		for (CompanionEntity companion : nearby(player, 256)) {
-			if (companion.isOwnedBy(player)) {
+		for (CompanionEntity companion : CompanionTracker.ownedBy(player)) {
+			if (companion.level() == player.level()) {
 				party.add(companion);
 			}
 		}
@@ -124,29 +127,19 @@ public final class Conversations {
 	}
 
 	private static List<CompanionEntity> nearby(ServerPlayer player) {
-		return nearby(player, ADDRESS_RANGE);
+		return CompanionTracker.near(player, ADDRESS_RANGE);
 	}
 
-	private static List<CompanionEntity> nearby(ServerPlayer player, double range) {
-		AABB box = player.getBoundingBox().inflate(range);
-		return player.level().getEntitiesOfClass(CompanionEntity.class, box, CompanionEntity::isAlive);
-	}
-
-	/** Counts every companion owned by the player across all loaded dimensions. */
+	/** Counts every companion travelling with the player, including ones in unloaded chunks. */
 	public static int partySize(ServerPlayer player) {
-		int count = 0;
-		for (ServerLevel level : player.level().getServer().getAllLevels()) {
-			for (Entity entity : level.getAllEntities()) {
-				if (entity instanceof CompanionEntity companion && companion.isAlive() && companion.isOwnedBy(player)) {
-					count++;
-				}
-			}
-		}
-		return count;
+		int loaded = CompanionTracker.ownedBy(player).size();
+		return Math.max(loaded, CompanionRoster.get(player.level().getServer()).ownedBy(player.getUUID()));
 	}
 
 	/** One message to one companion. */
 	public static void handleMessage(ServerPlayer player, CompanionEntity companion, String text) {
+		companion.noteSpeaker(player);
+		companion.memory().talkingWith(player.getUUID().toString());
 		companion.memory().addPlayerLine(text);
 		companion.getLookControl().setLookAt(player);
 		ParseResult result = PARSER.parse(text, List.of(companion.companionName()));
@@ -197,7 +190,8 @@ public final class Conversations {
 	public static Outcome apply(ServerPlayer player, CompanionEntity companion, Intent intent) {
 		IntentType type = intent.type();
 		if (companion.isRecruited() && !companion.isOwnedBy(player)) {
-			return Outcome.no("not_recruited", Map.of());
+			String owner = companion.ownerName() != null ? companion.ownerName() : "someone else";
+			return Outcome.no("recruit.taken", Map.of("owner", owner));
 		}
 		if (!companion.isRecruited()) {
 			return switch (type) {
@@ -277,6 +271,9 @@ public final class Conversations {
 			case GatherCatalog.Resolution.Unknown unknown -> Outcome.no("fail.unknown_item", Map.of("item", clip(unknown.phrase())));
 			case GatherCatalog.Resolution.NotGatherable not -> Outcome.no("fail.not_gatherable", Map.of("item", not.displayName()));
 			case GatherCatalog.Resolution.Gatherable gatherable -> {
+				if (WorldRules.isProtected((ServerLevel) companion.level(), companion.blockPosition())) {
+					yield Outcome.no("fail.protected", Map.of());
+				}
 				int count = intent.count() == null ? gatherable.spec().defaultCount() : intent.count();
 				if (count < 1 || count > MAX_GATHER) {
 					yield Outcome.no("fail.count_invalid", Map.of("max", Integer.toString(MAX_GATHER)));
@@ -335,6 +332,10 @@ public final class Conversations {
 			return Outcome.no("fail.refuse_target", Map.of("mob", name));
 		}
 		if (archetype.refuses(Archetype.TargetRefusal.FARM_ANIMALS) && target instanceof Animal) {
+			return Outcome.no("fail.refuse_target", Map.of("mob", name));
+		}
+		// Never someone else's pet or mount, whatever the personality.
+		if (target instanceof TamableAnimal tame && tame.isTame() && !tame.isOwnedBy(player)) {
 			return Outcome.no("fail.refuse_target", Map.of("mob", name));
 		}
 		companion.setOrder(new AttackOrder(target, name));

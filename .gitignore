@@ -33,3 +33,9 @@ secrets.json
 .env.*
 local.properties
 companions-secrets.json
+
+# Local snapshots of built jars and source archives
+snapshots/
+
+# Local Polymer jars (copied from the server's polymer-bundled jar; otherwise fetched from maven.nucleoid.xyz)
+libs/

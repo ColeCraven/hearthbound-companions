@@ -2,6 +2,7 @@ package io.github.tekless.hearthbound.entity;
 
 import io.github.tekless.hearthbound.core.persona.Archetype;
 import io.github.tekless.hearthbound.world.GatherCatalog;
+import io.github.tekless.hearthbound.world.WorldRules;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -327,8 +328,13 @@ public final class Pastimes {
 	// ------------------------------------------------------------------ helpers
 
 	private static Optional<Pastime> lootNearby(ServerLevel level, CompanionEntity companion, ServerPlayer owner, int minAge) {
+		if (WorldRules.isProtected(level, owner.blockPosition())) {
+			return Optional.empty();
+		}
+		// Only things the owner dropped or nobody did (mob drops): never another player's stuff.
 		return level.getEntitiesOfClass(ItemEntity.class, owner.getBoundingBox().inflate(RANGE),
-						item -> item.isAlive() && item.getAge() >= minAge && !item.hasPickUpDelay())
+						item -> item.isAlive() && item.getAge() >= minAge && !item.hasPickUpDelay()
+								&& (item.getOwner() == null || item.getOwner() == owner))
 				.stream()
 				.filter(item -> companion.hasRoomFor(s -> ItemStack.isSameItemSameComponents(s, item.getItem())))
 				.min(Comparator.comparingDouble(item -> item.distanceToSqr(companion)))
@@ -356,6 +362,9 @@ public final class Pastimes {
 
 	/** True when nothing crafted is nearby - so we only pick flowers in the wild, not from a garden. */
 	static boolean isWild(ServerLevel level, BlockPos pos) {
+		if (WorldRules.isProtected(level, pos)) {
+			return false;
+		}
 		for (BlockPos p : BlockPos.betweenClosed(pos.offset(-3, -2, -3), pos.offset(3, 2, 3))) {
 			BlockState state = level.getBlockState(p);
 			if (!(state.isAir() || state.canBeReplaced() || state.is(BlockTags.LEAVES) || state.is(BlockTags.SMALL_FLOWERS)

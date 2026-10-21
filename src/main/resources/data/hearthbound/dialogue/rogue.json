@@ -419,6 +419,14 @@
       "Oh. It's you.",
       "What do you want now?",
       "Make it worth my while."
+    ],
+    "recruit.taken": [
+      "Sorry, love, I'm with {owner}. Make me a better offer some other time.",
+      "Spoken for. {owner} pays in adventure, and they paid first."
+    ],
+    "fail.protected": [
+      "Rob the town in broad daylight? Even I've got standards. Further out.",
+      "Not here. Too many witnesses. Let's go somewhere quieter."
     ]
   }
 }

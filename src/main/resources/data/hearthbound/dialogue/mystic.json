@@ -426,6 +426,14 @@
       "I'll walk the edges. Shadows like edges.",
       "Circling. Listening.",
       "Something's out there. Probably nothing. Probably."
+    ],
+    "recruit.taken": [
+      "I walk with {owner} now. Our threads are tangled for a while.",
+      "No. {owner} asked first, and the stars kept the receipt."
+    ],
+    "fail.protected": [
+      "Not here. This ground is spoken for. The wild places won't mind.",
+      "Leave the hall standing. We'll take what we need from the wilderness."
     ]
   }
 }

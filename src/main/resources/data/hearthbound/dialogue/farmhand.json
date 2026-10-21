@@ -428,6 +428,14 @@
       "Oh. Hi.",
       "Um. Hello.",
       "Yes? Sorry. Yes?"
+    ],
+    "recruit.taken": [
+      "Oh! I'm already with {owner}. Sorry! You could all come along together?",
+      "I said I'd go with {owner}. Gran says you keep your promises."
+    ],
+    "fail.protected": [
+      "Not here! Somebody worked hard on all this. Let's find a field or a forest.",
+      "I can't dig up people's home! Somewhere out in the wild, maybe?"
     ]
   }
 }

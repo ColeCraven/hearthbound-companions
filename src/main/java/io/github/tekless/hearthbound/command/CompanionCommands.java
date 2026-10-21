@@ -7,6 +7,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.tekless.hearthbound.core.intent.Intent;
+import io.github.tekless.hearthbound.dialogue.Texts;
 import io.github.tekless.hearthbound.core.intent.IntentType;
 import io.github.tekless.hearthbound.core.persona.Archetype;
 import io.github.tekless.hearthbound.core.persona.CastMember;
@@ -15,6 +16,9 @@ import io.github.tekless.hearthbound.dialogue.Conversations;
 import io.github.tekless.hearthbound.entity.CompanionEntity;
 import io.github.tekless.hearthbound.entity.CompanionSkin;
 import io.github.tekless.hearthbound.registry.ModEntities;
+import io.github.tekless.hearthbound.world.CompanionRoster;
+import io.github.tekless.hearthbound.world.CompanionTracker;
+import io.github.tekless.hearthbound.world.HubResidents;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -26,7 +30,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.phys.AABB;
 
 /**
  * {@code /companion ...} - a keyboard-friendly way to do everything the chat and UI can do, plus
@@ -36,9 +39,7 @@ public final class CompanionCommands {
 	private static final SuggestionProvider<CommandSourceStack> NEARBY_NAMES = (context, builder) -> {
 		ServerPlayer player = context.getSource().getPlayer();
 		if (player != null) {
-			AABB box = player.getBoundingBox().inflate(64);
-			player.level().getEntitiesOfClass(CompanionEntity.class, box, CompanionEntity::isAlive)
-					.forEach(c -> builder.suggest(c.companionName().split(" ")[0]));
+			CompanionTracker.near(player, 64).forEach(c -> builder.suggest(c.companionName().split(" ")[0]));
 		}
 		return builder.buildFuture();
 	};
@@ -93,7 +94,63 @@ public final class CompanionCommands {
 								.then(Commands.argument("model", StringArgumentType.word())
 										.suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("wide", "slim"), b))
 										.executes(ctx -> skin(ctx, StringArgumentType.getString(ctx, "model")))))));
+		root.then(Commands.literal("hub")
+				.requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+				.then(Commands.literal("list").executes(CompanionCommands::hubList))
+				.then(Commands.literal("spawn").executes(CompanionCommands::hubSpawn))
+				.then(Commands.literal("home")
+						.then(Commands.argument("name", StringArgumentType.word()).suggests(NEARBY_NAMES)
+								.executes(CompanionCommands::hubHome))));
 		dispatcher.register(root);
+	}
+
+	/** Lists every cast member the world knows about: at the hub, or travelling with someone. */
+	private static int hubList(CommandContext<CommandSourceStack> ctx) {
+		CommandSourceStack source = ctx.getSource();
+		if (!HubResidents.enabled()) {
+			source.sendFailure(Component.literal("The hub is off. Set server.hub in config/hearthbound.json and restart."));
+			return 0;
+		}
+		CompanionRoster roster = CompanionRoster.get(source.getServer());
+		for (CastMember member : HubResidents.residents()) {
+			CompanionRoster.Entry entry = roster.entryForCast(member);
+			String where = entry == null ? "not spawned yet" : entry.ownerName != null ? "travelling with " + entry.ownerName : "at the hub";
+			source.sendSuccess(() -> Component.literal(member.displayName()).withStyle(CompanionEntity.nameColour(member.archetype().id()))
+					.append(Component.literal(" - " + where).withStyle(ChatFormatting.GRAY)), false);
+		}
+		return 1;
+	}
+
+	/** Spawns any hub residents who don't exist yet, right now. */
+	private static int hubSpawn(CommandContext<CommandSourceStack> ctx) {
+		CommandSourceStack source = ctx.getSource();
+		var level = HubResidents.hubLevel(source.getServer());
+		var hub = HubResidents.hubPos();
+		if (level.isEmpty() || hub.isEmpty()) {
+			source.sendFailure(Component.literal("The hub is off. Set server.hub in config/hearthbound.json and restart."));
+			return 0;
+		}
+		level.get().getChunkAt(hub.get());
+		int spawned = HubResidents.spawnMissing(level.get(), hub.get());
+		source.sendSuccess(() -> Component.literal(spawned == 0 ? "Everyone already lives at the hub (or is out travelling)."
+				: spawned + " companion(s) moved into the hub."), true);
+		return spawned;
+	}
+
+	/** Sends a companion back to the hub, ending their travels with whoever had them. */
+	private static int hubHome(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+		ServerPlayer player = ctx.getSource().getPlayerOrException();
+		CompanionEntity companion = find(ctx, player);
+		if (companion == null) {
+			return 0;
+		}
+		HubResidents.hubPos().ifPresent(companion::makeHubResident);
+		if (companion.isRecruited()) {
+			companion.dismiss();
+		}
+		HubResidents.sendHome(companion);
+		ctx.getSource().sendSuccess(() -> Component.literal(companion.companionName() + " is back at the hub."), true);
+		return 1;
 	}
 
 	private static int summon(CommandContext<CommandSourceStack> ctx, String archetypeId, String name, String skinId, String model)
@@ -133,7 +190,7 @@ public final class CompanionCommands {
 		ServerPlayer player = ctx.getSource().getPlayerOrException();
 		List<CompanionEntity> party = Conversations.party(player);
 		if (party.isEmpty()) {
-			ctx.getSource().sendSuccess(() -> Component.translatable("message.hearthbound.no_party").withStyle(ChatFormatting.GRAY), false);
+			ctx.getSource().sendSuccess(() -> Texts.tr("message.hearthbound.no_party").withStyle(ChatFormatting.GRAY), false);
 			return 0;
 		}
 		for (CompanionEntity companion : party) {
@@ -171,8 +228,9 @@ public final class CompanionCommands {
 		if (companion == null) {
 			return 0;
 		}
-		if (companion.isRecruited() && !companion.isOwnedBy(player)) {
-			ctx.getSource().sendFailure(Component.literal("That companion travels with someone else."));
+		if (!companion.isOwnedBy(player) && !Commands.hasPermission(Commands.LEVEL_GAMEMASTERS).test(ctx.getSource())) {
+			ctx.getSource().sendFailure(Component.literal(companion.isRecruited() ? "That companion travels with someone else."
+					: "Only your own companions change outfits for you. Recruit them first."));
 			return 0;
 		}
 		String skinId = StringArgumentType.getString(ctx, "skin");
@@ -199,7 +257,7 @@ public final class CompanionCommands {
 		String name = StringArgumentType.getString(ctx, "name");
 		List<CompanionEntity> found = Conversations.nearbyNamed(player, name);
 		if (found.isEmpty()) {
-			ctx.getSource().sendFailure(Component.translatable("message.hearthbound.no_such_companion", name));
+			ctx.getSource().sendFailure(Texts.tr("message.hearthbound.no_such_companion", name));
 			return null;
 		}
 		return found.get(0);

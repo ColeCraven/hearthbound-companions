@@ -9,7 +9,12 @@ import io.github.tekless.hearthbound.entity.order.CompanionOrder;
 import io.github.tekless.hearthbound.network.HearthboundNetwork;
 import io.github.tekless.hearthbound.registry.ModEntities;
 import io.github.tekless.hearthbound.registry.ModItems;
+import io.github.tekless.hearthbound.server.SkinProfiles;
+import io.github.tekless.hearthbound.server.VanillaClients;
 import io.github.tekless.hearthbound.world.AmbientChatter;
+import io.github.tekless.hearthbound.world.CompanionRoster;
+import io.github.tekless.hearthbound.world.CompanionTracker;
+import io.github.tekless.hearthbound.world.HubResidents;
 import java.nio.file.Path;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -22,7 +27,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,12 +54,22 @@ public final class Hearthbound implements ModInitializer {
 	public void onInitialize() {
 		Path configDir = FabricLoader.getInstance().getConfigDir();
 		config = HearthboundConfig.load(configDir.resolve("hearthbound.json"));
+		boolean vanillaClients = VanillaClients.decide(config);
 		ModEntities.init();
-		ModItems.init();
+		ModItems.init(vanillaClients);
 		HearthboundNetwork.init();
+		if (vanillaClients) {
+			VanillaClients.start();
+		}
+		CompanionTracker.init();
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, selection) -> CompanionCommands.register(dispatcher));
 
-		ServerLifecycleEvents.SERVER_STARTED.register(server -> ai = AiService.create(config, configDir, server));
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+			ai = AiService.create(config, configDir, server);
+			SkinProfiles.load(configDir);
+			CompanionRoster.get(server);
+		});
+		ServerLifecycleEvents.SERVER_STOPPING.register(server -> CompanionRoster.close());
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> ai = null);
 
 		// "@Hazel follow me" in normal chat. Runs on the server thread after the message is shown.
@@ -74,6 +88,10 @@ public final class Hearthbound implements ModInitializer {
 		if (server.getTickCount() % 20 != 0) {
 			return;
 		}
+		HubResidents.tick(server);
+		if (server.getTickCount() % 200 == 0) {
+			CompanionRoster.get(server).save();
+		}
 		for (ServerPlayer player : server.getPlayerList().getPlayers()) {
 			for (CompanionEntity companion : Conversations.party(player)) {
 				if (companion.baseMode() == CompanionOrder.Kind.FOLLOW && companion.order().kind() == CompanionOrder.Kind.FOLLOW
@@ -87,13 +105,10 @@ public final class Hearthbound implements ModInitializer {
 	}
 
 	private static void bringFollowers(ServerPlayer player, ServerLevel origin) {
-		java.util.List<Entity> loaded = new java.util.ArrayList<>();
-		origin.getAllEntities().forEach(loaded::add);
-		for (Entity entity : loaded) {
+		for (CompanionEntity companion : CompanionTracker.ownedBy(player)) {
 			// Only loaded companions are here, i.e. the ones that were near the player when they left.
 			// Knocked-down followers come too: otherwise they'd be stranded in an unloaded chunk.
-			if (entity instanceof CompanionEntity companion && companion.isOwnedBy(player) && companion.isAlive()
-					&& companion.baseMode() == CompanionOrder.Kind.FOLLOW) {
+			if (companion.level() == origin && companion.baseMode() == CompanionOrder.Kind.FOLLOW) {
 				boolean moved = companion.teleportNear(player);
 				LOGGER.info("{} followed {} from {}: {}", companion.companionName(), player.getName().getString(),
 						origin.dimension().identifier(), moved ? "ok" : "no safe spot");

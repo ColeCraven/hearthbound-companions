@@ -421,6 +421,14 @@
       "I am here.",
       "Yes?",
       "Speak."
+    ],
+    "recruit.taken": [
+      "I have given my word to {owner}. I keep my word.",
+      "Forgive me. I already walk beside {owner}, and I will not leave them."
+    ],
+    "fail.protected": [
+      "Not within these walls. This place belongs to everyone. We gather further afield.",
+      "I will not strip the land where people make their home. Lead me somewhere wild."
     ]
   }
 }

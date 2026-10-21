@@ -465,6 +465,15 @@
       "What.",
       "You again.",
       "Make it quick."
+    ],
+    "recruit.taken": [
+      "I'm already under contract with {owner}. Take it up with them.",
+      "Sorry. {owner} hired me first, and I finish my contracts.",
+      "Not my boss. {owner} is."
+    ],
+    "fail.protected": [
+      "Not here. Folk live here. Take me somewhere wild and I'll chop all day.",
+      "Tear up the town? No. Let's go further out."
     ]
   }
 }

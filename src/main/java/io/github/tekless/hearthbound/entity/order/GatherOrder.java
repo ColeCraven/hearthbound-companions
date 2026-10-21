@@ -6,6 +6,7 @@ import io.github.tekless.hearthbound.core.task.StuckDetector;
 import io.github.tekless.hearthbound.core.task.TaskStatus;
 import io.github.tekless.hearthbound.entity.CompanionEntity;
 import io.github.tekless.hearthbound.world.GatherSpec;
+import io.github.tekless.hearthbound.world.WorldRules;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -170,7 +171,17 @@ public final class GatherOrder implements CompanionOrder, GatherWorld<BlockPos> 
 			}
 			if (!found.isEmpty()) {
 				found.sort(Comparator.comparingDouble(p -> p.distSqr(origin) + Math.max(0, p.getY() - origin.getY()) * 2.0));
-				return Optional.of(found.get(0));
+				// Shared worlds: skip anything in a protected area or right next to someone's build.
+				int checked = 0;
+				for (BlockPos candidate : found) {
+					if (WorldRules.mayBreak(level, candidate)) {
+						return Optional.of(candidate);
+					}
+					excluded.add(candidate);
+					if (++checked >= 48) {
+						break;
+					}
+				}
 			}
 		}
 		return Optional.empty();

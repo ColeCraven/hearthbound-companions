@@ -31,10 +31,11 @@ class LineBankTest {
 				"fail.downed", "fail.no_target", "fail.stuck", "unclear.generic", "unclear.gather_what", "combat.low_health",
 				"combat.retreat", "combat.player_low_health", "combat.creeper", "downed", "revived", "move.caught_up",
 				"ambient.night", "ambient.dawn", "ambient.rain", "ambient.thunder", "ambient.cave", "ambient.idle", "callout.lava",
-				"callout.chest", "hurt_by_player", "fail.count_invalid")) {
+				"callout.chest", "hurt_by_player", "fail.count_invalid", "fail.protected")) {
 			REQUIRED.put(key, base);
 		}
 		REQUIRED.put("recruit.party_full", plus(base, "count"));
+		REQUIRED.put("recruit.taken", plus(base, "owner"));
 		REQUIRED.put("ack.gather", plus(base, "count", "item"));
 		REQUIRED.put("ack.cancel", plus(base, "task"));
 		REQUIRED.put("ack.attack", plus(base, "mob"));

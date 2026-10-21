@@ -1,9 +1,9 @@
 package io.github.tekless.hearthbound.entity.order;
 
+import io.github.tekless.hearthbound.Hearthbound;
 import io.github.tekless.hearthbound.core.task.FollowPolicy;
 import io.github.tekless.hearthbound.core.task.StuckDetector;
 import io.github.tekless.hearthbound.core.task.TaskStatus;
-import io.github.tekless.hearthbound.Hearthbound;
 import io.github.tekless.hearthbound.entity.CompanionEntity;
 import io.github.tekless.hearthbound.entity.Pastimes;
 import net.minecraft.server.level.ServerPlayer;

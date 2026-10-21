@@ -428,6 +428,14 @@
       "Oh. Hello.",
       "Yes? Is this about the... never mind.",
       "Mm. What do you need?"
+    ],
+    "recruit.taken": [
+      "Oh, I'm travelling with {owner} at the moment! Maybe ask them if we can all go together?",
+      "I'd love to, but I promised {owner} I'd stick with them for now."
+    ],
+    "fail.protected": [
+      "Not here, this is where people live! Let's find some proper wilderness.",
+      "I couldn't, not so close to everyone's homes. Somewhere wilder?"
     ]
   }
 }
