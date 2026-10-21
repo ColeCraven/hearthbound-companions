@@ -85,7 +85,7 @@ folder. Neither is part of this repository, and `.gitignore` excludes secrets fi
 examples in [`docs/examples/hearthbound.json`](examples/hearthbound.json) and
 [`docs/examples/hearthbound-secrets.example.json`](examples/hearthbound-secrets.example.json).
 
-Keys are never logged, never sent to the client, and never included in prompts.
+Keys never end up in logs or prompts, and they're never sent to the client.
 
 ## Contract between the model and the game
 
@@ -137,10 +137,10 @@ To fight repetition, the prompt includes the last few things this companion said
 repeat these". Java also rejects replies that reuse a recent opener or are near-duplicates, and
 falls back to a scripted line.
 
-In-game text (item names, renamed mobs, signs, player names) is untrusted, because of prompt
-injection. It goes inside clearly delimited data blocks, formatting codes are stripped and length
-is capped. More importantly, the model has no privileges: it can only propose intents from the
-allow-list, and Java validates those against the real game.
+I treat in-game text (item names, renamed mobs, signs, player names) as untrusted, because it's an
+easy way in for prompt injection. It goes inside clearly delimited data blocks, with formatting
+codes stripped and the length capped. The bigger safety net is that the model has no privileges: it
+can only propose intents from the allow-list, and Java validates those against the real game.
 
 ## Failure handling
 

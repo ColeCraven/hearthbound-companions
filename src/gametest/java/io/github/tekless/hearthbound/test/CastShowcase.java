@@ -8,8 +8,9 @@ import net.fabricmc.fabric.api.client.gametest.v1.context.TestServerContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
 
 /**
- * Renders the named cast in the real client for review: front and back line-ups, close-ups of
- * each group, and a few of them walking (to check seams and outer layers in motion).
+ * Renders the named cast in the real client for review: the README banner, front and back
+ * line-ups, close-ups of each group, and a few of them walking (to check seams and outer layers in
+ * motion).
  */
 @SuppressWarnings("UnstableApiUsage")
 public class CastShowcase implements FabricClientGameTest {
@@ -24,6 +25,21 @@ public class CastShowcase implements FabricClientGameTest {
 			context.waitTicks(20);
 
 			CastMember[] cast = CastMember.values();
+			// The README banner, like a team photo: the back row on a one-block step, no HUD.
+			server.runCommand("execute at @p run fill ~-6 ~ ~5 ~6 ~ ~6 minecraft:grass_block");
+			for (int i = 0; i < cast.length; i++) {
+				boolean backRow = i >= 6;
+				summon(server, cast[i], (2.5 - (i % 6)) * 1.15 + (backRow ? 0.3 : 0), backRow ? 1 : 0, backRow ? 5.5 : 3.9, 180, true);
+			}
+			context.waitTicks(30);
+			clearChat(context);
+			context.runOnClient(client -> client.gui.hud.toggle());
+			context.waitTicks(2);
+			context.takeScreenshot("cast-banner");
+			context.runOnClient(client -> client.gui.hud.toggle());
+			remove(server, context);
+			server.runCommand("execute at @p run fill ~-6 ~ ~5 ~6 ~ ~6 minecraft:air");
+
 			// Line-up: two rows of six, facing the camera, then facing away.
 			for (boolean back : new boolean[] {false, true}) {
 				for (int i = 0; i < cast.length; i++) {
@@ -63,9 +79,13 @@ public class CastShowcase implements FabricClientGameTest {
 	}
 
 	private static void summon(TestServerContext server, CastMember member, double x, double z, float yaw, boolean frozen) {
+		summon(server, member, x, 0, z, yaw, frozen);
+	}
+
+	private static void summon(TestServerContext server, CastMember member, double x, double y, double z, float yaw, boolean frozen) {
 		server.runCommand(String.format(Locale.ROOT,
-				"execute at @p run summon hearthbound:companion ~%.2f ~ ~%.2f {Archetype:\"%s\",Skin:%d,CustomName:\"%s\",CustomNameVisible:1b,%sRotation:[%.0ff,0f]}",
-				x, z, member.archetype().id(), member.skinVariant(), member.displayName(), frozen ? "NoAI:1b," : "", yaw));
+				"execute at @p run summon hearthbound:companion ~%.2f ~%.2f ~%.2f {Archetype:\"%s\",Skin:%d,CustomName:\"%s\",CustomNameVisible:1b,%sRotation:[%.0ff,0f]}",
+				x, y, z, member.archetype().id(), member.skinVariant(), member.displayName(), frozen ? "NoAI:1b," : "", yaw));
 	}
 
 	private static void remove(TestServerContext server, ClientGameTestContext context) {

@@ -1,86 +1,138 @@
 <div align="center">
 
+<img src="src/main/resources/assets/hearthbound/icon.png" width="88" alt="Hearthbound icon">
+
 # Hearthbound Companions
 
-**RPG-style companions for Minecraft. Recruit them, talk to them, go on adventures together.**
+**RPG-style companions for Minecraft.**<br>
+Recruit them, chat with them, and go on adventures together.
+
+<a href="https://github.com/ColeCraven/hearthbound-companions/releases/latest"><img src="https://img.shields.io/badge/Download-v0.3.0-2ea44f?style=for-the-badge" alt="Download v0.3.0"></a>
+<a href="#install"><img src="https://img.shields.io/badge/Install-4_easy_steps-3A7BD5?style=for-the-badge" alt="Install in 4 easy steps"></a>
 
 ![Minecraft 26.3](https://img.shields.io/badge/Minecraft-26.3-62B47A)
 ![Fabric](https://img.shields.io/badge/Loader-Fabric-DBD0B4)
-![Java 25](https://img.shields.io/badge/Java-25-E76F00)
+![Servers](https://img.shields.io/badge/Servers-no_client_mod_needed-8A63D2)
 ![License: MIT](https://img.shields.io/badge/License-MIT-3A7BD5)
-![Status: v0.3 preview](https://img.shields.io/badge/Status-v0.3%20preview-8A63D2)
 
-![Freya, Bram, Hazel and Emmett](docs/images/cast/group-1.png)
+<img src="docs/images/cast/banner.png" width="100%" alt="All twelve companions standing together in a meadow">
+
+**[Install](#install)** · **[Your first companion](#your-first-companion)** · **[What they can do](#what-they-can-do)** · **[Cheat sheet](#cheat-sheet)** · **[Servers](#playing-on-a-server)** · **[FAQ](#faq)**
 
 </div>
 
+<br>
+
 I've always loved a good RPG companion: the one who carries way too much of your loot and has a
-dry comment for every dungeon. Minecraft adventures feel a bit lonely in comparison, so I made
-this: a mod that adds companions who look like players, have their own personalities, and
-actually help you out.
+dry comment for every dungeon. Minecraft adventures feel a bit lonely in comparison, so I made this: a
+mod that adds companions who look like players, have their own personalities, and actually help
+you out.
 
-You can walk up to one, ask them to join you, and from then on they follow you around, fight
-next to you, chop wood when you ask, wander off to look at flowers when you stop to build, and
-answer back when you talk to them in chat. Each one sounds different. Bram the sellsword
-answers in about four words. Rosie the farm girl is scared of the dark and won't stop talking
-about her gran.
+Walk up to one, ask them to join you, and from then on they follow you around, fight next to you,
+chop wood, dig, build, wander off to look at flowers when you stop, and talk back when you talk to
+them. Each one sounds different. Bram the sellsword answers in about four words. Rosie the farm
+girl is scared of the dark and won't stop talking about her gran.
 
-## Meet the cast
+- **Just talk.** It all happens in normal chat. Say hi once and keep typing, like you would with a friend.
+- **They get to know you.** Tell them your nickname or what you love, and they remember it and bring it up later.
+- **They pull their weight.** Gathering, mining trips, tunnels, shelters, walls and bridges.
+- **They never fake it.** If they say they'll do something, the game is really doing it. If they can't, they tell you why.
+- **Works on servers** with nothing for your friends to install.
 
-There are twelve characters, two for each personality, and every one of them has their own
-hand-made skin. You can also get wanderers who use the game's default skins (all nine of them,
-with wide or slim arms).
+<br>
 
-| | Personality | Who they are |
+## Install
+
+> [!TIP]
+> Joining a server that already runs Hearthbound? You don't need to install anything. Just join and say hi.
+
+You need **Minecraft: Java Edition 26.3** on Windows, Mac or Linux. Setup takes about five minutes.
+
+**1. Install Fabric.** Grab the [Fabric installer](https://fabricmc.net/use/installer/), run it, set
+the Minecraft version to **26.3** and click **Install**. That adds a Fabric profile to your Minecraft
+Launcher.
+
+**2. Download the mod.** From the [latest release](https://github.com/ColeCraven/hearthbound-companions/releases/latest),
+download **`Hearthbound-Companions-0.3.0-install-kit.zip`**. It has the mod, Fabric API (a library
+the mod needs) and a step-by-step guide.
+
+**3. Drop two files into your `mods` folder.** Unzip the kit and copy both `.jar` files into `mods`:
+
+| Windows | Mac | Linux |
 |---|---|---|
-| **Freya** | Sellsword | Golden-haired shieldmaiden from the north. Charges anything with teeth. |
-| **Bram** | Sellsword | Scarred veteran who has outlived three mercenary companies. Not a talker. |
-| **Hazel** | Naturalist | Auburn-haired ranger who stops to sketch every flower you walk past. |
-| **Emmett** | Naturalist | Gentle herbalist with a sprig of something behind his ear. |
-| **Cass** | Rogue | Treasure hunter with a sharp tongue. Pockets anything you leave on the ground. |
-| **Lucas** | Rogue | Smooth-talking thief who calls you "partner" and means it, mostly. |
-| **Daisy** | Guardian | Paladin with a gold circlet and a long braid. Will not hurt a villager, ever. |
-| **Conoby** | Guardian | Retired rogue-knight with a rapier and a devilish grin. Has lost enough friends already. |
-| **Rosie** | Farmhand | Flower crown, first real adventure, nervous about caves, adores every cow she meets. |
-| **Samuel** | Farmhand | Farm lad who still isn't sure leaving home was a good idea. |
-| **Luna** | Mystic | Silver-haired stargazer in a star-stitched cape. Likes the night more than you do. |
-| **Casper** | Mystic | Young sorcerer in an emerald robe. Says very little, notices everything. |
+| Press <kbd>Win</kbd> + <kbd>R</kbd>, paste `%appdata%\.minecraft` and press Enter | In Finder press <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>G</kbd> and go to `~/Library/Application Support/minecraft` | `~/.minecraft` |
 
-<p align="center">
-  <img src="docs/images/cast/group-2.png" width="49%" alt="Cass, Lucas, Daisy and Conoby">
-  <img src="docs/images/cast/group-3.png" width="49%" alt="Samuel, Rosie, Luna and Casper">
-</p>
+Open the `mods` folder in there. If it doesn't exist yet, just make one.
 
-More about them (and how I drew the skins) in [docs/CAST.md](docs/CAST.md).
+**4. Play.** Open the Minecraft Launcher, pick **fabric-loader-26.3** next to the Play button, and hit Play.
+
+> [!IMPORTANT]
+> Once a world has companions in it, only open it with the Fabric profile. Plain Minecraft doesn't
+> know what a companion is and quietly removes them from the world.
+
+<details>
+<summary><b>Using Prism, the Modrinth App or CurseForge instead?</b></summary>
+<br>
+
+Make a new instance for Minecraft 26.3 with Fabric, then drop `hearthbound-0.3.0.jar` and
+[Fabric API](https://modrinth.com/mod/fabric-api) into that instance's `mods` folder. That's it.
+
+</details>
+
+<br>
+
+## Your first companion
+
+1. Create a world with **Allow Commands** turned on (or play in Creative).
+2. Summon someone. Type `/companion summon rosie` in chat. Any of the cast works: `freya`, `bram`,
+   `hazel`, `emmett`, `cass`, `lucas`, `daisy`, `conoby`, `rosie`, `samuel`, `luna`, `casper`.
+   In Creative there's also a **Companion Spawn Egg** in the Spawn Eggs tab.
+3. Say hi. Right-click her, or type `@Rosie hi!`.
+4. Ask her along with `@Rosie join me`.
+5. Now just talk. Try "how are you?", "follow me", "get me 16 oak logs" or "build a shelter".
+
+> [!TIP]
+> Survival world with cheats off? Press Esc, choose **Open to LAN**, turn on **Allow Commands** and
+> click **Start LAN World**. Commands work until you quit, and the world is back to normal next time.
+
+Forgot something? `/companion help` lists everything you can say and do, right in game.
+
+<br>
 
 ## What they can do
 
-You talk to them in normal chat. Say hi with `@Rosie hi!` (or just right-click her) and after that
-you can keep chatting like you would with anyone: "how are you?", "tell me about your family",
-"what should we do today?". No @ needed until you say bye or wander off, and a typo in a name
-(`@rsoie`) still gets through. Orders work the same way: `@Hazel follow me`,
-`Bram, get me 16 oak logs`, `@all wait here`. Press **G** and the chat opens with the name of
-whoever you're looking at already filled in. Every personality has well over a hundred situations
-of their own dialogue, so you're not hearing the same line over and over.
+### Just talk to them
 
-They get to know you, too. Tell one "call me Captain" and that's what they call you from then on.
-Tell them you love the ocean and they'll point it out when you get to one. When things are quiet
-they ask you stuff ("What should I call you, anyway?", "What's your favourite thing to find down a
-mine?") and remember the answer. Ask "what do you know about me?" and they'll tell you.
+Say hi with `@Rosie hi!` (or right-click her) and after that you can keep chatting like you would
+with anyone: "how are you?", "tell me about your family", "what should we do today?". No @ needed
+until you say bye or wander off, and a typo in a name (`@rsoie`) still gets through. Orders work
+the same way: `@Hazel follow me`, `Bram, get me 16 oak logs`, `@all wait here`. Press <kbd>G</kbd>
+and the chat opens with the name of whoever you're looking at already filled in.
+
+Every personality has well over a hundred situations of their own dialogue, so you're not hearing
+the same line over and over.
+
+### They get to know you
+
+Tell one "call me Captain" and that's what they call you from then on. Tell them you love the
+ocean and they'll point it out when you get to one. When things are quiet they ask you stuff
+("What should I call you, anyway?", "What's your favourite thing to find down a mine?") and
+remember the answer. Ask "what do you know about me?" and they'll tell you.
 
 <p align="center">
-  <img src="docs/images/free-chat.png" width="70%" alt="Rosie learning a nickname and a favourite thing, then saying them back">
+  <img src="docs/images/free-chat.png" width="80%" alt="Rosie learning a nickname and a favourite thing, then saying them back">
 </p>
 
-They notice what you're up to. They cheer when you get an advancement or find diamonds, say
-goodnight when you go to bed and ask how you slept in the morning, and panic when you die. Crouch
-twice while looking at one and they'll crouch back. If you're starving and they have food on them,
-they hand some over, and the ones who like you sometimes give you a flower they picked on the way.
+They notice what you're up to as well. They cheer when you get an advancement or find diamonds,
+say goodnight when you go to bed and ask how you slept in the morning, and panic when you die.
+Crouch twice while looking at one and they'll crouch back. If you're starving and they have food
+on them, they hand some over, and the ones who like you sometimes give you a flower they picked
+on the way.
 
-### Orders and real work
+### They pull their weight
 
-Follow, wait, come here, gather stuff, hand items over, attack that thing, stop, go home. They can
-also do proper jobs:
+Follow, wait, come here, gather stuff, hand items over, attack that thing, stop, go home. And some
+proper jobs:
 
 - **Dig.** "go mining" digs a staircase down and then a tunnel along, grabbing any ores next to it.
   "dig a tunnel" and "dig down 20" do one or the other. They need a pickaxe, put torches up if they
@@ -89,40 +141,33 @@ also do proper jobs:
   you), using blocks from their pack. A shelter gets a door and a torch if they have them.
 
 <p align="center">
-  <img src="docs/images/building.png" width="70%" alt="Conoby's finished shelter, built from the planks in his pack">
+  <img src="docs/images/building.png" width="49%" alt="Conoby next to the shelter he just built from planks in his pack">
+  <img src="docs/images/gathering.png" width="49%" alt="Bram chopping logs, with the party list in the corner">
 </p>
 
 When they can't do something, they tell you why, in character: there's no iron around here, they
-need a pickaxe, the ground's too uneven to build on, they're short on blocks. Type `/companion help`
-in game for the full list of things you can say.
+need a pickaxe, the ground's too uneven to build on, they're short on blocks.
 
-Stand still for a bit and they get bored. Hazel goes to study a
-flower, Cass grabs loot you left lying around (and admits it), Rosie goes and pets the
-nearest cow, the fighters walk a little guard circuit, and Luna stares at the stars at
-night. They drop it the second you move or give an order. They also nag you to eat, suggest
-finding shelter before dark, and bicker with each other.
+### They have a life of their own
 
-On the move they keep a comfortable distance, hurry when you sprint off, and if you get
-separated (or jump through a portal) they catch up next to you on safe ground. They warn you
-about creepers and mobs sneaking up behind you.
+Stand still for a bit and they get bored. Hazel goes to study a flower, Cass grabs loot you left
+lying around (and admits it), Rosie pets the nearest cow, the fighters walk a little guard circuit,
+and Luna stares at the stars at night. They drop it the second you move or give an order. They
+also nag you to eat, suggest finding shelter before dark, and bicker with each other.
 
-By default they're knocked down instead of killed, so you never lose someone you've got attached to. Their name, personality, gear,
-current task and memories all save with your world.
+On the move they keep a comfortable distance, hurry when you sprint off, and if you get separated
+(or jump through a portal) they catch up next to you on safe ground. They warn you about creepers
+and mobs sneaking up behind you. By default they're knocked down instead of killed, so you never lose someone you've got attached to.
 
-You can also right-click a companion with an item to give it to them. Everyone has
-favourites (emeralds for Cass, bread for Rosie, amethyst for Luna), and it warms them up
-towards you. Give a fighter a better sword and they'll equip it.
+Right-click one with an item to give it to them. Everyone has favourites (emeralds for Cass, bread
+for Rosie, amethyst for Luna), and it warms them up towards you. Give a fighter a better sword and
+they'll use it. Their name, personality, gear, current task and memories all save with your world.
 
-<p align="center">
-  <img src="docs/images/party-conversation.png" width="49%" alt="A party chatting, and Bram explaining he can't build a castle">
-  <img src="docs/images/gathering.png" width="49%" alt="Bram gathering logs, shown in the party list">
-</p>
+### They don't lie to you
 
-## They don't lie to you
-
-This is the part I cared about most. A lot of AI companion mods let a language model decide
-what the character does, and you end up with a follower who says "Sure, I'll mine you some
-diamonds!" and then stands there. I hate that.
+This is the part I cared about most. A lot of AI companion mods let a language model decide what
+the character does, and you end up with a follower who says "Sure, I'll mine you some diamonds!"
+and then stands there. I hate that.
 
 So talking and doing are completely separate here:
 
@@ -143,24 +188,48 @@ Your message goes through a plain rule-based parser first. If it's an order, the
 whether it can actually happen, starts the task, and only then lets the companion answer. Progress
 and "done" messages come straight from the task, so "Here's your 16 oak logs" only shows up once
 the logs are in your inventory. If you hook up an AI model, it can only suggest an action from a
-short list, and the game double-checks it the same way. If the game says no, the model's reply
-gets thrown out and the companion tells you the real reason instead.
+short list, and the game double-checks it the same way. If the game says no, the model's reply gets
+thrown out and the companion tells you the real reason instead.
 
-There's more detail in [ARCHITECTURE.md](docs/ARCHITECTURE.md) and [AI_DESIGN.md](docs/AI_DESIGN.md)
-if you're into that.
+<p align="center">
+  <img src="docs/images/party-conversation.png" width="80%" alt="A party chatting, and Bram explaining he can only build a shelter, a wall or a bridge">
+</p>
 
-## Installing
+<br>
 
-You'll need Minecraft Java Edition 26.3 with Fabric.
+## Meet the cast
 
-1. Install [Fabric Loader](https://fabricmc.net/use/installer/) (0.19.5 or newer) for 26.3.
-2. Drop [Fabric API](https://modrinth.com/mod/fabric-api) into your `mods` folder.
-3. Drop `hearthbound-0.3.0.jar` in there too (grab it from [Releases](../../releases)). Only want
-   single player? v0.1.0 there is the version from before server support was added.
-4. Launch the Fabric profile.
+There are twelve characters, two for each personality, and every one of them has their own
+hand-made skin. You'll also meet wanderers who use the game's default skins (all nine of them,
+with wide or slim arms).
 
-To meet someone quickly, grab a **Companion Spawn Egg** from the creative menu, or with cheats on
-run `/companion summon hazel`. Walk up, right-click to say hi, then type `@Hazel will you join me?`.
+| | Personality | Who they are |
+|---|---|---|
+| **Freya** | Sellsword | Golden-haired shieldmaiden from the north. Charges anything with teeth. |
+| **Bram** | Sellsword | Scarred veteran who has outlived three mercenary companies. Not a talker. |
+| **Hazel** | Naturalist | Auburn-haired ranger who stops to sketch every flower you walk past. |
+| **Emmett** | Naturalist | Gentle herbalist with a sprig of something behind his ear. |
+| **Cass** | Rogue | Treasure hunter with a sharp tongue. Pockets anything you leave on the ground. |
+| **Lucas** | Rogue | Smooth-talking thief who calls you "partner" and means it, mostly. |
+| **Daisy** | Guardian | Paladin with a gold circlet and a long braid. Will not hurt a villager, ever. |
+| **Conoby** | Guardian | Retired rogue-knight with a rapier and a devilish grin. Has lost enough friends already. |
+| **Rosie** | Farmhand | Flower crown, first real adventure, nervous about caves, adores every cow she meets. |
+| **Samuel** | Farmhand | Farm lad who still isn't sure leaving home was a good idea. |
+| **Luna** | Mystic | Silver-haired stargazer in a star-stitched cape. Likes the night more than you do. |
+| **Casper** | Mystic | Young sorcerer in an emerald robe. Says very little, notices everything. |
+
+<p align="center">
+  <img src="docs/images/cast/group-1.png" width="32%" alt="Freya, Bram, Hazel and Emmett">
+  <img src="docs/images/cast/group-2.png" width="32%" alt="Cass, Lucas, Daisy and Conoby">
+  <img src="docs/images/cast/group-3.png" width="32%" alt="Samuel, Rosie, Luna and Casper">
+</p>
+
+More about them (and how I drew the skins) in [CAST.md](docs/CAST.md), and how the six
+personalities differ in [PERSONALITIES.md](docs/PERSONALITIES.md).
+
+<br>
+
+## Cheat sheet
 
 | You want to | Type in chat | Or use a command |
 |---|---|---|
@@ -176,29 +245,44 @@ run `/companion summon hazel`. Walk up, right-click to say hi, then type `@Hazel
 | Stop a task | `@Name stop` | `/companion cancel Name` |
 | Swap items | sneak + right-click them | `/companion inventory Name` |
 | Let them go | `@Name you're dismissed` | `/companion dismiss Name` |
-| See everything you can do | `@Name what can you do?` | `/companion help` |
+| Talk to everyone at once | `@all follow me` | |
+| See everything | `@Name what can you do?` | `/companion help` |
 
-Press **H** to hide the little party list in the corner.
+| Key | What it does |
+|---|---|
+| <kbd>G</kbd> | Opens chat with the name of the companion you're looking at |
+| <kbd>H</kbd> | Shows or hides the party list in the corner |
+| Right-click | Say hi, or hand over the item you're holding |
+| Sneak + right-click | Open their pack |
+| Crouch twice | Say hello the Minecraft way |
+
+<br>
 
 ## Playing on a server
 
-You can also run it on a multiplayer server, and your friends don't need to install anything. With
-[Polymer](https://modrinth.com/mod/polymer) on the server, companions show up for unmodded players as
-player-shaped mannequins with a name tag and a short grey line under it (their personality, or
-who they're travelling with).
-Talking, recruiting and orders all work exactly the same.
+You can run Hearthbound on a multiplayer server too, and your friends don't need to install
+anything. With [Polymer](https://modrinth.com/mod/polymer) on the server, companions show up for
+unmodded players as player-shaped mannequins with a name tag and a short grey line under it (their
+personality, or who they're travelling with). Talking, recruiting and orders all work exactly the
+same.
 
-On my own server the whole cast lives in the spawn hub, hanging around until someone asks them
-along. Each player gets their own party, only you can give your companions orders, nobody can hurt
-someone else's companion, and they won't break blocks near the hub or anyone's builds.
+On my own server the whole cast lives at a hub, hanging around until someone asks them along. Each
+player gets their own party, only you can give your companions orders, nobody can hurt someone
+else's companion, and they won't break blocks near the hub or anyone's builds.
 
 <p align="center">
-  <img src="docs/images/server/vanilla-client-hub.png" width="70%" alt="The cast at the hub, seen from an unmodded client">
+  <img src="docs/images/server/vanilla-client-hub.png" width="80%" alt="The cast around the campfire at the hub, seen from an unmodded client">
 </p>
 
-Setup, the hub config and the multiplayer rules are in [docs/SERVER.md](docs/SERVER.md).
+Setup, the hub config and the multiplayer rules are in [SERVER.md](docs/SERVER.md).
+
+<br>
 
 ## Settings
+
+<details>
+<summary><b>The config file</b></summary>
+<br>
 
 The config lives at `config/hearthbound.json` and gets created the first time you play.
 
@@ -210,7 +294,11 @@ The config lives at `config/hearthbound.json` and gets created the first time yo
 | `autonomy` | `1.0` | How often they wander off to do their own thing |
 | `ai.provider` | `none` | `none`, `ollama`, `openai` or `anthropic` |
 
-### Optional: AI conversations
+</details>
+
+<details>
+<summary><b>Optional: AI conversations</b></summary>
+<br>
 
 Everything above works without any AI at all. If you want proper free-form conversations on top,
 you can plug in a language model.
@@ -228,8 +316,76 @@ smallest models. Only your conversation with that one companion, a short memory,
 description of where you are (biome, time, weather, health) gets sent. Your coordinates never are.
 
 If the AI is slow or offline, companions just fall back to their own lines and orders keep working.
+More detail in [AI_DESIGN.md](docs/AI_DESIGN.md).
 
-## Building it yourself
+</details>
+
+<br>
+
+## FAQ
+
+<details>
+<summary><b>The game won't start, or it says Fabric API is required</b></summary>
+<br>
+
+Make sure both jars from the kit are in your `mods` folder: `hearthbound-0.3.0.jar` and
+`fabric-api-0.164.0+26.3.jar`. If the error mentions a Minecraft version, re-run the Fabric
+installer and pick 26.3.
+
+</details>
+
+<details>
+<summary><b>The game starts, but nothing's different</b></summary>
+<br>
+
+You probably launched "Latest release" instead of **fabric-loader-26.3**. Pick the Fabric profile
+next to the Play button. The title screen mentions Fabric in the corner when it worked.
+
+</details>
+
+<details>
+<summary><b>It says "Unknown command" when I type /companion</b></summary>
+<br>
+
+Commands are off in that world. Use the Open to LAN trick from [Your first companion](#your-first-companion),
+or grab a spawn egg in Creative. Talking to companions with `@Name` works without commands.
+
+</details>
+
+<details>
+<summary><b>A companion doesn't answer me</b></summary>
+<br>
+
+Check the name is spelled close enough, with @ in front, and that you're within about 60 blocks.
+If you're chatting with friends nearby, look at the companion you're talking to, so your chat with
+people isn't taken over.
+
+</details>
+
+<details>
+<summary><b>Does it work with other mods?</b></summary>
+<br>
+
+It should. I've run it alongside Lithium, FerriteCore, Polymer, Ledger and Universal Graves on a
+server without problems. If something clashes, please open an issue.
+
+</details>
+
+<details>
+<summary><b>Bedrock, consoles or phones?</b></summary>
+<br>
+
+Sorry, Java Edition only. Bedrock players can't join a Java server running it either.
+
+</details>
+
+<br>
+
+## For the curious
+
+<details>
+<summary><b>Building it yourself</b></summary>
+<br>
 
 Gradle needs Java 25 (the one that comes with the Minecraft launcher works fine).
 
@@ -250,18 +406,40 @@ The skins are generated by a small Python script, so you can tweak colours and r
 python tools/skins/cast.py
 ```
 
-## Testing
+</details>
+
+<details>
+<summary><b>Testing</b></summary>
+<br>
 
 I tried to test this properly instead of just eyeballing it. There are 219 unit tests (the chat
 parser, reading answers to the companions' own questions, the gathering logic, the AI response
 handling), 33 tests that run inside a real game server (gathering logs and handing them over,
 digging a tunnel, stopping before lava, building a shelter and a bridge, remembering a nickname,
-reacting to an advancement, saving and loading), and a few scripted runs in the actual game client. One of those drops two
-companions into a normal generated world, walks them across the terrain, fights zombies at night,
-goes to the Nether and back, then quits and reloads the world to check nothing got lost. It caught
-a couple of real bugs along the way.
+reacting to an advancement, saving and loading), and a few scripted runs in the actual game client.
+One of those drops two companions into a normal generated world, walks them across the terrain,
+fights zombies at night, goes to the Nether and back, then quits and reloads the world to check
+nothing got lost. It caught a couple of real bugs along the way.
 
 The full write-up, including what still needs testing, is in [TESTING.md](docs/TESTING.md).
+
+</details>
+
+<details>
+<summary><b>How it's put together</b></summary>
+<br>
+
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md): how a chat message becomes a real action in the world
+- [AI_DESIGN.md](docs/AI_DESIGN.md): the optional AI side, prompts, costs and privacy
+- [TECH_DECISIONS.md](docs/TECH_DECISIONS.md): why Fabric, why a mob with a player model, and more
+- [PERSONALITIES.md](docs/PERSONALITIES.md): the six archetypes and what they change
+- [SERVER.md](docs/SERVER.md): running it for friends with no client mod
+- [RESEARCH.md](docs/RESEARCH.md): what I looked at before starting
+- [CHANGELOG.md](CHANGELOG.md): what changed in each version
+
+</details>
+
+<br>
 
 ## Known issues
 
@@ -284,7 +462,7 @@ and more cast members. If you have ideas, open an issue!
 
 ## Credits
 
-- Built on [Fabric](https://fabricmc.net/).
+- Built on [Fabric](https://fabricmc.net/), with [Polymer](https://modrinth.com/mod/polymer) for server support.
 - The cast skins are my own originals, drawn with [`tools/skins/cast.py`](tools/skins/cast.py).
   Default skins come from the game itself at runtime; nothing from Mojang is copied here.
 - Other Minecraft companion mods like CreatureChat, MCA Reborn and Human Companions were a big help

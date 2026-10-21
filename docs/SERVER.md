@@ -23,14 +23,14 @@ no custom items (the spawn egg is left out in this mode), no blocks, no required
 
 ## The hub
 
-Set the hub in `config/hearthbound.json` and the cast moves in:
+Set the hub in `config/hearthbound.json` (use your own spawn coordinates) and the cast moves in:
 
 ```json
 "server": {
   "hub": {
     "enabled": true,
     "dimension": "minecraft:overworld",
-    "x": -342, "y": 130, "z": -46,
+    "x": 0, "y": 64, "z": 0,
     "wanderRadius": 16,
     "protectRadius": 64,
     "residents": ["all"],
@@ -39,15 +39,15 @@ Set the hub in `config/hearthbound.json` and the cast moves in:
 }
 ```
 
-- Every listed cast member who doesn't exist yet is spawned once, in a ring around that spot, with
-  their starting gear. After that they're ordinary companions who happen to live there. A world
-  roster (`world/data/hearthbound_roster.json`) remembers who exists, even in unloaded chunks, so
-  nobody is spawned twice.
-- At the hub they stroll around within `wanderRadius`, turn to look at people nearby, and say hello
-  when someone walks up. A newcomer gets a one-time tip on how to talk to them.
-- Recruit one and they follow you anywhere. Dismiss them and they make their own way back to the hub,
-  even from the Nether.
-- `residents` can be `["all"]` or a list of names, e.g. `["freya", "bram", "rosie"]`.
+Every listed cast member who doesn't exist yet is spawned once, in a ring around that spot, with
+their starting gear. After that they're ordinary companions who happen to live there. A world
+roster (`world/data/hearthbound_roster.json`) remembers who exists, even in unloaded chunks, so
+nobody is spawned twice. `residents` can be `["all"]` or a list of names, e.g.
+`["freya", "bram", "rosie"]`.
+
+At the hub they stroll around within `wanderRadius`, turn to look at people nearby, and say hello
+when someone walks up. A newcomer gets a one-time tip on how to talk to them. Recruit one and they
+follow you anywhere. Dismiss them and they make their own way back to the hub, even from the Nether.
 
 Operator commands: `/companion hub list`, `/companion hub spawn`, `/companion hub home <name>`.
 
@@ -89,16 +89,16 @@ What a player says to a companion goes to the AI provider you configure. Only th
 conversation with that one companion is sent (see Privacy above), plus a short description of the
 surroundings. Tell your friends if you turn it on.
 
-The easiest setup is Ollama on the server machine. It costs nothing and keeps everything on your PC.
+The easiest setup is Ollama on the server machine. It's free, and nothing leaves that machine.
 
 ## How I tested it
 
-There are 20 in-game server tests, 5 of them for multiplayer: stranger orders refused, stranger
+There are 33 in-game server tests, 7 of them for multiplayer: stranger orders refused, stranger
 damage blocked, companions never targeting players, protected areas and the build guard, the hub
-spawning each resident once and taking them back, replies and per-speaker memory, and `@name` in
-the middle of a message.
+spawning each resident once and taking them back, replies and per-speaker memory, `@name` in the
+middle of a message, and plain chat carrying on a conversation.
 
-I also ran a copy of my real server (Fabric API, Polymer, Universal Graves, Ledger, Lithium,
+I also ran a copy of my own server (Fabric API, Polymer, Universal Graves, Ledger, Lithium,
 FerriteCore plus Hearthbound) and joined it with Mojang's official, unmodified 26.3 client, after
 checking the client's jar against Mojang's SHA-1. The twelve residents spawned at the hub, rendered
 as mannequins with names and the line under them, greeted me in chat, and could be recruited (the

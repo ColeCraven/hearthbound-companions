@@ -98,7 +98,7 @@ server.
 ## Networking and UI
 
 Talking happens in the normal chat box, so it works the same with or without the mod installed on
-the client. The only custom packet is the party status for the HUD (Fabric's payload API), which
+the client. The only custom packet is the party status for the HUD (Fabric's payload API). The HUD
 shows each companion's health and what they're doing, and you can hide it.
 
 One 26.3 gotcha: it replaced GLFW with SDL for input. Key bindings use `InputConstants`. The talk key

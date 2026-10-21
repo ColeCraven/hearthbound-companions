@@ -6,6 +6,9 @@ is a wanderer wearing one of the game's default skins instead. Every cast member
 name, look, personality and short backstory, and the backstory also goes into the AI character
 sheet so they stay consistent.
 
+Wanderers can wear any of the nine default skins, with wide or slim arms
+([wide](images/skins-wide.png), [slim](images/skins-slim.png), [side by side](images/slim-vs-wide.png)).
+
 ![Freya, Bram, Hazel and Emmett](images/cast/group-1.png)
 ![Cass, Lucas, Daisy and Conoby](images/cast/group-2.png)
 ![Samuel, Rosie, Luna and Casper](images/cast/group-3.png)

@@ -44,7 +44,7 @@ flowchart LR
 
 | Layer | Package | Depends on Minecraft? | Purpose |
 |---|---|---|---|
-| Core logic | `hearthbound.core.*` | No | Intent model and command parser, reading answers, personalities and the named cast, line banks and line filling, memory (conversation, events, what each player told them), the gather state machine, prompt building and the JSON contract for AI replies. Plain Java, so it's unit-tested quickly with JUnit. |
+| Core logic | `hearthbound.core.*` | No | Intent model and command parser, reading answers, personalities and the named cast, line banks and line filling, memory (conversation, events, what each player told them), the gather state machine, prompt building and the JSON contract for AI replies. It's plain Java, so the JUnit tests run fast. |
 | Game integration | `hearthbound.entity`, `hearthbound.entity.order`, `hearthbound.dialogue`, `hearthbound.world` | Yes (server) | The companion entity and its goals, the orders (follow, wait, come, gather, give, attack, mine, build, home), chat routing and validation, unprompted chatter and reactions, the roster, hub residents and world rules. |
 | AI providers | `hearthbound.ai`, `hearthbound.core.ai` | Only for the glue (`java.net.http` + Gson do the work) | Async HTTP clients for Ollama, OpenAI-compatible APIs and Anthropic, rate limiting, and the check that stops a model promising things the game won't do. Never called on the game thread. |
 | Server mode | `hearthbound.server`, `hearthbound.server.polymer` | Yes | Shows companions to unmodded players as vanilla mannequins through Polymer, with signed skins. |
@@ -115,10 +115,10 @@ Everything here goes through the same line banks, with cooldowns so nobody talks
 
 `CompanionMemory` holds the recent conversation (only with the current speaker, so one player's
 words never reach another player or an AI prompt written for them), a dozen notable shared events
-written by game code ("I built a shelter with {player}"), an affinity score, and `PlayerFacts` for
-each player: the name they asked to be called, a few likes and dislikes. Facts only ever come from
-the player's own words, and are matched against the world later (a like of "the ocean" matches a
-deep ocean biome; "spiders" matches a cave spider).
+written by game code ("I built a shelter with {player}") and an affinity score. It also keeps
+`PlayerFacts` for each player: the name they asked to be called, plus a few likes and dislikes.
+Facts only ever come from the player's own words, and get matched against the world later (a like
+of "the ocean" matches a deep ocean biome; "spiders" matches a cave spider).
 
 ## Persistence
 

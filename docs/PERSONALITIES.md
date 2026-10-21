@@ -33,8 +33,9 @@ I didn't want the archetype to be a coat of paint over the same follower. It cha
 ## Free will: what they do on their own
 
 When you stand still for a few seconds, a following companion may pick a pastime (code:
-`entity/Pastimes.java`). Pastimes are real actions, chosen by personality, kept within a few blocks
-of you, and dropped the moment you move on, give an order, or a fight starts.
+`entity/Pastimes.java`). Pastimes are real actions picked to suit their personality. A companion
+stays within a few blocks of you while doing one, and drops it the moment you move on, give an
+order or a fight starts.
 
 | Archetype | Pastimes |
 |---|---|
