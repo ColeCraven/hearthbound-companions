@@ -66,7 +66,7 @@ public final class MineOrder implements CompanionOrder {
 		this.companion = companion;
 		this.direction = direction;
 		this.legs = List.copyOf(legs);
-		this.work = new BlockWork(companion);
+		this.work = new BlockWork(companion, io.github.tekless.hearthbound.core.persona.Role.Task.DIG);
 		this.feet = start.immutable();
 	}
 

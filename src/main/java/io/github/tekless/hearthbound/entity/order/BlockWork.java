@@ -26,8 +26,11 @@ final class BlockWork {
 	private int lastStage = -1;
 	private int swingCooldown;
 
-	BlockWork(CompanionEntity companion) {
+	private final io.github.tekless.hearthbound.core.persona.Role.Task task;
+
+	BlockWork(CompanionEntity companion, io.github.tekless.hearthbound.core.persona.Role.Task task) {
 		this.companion = companion;
+		this.task = task;
 	}
 
 	/** One tick of work on {@code target}. GONE means it's air now or can't be broken at all. */
@@ -52,7 +55,7 @@ final class BlockWork {
 		ItemStack tool = companion.getMainHandItem();
 		boolean correct = !state.requiresCorrectToolForDrops() || tool.isCorrectToolForDrops(state);
 		float speed = Math.max(1.0F, tool.getDestroySpeed(state));
-		progress += hardness == 0 ? 1.0F : speed / hardness / (correct ? 30.0F : 100.0F);
+		progress += hardness == 0 ? 1.0F : (float) (companion.role().multiplier(task) * speed / hardness / (correct ? 30.0F : 100.0F));
 		if (--swingCooldown <= 0) {
 			swingCooldown = 5;
 			companion.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, true);

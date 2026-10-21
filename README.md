@@ -30,7 +30,7 @@ help you out.
 
 Walk up to one, ask them to join you, and from then on they follow you around, fight next to you,
 chop wood, dig, build, wander off to look at flowers when you stop, and talk back when you talk to
-them. Each one sounds different. Bram the sellsword answers in about four words. Rosie the farm
+them. Each one sounds different. Charlie the sellsword answers in about four words. Honey the farm
 girl is scared of the dark and won't stop talking about her gran.
 
 - **Just talk.** It all happens in normal chat. Say hi once and keep typing, like you would with a friend.
@@ -84,11 +84,11 @@ Make a new instance for Minecraft 26.3 with Fabric, then drop `hearthbound-0.3.0
 ## Your first companion
 
 1. Create a world with **Allow Commands** turned on (or play in Creative).
-2. Summon someone. Type `/companion summon rosie` in chat. Any of the cast works: `freya`, `bram`,
-   `hazel`, `emmett`, `cass`, `lucas`, `daisy`, `conoby`, `rosie`, `samuel`, `luna`, `casper`.
+2. Summon someone. Type `/companion summon honey` in chat. Any of the cast works: `dasha`, `charlie`,
+   `hazel`, `birintan`, `maddie`, `aj`, `daisy`, `cole`, `honey`, `samuel`, `luna`, `luke`.
    In Creative there's also a **Companion Spawn Egg** in the Spawn Eggs tab.
-3. Say hi. Right-click her, or type `@Rosie hi!`.
-4. Ask her along with `@Rosie join me`.
+3. Say hi. Right-click her, or type `@Honey hi!`.
+4. Ask her along with `@Honey join me`.
 5. Now just talk. Try "how are you?", "follow me", "get me 16 oak logs" or "build a shelter".
 
 > [!TIP]
@@ -103,10 +103,10 @@ Forgot something? `/companion help` lists everything you can say and do, right i
 
 ### Just talk to them
 
-Say hi with `@Rosie hi!` (or right-click her) and after that you can keep chatting like you would
+Say hi with `@Honey hi!` (or right-click her) and after that you can keep chatting like you would
 with anyone: "how are you?", "tell me about your family", "what should we do today?". No @ needed
 until you say bye or wander off, and a typo in a name (`@rsoie`) still gets through. Orders work
-the same way: `@Hazel follow me`, `Bram, get me 16 oak logs`, `@all wait here`. Press <kbd>G</kbd>
+the same way: `@Hazel follow me`, `Charlie, get me 16 oak logs`, `@all wait here`. Press <kbd>G</kbd>
 and the chat opens with the name of whoever you're looking at already filled in.
 
 Every personality has well over a hundred situations of their own dialogue, so you're not hearing
@@ -120,7 +120,7 @@ ocean and they'll point it out when you get to one. When things are quiet they a
 remember the answer. Ask "what do you know about me?" and they'll tell you.
 
 <p align="center">
-  <img src="docs/images/free-chat.png" width="80%" alt="Rosie learning a nickname and a favourite thing, then saying them back">
+  <img src="docs/images/free-chat.png" width="80%" alt="Honey learning a nickname and a favourite thing, then saying them back">
 </p>
 
 They notice what you're up to as well. They cheer when you get an advancement or find diamonds,
@@ -141,8 +141,8 @@ proper jobs:
   you), using blocks from their pack. A shelter gets a door and a torch if they have them.
 
 <p align="center">
-  <img src="docs/images/building.png" width="49%" alt="Conoby next to the shelter he just built from planks in his pack">
-  <img src="docs/images/gathering.png" width="49%" alt="Bram chopping logs, with the party list in the corner">
+  <img src="docs/images/building.png" width="49%" alt="Cole next to the shelter he just built from planks in his pack">
+  <img src="docs/images/gathering.png" width="49%" alt="Charlie chopping logs, with the party list in the corner">
 </p>
 
 When they can't do something, they tell you why, in character: there's no iron around here, they
@@ -150,8 +150,8 @@ need a pickaxe, the ground's too uneven to build on, they're short on blocks.
 
 ### They have a life of their own
 
-Stand still for a bit and they get bored. Hazel goes to study a flower, Cass grabs loot you left
-lying around (and admits it), Rosie pets the nearest cow, the fighters walk a little guard circuit,
+Stand still for a bit and they get bored. Hazel goes to study a flower, Maddie grabs loot you left
+lying around (and admits it), Honey pets the nearest cow, the fighters walk a little guard circuit,
 and Luna stares at the stars at night. They drop it the second you move or give an order. They
 also nag you to eat, suggest finding shelter before dark, and bicker with each other.
 
@@ -160,8 +160,8 @@ On the move they keep a comfortable distance, hurry when you sprint off, and if 
 and mobs sneaking up behind you. By default they're knocked down instead of killed, so you never
 lose someone you've got attached to.
 
-Right-click one with an item to give it to them. Everyone has favourites (emeralds for Cass, bread
-for Rosie, amethyst for Luna), and it warms them up towards you. Give a fighter a better sword and
+Right-click one with an item to give it to them. Everyone has favourites (emeralds for Maddie, bread
+for Honey, amethyst for Luna), and it warms them up towards you. Give a fighter a better sword and
 they'll use it. Their name, personality, gear, current task and memories all save with your world.
 
 ### They don't lie to you
@@ -193,7 +193,7 @@ short list, and the game double-checks it the same way. If the game says no, the
 thrown out and the companion tells you the real reason instead.
 
 <p align="center">
-  <img src="docs/images/party-conversation.png" width="80%" alt="A party chatting, and Bram explaining he can only build a shelter, a wall or a bridge">
+  <img src="docs/images/party-conversation.png" width="80%" alt="A party chatting, and Charlie explaining he can only build a shelter, a wall or a bridge">
 </p>
 
 <br>
@@ -206,23 +206,23 @@ with wide or slim arms).
 
 | | Personality | Who they are |
 |---|---|---|
-| **Freya** | Sellsword | Golden-haired shieldmaiden from the north. Charges anything with teeth. |
-| **Bram** | Sellsword | Scarred veteran who has outlived three mercenary companies. Not a talker. |
+| **Dasha** | Sellsword | Golden-haired shieldmaiden from the north. Charges anything with teeth. |
+| **Charlie** | Sellsword | Scarred veteran who has outlived three mercenary companies. Not a talker. |
 | **Hazel** | Naturalist | Auburn-haired ranger who stops to sketch every flower you walk past. |
-| **Emmett** | Naturalist | Gentle herbalist with a sprig of something behind his ear. |
-| **Cass** | Rogue | Treasure hunter with a sharp tongue. Pockets anything you leave on the ground. |
-| **Lucas** | Rogue | Smooth-talking thief who calls you "partner" and means it, mostly. |
+| **Birintan** | Naturalist | Gentle herbalist with a sprig of something behind his ear. |
+| **Maddie** | Rogue | Treasure hunter with a sharp tongue. Pockets anything you leave on the ground. |
+| **AJ** | Rogue | Smooth-talking thief who calls you "partner" and means it, mostly. |
 | **Daisy** | Guardian | Paladin with a gold circlet and a long braid. Will not hurt a villager, ever. |
-| **Conoby** | Guardian | Retired rogue-knight with a rapier and a devilish grin. Has lost enough friends already. |
-| **Rosie** | Farmhand | Flower crown, first real adventure, nervous about caves, adores every cow she meets. |
+| **Cole** | Guardian | Retired rogue-knight with a rapier and a devilish grin. Has lost enough friends already. |
+| **Honey** | Farmhand | Flower crown, first real adventure, nervous about caves, adores every cow she meets. |
 | **Samuel** | Farmhand | Farm lad who still isn't sure leaving home was a good idea. |
 | **Luna** | Mystic | Silver-haired stargazer in a star-stitched cape. Likes the night more than you do. |
-| **Casper** | Mystic | Young sorcerer in an emerald robe. Says very little, notices everything. |
+| **Luke** | Mystic | Young sorcerer in an emerald robe. Says very little, notices everything. |
 
 <p align="center">
-  <img src="docs/images/cast/group-1.png" width="32%" alt="Freya, Bram, Hazel and Emmett">
-  <img src="docs/images/cast/group-2.png" width="32%" alt="Cass, Lucas, Daisy and Conoby">
-  <img src="docs/images/cast/group-3.png" width="32%" alt="Samuel, Rosie, Luna and Casper">
+  <img src="docs/images/cast/group-1.png" width="32%" alt="Dasha, Charlie, Hazel and Birintan">
+  <img src="docs/images/cast/group-2.png" width="32%" alt="Maddie, AJ, Daisy and Cole">
+  <img src="docs/images/cast/group-3.png" width="32%" alt="Samuel, Honey, Luna and Luke">
 </p>
 
 More about them (and how I drew the skins) in [CAST.md](docs/CAST.md), and how the six

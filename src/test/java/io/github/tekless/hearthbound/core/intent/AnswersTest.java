@@ -67,14 +67,14 @@ class AnswersTest {
 
 	@ParameterizedTest
 	@CsvSource({
-			"ros, rosie, true",
-			"rosi, rosie, true",
-			"rsoie, rosie, true",
-			"rosiee, rosie, true",
-			"ro, rosie, false",
+			"hon, honey, true",
+			"honney, honey, true",
+			"hoeny, honey, true",
+			"honeyy, honey, true",
+			"ho, honey, false",
 			"well, nell, true",
-			"bob, rosie, false",
-			"zzzz, cass, false"
+			"bob, honey, false",
+			"zzzz, maddie, false"
 	})
 	void forgivingNames(String typed, String name, boolean matches) {
 		assertEquals(matches, NameMatch.closeEnough(typed, name));

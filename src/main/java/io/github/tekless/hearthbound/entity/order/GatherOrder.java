@@ -57,7 +57,7 @@ public final class GatherOrder implements CompanionOrder, GatherWorld<BlockPos> 
 		this.spec = spec;
 		this.baseline = baseline >= 0 ? baseline : companion.countCarried(spec.counts());
 		this.machine = new GatherMachine<>(this, goal);
-		this.work = new BlockWork(companion);
+		this.work = new BlockWork(companion, io.github.tekless.hearthbound.core.persona.Role.Task.GATHER);
 	}
 
 	public GatherSpec spec() {

@@ -55,6 +55,13 @@ public final class Pastimes {
 		boolean night = level.isDarkOutside();
 		switch (archetype) {
 			case SELLSWORD -> {
+				// Charlie picks herbs for his pipe whenever he spots some.
+				if (companion.castMember().filter(m -> m == io.github.tekless.hearthbound.core.persona.CastMember.CHARLIE).isPresent()) {
+					findBlock(level, owner, s -> s.is(BlockTags.SMALL_FLOWERS)).filter(pos -> isWild(level, pos)).ifPresent(pos -> {
+						options.add(new PickFlower(pos, "pastime.herbs"));
+						options.add(new PickFlower(pos, "pastime.herbs"));
+					});
+				}
 				options.add(new Patrol(owner));
 				options.add(new Practice());
 				lootNearby(level, companion, owner, 1200).ifPresent(options::add);
@@ -149,10 +156,16 @@ public final class Pastimes {
 	/** Pick one wild flower and keep it. */
 	static final class PickFlower implements Pastime {
 		private final BlockPos pos;
+		private final String lineKey;
 		private int ticks;
 
 		PickFlower(BlockPos pos) {
+			this(pos, "pastime.flower");
+		}
+
+		PickFlower(BlockPos pos, String lineKey) {
 			this.pos = pos;
+			this.lineKey = lineKey;
 		}
 
 		@Override
@@ -174,7 +187,7 @@ public final class Pastimes {
 			String name = flower.getHoverName().getString().toLowerCase(Locale.ROOT);
 			level.destroyBlock(pos, false, c);
 			c.storeOrDrop(flower);
-			c.sayMaybe("pastime.flower", Map.of("item", name), 0.8);
+			c.sayMaybe(lineKey, Map.of("item", name), 0.8);
 			return false;
 		}
 	}

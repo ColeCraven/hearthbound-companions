@@ -16,7 +16,7 @@ I didn't want the archetype to be a coat of paint over the same follower. It cha
 
 | | Sellsword | Naturalist | Rogue | Guardian | Farmhand | Mystic |
 |---|---|---|---|---|---|---|
-| Cast ([see them](CAST.md)) | Bram, Freya | Hazel, Emmett | Cass, Lucas | Daisy, Conoby | Samuel, Rosie | Luna, Casper |
+| Cast ([see them](CAST.md)) | Charlie, Dasha | Hazel, Birintan | Maddie, AJ | Daisy, Cole | Samuel, Honey | Luna, Luke |
 | Wanderer names | Torvald, Greta, Osric | Elowen, Linnea, Ivy | Jory, Lark, Vesper | Aveline, Gareth, Tristan | Odo, Bess, Clem | Nyx, Thorne, Orrin |
 | Voice | Terse, blunt, soldier's slang | Long, excited sentences, asks questions | Quick quips, teasing, "partner" | Formal, sincere, old-fashioned courtesy | Rambling, nervous, homely sayings | Dry, cryptic, short poetic lines |
 | Humour | Deadpan understatement | Puns and trivia | Sarcasm and teasing | Earnest, gentle | Self-deprecating, accidental | Dark, gallows humour |

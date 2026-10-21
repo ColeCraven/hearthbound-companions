@@ -43,7 +43,7 @@ Every listed cast member who doesn't exist yet is spawned once, in a ring around
 their starting gear. After that they're ordinary companions who happen to live there. A world
 roster (`world/data/hearthbound_roster.json`) remembers who exists, even in unloaded chunks, so
 nobody is spawned twice. `residents` can be `["all"]` or a list of names, e.g.
-`["freya", "bram", "rosie"]`.
+`["dasha", "charlie", "honey"]`.
 
 At the hub they stroll around within `wanderRadius`, turn to look at people nearby, and say hello
 when someone walks up. A newcomer gets a one-time tip on how to talk to them. Recruit one and they

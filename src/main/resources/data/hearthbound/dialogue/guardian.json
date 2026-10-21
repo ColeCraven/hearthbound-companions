@@ -762,6 +762,14 @@
       "{thing}. A good thing to speak of.",
       "{thing}? That is worth remembering.",
       "Ah, {thing}. Go on, I am listening."
+    ],
+    "role.strong": [
+      "This I do well. You can rely on me.",
+      "I am well suited to this. Leave it to me."
+    ],
+    "role.weak": [
+      "It is not my greatest skill to {task}, but I will do it faithfully.",
+      "I am no master at this. I will be careful and slow."
     ]
   }
 }

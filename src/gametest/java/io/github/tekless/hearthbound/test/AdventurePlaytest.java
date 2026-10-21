@@ -43,10 +43,10 @@ public class AdventurePlaytest implements FabricClientGameTest {
 			server.runCommand("gamemode survival @p");
 			server.runCommand("effect give @p resistance 99999 4 true");
 			server.runCommand("time set 1000");
-			server.runCommand("execute at @p run summon hearthbound:companion ~2 ~ ~2 {Archetype:\"sellsword\",Skin:100,CustomName:\"Bram\",CustomNameVisible:1b}");
+			server.runCommand("execute at @p run summon hearthbound:companion ~2 ~ ~2 {Archetype:\"sellsword\",Skin:100,CustomName:\"Charlie\",CustomNameVisible:1b}");
 			server.runCommand("execute at @p run summon hearthbound:companion ~-2 ~ ~2 {Archetype:\"naturalist\",Skin:102,CustomName:\"Hazel\",CustomNameVisible:1b}");
 			context.waitTicks(10);
-			say(server, "Bram", "join me");
+			say(server, "Charlie", "join me");
 			say(server, "Hazel", "will you join me?");
 			context.waitTicks(20);
 			check(snapshots(server).stream().allMatch(s -> s.order().equals("FOLLOW")), "both recruited and following");
@@ -72,14 +72,14 @@ public class AdventurePlaytest implements FabricClientGameTest {
 			server.runCommand("execute at @p run place feature minecraft:oak ~-5 ~ ~6");
 			context.waitTicks(5);
 			int logsBefore = playerLogs(server);
-			say(server, "Bram", "chop 4 logs");
-			server.waitFor(s -> snapshot(s, "Bram").map(b -> !b.order().equals("GATHER")).orElse(true), 2400);
-			Snapshot bram = snapshots(server).stream().filter(s -> s.name().equals("Bram")).findFirst().orElseThrow();
+			say(server, "Charlie", "chop 4 logs");
+			server.waitFor(s -> snapshot(s, "Charlie").map(b -> !b.order().equals("GATHER")).orElse(true), 2400);
+			Snapshot charlie = snapshots(server).stream().filter(s -> s.name().equals("Charlie")).findFirst().orElseThrow();
 			int gained = playerLogs(server) - logsBefore;
-			report.add("gather: last line '" + bram.lastLine() + "', player gained " + gained + " logs");
-			check(!bram.lastLine().equals("done.delivered") || gained >= 4, "completion is only claimed when 4 logs were delivered");
-			check(gained == 0 || bram.lastLine().equals("done.delivered") || bram.lastLine().equals("partial.gather")
-					|| bram.lastLine().equals("fail.inventory_full"), "items handed over are always announced truthfully");
+			report.add("gather: last line '" + charlie.lastLine() + "', player gained " + gained + " logs");
+			check(!charlie.lastLine().equals("done.delivered") || gained >= 4, "completion is only claimed when 4 logs were delivered");
+			check(gained == 0 || charlie.lastLine().equals("done.delivered") || charlie.lastLine().equals("partial.gather")
+					|| charlie.lastLine().equals("fail.inventory_full"), "items handed over are always announced truthfully");
 			context.takeScreenshot("playtest-gather");
 
 			// 3. Night fight.
@@ -125,19 +125,19 @@ public class AdventurePlaytest implements FabricClientGameTest {
 			List<Snapshot> nether = snapshots(server);
 			report.add("player now in: " + server.computeOnServer(s -> s.getPlayerList().getPlayers().get(0).level().dimension().identifier().toString()));
 			report.add("after portal-style travel: " + nether);
-			check(nether.stream().anyMatch(s -> s.name().equals("Bram") && s.dimension().equals("the_nether")), "following Bram came to the Nether");
+			check(nether.stream().anyMatch(s -> s.name().equals("Charlie") && s.dimension().equals("the_nether")), "following Charlie came to the Nether");
 			// Hazel's overworld chunk unloads once nobody is there, so "not in the Nether" is what we can check.
 			check(nether.stream().noneMatch(s -> s.name().equals("Hazel") && s.dimension().equals("the_nether")), "waiting Hazel stayed behind");
 			context.takeScreenshot("playtest-nether");
 			server.runCommand("execute in minecraft:the_nether run forceload remove 0 0 10 10");
 			server.runCommand("execute in minecraft:overworld run tp @p " + home);
 			context.waitTicks(60);
-			check(snapshots(server).stream().anyMatch(s -> s.name().equals("Bram") && s.dimension().equals("overworld")), "Bram came back too");
+			check(snapshots(server).stream().anyMatch(s -> s.name().equals("Charlie") && s.dimension().equals("overworld")), "Charlie came back too");
 			check(snapshots(server).stream().anyMatch(s -> s.name().equals("Hazel") && s.order().equals("WAIT")), "Hazel is still waiting");
 
 			// 6. Prepare state to check after reloading.
-			server.runCommand("item replace entity @e[type=hearthbound:companion,name=Bram] weapon.mainhand with minecraft:iron_sword");
-			say(server, "Bram", "tell me a joke");
+			server.runCommand("item replace entity @e[type=hearthbound:companion,name=Charlie] weapon.mainhand with minecraft:iron_sword");
+			say(server, "Charlie", "tell me a joke");
 			context.waitTicks(20);
 			beforeQuit = snapshots(server);
 			save = world.getWorldSave();

@@ -13,9 +13,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 
 /**
- * Talks to a companion exactly like a player would: opens the chat box, types "@Bram join me" and
- * presses Enter; then uses the Talk key (G), which pre-fills "@Bram ", and asks for a status.
- * After that, a free conversation where Rosie learns a nickname and a favourite thing and says
+ * Talks to a companion exactly like a player would: opens the chat box, types "@Charlie join me" and
+ * presses Enter; then uses the Talk key (G), which pre-fills "@Charlie ", and asks for a status.
+ * After that, a free conversation where Honey learns a nickname and a favourite thing and says
  * them back, and a companion building a shelter from the planks in their pack.
  */
 @SuppressWarnings("UnstableApiUsage")
@@ -25,17 +25,17 @@ public class ChatPathPlaytest implements FabricClientGameTest {
 		try (TestSingleplayerContext world = context.worldBuilder().create()) {
 			world.getConnection().waitForChunksRender();
 			TestServerContext server = world.getServer();
-			server.runCommand("execute at @p run summon hearthbound:companion ~1 ~ ~3 {Archetype:\"sellsword\",Skin:100,CustomName:\"Bram\",CustomNameVisible:1b}");
+			server.runCommand("execute at @p run summon hearthbound:companion ~1 ~ ~3 {Archetype:\"sellsword\",Skin:100,CustomName:\"Charlie\",CustomNameVisible:1b}");
 			context.waitTicks(10);
 
-			typeInChat(context, "@Bram join me");
+			typeInChat(context, "@Charlie join me");
 			context.waitTicks(10);
 			String afterRecruit = server.computeOnServer(ChatPathPlaytest::bramState);
 			if (!afterRecruit.equals("recruited:recruit.accept")) {
-				throw new AssertionError("Typing '@Bram join me' in chat should recruit Bram, got " + afterRecruit);
+				throw new AssertionError("Typing '@Charlie join me' in chat should recruit Charlie, got " + afterRecruit);
 			}
 
-			// The talk key opens chat with "@Bram " already typed (last companion spoken to).
+			// The talk key opens chat with "@Charlie " already typed (last companion spoken to).
 			context.getInput().pressKey(HearthboundClient.talkKey());
 			context.waitTicks(5);
 			context.getInput().typeChars("what are you doing?");
@@ -46,14 +46,14 @@ public class ChatPathPlaytest implements FabricClientGameTest {
 				throw new AssertionError("Talk key + 'what are you doing?' should get a follow status, got " + afterStatus);
 			}
 			context.takeScreenshot("hearthbound-chat-path");
-			System.out.println("[Playtest] PASS chat path: '@Bram join me' recruited; talk key + 'what are you doing?' -> status.follow");
+			System.out.println("[Playtest] PASS chat path: '@Charlie join me' recruited; talk key + 'what are you doing?' -> status.follow");
 
 			// A free conversation: name her once, then just talk.
-			server.runCommand("execute at @p run summon hearthbound:companion ~-1 ~ ~2.5 {Archetype:\"farmhand\",Skin:109,CustomName:\"Rosie\",CustomNameVisible:1b,Rotation:[180f,0f]}");
+			server.runCommand("execute at @p run summon hearthbound:companion ~-1 ~ ~2.5 {Archetype:\"farmhand\",Skin:109,CustomName:\"Honey\",CustomNameVisible:1b,Rotation:[180f,0f]}");
 			context.waitTicks(10);
 			context.runOnClient(client -> client.gui.hud.getChat().clearMessages(false));
 			String[][] lines = {
-					{"@Rosie hi there!", "talk.hello"},
+					{"@Honey hi there!", "talk.hello"},
 					{"how are you?", "talk.how"},
 					{"call me Captain", "fact.nickname"},
 					{"I love cherry trees", "fact.like"},
@@ -62,30 +62,30 @@ public class ChatPathPlaytest implements FabricClientGameTest {
 			for (String[] line : lines) {
 				typeInChat(context, line[0]);
 				context.waitTicks(25);
-				String key = server.computeOnServer(s -> lastLine(s, "Rosie"));
+				String key = server.computeOnServer(s -> lastLine(s, "Honey"));
 				if (!key.equals(line[1])) {
-					throw new AssertionError("'" + line[0] + "' should get a " + line[1] + " reply from Rosie, got " + key);
+					throw new AssertionError("'" + line[0] + "' should get a " + line[1] + " reply from Honey, got " + key);
 				}
 			}
 			context.takeScreenshot("hearthbound-free-chat");
-			System.out.println("[Playtest] PASS free chat: one @Rosie, then four plain messages answered in character, and remembered");
+			System.out.println("[Playtest] PASS free chat: one @Honey, then four plain messages answered in character, and remembered");
 
 			// Building: a guardian with a pack of planks, a door and a torch puts up a shelter in front of the player.
 			// (Followers teleport back to you, so the earlier two are removed for good.)
 			server.runCommand("kill @e[type=hearthbound:companion]");
 			context.waitTicks(40);
 			context.runOnClient(client -> client.gui.hud.getChat().clearMessages(false));
-			CastMember builder = CastMember.CONOBY;
+			CastMember builder = CastMember.COLE;
 			server.runCommand(String.format(Locale.ROOT, "execute at @p run summon hearthbound:companion ~1.5 ~ ~1 {Archetype:\"%s\",Skin:%d,CustomName:\"%s\","
 					+ "CustomNameVisible:1b,Inventory:[{id:\"minecraft:oak_planks\",count:64},{id:\"minecraft:oak_planks\",count:32},"
 					+ "{id:\"minecraft:oak_door\",count:1},{id:\"minecraft:torch\",count:4}]}",
 					builder.archetype().id(), builder.skinVariant(), builder.displayName()));
 			context.waitTicks(10);
-			typeInChat(context, "@Conoby join me");
+			typeInChat(context, "@Cole join me");
 			context.waitTicks(20);
-			typeInChat(context, "@Conoby build a shelter");
-			server.waitFor(s -> lastLine(s, "Conoby").equals("done.build"), 2000);
-			typeInChat(context, "@Conoby wait here");
+			typeInChat(context, "@Cole build a shelter");
+			server.waitFor(s -> lastLine(s, "Cole").equals("done.build"), 2000);
+			typeInChat(context, "@Cole wait here");
 			context.waitTicks(20);
 			// A three-quarter view of the finished shelter, doorway side.
 			server.runCommand("execute at @p run tp @p ~6 ~ ~-5 34 8");
@@ -116,7 +116,7 @@ public class ChatPathPlaytest implements FabricClientGameTest {
 	private static String bramState(MinecraftServer server) {
 		for (var level : server.getAllLevels()) {
 			for (Entity entity : level.getAllEntities()) {
-				if (entity instanceof CompanionEntity companion && companion.companionName().equals("Bram")) {
+				if (entity instanceof CompanionEntity companion && companion.companionName().equals("Charlie")) {
 					return (companion.isRecruited() ? "recruited" : "stranger") + ":" + companion.lastLineKey();
 				}
 			}

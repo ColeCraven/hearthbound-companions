@@ -22,8 +22,8 @@ API = 'https://api.mineskin.org'
 USER_AGENT = 'HearthboundCompanions/0.1'
 # Cast id -> slim (3px) arms, matching CastMember.
 CAST = {
-    'bram': False, 'freya': True, 'hazel': True, 'emmett': False, 'cass': True, 'lucas': False,
-    'daisy': True, 'conoby': False, 'samuel': False, 'rosie': True, 'luna': True, 'casper': False,
+    'charlie': False, 'dasha': True, 'hazel': True, 'birintan': False, 'maddie': True, 'aj': False,
+    'daisy': True, 'cole': False, 'samuel': False, 'honey': True, 'luna': True, 'luke': False,
 }
 
 

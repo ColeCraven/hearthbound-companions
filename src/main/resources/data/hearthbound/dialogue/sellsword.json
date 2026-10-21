@@ -809,6 +809,14 @@
       "{thing}. Useful, if you can carry it.",
       "{thing}? Fine by me.",
       "Hm. {thing}. Go on."
+    ],
+    "role.strong": [
+      "{task}? That's my kind of work.",
+      "I'm good at this. Stay out of the way."
+    ],
+    "role.weak": [
+      "Not my trade, but I'll {task}. Badly, if need be.",
+      "I'd rather hit something, but fine. {task}."
     ]
   }
 }

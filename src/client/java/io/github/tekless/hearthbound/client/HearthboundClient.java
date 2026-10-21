@@ -49,7 +49,7 @@ public final class HearthboundClient implements ClientModInitializer {
 
 		ClientPlayNetworking.registerGlobalReceiver(PartyStatusPayload.TYPE, (payload, context) -> PartyHud.update(payload));
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> PartyHud.clear());
-		// "@Bram join me" makes Bram the one the talk key fills in next, even before the party list updates.
+		// "@Charlie join me" makes Charlie the one the talk key fills in next, even before the party list updates.
 		ClientSendMessageEvents.CHAT.register(HearthboundClient::rememberAddressee);
 		HudElementRegistry.addLast(Hearthbound.id("party"), PartyHud::render);
 

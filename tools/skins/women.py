@@ -39,7 +39,7 @@ def open_coat(s, ramp, rows=(0, 10), open_cols=(2, 3, 4, 5), sleeves_to=8, cuff=
                     p.paint(x, y, ramp['lo'] if y == tails - 1 else ramp['base'])
 
 
-def freya():
+def dasha():
     """Sellsword. Golden-haired shieldmaiden: teal tunic with silver trim, laced leather corset, fur mantle."""
     s = Skin(slim=True)
     skin, hair = Ramp('#f4dccb'), Ramp('#ecc87a')
@@ -95,7 +95,7 @@ def hazel():
     return s
 
 
-def cass():
+def maddie():
     """Rogue. Treasure hunter: dark waves under a crimson bandana, cream blouse, brown leather vest, crimson sash, tall boots."""
     s = Skin(slim=True)
     skin, hair = Ramp('#e8b892'), Ramp('#3a2620')
@@ -183,7 +183,7 @@ def daisy():
     return s
 
 
-def rosie():
+def honey():
     """Farmhand. Honey-blonde waves and a flower crown; puff-sleeved blouse, sky-blue laced bodice, short skirt over leggings, satchel."""
     s = Skin(slim=True)
     skin, hair = Ramp('#f8e0d0'), Ramp('#e6b45e')

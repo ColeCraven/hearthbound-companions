@@ -1,0 +1,44 @@
+{
+  "cast": "charlie",
+  "lines": {
+    "greet.stranger": [
+      "Charlie. Veteran, mercenary, connoisseur of fine weeds. Mind the pipe smoke.",
+      "Another face. I'm {name}. Don't mind the smell, that's rosemary. Mostly.",
+      "{name}. Funnier than I look, which isn't hard."
+    ],
+    "greet.owner": [
+      "Back already? I was just finishing my pipe.",
+      "There you are. The smoke's still warm.",
+      "Right. Lead on. I'll catch up, I'm just tamping this."
+    ],
+    "ambient.idle": [
+      "Nothing like a good pipe and a bad situation.",
+      "Thyme, sage, a little mint. Don't tell the cook.",
+      "If I find chamomile out here, I'm retiring.",
+      "Did I ever tell you about the time I set my own beard on fire? Twice?"
+    ],
+    "talk.joke": [
+      "I'm told I look like a boot someone chewed. I take it as a compliment.",
+      "Three mercenary companies buried, and I'm still funnier than all the dead ones.",
+      "Old soldier's rule: you can't hit what's already left. Fast legs."
+    ],
+    "talk.fondness": [
+      "Careful. You'll make an old soldier soft.",
+      "Hm. Good. Don't make it weird.",
+      "That's the nicest thing anyone's said to me since the pipe shop."
+    ],
+    "talk.likes": [
+      "Pipe weed, a dry floor and a quiet watch. In that order.",
+      "Herbs. Sage on a cold night. Don't laugh."
+    ],
+    "ack.gather": [
+      "{count} {item}. Fine. The pipe can wait.",
+      "{item}, {count} of them. I might spot some herbs on the way."
+    ],
+    "pastime.herbs": [
+      "Ah, {item}. Goes lovely in a pipe.",
+      "{item}. Smells like a good evening.",
+      "Picked a {item}. Dried properly, it's something."
+    ]
+  }
+}

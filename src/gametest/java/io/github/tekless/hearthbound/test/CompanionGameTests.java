@@ -134,7 +134,7 @@ public class CompanionGameTests {
 	public void gatherReportsNothingFound(GameTestHelper helper) {
 		floor(helper);
 		ServerPlayer player = owner(helper, 1.5, 1.5);
-		CompanionEntity companion = companion(helper, Archetype.ROGUE, "Lucas", 3.5, 3.5);
+		CompanionEntity companion = companion(helper, Archetype.ROGUE, "AJ", 3.5, 3.5);
 		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
 		helper.assertTrue(Conversations.apply(player, companion, Intent.gather("diamonds", 2)).accepted(), "order starts");
 		helper.succeedWhen(() -> {
@@ -152,7 +152,7 @@ public class CompanionGameTests {
 			helper.setBlock(x, 1, 5, Blocks.STONE);
 		}
 		ServerPlayer player = owner(helper, 1.5, 1.5);
-		CompanionEntity companion = companion(helper, Archetype.SELLSWORD, "Bram", 2.5, 2.5);
+		CompanionEntity companion = companion(helper, Archetype.SELLSWORD, "Charlie", 2.5, 2.5);
 		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
 		helper.assertTrue(Conversations.apply(player, companion, Intent.gather("cobblestone", 4)).accepted(), "order starts");
 		helper.succeedWhen(() -> {
@@ -243,7 +243,7 @@ public class CompanionGameTests {
 	public void dismissedCompanionsWalkHome(GameTestHelper helper) {
 		floor(helper);
 		ServerPlayer player = owner(helper, 1.5, 1.5);
-		CompanionEntity companion = companion(helper, Archetype.FARMHAND, "Rosie", 6.5, 6.5);
+		CompanionEntity companion = companion(helper, Archetype.FARMHAND, "Honey", 6.5, 6.5);
 		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
 		companion.snapTo(helper.absoluteVec(new Vec3(1.5, 1, 3.5)));
 		Conversations.Outcome outcome = Conversations.apply(player, companion, Intent.of(IntentType.DISMISS));
@@ -291,7 +291,7 @@ public class CompanionGameTests {
 	@GameTest(maxTicks = 40)
 	public void essentialCompanionsAreDownedNotKilled(GameTestHelper helper) {
 		floor(helper);
-		CompanionEntity companion = companion(helper, Archetype.SELLSWORD, "Freya", 3.5, 3.5);
+		CompanionEntity companion = companion(helper, Archetype.SELLSWORD, "Dasha", 3.5, 3.5);
 		companion.hurtServer(helper.getLevel(), helper.getLevel().damageSources().generic(), 100.0F);
 		helper.assertTrue(companion.isAlive(), "still alive");
 		helper.assertTrue(companion.isDowned(), "knocked down");
@@ -303,7 +303,7 @@ public class CompanionGameTests {
 	public void guardianRefusesToAttackVillagers(GameTestHelper helper) {
 		floor(helper);
 		ServerPlayer player = owner(helper, 1.5, 1.5);
-		CompanionEntity companion = companion(helper, Archetype.GUARDIAN, "Conoby", 3.5, 3.5);
+		CompanionEntity companion = companion(helper, Archetype.GUARDIAN, "Cole", 3.5, 3.5);
 		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
 		Villager villager = helper.spawn(net.minecraft.world.entity.EntityTypes.VILLAGER, new Vec3(5.5, 1, 5.5));
 		Conversations.Outcome outcome = Conversations.apply(player, companion, Intent.attack("villager"));
@@ -318,7 +318,7 @@ public class CompanionGameTests {
 	public void strangersDontTakeOrdersAndPartyIsLimited(GameTestHelper helper) {
 		floor(helper);
 		ServerPlayer player = owner(helper, 1.5, 1.5);
-		CompanionEntity stranger = companion(helper, Archetype.ROGUE, "Cass", 3.5, 3.5);
+		CompanionEntity stranger = companion(helper, Archetype.ROGUE, "Maddie", 3.5, 3.5);
 		Conversations.Outcome refused = Conversations.apply(player, stranger, Intent.gather("logs", 4));
 		helper.assertFalse(refused.accepted(), "stranger refuses orders");
 		helper.assertValueEqual(refused.lineKey(), "not_recruited", "explains they must be recruited");

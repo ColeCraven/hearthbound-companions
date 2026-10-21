@@ -60,7 +60,7 @@ public class FriendshipGameTests {
 	public void aNicknameIsUsedFromThenOn(GameTestHelper helper) {
 		floor(helper);
 		ServerPlayer owner = player(helper, 1.5, 1.5);
-		CompanionEntity companion = friend(helper, owner, Archetype.SELLSWORD, "Bram", 1.5, 3.5);
+		CompanionEntity companion = friend(helper, owner, Archetype.SELLSWORD, "Charlie", 1.5, 3.5);
 		Conversations.handleMessage(owner, companion, "call me Captain");
 		helper.assertValueEqual(companion.lastLineKey(), "fact.nickname", "acknowledged");
 		helper.assertValueEqual(companion.callName(owner), "Captain", "uses the new name");
@@ -105,7 +105,7 @@ public class FriendshipGameTests {
 	public void crouchingTwiceGetsACrouchBack(GameTestHelper helper) {
 		floor(helper);
 		ServerPlayer owner = player(helper, 2.5, 0.5);
-		CompanionEntity companion = friend(helper, owner, Archetype.FARMHAND, "Rosie", 2.5, 3.5);
+		CompanionEntity companion = friend(helper, owner, Archetype.FARMHAND, "Honey", 2.5, 3.5);
 		helper.runAfterDelay(5, () -> owner.setShiftKeyDown(true));
 		helper.runAfterDelay(7, () -> owner.setShiftKeyDown(false));
 		helper.runAfterDelay(9, () -> owner.setShiftKeyDown(true));

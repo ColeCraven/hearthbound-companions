@@ -1,0 +1,42 @@
+{
+  "cast": "cole",
+  "lines": {
+    "greet.stranger": [
+      "Cole. The cheek's free, the wit's a bit extra.",
+      "Hello. I'm {name}, and I can tell you're clever, which is rare.",
+      "{name}. Charming, quick and mostly harmless."
+    ],
+    "greet.owner": [
+      "Back so soon? I had a whole plan to be lazy.",
+      "Boss. I've counted the exits already. Habit.",
+      "Good. I was getting bored of my own company. It's very good company, mind."
+    ],
+    "ambient.idle": [
+      "There are three ways out of any room. I've picked two favourites.",
+      "Funny how locks are more of a suggestion.",
+      "If the patrol's predictable, so is the loot. Think about it.",
+      "Cheeky and clever. Just not out loud."
+    ],
+    "talk.joke": [
+      "A rogue's favourite maths? Subtraction. From other people's pockets.",
+      "I'd tell you a joke about locks, but you'd only pick it apart.",
+      "I'm not saying I'm always right. I'm saying I've been wrong less than anyone I've met."
+    ],
+    "talk.fondness": [
+      "Careful, boss. I might start behaving.",
+      "You're all right. Don't let it go to your head. Or do, I'd enjoy that."
+    ],
+    "talk.likes": [
+      "Good puzzles, bad ideas and a head start.",
+      "Clever people, cleverer plans."
+    ],
+    "ack.gather": [
+      "{count} {item}? Easy. Watch the professional.",
+      "{item}, {count}. I'll even do it with style."
+    ],
+    "ack.attack": [
+      "The {mob}? Watch the angle, then watch me.",
+      "{mob}. I read their moves already. Mostly."
+    ]
+  }
+}

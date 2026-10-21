@@ -11,7 +11,7 @@ import io.github.tekless.hearthbound.core.intent.ParseResult;
 import io.github.tekless.hearthbound.core.intent.QuestionKind;
 import io.github.tekless.hearthbound.core.intent.TalkTopic;
 import io.github.tekless.hearthbound.core.memory.PlayerFacts;
-import io.github.tekless.hearthbound.core.persona.Archetype;
+import io.github.tekless.hearthbound.core.persona.Role;
 import io.github.tekless.hearthbound.entity.CompanionEntity;
 import io.github.tekless.hearthbound.entity.order.AttackOrder;
 import io.github.tekless.hearthbound.entity.order.Blueprint;
@@ -73,7 +73,7 @@ public final class Conversations {
 	private static final double ADDRESS_RANGE = 64;
 	private static final Pattern AT_ADDRESS = Pattern.compile("^@(\\S+)\\s*(.*)$", Pattern.DOTALL);
 	private static final Pattern NAME_ADDRESS = Pattern.compile("^([A-Za-z]+)\\s*[,:]\\s*(.+)$", Pattern.DOTALL);
-	/** "@Rosie" somewhere in the middle of a message, e.g. "hey @rosie, how are you?". */
+	/** "@Honey" somewhere in the middle of a message, e.g. "hey @honey, how are you?". */
 	private static final Pattern AT_MENTION = Pattern.compile("(?:^|\\s)@([A-Za-z]+)[,:;!?.]*");
 	private static final CommandParser PARSER = new CommandParser(Conversations::isMobName);
 	/** Three minutes of silence ends a conversation. */
@@ -375,7 +375,7 @@ public final class Conversations {
 
 	/**
 	 * Companions within earshot with that name. With {@code fuzzy}, a short form or a typo also
-	 * counts ("@ros", "@rsoie" for Rosie) as long as it fits only one name and isn't a player's name.
+	 * counts ("@ros", "@rsoie" for Honey) as long as it fits only one name and isn't a player's name.
 	 */
 	public static List<CompanionEntity> nearbyNamed(ServerPlayer player, String name, boolean fuzzy) {
 		String wanted = name.toLowerCase(Locale.ROOT).replaceAll("[^a-z]", "");
@@ -573,6 +573,29 @@ public final class Conversations {
 			} else {
 				companion.say(outcome.lineKey(), outcome.vars());
 			}
+		}
+		if (outcome.accepted() && "ack.come".equals(outcome.lineKey()) == false) {
+			roleRemark(companion, resolved);
+		}
+	}
+
+	/** Now and then, a word on whether this is the sort of job they're good at (or not). */
+	private static void roleRemark(CompanionEntity companion, Intent intent) {
+		Role.Task task = switch (intent.type()) {
+			case GATHER -> Role.Task.GATHER;
+			case BUILD -> Role.Task.BUILD;
+			case MINE -> Role.Task.DIG;
+			case ATTACK -> Role.Task.COMBAT;
+			default -> null;
+		};
+		if (task == null || companion.getRandom().nextInt(3) != 0) {
+			return;
+		}
+		Role role = companion.role();
+		if (role.isStrongAt(task)) {
+			companion.say("role.strong", Map.of("task", task.verb()));
+		} else if (role.isWeakAt(task)) {
+			companion.say("role.weak", Map.of("task", task.verb()));
 		}
 	}
 

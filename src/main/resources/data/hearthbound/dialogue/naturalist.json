@@ -772,6 +772,14 @@
       "{thing}! I do love that.",
       "Ah, {thing}. There's more to that than you'd think.",
       "{thing}? Now that's interesting."
+    ],
+    "role.strong": [
+      "Oh, I'm quite good at this, actually!",
+      "This is right up my street. I'll {task} happily."
+    ],
+    "role.weak": [
+      "I'm not the best at this, but I'll try my hardest.",
+      "Bear with me, it's not my strength to {task}."
     ]
   }
 }

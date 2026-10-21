@@ -768,6 +768,14 @@
       "{thing}. Interesting. Go on.",
       "{thing}? There is more in that than most see.",
       "Hm. {thing}. Noted."
+    ],
+    "role.strong": [
+      "This suits me. Watch.",
+      "I can do this well. Quietly."
+    ],
+    "role.weak": [
+      "It is not my craft to {task}. I will manage.",
+      "Not my gift. I'll do it anyway."
     ]
   }
 }

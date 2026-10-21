@@ -762,6 +762,14 @@
       "{thing}? Now you're talking.",
       "Ooh, {thing}. Worth a coin or two.",
       "{thing}. Keep going, I'm intrigued."
+    ],
+    "role.strong": [
+      "Easy. This is my sort of job.",
+      "Now you're giving me the good stuff."
+    ],
+    "role.weak": [
+      "Not my speciality, boss, but I'll give it a go.",
+      "I can {task}. Doesn't mean I like it. Or that it'll be quick."
     ]
   }
 }

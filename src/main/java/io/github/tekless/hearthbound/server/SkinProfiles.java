@@ -40,18 +40,18 @@ public final class SkinProfiles {
 	}
 
 	static {
-		fallback(CastMember.BRAM, CompanionSkin.STEVE, false);
-		fallback(CastMember.FREYA, CompanionSkin.SUNNY, true);
+		fallback(CastMember.CHARLIE, CompanionSkin.STEVE, false);
+		fallback(CastMember.DASHA, CompanionSkin.SUNNY, true);
 		fallback(CastMember.HAZEL, CompanionSkin.ALEX, true);
-		fallback(CastMember.EMMETT, CompanionSkin.EFE, false);
-		fallback(CastMember.CASS, CompanionSkin.NOOR, true);
-		fallback(CastMember.LUCAS, CompanionSkin.KAI, false);
+		fallback(CastMember.BIRINTAN, CompanionSkin.EFE, false);
+		fallback(CastMember.MADDIE, CompanionSkin.NOOR, true);
+		fallback(CastMember.AJ, CompanionSkin.KAI, false);
 		fallback(CastMember.DAISY, CompanionSkin.MAKENA, true);
-		fallback(CastMember.CONOBY, CompanionSkin.ZURI, false);
+		fallback(CastMember.COLE, CompanionSkin.ZURI, false);
 		fallback(CastMember.SAMUEL, CompanionSkin.ARI, false);
-		fallback(CastMember.ROSIE, CompanionSkin.EFE, true);
+		fallback(CastMember.HONEY, CompanionSkin.EFE, true);
 		fallback(CastMember.LUNA, CompanionSkin.ZURI, true);
-		fallback(CastMember.CASPER, CompanionSkin.MAKENA, false);
+		fallback(CastMember.LUKE, CompanionSkin.MAKENA, false);
 	}
 
 	private SkinProfiles() {
@@ -61,7 +61,7 @@ public final class SkinProfiles {
 		FALLBACK.put(member, skin.encode(slim));
 	}
 
-	/** Reads {@code hearthbound-skins.json}: {"freya": {"value": "...", "signature": "..."}, ...}. */
+	/** Reads {@code hearthbound-skins.json}: {"dasha": {"value": "...", "signature": "..."}, ...}. */
 	public static void load(Path configDir) {
 		SIGNED.clear();
 		CACHE.clear();

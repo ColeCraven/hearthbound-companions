@@ -101,6 +101,8 @@ class LineBankTest {
 		REQUIRED.put("ask.build_what", plus(base, "things"));
 		REQUIRED.put("talk.mention.mob", plus(base, "thing"));
 		REQUIRED.put("talk.mention.thing", plus(base, "thing"));
+		REQUIRED.put("role.strong", plus(base, "task"));
+		REQUIRED.put("role.weak", plus(base, "task"));
 	}
 
 	private static Set<String> plus(Set<String> base, String... extra) {
@@ -197,5 +199,22 @@ class LineBankTest {
 		assertEquals("I love these cookies.", LineSelector.fill("I love this {item}.", Map.of("item", "cookies")));
 		assertEquals("It's a cactus.", LineSelector.fill("It's a {item}.", Map.of("item", "cactus")));
 		assertEquals("Ha, a zombie.", LineSelector.fill("Ha, a {mob}.", Map.of("mob", "zombie")));
+	}
+
+	/** Per-character files only add variety: whatever they say must use placeholders the game supplies. */
+	@org.junit.jupiter.api.Test
+	void castLinesUseKnownPlaceholders() {
+		for (io.github.tekless.hearthbound.core.persona.CastMember member : io.github.tekless.hearthbound.core.persona.CastMember.values()) {
+			LineBank bank = LineBank.of(member.archetype(), member.id());
+			for (Map.Entry<String, Set<String>> required : REQUIRED.entrySet()) {
+				List<String> lines = bank.get(required.getKey());
+				assertFalse(lines.isEmpty(), member + " has no lines for " + required.getKey());
+				for (String line : lines) {
+					for (String placeholder : LineSelector.placeholders(line)) {
+						assertTrue(required.getValue().contains(placeholder), member + " " + required.getKey() + " uses {" + placeholder + "}: " + line);
+					}
+				}
+			}
+		}
 	}
 }

@@ -772,6 +772,14 @@
       "{thing}! Oh, I like that!",
       "Ooh, {thing}! Tell me more!",
       "{thing}? That's a good one!"
+    ],
+    "role.strong": [
+      "Oh, I'm good at this one! Promise!",
+      "I know exactly how to do this!"
+    ],
+    "role.weak": [
+      "I'm not great at that, but I'll try!",
+      "Uh, that's not really what I'm good at. But okay!"
     ]
   }
 }

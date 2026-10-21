@@ -49,25 +49,25 @@ public class CompanionClientGameTest implements FabricClientGameTest {
 
 			// A small party: recruit three companions and give orders through the normal chat path.
 			server.runCommand("execute at @p run summon hearthbound:companion ~-1.5 ~ ~3 {Archetype:\"naturalist\",Skin:102,CustomName:\"Hazel\",CustomNameVisible:1b}");
-			server.runCommand("execute at @p run summon hearthbound:companion ~0 ~ ~3.5 {Archetype:\"sellsword\",Skin:100,CustomName:\"Bram\",CustomNameVisible:1b}");
-			server.runCommand("execute at @p run summon hearthbound:companion ~1.5 ~ ~3 {Archetype:\"rogue\",Skin:104,CustomName:\"Cass\",CustomNameVisible:1b}");
+			server.runCommand("execute at @p run summon hearthbound:companion ~0 ~ ~3.5 {Archetype:\"sellsword\",Skin:100,CustomName:\"Charlie\",CustomNameVisible:1b}");
+			server.runCommand("execute at @p run summon hearthbound:companion ~1.5 ~ ~3 {Archetype:\"rogue\",Skin:104,CustomName:\"Maddie\",CustomNameVisible:1b}");
 			context.waitTicks(10);
 			server.runCommand("execute as @p run companion say Hazel hello! will you join me?");
-			server.runCommand("execute as @p run companion say Bram join me");
-			server.runCommand("execute as @p run companion say Cass would you like to join my party");
+			server.runCommand("execute as @p run companion say Charlie join me");
+			server.runCommand("execute as @p run companion say Maddie would you like to join my party");
 			context.waitTicks(30);
-			server.runCommand("execute as @p run companion say Bram build me a castle");
+			server.runCommand("execute as @p run companion say Charlie build me a castle");
 			server.runCommand("execute as @p run companion say Hazel gather 20 diamonds");
-			server.runCommand("execute as @p run companion say Cass wait here");
+			server.runCommand("execute as @p run companion say Maddie wait here");
 			context.waitTicks(60);
 			context.takeScreenshot("hearthbound-party-conversation");
 
-			// Gathering: grow a few trees and send Bram for wood.
+			// Gathering: grow a few trees and send Charlie for wood.
 			server.runCommand("execute at @p run place feature minecraft:oak ~-3 ~ ~9");
 			server.runCommand("execute at @p run place feature minecraft:oak ~2 ~ ~11");
 			server.runCommand("execute at @p run place feature minecraft:birch ~5 ~ ~8");
 			context.waitTicks(10);
-			server.runCommand("execute as @p run companion say Bram could you chop me 6 logs?");
+			server.runCommand("execute as @p run companion say Charlie could you chop me 6 logs?");
 			context.waitTicks(160);
 			context.takeScreenshot("hearthbound-gathering");
 			context.waitTicks(600);

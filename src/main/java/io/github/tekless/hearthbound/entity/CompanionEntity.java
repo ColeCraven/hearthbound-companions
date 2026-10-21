@@ -436,11 +436,35 @@ public class CompanionEntity extends PathfinderMob {
 		setCustomName(Component.literal(name));
 		setCustomNameVisible(true);
 		setSkinVariant(skinVariant);
+		applyRoleStats();
 	}
 
 	/** Makes this companion one of the named cast characters (name, personality and outfit). */
 	public void initIdentity(io.github.tekless.hearthbound.core.persona.CastMember member) {
 		initIdentity(member.archetype(), member.displayName(), member.skinVariant());
+	}
+
+	/** What this companion is good at: their cast role, or one that fits their personality. */
+	public io.github.tekless.hearthbound.core.persona.Role role() {
+		return castMember().map(io.github.tekless.hearthbound.core.persona.CastMember::role)
+				.orElseGet(() -> io.github.tekless.hearthbound.core.persona.Role.forArchetype(archetype));
+	}
+
+	/** Fighters hit harder and take more punishment; everyone else is as sturdy as ever. */
+	private void applyRoleStats() {
+		io.github.tekless.hearthbound.core.persona.Role role = role();
+		net.minecraft.world.entity.ai.attributes.AttributeInstance damage = getAttribute(Attributes.ATTACK_DAMAGE);
+		if (damage != null) {
+			damage.setBaseValue(2.0 * role.multiplier(io.github.tekless.hearthbound.core.persona.Role.Task.COMBAT));
+		}
+		net.minecraft.world.entity.ai.attributes.AttributeInstance health = getAttribute(Attributes.MAX_HEALTH);
+		if (health != null) {
+			float oldMax = getMaxHealth();
+			health.setBaseValue(role.isStrongAt(io.github.tekless.hearthbound.core.persona.Role.Task.COMBAT) ? 24.0 : 20.0);
+			if (getHealth() >= oldMax || getHealth() > getMaxHealth()) {
+				setHealth(getMaxHealth());
+			}
+		}
 	}
 
 	/** The cast character this companion is, if it is one (matched by name and outfit). */
@@ -636,7 +660,7 @@ public class CompanionEntity extends PathfinderMob {
 			return;
 		}
 		lastLineKey = key;
-		String text = lines.pick(LineBank.of(archetype), key, withDefaults(vars));
+		String text = lines.pick(LineBank.of(archetype, castMember().map(io.github.tekless.hearthbound.core.persona.CastMember::id).orElse(null)), key, withDefaults(vars));
 		sayLiteral(text);
 	}
 
@@ -1119,6 +1143,14 @@ public class CompanionEntity extends PathfinderMob {
 		super.readAdditionalSaveData(input);
 		setArchetype(Archetype.byId(input.getStringOr("Archetype", "sellsword")).orElse(Archetype.SELLSWORD));
 		setSkinVariant(input.getIntOr("Skin", 0));
+		// Cast characters renamed in 0.4 keep their skin: carry them over to their new name and voice.
+		io.github.tekless.hearthbound.core.persona.CastMember.bySkinVariant(skinVariant()).filter(member -> member.answersTo(companionName())).ifPresent(member -> {
+			if (!member.displayName().equals(companionName())) {
+				setCustomName(Component.literal(member.displayName()));
+			}
+			setArchetype(member.archetype());
+		});
+		applyRoleStats();
 		ownerId = input.getString("Owner").map(UUID::fromString).orElse(null);
 		entityData.set(DATA_OWNER_NAME, ownerId == null ? "" : input.getStringOr("OwnerName", ""));
 		hubResident = input.getBooleanOr("HubResident", false);

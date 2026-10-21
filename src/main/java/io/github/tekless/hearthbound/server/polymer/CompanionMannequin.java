@@ -55,7 +55,6 @@ final class CompanionMannequin implements PolymerEntity {
 		if (owner != null) {
 			return Texts.tr("label.hearthbound.with", owner).withStyle(ChatFormatting.GRAY);
 		}
-		Archetype archetype = Archetype.byId(companion.syncedArchetype()).orElse(companion.archetype());
-		return Texts.tr("label.hearthbound.free", archetype.displayName()).withStyle(ChatFormatting.GRAY);
+		return Texts.tr("label.hearthbound.free", companion.role().label()).withStyle(ChatFormatting.GRAY);
 	}
 }

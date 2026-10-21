@@ -16,7 +16,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, '..', '..', 'src', 'main', 'resources', 'assets', 'hearthbound', 'textures', 'entity', 'companion')
 
 
-def bram():
+def charlie():
     """Sellsword. Scarred veteran: oxblood gambeson over mail, one steel pauldron, salt-and-pepper beard."""
     s = Skin(slim=False)
     skin, hair = Ramp('#c99a76'), Ramp('#3b2a20')
@@ -41,7 +41,7 @@ def bram():
     return s
 
 
-def emmett():
+def birintan():
     """Naturalist. Gentle herbalist: curly hair, round spectacles, olive vest, rolled sleeves, vials on the belt."""
     s = Skin(slim=False)
     skin, hair = Ramp('#8d5a3b'), Ramp('#2b1d14')
@@ -71,7 +71,7 @@ def emmett():
     return s
 
 
-def lucas():
+def aj():
     """Rogue. Charming thief: tousled chestnut hair, stubble, plum doublet with brass buttons, gold earring."""
     s = Skin(slim=False)
     skin, hair = Ramp('#e0b08a'), Ramp('#5a3420')
@@ -95,7 +95,7 @@ def lucas():
     return s
 
 
-def conoby():
+def cole():
     """Guardian. Retired rogue-knight: slicked-back blond hair greying at the temples, a devilish goatee and arched brow,
     black leather brigandine with gold rivets, one old steel pauldron, crimson-lined half-cape, rapier at the hip."""
     s = Skin(slim=False)
@@ -205,7 +205,7 @@ def samuel():
     return s
 
 
-def casper():
+def luke():
     """Mystic. Young sorcerer: black hair tied back with a silver streak, emerald robe trimmed in gold,
     brown leather mantle and belt with a spellbook, a glowing amber charm."""
     s = Skin(slim=False)
@@ -271,8 +271,8 @@ def casper():
 
 
 CAST = [
-    ('bram', bram), ('freya', W.freya), ('hazel', W.hazel), ('emmett', emmett), ('cass', W.cass), ('lucas', lucas),
-    ('daisy', W.daisy), ('conoby', conoby), ('samuel', samuel), ('rosie', W.rosie), ('luna', W.luna), ('casper', casper),
+    ('charlie', charlie), ('dasha', W.dasha), ('hazel', W.hazel), ('birintan', birintan), ('maddie', W.maddie), ('aj', aj),
+    ('daisy', W.daisy), ('cole', cole), ('samuel', samuel), ('honey', W.honey), ('luna', W.luna), ('luke', luke),
 ]
 
 

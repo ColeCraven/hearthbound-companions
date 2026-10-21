@@ -6,7 +6,7 @@
   The conversation ends when you say bye, walk off or go quiet for a minute. With other players
   around, plain chat only goes to a companion you're facing, so chat between friends is left alone.
   On your own, plain chat goes to the companion you're looking at, or the nearest one.
-- `@name` forgives short forms and typos (`@ros`, `@rsoie` for Rosie) when only one name fits and
+- `@name` forgives short forms and typos (`@ros`, `@rsoie` for Honey) when only one name fits and
   no player has that name.
 - They remember what you tell them: "call me Captain", "I love the ocean", "I hate spiders". The
   nickname is used from then on, likes and dislikes come up when they turn up in the world, and
@@ -43,7 +43,7 @@
   looting other players' items, `@name` works anywhere in a message.
 - Per-speaker conversation memory, a per-player AI rate limit and a cap on concurrent AI requests.
 - A world roster and loaded-companion tracker replace large entity scans.
-- Redrawn skins for Cass, Conoby, Samuel and Casper; travel outfits for Rosie and Luna.
+- Redrawn skins for Maddie, Cole, Samuel and Luke; travel outfits for Honey and Luna.
 - Signed cast skins for unmodded players: `tools/skins/mineskin_upload.py` makes
   `config/hearthbound-skins.json` (notes starting with `_` are ignored).
 - Fixed: `/companion summon <name>` gave the gear of a random personality; hub residents could be

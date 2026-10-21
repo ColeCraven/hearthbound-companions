@@ -126,7 +126,7 @@ public final class BuildOrder implements CompanionOrder {
 		if (--cooldown > 0) {
 			return;
 		}
-		cooldown = PLACE_EVERY;
+		cooldown = Math.max(1, (int) Math.round(PLACE_EVERY / companion.role().multiplier(io.github.tekless.hearthbound.core.persona.Role.Task.BUILD)));
 		if (!level.getEntitiesOfClass(LivingEntity.class, new AABB(next)).isEmpty()) {
 			// Someone's standing there: try the rest first, give up on this spot after a while.
 			int waited = blockedFor.merge(next, 1, Integer::sum);

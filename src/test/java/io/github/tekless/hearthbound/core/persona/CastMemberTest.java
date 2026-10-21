@@ -32,21 +32,38 @@ class CastMemberTest {
 	}
 
 	@Test
-	void eachPersonalityHasOneWomanAndOneMan() {
-		for (Archetype archetype : Archetype.values()) {
-			long women = 0;
-			long men = 0;
-			for (CastMember member : CastMember.values()) {
-				if (member.archetype() == archetype) {
-					if (member.pronouns().equals("she/her")) {
-						women++;
-					} else if (member.pronouns().equals("he/him")) {
-						men++;
-					}
-				}
+	void everyRoleHasAtLeastTwoCharacters() {
+		for (Role role : Role.values()) {
+			long members = java.util.Arrays.stream(CastMember.values()).filter(m -> m.role() == role).count();
+			assertTrue(members >= 2, role + " cast size " + members);
+		}
+		assertEquals(12, CastMember.values().length);
+	}
+
+	@Test
+	void oldNamesStillFindTheirCharacter() {
+		assertEquals(CastMember.CHARLIE, CastMember.byName("Bram").orElseThrow());
+		assertEquals(CastMember.DASHA, CastMember.byName("freya").orElseThrow());
+		assertEquals(CastMember.COLE, CastMember.byName("CONOBY").orElseThrow());
+		assertEquals(CastMember.AJ, CastMember.byName("Lucas").orElseThrow());
+		assertEquals(CastMember.MADDIE, CastMember.byName("Cass").orElseThrow());
+		assertEquals(CastMember.BIRINTAN, CastMember.byName("Emmett").orElseThrow());
+		assertEquals(CastMember.LUKE, CastMember.byName("Casper").orElseThrow());
+		assertEquals(CastMember.HONEY, CastMember.byName("Rosie").orElseThrow());
+		assertEquals(CastMember.HAZEL, CastMember.byName("Hazel").orElseThrow());
+		assertTrue(CastMember.CHARLIE.answersTo("Bram") && CastMember.CHARLIE.answersTo("Charlie") && !CastMember.CHARLIE.answersTo("Dasha"));
+	}
+
+	@Test
+	void rolesGiveRealButFairDifferences() {
+		assertTrue(Role.GUARDIAN.multiplier(Role.Task.COMBAT) > 1.0);
+		assertTrue(Role.BUILDER.multiplier(Role.Task.BUILD) > 1.0);
+		assertTrue(Role.COLLECTOR.multiplier(Role.Task.GATHER) > 1.0);
+		assertTrue(Role.FARMER.multiplier(Role.Task.FARM) > 1.0);
+		for (Role role : Role.values()) {
+			for (Role.Task task : Role.Task.values()) {
+				assertTrue(role.multiplier(task) >= 0.8, role + " can still do " + task);
 			}
-			assertEquals(1, women, archetype + " women");
-			assertEquals(1, men, archetype + " men");
 		}
 	}
 

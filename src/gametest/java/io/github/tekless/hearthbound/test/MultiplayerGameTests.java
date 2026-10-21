@@ -151,11 +151,11 @@ public class MultiplayerGameTests {
 		server.hub.z = hub.getZ();
 		server.hub.wanderRadius = 3;
 		server.hub.welcomeTip = false;
-		server.hub.residents = new ArrayList<>(List.of("freya", "bram"));
+		server.hub.residents = new ArrayList<>(List.of("dasha", "charlie"));
 		HearthboundConfig.Server old = swapServerConfig(server);
 		try {
 			CompanionRoster roster = CompanionRoster.get(helper.getLevel().getServer());
-			for (CastMember member : List.of(CastMember.FREYA, CastMember.BRAM)) {
+			for (CastMember member : List.of(CastMember.DASHA, CastMember.CHARLIE)) {
 				// Other tests may have left these two in the roster; start clean.
 				new ArrayList<>(roster.entries().entrySet()).stream()
 						.filter(e -> member.id().equals(e.getValue().cast))
@@ -164,19 +164,19 @@ public class MultiplayerGameTests {
 			helper.assertValueEqual(HubResidents.spawnMissing(helper.getLevel(), hub), 2, "both residents spawn");
 			helper.assertValueEqual(HubResidents.spawnMissing(helper.getLevel(), hub), 0, "nobody spawns twice");
 
-			CompanionEntity freya = CompanionTracker.all().stream()
-					.filter(c -> c.castMember().orElse(null) == CastMember.FREYA && c.level() == helper.getLevel()).findFirst().orElseThrow();
-			helper.assertTrue(freya.isHubResident(), "Freya lives at the hub");
-			helper.assertTrue(freya.distanceToSqr(Vec3.atBottomCenterOf(hub)) < 64, "and stands near it");
-			helper.assertFalse(freya.getMainHandItem().isEmpty(), "with her starting weapon");
+			CompanionEntity dasha = CompanionTracker.all().stream()
+					.filter(c -> c.castMember().orElse(null) == CastMember.DASHA && c.level() == helper.getLevel()).findFirst().orElseThrow();
+			helper.assertTrue(dasha.isHubResident(), "Dasha lives at the hub");
+			helper.assertTrue(dasha.distanceToSqr(Vec3.atBottomCenterOf(hub)) < 64, "and stands near it");
+			helper.assertFalse(dasha.getMainHandItem().isEmpty(), "with her starting weapon");
 
 			ServerPlayer friend = player(helper, 1.5, 1.5);
-			helper.assertTrue(Conversations.apply(friend, freya, Intent.of(IntentType.RECRUIT)).accepted(), "a friend recruits her");
+			helper.assertTrue(Conversations.apply(friend, dasha, Intent.of(IntentType.RECRUIT)).accepted(), "a friend recruits her");
 			helper.assertValueEqual(roster.ownedBy(friend.getUUID()), 1, "the roster counts her in the party");
-			Conversations.apply(friend, freya, Intent.of(IntentType.DISMISS));
-			helper.assertFalse(freya.isRecruited(), "dismissed");
-			helper.assertValueEqual(freya.home(), hub, "home is the hub again");
-			helper.assertValueEqual(freya.order().kind(), CompanionOrder.Kind.HOME, "heading home");
+			Conversations.apply(friend, dasha, Intent.of(IntentType.DISMISS));
+			helper.assertFalse(dasha.isRecruited(), "dismissed");
+			helper.assertValueEqual(dasha.home(), hub, "home is the hub again");
+			helper.assertValueEqual(dasha.order().kind(), CompanionOrder.Kind.HOME, "heading home");
 			helper.assertValueEqual(roster.ownedBy(friend.getUUID()), 0, "and no longer counted");
 			remove(helper, friend);
 		} finally {
@@ -219,13 +219,13 @@ public class MultiplayerGameTests {
 		ServerPlayer op = player(helper, 3.5, 1.5);
 		var server = helper.getLevel().getServer();
 		server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withEntity(op).withPosition(op.position())
-				.withLevel(helper.getLevel()), "companion summon bram");
-		CompanionEntity bram = CompanionTracker.all().stream()
-				.filter(c -> c.level() == helper.getLevel() && c.companionName().equals("Bram") && c.distanceTo(op) < 4)
-				.findFirst().orElseThrow(() -> helper.assertionException("Bram was summoned"));
-		helper.assertValueEqual(bram.archetype(), Archetype.SELLSWORD, "Bram is a sellsword");
-		helper.assertTrue(bram.getMainHandItem().is(net.minecraft.world.item.Items.IRON_SWORD), "with a sellsword's iron sword, not someone else's kit");
-		bram.discard();
+				.withLevel(helper.getLevel()), "companion summon charlie");
+		CompanionEntity charlie = CompanionTracker.all().stream()
+				.filter(c -> c.level() == helper.getLevel() && c.companionName().equals("Charlie") && c.distanceTo(op) < 4)
+				.findFirst().orElseThrow(() -> helper.assertionException("Charlie was summoned"));
+		helper.assertValueEqual(charlie.archetype(), Archetype.SELLSWORD, "Charlie is a sellsword");
+		helper.assertTrue(charlie.getMainHandItem().is(net.minecraft.world.item.Items.IRON_SWORD), "with a sellsword's iron sword, not someone else's kit");
+		charlie.discard();
 		remove(helper, op);
 		helper.succeed();
 	}

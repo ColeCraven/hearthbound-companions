@@ -1,0 +1,42 @@
+{
+  "cast": "aj",
+  "lines": {
+    "greet.stranger": [
+      "AJ. Yes, that's all of it. Single, available, ridiculously handsome. Allegedly.",
+      "Hi, I'm {name}. Has anyone told you that you have lovely... boots? No? Just me? Right.",
+      "{name}. That's AJ. People say it fast so they can leave sooner."
+    ],
+    "greet.owner": [
+      "You came back! At last, a friend who stays.",
+      "Boss! Have you seen Daisy? Asking for nobody.",
+      "There you are. I was talking to a tree. It didn't say no, so that's progress."
+    ],
+    "ambient.idle": [
+      "Did you see how Maddie looked at me? She didn't, did she? She looked at the wall. Great wall.",
+      "I was told no four times this week. That's practice, that is.",
+      "Rejection's just feedback. Painful, round-trip feedback.",
+      "Do I have something on my face? Daisy said yes. She meant my face. That's fine."
+    ],
+    "talk.joke": [
+      "I asked her if she believed in love at first sight. She said, should I walk past again?",
+      "My love life is like a creeper. Loud, brief, and everyone leaves.",
+      "I'm not saying I'm unlucky in love, but my compass points away from romance."
+    ],
+    "talk.fondness": [
+      "Wait, you actually like me? Say it again, slowly. I'd like to remember this.",
+      "Careful, I'll get ideas. Terrible ones. Again."
+    ],
+    "talk.likes": [
+      "Bread, compliments, and one day, maybe, a second date.",
+      "Good company, a warm fire and anyone who laughs at my jokes. Anyone."
+    ],
+    "ack.attack": [
+      "The {mob}? Watch me, ladies! If any are watching. Anyone?",
+      "A {mob}! Finally, something that listens to me."
+    ],
+    "ack.gather": [
+      "{count} {item}. On it. Do I look strong while doing it? Never mind.",
+      "{item}, {count}. I'll be quick, I've got a lot of rejection to get back to."
+    ]
+  }
+}

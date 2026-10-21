@@ -164,6 +164,15 @@ public final class CompanionRoster {
 					loaded.welcomed = new HashSet<>();
 				}
 				data = loaded;
+				// Cast characters renamed in 0.4: old names and ids in an existing roster become the new ones.
+				for (Entry entry : data.companions.values()) {
+					CastMember.byName(entry.cast).ifPresent(member -> {
+						entry.cast = member.id();
+						if (member.answersTo(entry.name)) {
+							entry.name = member.displayName();
+						}
+					});
+				}
 			}
 		} catch (IOException | JsonParseException e) {
 			Hearthbound.LOGGER.warn("Could not read {}, starting a fresh roster: {}", file, e.getMessage());

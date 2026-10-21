@@ -15,7 +15,7 @@ class CommandParserTest {
 	private final CommandParser parser = new CommandParser(Set.of("zombie", "skeleton", "creeper", "cow", "villager", "cave spider")::contains);
 
 	private Intent command(String message) {
-		ParseResult result = parser.parse(message, List.of("Hazel", "Bram"));
+		ParseResult result = parser.parse(message, List.of("Hazel", "Charlie"));
 		return assertInstanceOf(ParseResult.Command.class, result, () -> "Expected a command for: " + message + " but got " + result).intent();
 	}
 
@@ -56,7 +56,7 @@ class CommandParserTest {
 
 	@Test
 	void gatherWithCountAndItem() {
-		Intent intent = command("Bram, could you gather 16 oak logs for me?");
+		Intent intent = command("Charlie, could you gather 16 oak logs for me?");
 		assertEquals(IntentType.GATHER, intent.type());
 		assertEquals("oak logs", intent.item());
 		assertEquals(16, intent.count());

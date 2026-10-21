@@ -93,7 +93,7 @@ public class ChatOrdersGameTests {
 		helper.assertTrue(Conversations.onChat(owner, "a shelter please"), "the answer needs no @");
 		helper.assertValueEqual(builder.order().kind(), CompanionOrder.Kind.BUILD, "building now");
 		helper.assertValueEqual(((BuildOrder) builder.order()).blueprint().kind(), Blueprint.Kind.SHELTER, "a shelter");
-		helper.assertValueEqual(builder.lastLineKey(), "ack.build", "acknowledged");
+		helper.assertTrue(builder.lastLineKey().equals("ack.build") || builder.lastLineKey().startsWith("role."), "acknowledged (" + builder.lastLineKey() + ")");
 		remove(helper, owner);
 		helper.succeed();
 	}
@@ -107,7 +107,7 @@ public class ChatOrdersGameTests {
 		helper.assertTrue(Conversations.onChat(owner, "@adaxx collect that"), "heard");
 		helper.assertValueEqual(ada.order().kind(), CompanionOrder.Kind.GATHER, "gathering");
 		helper.assertTrue(((GatherOrder) ada.order()).spec().displayName().toLowerCase().contains("oak"), "the block's own wood, not just any logs");
-		helper.assertValueEqual(ada.lastLineKey(), "ack.gather", "acknowledged");
+		helper.assertTrue(ada.lastLineKey().equals("ack.gather") || ada.lastLineKey().startsWith("role."), "acknowledged (" + ada.lastLineKey() + ")");
 		remove(helper, owner);
 		helper.succeed();
 	}

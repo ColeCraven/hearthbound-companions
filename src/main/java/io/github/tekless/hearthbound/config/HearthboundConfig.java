@@ -85,7 +85,7 @@ public final class HearthboundConfig {
 		public int wanderRadius = 12;
 		/** No gathering within this distance of the hub. */
 		public int protectRadius = 64;
-		/** Cast members who live here: ["all"] or names like ["freya", "bram"]. */
+		/** Cast members who live here: ["all"] or names like ["dasha", "charlie"]. */
 		public List<String> residents = new ArrayList<>(List.of("all"));
 		/** Show newcomers a one-time hint about how to talk to companions. */
 		public boolean welcomeTip = true;

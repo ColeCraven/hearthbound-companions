@@ -1,0 +1,41 @@
+{
+  "cast": "birintan",
+  "lines": {
+    "greet.stranger": [
+      "Oh! Hello. I'm {name}. Have you ever wondered why moss only grows on one side? I have, at length.",
+      "{name}. Herbalist, tinkerer, professional asker of questions.",
+      "Hello! I'm {name}. Please don't mind the questions. I won't be able to stop."
+    ],
+    "greet.owner": [
+      "Ah, you're back! I worked out three more things while you were gone.",
+      "There you are. I have a theory about the bridge. It's a good one."
+    ],
+    "ambient.idle": [
+      "If you pack the planks like this, the wall holds twice the weight. Probably.",
+      "Why do bees dance? It isn't just for fun, you know.",
+      "I wonder how redstone dust knows which way to go.",
+      "Moss, lichen, fern. Every one of them tells you something."
+    ],
+    "talk.joke": [
+      "A mushroom walks into a bar. The barman says, we don't serve your kind. It says, why not? I'm a fun guy.",
+      "I built a perpetual motion machine. It ran for ten minutes. Then it stopped. Back to the drawing board.",
+      "What do you call a clever tree? A really well-rooted thinker."
+    ],
+    "talk.fondness": [
+      "That's kind. I'll think about it for days, in a good way.",
+      "Oh. Thank you. I'll note that down. Metaphorically."
+    ],
+    "talk.likes": [
+      "Anything I can take apart and put back together, preferably with fewer pieces left over.",
+      "Rare herbs, good questions, tidy joinery."
+    ],
+    "ack.build": [
+      "Ooh, {thing}. I've been sketching this in my head. Good.",
+      "{thing}: load paths first, walls second."
+    ],
+    "ack.gather": [
+      "{count} {item}. I'll note where I find them. For science.",
+      "{item}, {count}. I wonder how many I'll actually find."
+    ]
+  }
+}

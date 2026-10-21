@@ -66,10 +66,10 @@ public class CastShowcase implements FabricClientGameTest {
 
 			// Walking: three recruited companions hurry back to the player from a distance.
 			summon(server, CastMember.DAISY, 2, 14, 180, false);
-			summon(server, CastMember.CASS, 0, 15, 180, false);
-			summon(server, CastMember.CASPER, -2, 14, 180, false);
+			summon(server, CastMember.MADDIE, 0, 15, 180, false);
+			summon(server, CastMember.LUKE, -2, 14, 180, false);
 			context.waitTicks(5);
-			for (String name : new String[] {"Daisy", "Cass", "Casper"}) {
+			for (String name : new String[] {"Daisy", "Maddie", "Luke"}) {
 				server.runCommand("execute as @p run companion recruit " + name);
 			}
 			context.waitTicks(22);

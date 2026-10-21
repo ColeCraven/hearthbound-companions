@@ -56,7 +56,7 @@ These run in a real Minecraft server world on every `./gradlew build`:
 | `strangersCantHurtCompanionsAndCompanionsNeverFightPlayers` | A stranger's hit does nothing; companions never target any player |
 | `noGatheringInsideProtectedAreasOrNextToBuilds` | Gathering refused in a protected area (with a reason); blocks beside planks are off limits |
 | `hubSpawnsResidentsOnceAndTakesThemBack` | The hub spawns each resident once, with gear; the roster counts a recruited one; dismissed ones head home to the hub |
-| `summonedCastMembersGetTheirOwnGear` | `/companion summon bram` gives Bram a sellsword's kit |
+| `summonedCastMembersGetTheirOwnGear` | `/companion summon charlie` gives Charlie a sellsword's kit |
 | `repliesReachTheSpeakerAndPeopleNearby` | Conversation memory is per speaker; `@name` mid-message works; mentions of players are ignored |
 | `plainChatCarriesOnAConversation` | After one `@name`, plain chat reaches that companion; with another player nearby, only if you're facing them |
 | `tunnelThroughStone` | "dig a tunnel 4": the tunnel is really there, it stops where asked, and the stone is in their pack |
@@ -102,16 +102,16 @@ commands.
 
 ### Chat path playtest (client): passing
 
-Types `@Bram join me` into the real chat box (recruits him), then presses the Talk key, which
-pre-fills `@Bram `, and asks "what are you doing?" (correct follow status). Then a free
-conversation with Rosie: one `@Rosie`, then plain messages, including "call me Captain" and "I love
-cherry trees", and "what do you know about me?" gets both said back. Last, Conoby is handed a pack
+Types `@Charlie join me` into the real chat box (recruits him), then presses the Talk key, which
+pre-fills `@Charlie `, and asks "what are you doing?" (correct follow status). Then a free
+conversation with Honey: one `@Honey`, then plain messages, including "call me Captain" and "I love
+cherry trees", and "what do you know about me?" gets both said back. Last, Cole is handed a pack
 of planks, a door and a torch, and builds a shelter in front of the player.
 
 ### Cast showcase (client): passing
 
-`CastShowcase` renders the twelve cast members (Freya, Bram, Hazel, Emmett, Cass, Lucas, Daisy,
-Conoby, Rosie, Samuel, Luna, Casper) in the real client: front and back line-ups, close-ups of each
+`CastShowcase` renders the twelve cast members (Dasha, Charlie, Hazel, Birintan, Maddie, AJ, Daisy,
+Cole, Honey, Samuel, Luna, Luke) in the real client: front and back line-ups, close-ups of each
 group of four, and three of them running. I use it to check seams, outer layers and motion. The
 results are in [docs/images/cast](images/cast) and [CAST.md](CAST.md).
 
