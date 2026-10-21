@@ -48,16 +48,16 @@ public class CompanionClientGameTest implements FabricClientGameTest {
 			removeCompanions(server, context);
 
 			// A small party: recruit three companions and give orders through the normal chat path.
-			server.runCommand("execute at @p run summon hearthbound:companion ~-1.5 ~ ~3 {Archetype:\"naturalist\",Skin:10,CustomName:\"Wren\",CustomNameVisible:1b}");
-			server.runCommand("execute at @p run summon hearthbound:companion ~0 ~ ~3.5 {Archetype:\"sellsword\",Skin:6,CustomName:\"Bram\",CustomNameVisible:1b}");
-			server.runCommand("execute at @p run summon hearthbound:companion ~1.5 ~ ~3 {Archetype:\"rogue\",Skin:13,CustomName:\"Cass\",CustomNameVisible:1b}");
+			server.runCommand("execute at @p run summon hearthbound:companion ~-1.5 ~ ~3 {Archetype:\"naturalist\",Skin:102,CustomName:\"Hazel\",CustomNameVisible:1b}");
+			server.runCommand("execute at @p run summon hearthbound:companion ~0 ~ ~3.5 {Archetype:\"sellsword\",Skin:100,CustomName:\"Bram\",CustomNameVisible:1b}");
+			server.runCommand("execute at @p run summon hearthbound:companion ~1.5 ~ ~3 {Archetype:\"rogue\",Skin:104,CustomName:\"Cass\",CustomNameVisible:1b}");
 			context.waitTicks(10);
-			server.runCommand("execute as @p run companion say Wren hello! will you join me?");
+			server.runCommand("execute as @p run companion say Hazel hello! will you join me?");
 			server.runCommand("execute as @p run companion say Bram join me");
 			server.runCommand("execute as @p run companion say Cass would you like to join my party");
 			context.waitTicks(30);
 			server.runCommand("execute as @p run companion say Bram build me a castle");
-			server.runCommand("execute as @p run companion say Wren gather 20 diamonds");
+			server.runCommand("execute as @p run companion say Hazel gather 20 diamonds");
 			server.runCommand("execute as @p run companion say Cass wait here");
 			context.waitTicks(60);
 			context.takeScreenshot("hearthbound-party-conversation");

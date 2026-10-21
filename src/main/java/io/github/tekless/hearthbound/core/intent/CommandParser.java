@@ -134,7 +134,7 @@ public final class CommandParser {
 
 	/**
 	 * @param message        what the player typed
-	 * @param addresseeNames companion names that may appear as a form of address ("Wren, follow me")
+	 * @param addresseeNames companion names that may appear as a form of address ("Hazel, follow me")
 	 */
 	public ParseResult parse(String message, Collection<String> addresseeNames) {
 		List<String> tokens = tokenize(message);

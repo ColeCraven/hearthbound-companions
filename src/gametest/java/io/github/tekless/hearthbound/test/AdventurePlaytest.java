@@ -43,11 +43,11 @@ public class AdventurePlaytest implements FabricClientGameTest {
 			server.runCommand("gamemode survival @p");
 			server.runCommand("effect give @p resistance 99999 4 true");
 			server.runCommand("time set 1000");
-			server.runCommand("execute at @p run summon hearthbound:companion ~2 ~ ~2 {Archetype:\"sellsword\",Skin:6,CustomName:\"Bram\",CustomNameVisible:1b}");
-			server.runCommand("execute at @p run summon hearthbound:companion ~-2 ~ ~2 {Archetype:\"naturalist\",Skin:10,CustomName:\"Wren\",CustomNameVisible:1b}");
+			server.runCommand("execute at @p run summon hearthbound:companion ~2 ~ ~2 {Archetype:\"sellsword\",Skin:100,CustomName:\"Bram\",CustomNameVisible:1b}");
+			server.runCommand("execute at @p run summon hearthbound:companion ~-2 ~ ~2 {Archetype:\"naturalist\",Skin:102,CustomName:\"Hazel\",CustomNameVisible:1b}");
 			context.waitTicks(10);
 			say(server, "Bram", "join me");
-			say(server, "Wren", "will you join me?");
+			say(server, "Hazel", "will you join me?");
 			context.waitTicks(20);
 			check(snapshots(server).stream().allMatch(s -> s.order().equals("FOLLOW")), "both recruited and following");
 
@@ -100,16 +100,16 @@ public class AdventurePlaytest implements FabricClientGameTest {
 			server.runCommand("time set 1000");
 
 			// 4. Interrupted order: change of mind straight away.
-			say(server, "Wren", "gather 10 sand");
-			say(server, "Wren", "never mind");
-			say(server, "Wren", "what are you doing?");
+			say(server, "Hazel", "gather 10 sand");
+			say(server, "Hazel", "never mind");
+			say(server, "Hazel", "what are you doing?");
 			context.waitTicks(5);
-			Snapshot wren = snapshots(server).stream().filter(s -> s.name().equals("Wren")).findFirst().orElseThrow();
-			check(wren.order().equals("FOLLOW"), "cancelled order really stopped (" + wren.order() + ")");
-			check(wren.lastLine().equals("status.follow"), "status reply matches reality (" + wren.lastLine() + ")");
+			Snapshot hazel = snapshots(server).stream().filter(s -> s.name().equals("Hazel")).findFirst().orElseThrow();
+			check(hazel.order().equals("FOLLOW"), "cancelled order really stopped (" + hazel.order() + ")");
+			check(hazel.lastLine().equals("status.follow"), "status reply matches reality (" + hazel.lastLine() + ")");
 
 			// 5. Nether trip: followers come along; a waiting companion stays.
-			say(server, "Wren", "wait here");
+			say(server, "Hazel", "wait here");
 			context.waitTicks(5);
 			String home = server.computeOnServer(s -> {
 				ServerPlayer p = s.getPlayerList().getPlayers().get(0);
@@ -126,14 +126,14 @@ public class AdventurePlaytest implements FabricClientGameTest {
 			report.add("player now in: " + server.computeOnServer(s -> s.getPlayerList().getPlayers().get(0).level().dimension().identifier().toString()));
 			report.add("after portal-style travel: " + nether);
 			check(nether.stream().anyMatch(s -> s.name().equals("Bram") && s.dimension().equals("the_nether")), "following Bram came to the Nether");
-			// Wren's overworld chunk unloads once nobody is there, so "not in the Nether" is what we can check.
-			check(nether.stream().noneMatch(s -> s.name().equals("Wren") && s.dimension().equals("the_nether")), "waiting Wren stayed behind");
+			// Hazel's overworld chunk unloads once nobody is there, so "not in the Nether" is what we can check.
+			check(nether.stream().noneMatch(s -> s.name().equals("Hazel") && s.dimension().equals("the_nether")), "waiting Hazel stayed behind");
 			context.takeScreenshot("playtest-nether");
 			server.runCommand("execute in minecraft:the_nether run forceload remove 0 0 10 10");
 			server.runCommand("execute in minecraft:overworld run tp @p " + home);
 			context.waitTicks(60);
 			check(snapshots(server).stream().anyMatch(s -> s.name().equals("Bram") && s.dimension().equals("overworld")), "Bram came back too");
-			check(snapshots(server).stream().anyMatch(s -> s.name().equals("Wren") && s.order().equals("WAIT")), "Wren is still waiting");
+			check(snapshots(server).stream().anyMatch(s -> s.name().equals("Hazel") && s.order().equals("WAIT")), "Hazel is still waiting");
 
 			// 6. Prepare state to check after reloading.
 			server.runCommand("item replace entity @e[type=hearthbound:companion,name=Bram] weapon.mainhand with minecraft:iron_sword");

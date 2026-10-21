@@ -14,15 +14,15 @@ class CommandParserTest {
 	private final CommandParser parser = new CommandParser(Set.of("zombie", "skeleton", "creeper", "cow", "villager", "cave spider")::contains);
 
 	private Intent command(String message) {
-		ParseResult result = parser.parse(message, List.of("Wren", "Bram"));
+		ParseResult result = parser.parse(message, List.of("Hazel", "Bram"));
 		return assertInstanceOf(ParseResult.Command.class, result, () -> "Expected a command for: " + message + " but got " + result).intent();
 	}
 
 	@ParameterizedTest
 	@CsvSource({
 			"follow me, FOLLOW",
-			"'Wren, follow me please', FOLLOW",
-			"@Wren come with me, FOLLOW",
+			"'Hazel, follow me please', FOLLOW",
+			"@Hazel come with me, FOLLOW",
 			"let's go, FOLLOW",
 			"stay close, FOLLOW",
 			"wait here, WAIT",
@@ -124,7 +124,7 @@ class CommandParserTest {
 	@ParameterizedTest
 	@CsvSource({
 			"hello, HELLO",
-			"hi Wren, HELLO",
+			"hi Hazel, HELLO",
 			"how are you?, HOW",
 			"who are you, WHO",
 			"tell me a joke, JOKE",
@@ -138,7 +138,7 @@ class CommandParserTest {
 			"do you remember the creeper, MEMORY"
 	})
 	void recognisesSmallTalk(String message, TalkTopic topic) {
-		ParseResult result = parser.parse(message, List.of("Wren"));
+		ParseResult result = parser.parse(message, List.of("Hazel"));
 		assertEquals(topic, assertInstanceOf(ParseResult.Talk.class, result, () -> message + " -> " + result).topic());
 	}
 

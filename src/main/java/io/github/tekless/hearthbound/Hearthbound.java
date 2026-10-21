@@ -58,7 +58,7 @@ public final class Hearthbound implements ModInitializer {
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> ai = AiService.create(config, configDir, server));
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> ai = null);
 
-		// "@Wren follow me" in normal chat. Runs on the server thread after the message is shown.
+		// "@Hazel follow me" in normal chat. Runs on the server thread after the message is shown.
 		ServerMessageEvents.CHAT_MESSAGE.register((message, sender, params) -> {
 			String text = message.signedContent();
 			sender.level().getServer().execute(() -> Conversations.onChat(sender, text));

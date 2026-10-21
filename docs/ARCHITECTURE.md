@@ -58,7 +58,7 @@ flowchart LR
 
 ## How a message flows
 
-1. The player types *"Wren, gather 16 oak logs"* in the conversation screen (or `@Wren ...` in chat).
+1. The player types *"Hazel, gather 16 oak logs"* in the conversation screen (or `@Hazel ...` in chat).
 2. The server receives it on the game thread. `CommandParser` (rule-based, a few microseconds)
    recognises `gather(item=oak_log, count=16)`.
 3. `IntentValidator` checks it against the real world: is it a known item, can this mod gather it,

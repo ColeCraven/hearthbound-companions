@@ -21,7 +21,7 @@ public enum Archetype {
 			List.of("Oh my gosh", "Fascinating!", "I'm so excited")),
 	NATURALIST(
 			"Naturalist",
-			List.of("Elowen", "Linnea", "Corwin", "Fennel", "Hazel", "Basil"),
+			List.of("Elowen", "Linnea", "Corwin", "Fennel", "Ivy", "Basil"),
 			4.0, 6.0, CombatStance.DEFENSIVE, 0, 0.50f, Chattiness.HIGH,
 			Set.of(Interest.ORES, Interest.BIOMES, Interest.ANIMALS), Set.of(),
 			"An endlessly curious scholar of the natural world. Speaks in long, excited sentences full of questions, trivia and gentle puns. Loves biomes, plants, animals, rocks and the stars; dislikes needless destruction. Brave only when someone needs protecting.",

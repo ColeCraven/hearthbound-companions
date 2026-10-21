@@ -1,260 +1,240 @@
+<div align="center">
+
 # Hearthbound Companions
 
-*RPG-style followers for single-player Minecraft: recruit them, talk to them, and
-adventure together.*
+**RPG-style companions for Minecraft. Recruit them, talk to them, go on adventures together.**
 
-![A party of three companions answering in their own voices](docs/images/party-conversation.png)
+![Minecraft 26.3](https://img.shields.io/badge/Minecraft-26.3-62B47A)
+![Fabric](https://img.shields.io/badge/Loader-Fabric-DBD0B4)
+![Java 25](https://img.shields.io/badge/Java-25-E76F00)
+![License: MIT](https://img.shields.io/badge/License-MIT-3A7BD5)
+![Status: v0.1 preview](https://img.shields.io/badge/Status-v0.1%20preview-8A63D2)
 
-Hearthbound adds companions who look like players, each with their own personality. Ask one to
-join you, and they'll follow you through forests, caves and portals, fight beside you, wait where
-you tell them, and fetch resources. Talk to them in plain English in the normal chat box. Optionally,
-connect a local or cloud language model for free-form conversation. Either way, **companions only
-agree to what they will actually do, and only report what really happened.**
+![Freya, Bram, Hazel and Emmett](docs/images/cast/group-1.png)
 
-| | |
-|---|---|
-| **Minecraft** | Java Edition **26.3** |
-| **Loader** | **Fabric** Loader 0.19.5+ with Fabric API 0.164.0+26.3 |
-| **Java** | 25 (bundled with the Minecraft launcher) |
-| **Status** | v0.1 preview - core features working and tested; see [Known limitations](#known-limitations) |
-| **License** | MIT |
+</div>
 
-## Features
+I've always loved a good RPG companion: the one who carries way too much of your loot and has a
+dry comment for every dungeon. Minecraft adventures feel a bit lonely in comparison, so I made
+this: a mod that adds companions who look like players, have their own personalities, and
+actually help you out.
 
-**A cast of original characters**
+You can walk up to one, ask them to join you, and from then on they follow you around, fight
+next to you, chop wood when you ask, wander off to look at flowers when you stop to build, and
+answer back when you talk to them in chat. Each one sounds different. Bram the sellsword
+answers in about four words. Rosie the farm girl is scared of the dark and won't stop talking
+about her gran.
 
-![The Hearthbound cast](docs/images/cast/group-1.png)
+## Meet the cast
 
-- Twelve named adventurers with hand-designed fantasy skins - Bram, Hilde, Wren, Tobias, Cass,
-  Marlo, Isolde, Aldric, Pip, Tilly, Sable and Ashe - two per personality, one woman and one man
-  each. Meet them all in [the cast](docs/CAST.md).
-- Wanderers can also use any of the nine default player skins shipped with the game (Steve, Alex,
-  Ari, Efe, Kai, Makena, Noor, Sunny, Zuri), with wide (4 px) or slim (3 px) arms - 18 looks, read
-  from the game at runtime; no Mojang art is copied into this repository.
-- Rendered with the game's own player model; armour and held items show as on players.
+There are twelve characters, two for each personality, and every one of them has their own
+hand-made skin. You can also get wanderers who use the game's default skins (all nine of them,
+with wide or slim arms).
 
-**Six real personalities** - not just different names ([details](docs/PERSONALITIES.md)):
-
-| Archetype (cast) | Voice | Helps by |
+| | Personality | Who they are |
 |---|---|---|
-| Sellsword (Bram, Hilde) | Terse, deadpan soldier | Charges any hostile nearby; retreats only at 20 % health |
-| Naturalist (Wren, Tobias) | Curious, punny scholar | Spots ores and biomes; fights only when attacked |
-| Rogue (Cass, Marlo) | Teasing treasure hunter | Flanks mobs that target you; points out chests and loot |
-| Guardian (Isolde, Aldric) | Formal, earnest protector | Stays closest; defends you; refuses to harm villagers or pets |
-| Farmhand (Pip, Tilly) | Nervous, kind farm kid | Warns early, retreats early; won't hurt farm animals |
-| Mystic (Sable, Ashe) | Dry, cryptic wanderer | Aggressive at night, aloof by day; warns about lava |
+| **Freya** | Sellsword | Golden-haired shieldmaiden from the north. Charges anything with teeth. |
+| **Bram** | Sellsword | Scarred veteran who has outlived three mercenary companies. Not a talker. |
+| **Hazel** | Naturalist | Auburn-haired ranger who stops to sketch every flower you walk past. |
+| **Emmett** | Naturalist | Gentle herbalist with a sprig of something behind his ear. |
+| **Cass** | Rogue | Treasure hunter with a sharp tongue. Pockets anything you leave on the ground. |
+| **Lucas** | Rogue | Smooth-talking thief who calls you "partner" and means it, mostly. |
+| **Daisy** | Guardian | Paladin with a gold circlet and a long braid. Will not hurt a villager, ever. |
+| **Conoby** | Guardian | Grey-bearded knight who has lost enough friends already. |
+| **Rosie** | Farmhand | Flower crown, nervous about caves, adores every cow she meets. |
+| **Samuel** | Farmhand | Farm lad who still isn't sure leaving home was a good idea. |
+| **Luna** | Mystic | Silver-haired stargazer in a midnight gown. Likes the night more than you do. |
+| **Casper** | Mystic | Hooded seer with glowing runes. Says very little, notices everything. |
 
-Each archetype has around 90 situations of scripted dialogue (orders, refusals, progress, combat,
-weather, biomes, small talk), with no-repeat selection so lines don't loop.
+<p align="center">
+  <img src="docs/images/cast/group-2.png" width="49%" alt="Cass, Lucas, Daisy and Conoby">
+  <img src="docs/images/cast/group-3.png" width="49%" alt="Samuel, Rosie, Luna and Casper">
+</p>
 
-**Clear, reliable orders**
-- **Follow** - keeps a personal distance, hurries when you get ahead, and teleports to a safe spot
-  next to you when separated, stuck, or when you go through a portal.
-- **Wait** - holds a spot and returns to it after a fight.
-- **Come** - walks to you once.
-- **Gather** *N* *items* - logs, stone, dirt, sand, gravel, clay, ores, flowers, sugar cane,
-  pumpkins... Only natural blocks (no dismantling your house), using the best tool the companion
-  carries, at normal breaking speed. The items are brought back and handed to you.
-- **Give** - hands over everything, or a specific item.
-- **Attack** - fight the creature you're looking at (or name one).
-- **Cancel / stop** - drops the current task.
-- **Recruit / dismiss** - up to 3 companions at a time; dismissed companions walk home.
+More about them (and how I drew the skins) in [docs/CAST.md](docs/CAST.md).
 
-When a request can't be done, companions say why, in character: the item isn't gatherable,
-there's none within reach, they need a stone pickaxe, their pack is full, they won't attack a
-villager, or "I don't build."
+## What they can do
 
-**A life of their own**
-- When you stop to build or mine, companions find something to do by themselves - and really do it:
-  the Naturalist goes to study a flower or an animal (and may pick a wild flower), the Rogue
-  pockets loot you left lying around (and tells you), the Farmhand fusses over a nearby cow, the
-  Sellsword and Guardian walk a guard circuit, the Mystic stargazes at night. They drop it the
-  moment you move on or give an order.
-- They make suggestions - eat something, find shelter before dark, let them carry your overflowing
-  pack - but never act on them without you.
-- Party members banter: one comments, another answers back in their own voice.
-- Give gifts by right-clicking with an item. Everyone has favourites (the Rogue loves emeralds, the
-  Farmhand bread, the Mystic amethyst...). Gifts raise affinity, which warms up their greetings;
-  weapons and armour you give them get equipped. Fighters start with a sword.
+You talk to them in normal chat. `@Hazel follow me`, `Bram, get me 16 oak logs`,
+`@all wait here`, or `@Cass tell me a joke`. Press **G** and the chat opens with the name of
+whoever you're looking at already filled in. Every personality has around a hundred
+situations of their own dialogue, so you're not hearing the same line over and over.
 
-**Adventuring**
-- Essential by default: at zero health a companion is knocked down for 15 seconds instead of dying.
-- Warnings when a creeper is close, a mob is behind you, your health is low, or there's lava nearby.
-- Comments on nightfall, rain, caves and new biomes, with cooldowns and a chattiness setting.
-- Auto-equips armour and the best sword or axe you put in their pack.
+They take orders too: follow, wait, come here, gather stuff, hand items over, attack that thing,
+stop what you're doing, go home. When they can't do something, they tell you why, in
+character: there's no iron around here, they need a pickaxe for stone, their pack is full, or
+"I don't build."
 
-**Talking**
-- Address a companion in normal chat: `@Wren follow me`, `Bram, gather 16 oak logs`, `@all wait here`.
-- Press **G** to start a message to the companion you're looking at (or the last one you spoke to).
-- A small party list (top left, toggle with **H**) shows each companion's task and health.
+Stand still for a bit and they get bored. Hazel goes to study a
+flower, Cass grabs loot you left lying around (and admits it), Rosie goes and pets the
+nearest cow, the fighters walk a little guard circuit, and Luna stares at the stars at
+night. They drop it the second you move or give an order. They also nag you to eat, suggest
+finding shelter before dark, and bicker with each other.
 
-**Persistence**
-- Name, personality, skin, owner, current order (including an unfinished gather), inventory,
-  recent conversation, notable shared events and affinity are saved with the world.
+On the move they keep a comfortable distance, hurry when you sprint off, and if you get
+separated (or jump through a portal) they catch up next to you on safe ground. They warn you
+about creepers and mobs sneaking up behind you.
 
-## How it works
+By default they're knocked down instead of killed, so you never lose someone you've got attached to. Their name, personality, gear,
+current task and memories all save with your world.
 
-The rule that shapes the whole design: **talking and doing are separate systems.**
+You can also right-click a companion with an item to give it to them. Everyone has
+favourites (emeralds for Cass, bread for Rosie, amethyst for Luna), and it warms them up
+towards you. Give a fighter a better sword and they'll equip it.
+
+<p align="center">
+  <img src="docs/images/party-conversation.png" width="49%" alt="A party chatting and refusing to build a castle">
+  <img src="docs/images/gathering.png" width="49%" alt="Bram gathering logs, shown in the party list">
+</p>
+
+## They don't lie to you
+
+This is the part I cared about most. A lot of AI companion mods let a language model decide
+what the character does, and you end up with a follower who says "Sure, I'll mine you some
+diamonds!" and then stands there. I hate that.
+
+So talking and doing are completely separate here:
 
 ```mermaid
 flowchart LR
-    P[Player message] --> R[Rule-based parser]
-    R -- clear order --> V[Validator<br/>checks the real world]
-    R -- small talk / unclear --> D[Dialogue]
-    D -. optional .-> M[Language model<br/>async, off-thread]
-    M -. proposed intent .-> V
-    V -- accepted --> T[Task state machine<br/>follow / gather / ...]
-    V -- refused + reason --> D
-    T -- progress, done, failed --> D
-    D --> C[Companion's reply]
+    P[You say something] --> R[Rule-based reader]
+    R -- clear order --> V[Game checks it's possible]
+    R -- chatting --> D[Dialogue]
+    D -. optional AI .-> M[Language model]
+    M -. suggests an action .-> V
+    V -- yes --> T[Task runs in game code]
+    V -- no, and why --> D
+    T -- real progress --> D
+    D --> C[Companion replies]
 ```
 
-1. Messages are first read by a deterministic parser (tested with 58 cases).
-2. Orders are validated against the actual game: does the item exist, can it be gathered, does the
-   companion have the right tool, are they recruited, would their personality refuse?
-3. Only after the order has started (or been refused) does the companion reply, so the reply always
-   matches what is really happening.
-4. Progress and completion come from the task's state machine ("Only found 5 of the 16 oak logs,
-   that's all there is"). A task is only reported complete when the items are in your inventory.
-5. An optional language model can make conversation richer, but it can only *propose* an intent
-   from a fixed list. The game validates it exactly like a typed order. If the game refuses, the
-   model's reply is discarded and the truthful refusal is shown. A guard also replaces replies that
-   promise actions nobody started ("Sure, I'll build you a tower!").
+Your message goes through a plain rule-based parser first. If it's an order, the game checks
+whether it can actually happen, starts the task, and only then lets the companion answer. Progress
+and "done" messages come straight from the task, so "Here's your 16 oak logs" only shows up once
+the logs are in your inventory. If you hook up an AI model, it can only suggest an action from a
+short list, and the game double-checks it the same way. If the game says no, the model's reply
+gets thrown out and the companion tells you the real reason instead.
 
-More detail: [Architecture](docs/ARCHITECTURE.md), [AI design](docs/AI_DESIGN.md),
-[technical decisions](docs/TECH_DECISIONS.md), [research](docs/RESEARCH.md), [plan](docs/PLAN.md).
+There's more detail in [ARCHITECTURE.md](docs/ARCHITECTURE.md) and [AI_DESIGN.md](docs/AI_DESIGN.md)
+if you're into that.
 
-## Installation
+## Installing
 
-1. Install [Fabric Loader](https://fabricmc.net/use/installer/) 0.19.5 or newer for Minecraft 26.3.
-2. Put [Fabric API](https://modrinth.com/mod/fabric-api) (0.164.0+26.3 or newer) in your `mods` folder.
-3. Put `hearthbound-0.1.0.jar` (from [Releases](../../releases) or built yourself) in `mods`.
-4. Start the game with the Fabric profile.
+You'll need Minecraft Java Edition 26.3 with Fabric.
 
-### Getting a companion
+1. Install [Fabric Loader](https://fabricmc.net/use/installer/) (0.19.5 or newer) for 26.3.
+2. Drop [Fabric API](https://modrinth.com/mod/fabric-api) into your `mods` folder.
+3. Drop `hearthbound-0.1.0.jar` in there too (grab it from [Releases](../../releases)).
+4. Launch the Fabric profile.
 
-- In Creative, use the **Companion Spawn Egg** (Spawn Eggs tab), or with cheats run
-  `/companion summon wren` for a cast member, or `/companion summon [archetype] [name] [skin] [wide|slim]`
-  for a wanderer, e.g. `/companion summon guardian Aveline noor slim`.
-- Walk up, right-click to say hello, then say `@Wren will you join me?`.
+To meet someone quickly, grab a **Companion Spawn Egg** from the creative menu, or with cheats on
+run `/companion summon hazel`. Walk up, right-click to say hi, then type `@Hazel will you join me?`.
 
-### Talking and commands
-
-| Do this | By typing (chat) | Or |
+| You want to | Type in chat | Or use a command |
 |---|---|---|
-| Recruit | `@Name join me` | `/companion recruit Name` |
-| Follow / wait / come | `@Name follow me`, `wait here`, `come here` | `/companion follow Name` ... |
-| Gather | `@Name get me a stack of cobblestone`, `chop 10 birch logs` | `/companion gather Name 64 cobblestone` |
-| Hand over items | `@Name give me everything`, `hand over the logs` | `/companion give Name` |
-| Fight | `@Name attack that` (look at it) | |
-| Status | `@Name what are you doing?` | `/companion list` |
-| Stop the current task | `@Name stop` | `/companion cancel Name` |
-| Trade items | sneak + right-click, or `@Name show me your pack` | `/companion inventory Name` |
-| Dismiss | `@Name you're dismissed` | `/companion dismiss Name` |
-| Everyone at once | `@all follow me` | |
+| Recruit someone | `@Name join me` | `/companion recruit Name` |
+| Follow / wait / come | `@Name follow me`, `wait here`, `come here` | `/companion follow Name` |
+| Get resources | `@Name get me a stack of cobblestone` | `/companion gather Name 64 cobblestone` |
+| Get your stuff back | `@Name give me everything` | `/companion give Name` |
+| Fight something | look at it, `@Name attack that` | |
+| Check on them | `@Name what are you doing?` | `/companion list` |
+| Stop a task | `@Name stop` | `/companion cancel Name` |
+| Swap items | sneak + right-click them | `/companion inventory Name` |
+| Let them go | `@Name you're dismissed` | `/companion dismiss Name` |
 
-## Configuration
+Press **H** to hide the little party list in the corner.
 
-`config/hearthbound.json` is created on first launch ([example](docs/examples/hearthbound.json)):
+## Settings
 
-| Setting | Default | Meaning |
+The config lives at `config/hearthbound.json` and gets created the first time you play.
+
+| Setting | Default | What it does |
 |---|---|---|
 | `essentialCompanions` | `true` | Knocked down instead of killed |
-| `partyLimit` | `3` | Companions per player |
-| `ambientChatter` | `1.0` | 0 = silent, 2 = chatty |
-| `autonomy` | `1.0` | How often companions do things of their own accord: 0 = never, 2 = often |
-| `ai.provider` | `none` | `none`, `ollama`, `openai` (any OpenAI-compatible API), `anthropic` |
+| `partyLimit` | `3` | How many companions you can have at once |
+| `ambientChatter` | `1.0` | How much they talk on their own (0 is silent, 2 is very chatty) |
+| `autonomy` | `1.0` | How often they wander off to do their own thing |
+| `ai.provider` | `none` | `none`, `ollama`, `openai` or `anthropic` |
 
-### Optional AI dialogue
+### Optional: AI conversations
 
-The mod is complete without AI. If you want free-form conversation:
+Everything above works without any AI at all. If you want proper free-form conversations on top,
+you can plug in a language model.
 
-**Local and private (recommended): [Ollama](https://ollama.com)**
-1. Install Ollama and run `ollama pull qwen3.5:9b` (about 6.6 GB; needs about 8-10 GB of VRAM).
-   With 4-8 GB, use `qwen3.5:4b`.
-2. Use [this config](docs/examples/hearthbound-ollama.json). Nothing leaves your computer.
+The option I'd recommend is **[Ollama](https://ollama.com)**, which runs on your own PC, costs
+nothing, and keeps everything private. Install it, run `ollama pull qwen3.5:9b` (about 6.6 GB,
+wants roughly 8 to 10 GB of graphics memory, or use `qwen3.5:4b` on smaller cards), and copy
+[this config](docs/examples/hearthbound-ollama.json).
 
-**Cloud: OpenAI-compatible APIs (OpenAI, OpenRouter, Groq, LM Studio...) or Anthropic**
-1. Set `ai.provider`, `ai.model` (and `ai.baseUrl` for non-OpenAI services), e.g.
-   [Anthropic example](docs/examples/hearthbound-anthropic.json).
-2. Provide your API key **outside the config**, either as an environment variable
-   (`HEARTHBOUND_API_KEY`, or `OPENAI_API_KEY` / `ANTHROPIC_API_KEY`), or in
-   `config/hearthbound-secrets.json` (see the [example](docs/examples/hearthbound-secrets.example.json)).
-   Keys are never logged, never sent to the game client, and never put in prompts.
-3. Costs are small but real: a typical reply is about 1,500 tokens in and 150 out. That's roughly
-   $0.03 per 100 replies with `claude-haiku-5-5`, and about $1 per 100 with `claude-opus-5-5` at low
-   effort. See [AI design](docs/AI_DESIGN.md) for other providers and sources.
-4. Privacy: only the conversation with that companion, a short memory summary, and a compact world
-   description (biome, time, weather, health, nearby mob types) are sent. Set
-   `ai.sharePlayerName: false` to hide your name. Coordinates and other players' chat are never sent.
+You can also use a cloud API: anything OpenAI-compatible (OpenAI, OpenRouter, Groq, LM Studio) or
+Anthropic's Claude. Put your API key in an environment variable (`HEARTHBOUND_API_KEY`) or in
+`config/hearthbound-secrets.json` ([example](docs/examples/hearthbound-secrets.example.json)),
+never in the main config. A typical reply is cheap, around $0.03 per hundred messages on the
+smallest models. Only your conversation with that one companion, a short memory, and a basic
+description of where you are (biome, time, weather, health) gets sent. Your coordinates never are.
 
-If the AI service is slow, offline or returns something unusable, companions answer with their
-scripted lines instead. After three failures in a row the AI is paused for two minutes. Orders always
-work.
+If the AI is slow or offline, companions just fall back to their own lines and orders keep working.
 
-## Building from source
+## Building it yourself
+
+Gradle needs Java 25 (the one that comes with the Minecraft launcher works fine).
 
 ```bash
 ./gradlew build
 ```
 
-This compiles the mod, runs the unit tests and the in-game GameTests, and writes the jar to
-`build/libs/`. Gradle needs Java 25; the Minecraft launcher's runtime works, or any JDK 25.
+That builds the jar into `build/libs/` and runs all the tests. If you want to poke around in a dev
+copy of the game:
 
 ```bash
 ./gradlew runClient
 ```
 
-```bash
-./gradlew runClientGameTest
-```
+The skins are generated by a small Python script, so you can tweak colours and rebuild them:
 
-`runClient` starts a development game. `runClientGameTest` opens a game window, runs scripted
-playtests and saves screenshots to `build/run/clientGameTest/screenshots`.
+```bash
+python tools/skins/cast.py
+```
 
 ## Testing
 
-| Layer | What | Count |
-|---|---|---|
-| Unit tests (JUnit 5) | Command parser, gather state machine, follow/stuck logic, line banks for every personality, AI JSON contract, promise guard, prompt building, all three AI clients against a fake HTTP server (success, refusal, HTTP errors, timeouts) | 101 |
-| Server GameTests | In a real world: gathering and handing over, "nothing found", "needs a pickaxe", cancelling mid-task, catch-up teleport, knocked down not killed, refusing to attack villagers, strangers refusing orders, party limit, save/load round trip | 10 |
-| Client GameTest | Real client: renders all 18 looks, recruits a party through chat, gives orders, gathers wood; takes screenshots | 1 scripted session |
+I tried to test this properly instead of just eyeballing it. There are 106 unit tests (the chat
+parser, the gathering logic, the AI response handling), 15 tests that run inside a real game
+server (gathering logs and handing them over, cancelling halfway, catching up after a teleport,
+saving and loading), and a few scripted runs in the actual game client. One of those drops two
+companions into a normal generated world, walks them across the terrain, fights zombies at night,
+goes to the Nether and back, then quits and reloads the world to check nothing got lost. It caught
+a couple of real bugs along the way.
 
-What has been verified and what still needs testing is tracked honestly in [docs/TESTING.md](docs/TESTING.md).
+The full write-up, including what still needs testing, is in [TESTING.md](docs/TESTING.md).
 
-## Screenshots
+## Known issues
 
-| | |
-|---|---|
-| ![Wide-arm default skins](docs/images/skins-wide.png) | ![Slim-arm default skins](docs/images/skins-slim.png) |
-| All nine default skins, wide arms | ...and slim arms |
-| ![Slim vs wide arms](docs/images/slim-vs-wide.png) | ![A companion gathering logs](docs/images/gathering.png) |
-| Same skin, both models | Gathering logs from real trees |
-| ![Cast group 2](docs/images/cast/group-2.png) | ![Cast group 3](docs/images/cast/group-3.png) |
-| Cass, Marlo, Isolde, Aldric | Pip, Tilly, Sable, Ashe |
+- They use Minecraft's normal pathfinding, so they won't dig tunnels or build bridges. If something
+  is out of reach (like the top of a tall tree) they'll say so and skip it.
+- If you teleport really far and their chunk unloads before they notice, they'll stay put until you
+  come back.
+- Melee only for now, no bows.
+- Talking happens in the chat box. A proper conversation screen is on my list.
+- English only, and I've only played it in single-player.
+- I haven't tried the AI side with a live model yet. It's tested against fake servers, but I still
+  need to sit down with Ollama and play.
 
-## Known limitations
+## What's next
 
-- **Movement is vanilla pathfinding.** Companions don't dig tunnels, build bridges or pillar up, so
-  they only gather blocks they can reach on foot (tall trees keep their top logs). When they can't
-  reach something they say so instead of pretending.
-- **Separation edge case:** if you teleport far away and the companion's chunk unloads before its
-  next check (about once a second), it stays where it was until you return.
-- **Melee only**, no bows. Companions regenerate slowly but don't eat.
-- **Conversation uses the chat box.** There's no dedicated conversation screen yet.
-- **English only.** Single-player focus; multiplayer hasn't been tested.
-- **AI dialogue** is fully implemented and covered by tests against fake servers, but at the time of
-  writing it hadn't been playtested with a live model.
+A conversation screen with your history, companions who comment on each other more, bows, a way to
+set a home for them, and more cast members. If you have ideas, open an issue!
 
 ## Credits
 
-- Built with [Fabric](https://fabricmc.net/) (Loader, Loom, Fabric API).
-- Skins, models and textures are Minecraft's own, used at runtime; Minecraft is a trademark of Mojang/Microsoft. This mod is not affiliated with Mojang or Microsoft.
-- Inspired by the RPG companions I've always liked, and the companion mods that came before this one.
-- Prior art studied: CreatureChat, Mindcraft, MCA Reborn, Human Companions, Villager Recruits and others (see [research](docs/RESEARCH.md)).
-- Original cast skins drawn procedurally by [`tools/skins/cast.py`](tools/skins/cast.py).
-- Developed by Tekless with AI assistance (Claude).
+- Built on [Fabric](https://fabricmc.net/).
+- The cast skins are my own originals, drawn with [`tools/skins/cast.py`](tools/skins/cast.py).
+  Default skins come from the game itself at runtime; nothing from Mojang is copied here.
+- Other Minecraft companion mods like CreatureChat, MCA Reborn and Human Companions were a big help
+  in working out what I wanted ([research notes](docs/RESEARCH.md)).
+
+Minecraft is a trademark of Mojang and Microsoft. This mod isn't affiliated with either of them.
 
 ## License
 
-[MIT](LICENSE) for the code and the original assets in this repository (cast skins, icon, spawn egg texture, dialogue text).
+[MIT](LICENSE). Do what you like with it.

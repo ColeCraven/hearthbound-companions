@@ -21,7 +21,7 @@ public class ChatPathPlaytest implements FabricClientGameTest {
 		try (TestSingleplayerContext world = context.worldBuilder().create()) {
 			world.getConnection().waitForChunksRender();
 			TestServerContext server = world.getServer();
-			server.runCommand("execute at @p run summon hearthbound:companion ~1 ~ ~3 {Archetype:\"sellsword\",Skin:6,CustomName:\"Bram\",CustomNameVisible:1b}");
+			server.runCommand("execute at @p run summon hearthbound:companion ~1 ~ ~3 {Archetype:\"sellsword\",Skin:100,CustomName:\"Bram\",CustomNameVisible:1b}");
 			context.waitTicks(10);
 
 			typeInChat(context, "@Bram join me");

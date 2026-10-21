@@ -1,57 +1,59 @@
 # The cast
 
-Twelve original characters, two per personality (one woman, one man), each with a hand-designed
-skin. You'll usually meet one of them when a companion spawns; about one in four companions is a
-wanderer in one of the game's default skins instead. Every cast member has a fixed name, look,
-personality and short background, which also goes into the AI character sheet.
+Twelve original characters, two for each personality (one woman and one man), each with a skin
+I designed for them. When a companion spawns you'll usually meet one of these; about one in four
+is a wanderer wearing one of the game's default skins instead. Every cast member has a fixed
+name, look, personality and short backstory, and the backstory also goes into the AI character
+sheet so they stay consistent.
 
-![The cast, group 1](images/cast/group-1.png)
-![The cast, group 2](images/cast/group-2.png)
-![The cast, group 3](images/cast/group-3.png)
+![Freya, Bram, Hazel and Emmett](images/cast/group-1.png)
+![Cass, Lucas, Daisy and Conoby](images/cast/group-2.png)
+![Samuel, Rosie, Luna and Casper](images/cast/group-3.png)
 
 | Name | Personality | Look | Who they are |
 |---|---|---|---|
-| **Bram** (he/him) | Sellsword | Short dark hair, salt-and-pepper beard, scar over the brow; oxblood quilted gambeson over mail, one steel pauldron, leather bracers | A scarred veteran who has outlived three mercenary companies |
-| **Hilde** (she/her) | Sellsword | Blonde braids and a leather headband; brown lamellar vest over a slate-blue tunic, white fur collar, fur-topped boots | A northern shieldmaiden: blunt, fearless, fiercely loyal |
-| **Wren** (she/her, slim) | Naturalist | Auburn bun with a quill, freckles, green eyes; open moss-green travel coat, satchel strap, cream shirt | A scholar-ranger who sketches every creature and flower she meets |
-| **Tobias** (he/him) | Naturalist | Dark curls, goatee, a sprig of herbs behind the ear; olive vest, rolled sleeves, green neckerchief, coloured vials on his belt | A soft-spoken herbalist who knows every root and leaf |
-| **Cass** (she/her, slim) | Rogue | Black bob, smirk; charcoal leather jacket, crimson scarf, crossed belts, hood down, small pack on the back | A sharp-tongued treasure hunter with a few too many tomb stories |
-| **Marlo** (he/him) | Rogue | Tousled chestnut hair, stubble, gold earring; plum doublet with brass buttons over a loose white shirt, bandolier | A silver-tongued thief with a weakness for shiny things |
-| **Isolde** (she/her) | Guardian | Dark hair tied back; polished breastplate under a white tabard with a golden sun, steel pauldrons and greaves | A paladin of the Dawn, sworn to guard travellers |
-| **Aldric** (he/him) | Guardian | Grey crop and full grey beard; deep-blue surcoat with a silver chevron over mail, steel pauldrons | An old knight-protector who won't lose another friend |
-| **Pip** (he/him) | Farmhand | Black curls, freckles; faded yellow shirt, patched brown overalls, red kerchief, rolled cuffs, muddy boots | A farm lad still not sure leaving home was a good idea |
-| **Tilly** (she/her, slim) | Farmhand | Ginger braids, red headscarf, freckles; green dress, cream blouse and apron | A cheerful farm girl who calms animals and bakes when nervous |
-| **Sable** (she/her, slim) | Mystic | Long black hair with a silver streak, violet eyes; violet robe with silver trim, amethyst pendant and sash | A wandering mystic who reads omens in the stars |
-| **Ashe** (he/him) | Mystic | Ash-grey cloak with the hood up, amber eyes, glowing teal rune marks; teal tunic, rope belt, wrapped boots | A hooded seer who speaks rarely and notices everything |
+| **Freya** (she/her, slim) | Sellsword | Long golden hair with thin braids framing her face; teal tunic with silver trim, laced leather corset, white fur mantle, fur-topped boots | A shieldmaiden from the north who left her clan to see the world |
+| **Bram** (he/him) | Sellsword | Short dark hair, salt-and-pepper beard, scar over the brow; oxblood quilted gambeson over mail, one steel pauldron | A scarred veteran who has outlived three mercenary companies |
+| **Hazel** (she/her, slim) | Naturalist | Long auburn hair with a white flower, freckles, green eyes; sage coat over a cream blouse and laced corset, satchel strap | A scholar-ranger who sketches every creature and flower she meets |
+| **Emmett** (he/him) | Naturalist | Dark curls, goatee, a sprig of herbs behind his ear; olive vest, rolled sleeves, green neckerchief, little vials on his belt | A soft-spoken herbalist who knows every root and leaf |
+| **Cass** (she/her, slim) | Rogue | High dark ponytail, side-swept bangs, amber eyes; burgundy laced corset, cropped black leather jacket, crimson sash, thigh-high boots | A sharp-tongued treasure hunter with a few too many tomb stories |
+| **Lucas** (he/him) | Rogue | Tousled chestnut hair, stubble, gold earring; plum doublet with brass buttons over a loose white shirt, bandolier | A silver-tongued thief with a weakness for shiny things |
+| **Daisy** (she/her, slim) | Guardian | Long dark braid over one shoulder, gold circlet; silver breastplate with gold trim, white tabard with a golden sun, royal-blue cape | A paladin of the Dawn, sworn to guard travellers on the wild roads |
+| **Conoby** (he/him) | Guardian | Grey crop and full grey beard; deep-blue surcoat with a silver chevron over mail, steel pauldrons | An old knight-protector who won't lose another friend |
+| **Rosie** (she/her, slim) | Farmhand | Honey-blonde waves and a flower crown, freckles; cream puff-sleeved blouse, sky-blue laced dress, white apron with embroidered flowers | A sunny farm girl who calms animals and bakes when she's nervous |
+| **Samuel** (he/him) | Farmhand | Black curls, freckles; faded yellow shirt, patched brown overalls, red kerchief, rolled cuffs, muddy boots | A farm lad still not sure leaving home was a good idea |
+| **Luna** (she/her, slim) | Mystic | Waist-length silver-lavender hair, violet eyes, gold circlet with a blue gem; midnight gown with gold trim and stars, amethyst amulet | A stargazer who reads omens in the night sky |
+| **Casper** (he/him) | Mystic | Ash-grey hood up, amber eyes, glowing teal rune marks; teal tunic, rope belt, wrapped boots | A hooded seer who speaks rarely and notices everything |
 
 ## Design notes
 
-- **Readable at a distance:** each character has one signature colour (Bram's oxblood, Wren's
-  moss green, Marlo's plum, Isolde's white and gold, Sable's violet...) and a distinctive
-  silhouette detail on the outer layer: pauldron, fur collar, hood, bun, scarf, tabard.
-- **Practical adventuring gear:** belts, straps, pouches, bracers and boots rather than elaborate
-  costumes, in the spirit of classic fantasy adventures.
+- **Faces:** the women have taller eyes with lashes and a catch-light, a soft blush and small
+  rosy lips; long hair frames the face on the outer layer and falls down the back and over the
+  shoulders. The men keep simpler, sturdier faces with brows, beards and stubble.
+- **Readable at a distance:** each character has a signature colour (Freya's teal, Bram's
+  oxblood, Hazel's sage, Cass's burgundy, Daisy's white and gold, Luna's midnight blue) and a
+  silhouette detail on the outer layer, such as a fur mantle, hood, ponytail, cape or crown.
+- **Practical adventuring gear:** belts, straps, corsets, bracers and boots rather than
+  over-the-top costumes, in the spirit of classic fantasy adventures.
 - **Shading:** a four-step colour ramp per material, with cooler shadows and warmer highlights,
   side and back faces a little darker, and no random noise.
-- **Both layers:** shirts and skin on the base layer; coats, armour, hoods and hair volume on
-  the outer layer, which stays readable in motion ([walking check](images/cast/walking.png),
-  [back view](images/cast/lineup-back.png)).
-- **Flat sheet** of all twelve, front and back: [skin-sheet.png](images/cast/skin-sheet.png).
+- **Checked in the game:** front and back line-ups, close-ups and a running shot
+  ([walking](images/cast/walking.png), [back view](images/cast/lineup-back.png)). The flat sheet
+  of all twelve, front and back: [skin-sheet.png](images/cast/skin-sheet.png).
 
-The skins are generated by [`tools/skins/cast.py`](../tools/skins/cast.py) (pure Python, no
-dependencies): every character is a short function built from reusable pieces in
-[`pieces.py`](../tools/skins/pieces.py). Edit a colour or a piece and run
-`python tools/skins/cast.py` to regenerate. They are original art, licensed MIT with the rest
-of this repository.
+The skins are generated by [`tools/skins/cast.py`](../tools/skins/cast.py) (plain Python, no
+dependencies). The men are in `cast.py` and the women in [`women.py`](../tools/skins/women.py),
+built from reusable pieces in [`pieces.py`](../tools/skins/pieces.py) and
+[`details.py`](../tools/skins/details.py). Change a colour and run `python tools/skins/cast.py` to
+regenerate. They're original art, MIT-licensed with the rest of the repo.
 
 ## Names
 
-The twelve cast names are reserved for these characters. Generic wanderers draw from separate
-per-personality name pools, which were cleaned up so that no two names are easily confused in
-chat (removed look-alikes: Corwin/Corvin, Rowan/Rowena, Seren/Wren, Isra/Isolde, Odo/Odette).
+The twelve cast names are reserved for these characters. Wanderers use separate name pools per
+personality, cleaned up so no two names are easy to confuse in chat.
 
 ## Commands
 
-- `/companion summon wren` - summon a specific cast member (with cheats).
-- `/companion skin <name> <outfit>` - change a companion's look to any default skin
-  (`noor slim`) or a cast outfit (`isolde`).
+- `/companion summon hazel` summons a specific cast member (with cheats on).
+- `/companion skin <name> <outfit>` changes a companion's look to a default skin (`noor slim`)
+  or a cast outfit (`daisy`).

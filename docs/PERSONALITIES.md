@@ -16,8 +16,8 @@ An archetype is **not just flavour text**. It changes three separate things:
 
 | | Sellsword | Naturalist | Rogue | Guardian | Farmhand | Mystic |
 |---|---|---|---|---|---|---|
-| **Cast** ([see them](CAST.md)) | Bram, Hilde | Wren, Tobias | Cass, Marlo | Isolde, Aldric | Pip, Tilly | Sable, Ashe |
-| **Wanderer names** | Torvald, Greta, Osric | Elowen, Linnea, Hazel | Jory, Lark, Vesper | Aveline, Gareth, Tristan | Odo, Bess, Clem | Nyx, Thorne, Orrin |
+| **Cast** ([see them](CAST.md)) | Bram, Freya | Hazel, Emmett | Cass, Lucas | Daisy, Conoby | Samuel, Rosie | Luna, Casper |
+| **Wanderer names** | Torvald, Greta, Osric | Elowen, Linnea, Ivy | Jory, Lark, Vesper | Aveline, Gareth, Tristan | Odo, Bess, Clem | Nyx, Thorne, Orrin |
 | **Voice** | Terse, blunt, soldier's slang | Long, excited sentences, asks questions | Quick quips, teasing, "partner" | Formal, sincere, old-fashioned courtesy | Rambling, nervous, homely sayings | Dry, cryptic, short poetic lines |
 | **Humour** | Deadpan understatement | Puns and trivia | Sarcasm and teasing | Earnest, gentle | Self-deprecating, accidental | Dark, gallows humour |
 | **Interests** | Weapons, armour, a good fight | Biomes, plants, animals, rocks | Emeralds, loot, chests, trades | Villagers, oaths, keeping you alive | Crops, animals, cooking, home | The Nether, the End, enchanting, night |

@@ -22,7 +22,7 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 
 | Suite | Covers |
 |---|---|
-| `CommandParserTest` (58) | Every order type, politeness and addressing ("Wren, could you..."), quantities in digits/words/stacks/dozens, "chop trees" = logs, attack vs gather ("get that zombie" vs "get some logs"), give-all vs give-item, small-talk topics, unsupported actions ("build me a house"), non-items ("I need help") |
+| `CommandParserTest` (58) | Every order type, politeness and addressing ("Hazel, could you..."), quantities in digits/words/stacks/dozens, "chop trees" = logs, attack vs gather ("get that zombie" vs "get some logs"), give-all vs give-item, small-talk topics, unsupported actions ("build me a house"), non-items ("I need help") |
 | `GatherMachineTest` (9) | Success only after full delivery; nothing found (no invented items); partial delivery when supply runs out; unreachable targets skipped then explained; missing tool fails before moving; full pack brings back what fits; cancel is immediate and final; owner leaving keeps the items |
 | `MovementPolicyTest` (5) | Follow band, hysteresis, hurry and teleport thresholds, dimension/cliff/stuck teleport, stuck detection windows |
 | `LineBankTest` (16) | Every personality has lines for every situation the game uses; placeholders match what code supplies; frequent situations have 3+ variants; personalities don't share lines; selector cycles through all variants and never repeats back-to-back |
@@ -84,7 +84,7 @@ pre-fills `@Bram `, and asks "what are you doing?" (correct follow status).
 
 ### Cast showcase (client): passing
 
-`CastShowcase` renders the twelve cast members in the real client - front and back line-ups,
+`CastShowcase` renders the twelve cast members (Freya, Bram, Hazel, Emmett, Cass, Lucas, Daisy, Conoby, Rosie, Samuel, Luna, Casper) in the real client - front and back line-ups,
 close-ups of each group of four, and three of them running - for visual review of seams, outer
 layers and motion. Results are in [docs/images/cast](images/cast) and [CAST.md](CAST.md).
 

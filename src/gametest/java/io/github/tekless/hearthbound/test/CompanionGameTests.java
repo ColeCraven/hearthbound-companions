@@ -110,7 +110,7 @@ public class CompanionGameTests {
 		floor(helper);
 		tree(helper, 5, 5, 4);
 		ServerPlayer player = owner(helper, 1.5, 1.5);
-		CompanionEntity companion = companion(helper, Archetype.FARMHAND, "Pip", 2.5, 2.5);
+		CompanionEntity companion = companion(helper, Archetype.FARMHAND, "Samuel", 2.5, 2.5);
 		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
 		Conversations.Outcome outcome = Conversations.apply(player, companion, Intent.gather("oak logs", 3));
 		helper.assertTrue(outcome.accepted(), "gather order accepted");
@@ -128,7 +128,7 @@ public class CompanionGameTests {
 	public void gatherReportsNothingFound(GameTestHelper helper) {
 		floor(helper);
 		ServerPlayer player = owner(helper, 1.5, 1.5);
-		CompanionEntity companion = companion(helper, Archetype.ROGUE, "Marlo", 3.5, 3.5);
+		CompanionEntity companion = companion(helper, Archetype.ROGUE, "Lucas", 3.5, 3.5);
 		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
 		helper.assertTrue(Conversations.apply(player, companion, Intent.gather("diamonds", 2)).accepted(), "order starts");
 		helper.succeedWhen(() -> {
@@ -161,7 +161,7 @@ public class CompanionGameTests {
 		floor(helper);
 		tree(helper, 6, 6, 5);
 		ServerPlayer player = owner(helper, 1.5, 1.5);
-		CompanionEntity companion = companion(helper, Archetype.NATURALIST, "Wren", 2.5, 2.5);
+		CompanionEntity companion = companion(helper, Archetype.NATURALIST, "Hazel", 2.5, 2.5);
 		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
 		Conversations.apply(player, companion, Intent.gather("logs", 10));
 		helper.runAfterDelay(10, () -> {
@@ -184,7 +184,7 @@ public class CompanionGameTests {
 	public void followerTeleportsWhenLeftBehind(GameTestHelper helper) {
 		floor(helper);
 		ServerPlayer player = owner(helper, 1.5, 1.5);
-		CompanionEntity companion = companion(helper, Archetype.MYSTIC, "Sable", 3.5, 3.5);
+		CompanionEntity companion = companion(helper, Archetype.MYSTIC, "Luna", 3.5, 3.5);
 		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
 		BlockPos far = helper.absolutePos(new BlockPos(1, 1, 1)).offset(40, 0, 0);
 		ServerLevel level = helper.getLevel();
@@ -237,7 +237,7 @@ public class CompanionGameTests {
 	public void dismissedCompanionsWalkHome(GameTestHelper helper) {
 		floor(helper);
 		ServerPlayer player = owner(helper, 1.5, 1.5);
-		CompanionEntity companion = companion(helper, Archetype.FARMHAND, "Tilly", 6.5, 6.5);
+		CompanionEntity companion = companion(helper, Archetype.FARMHAND, "Rosie", 6.5, 6.5);
 		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
 		companion.snapTo(helper.absoluteVec(new Vec3(1.5, 1, 3.5)));
 		Conversations.Outcome outcome = Conversations.apply(player, companion, Intent.of(IntentType.DISMISS));
@@ -285,7 +285,7 @@ public class CompanionGameTests {
 	@GameTest(maxTicks = 40)
 	public void essentialCompanionsAreDownedNotKilled(GameTestHelper helper) {
 		floor(helper);
-		CompanionEntity companion = companion(helper, Archetype.SELLSWORD, "Hilde", 3.5, 3.5);
+		CompanionEntity companion = companion(helper, Archetype.SELLSWORD, "Freya", 3.5, 3.5);
 		companion.hurtServer(helper.getLevel(), helper.getLevel().damageSources().generic(), 100.0F);
 		helper.assertTrue(companion.isAlive(), "still alive");
 		helper.assertTrue(companion.isDowned(), "knocked down");
@@ -297,7 +297,7 @@ public class CompanionGameTests {
 	public void guardianRefusesToAttackVillagers(GameTestHelper helper) {
 		floor(helper);
 		ServerPlayer player = owner(helper, 1.5, 1.5);
-		CompanionEntity companion = companion(helper, Archetype.GUARDIAN, "Aldric", 3.5, 3.5);
+		CompanionEntity companion = companion(helper, Archetype.GUARDIAN, "Conoby", 3.5, 3.5);
 		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
 		Villager villager = helper.spawn(net.minecraft.world.entity.EntityTypes.VILLAGER, new Vec3(5.5, 1, 5.5));
 		Conversations.Outcome outcome = Conversations.apply(player, companion, Intent.attack("villager"));
@@ -319,7 +319,7 @@ public class CompanionGameTests {
 
 		CompanionEntity[] party = {
 				companion(helper, Archetype.SELLSWORD, "Torvald", 2.5, 5.5),
-				companion(helper, Archetype.NATURALIST, "Hazel", 4.5, 5.5),
+				companion(helper, Archetype.NATURALIST, "Fennel", 4.5, 5.5),
 				companion(helper, Archetype.FARMHAND, "Odo", 6.5, 5.5)};
 		for (CompanionEntity member : party) {
 			helper.assertTrue(Conversations.apply(player, member, Intent.of(IntentType.RECRUIT)).accepted(), "recruited " + member.companionName());

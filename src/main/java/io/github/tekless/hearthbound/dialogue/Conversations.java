@@ -62,7 +62,7 @@ public final class Conversations {
 	}
 
 	/**
-	 * Handles a chat line if it is addressed to companions ("@Wren follow me", "Wren, wait here",
+	 * Handles a chat line if it is addressed to companions ("@Hazel follow me", "Hazel, wait here",
 	 * "@all come here"). Returns true if it was.
 	 */
 	public static boolean onChat(ServerPlayer player, String raw) {

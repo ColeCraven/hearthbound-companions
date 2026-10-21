@@ -9,6 +9,7 @@ import sys
 
 from skinlib import Part, Ramp, Skin, render_preview, save_rgba, shade, hex_rgb
 import pieces as P
+import women as W
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, '..', '..', 'src', 'main', 'resources', 'assets', 'hearthbound', 'textures', 'entity', 'companion')
@@ -39,51 +40,7 @@ def bram():
     return s
 
 
-def hilde():
-    """Sellsword. Northern shieldmaiden: blonde braids, leather lamellar over a slate tunic, fur collar."""
-    s = Skin(slim=False)
-    skin, hair = Ramp('#efd2bd'), Ramp('#e0bf72')
-    P.body_skin(s, skin)
-    P.shirt(s, Ramp('#4f6a8a'), arms_to=9)
-    P.trousers(s, Ramp('#5c5650'))
-    P.boots(s, Ramp('#4a3424'), top_row=8, cuff=Ramp('#d9d4cc'))
-    lamellar = Ramp('#6b4a2e')
-    P.coat(s, lamellar, rows=(1, 10), open_front=False, sleeves_to=2)
-    P.quilting(s, lamellar, rows=range(2, 10), every=2)
-    P.fur_collar(s, Ramp('#d9d4cc'))
-    P.belt(s, Ramp('#3a2618'), buckle=hex_rgb('#9aa0a8'), row=8, layer='jacket')
-    P.bracers(s, Ramp('#6b4a2e'), rows=(6, 9))
-    P.hair(s, hair, 'braids', fringe='centre')
-    P.face(s, skin, eyes=hex_rgb('#5b8cc7'), brows=shade(hair['deep'], -0.12), mouth='neutral', lip=hex_rgb('#c98d84'))
-    # leather headband holding the braids back
-    hat = Part(s, 'hat')
-    for x in range(hat.wrap_width):
-        hat.paint(x, 1, hex_rgb('#6b4a2e') if x % 4 else hex_rgb('#8a6440'))
-    return s
-
-
-def wren():
-    """Naturalist. Scholar-ranger: auburn bun with a quill, open moss-green coat, satchel strap, freckles."""
-    s = Skin(slim=True)
-    skin, hair = Ramp('#f1d0b5'), Ramp('#a4502a')
-    P.body_skin(s, skin)
-    P.shirt(s, Ramp('#e9e1cc'), arms_to=9, neck='v', skin=skin)
-    P.trousers(s, Ramp('#8b7355'))
-    P.boots(s, Ramp('#5a3d26'), top_row=8, cuff=Ramp('#7a5636'))
-    P.coat(s, Ramp('#4f6b3a'), rows=(0, 11), open_front=True, opening=(3, 4), sleeves_to=8, cuff=Ramp('#3e5530')['base'], skirt_rows=4)
-    P.strap(s, Ramp('#6b4a2e'), direction='down_right', buckle=hex_rgb('#c9a227'))
-    P.belt(s, Ramp('#5a3d26'), buckle=hex_rgb('#c9a227'), row=8, layer='body')
-    P.pouch(s, Ramp('#a07a50'), col=1, row=9, layer='body')
-    P.hair(s, hair, 'bun', fringe='side')
-    P.face(s, skin, eyes=hex_rgb('#4f8a4a'), brows=hair['lo'], mouth='smile', lip=hex_rgb('#c98074'), freckles=True)
-    # a quill tucked into the bun
-    hat = Part(s, 'hat')
-    hat.paint(hat.back_x(5), 0, (236, 232, 222))
-    hat.paint(hat.back_x(6), 1, (214, 210, 200))
-    return s
-
-
-def tobias():
+def emmett():
     """Naturalist. Gentle herbalist: curly hair, round spectacles, olive vest, rolled sleeves, vials on the belt."""
     s = Skin(slim=False)
     skin, hair = Ramp('#8d5a3b'), Ramp('#2b1d14')
@@ -113,41 +70,7 @@ def tobias():
     return s
 
 
-def cass():
-    """Rogue. Treasure hunter: black bob, charcoal leather jacket, crimson scarf, crossed belts, hood down."""
-    s = Skin(slim=True)
-    skin, hair = Ramp('#d6a77f'), Ramp('#1c1a22')
-    P.body_skin(s, skin)
-    P.shirt(s, Ramp('#3a3a40'), arms_to=9)
-    P.trousers(s, Ramp('#2f2c33'))
-    P.boots(s, Ramp('#1f1c22'), top_row=6)
-    jacket_ramp = Ramp('#3a3742')
-    P.coat(s, jacket_ramp, rows=(0, 9), open_front=True, opening=(3, 4), sleeves_to=9, trim=hex_rgb('#55505e'))
-    P.gloves(s, Ramp('#3b2a22'), rows=(10, 11), fingertips_skin=skin['base'])
-    # crossed belts
-    P.strap(s, Ramp('#5a3a24'), direction='down_right', back=False, buckle=hex_rgb('#b8b8c0'))
-    P.strap(s, Ramp('#5a3a24'), direction='down_left', back=False)
-    P.hood_down(s, Ramp('#4a4452'))
-    # crimson scarf with a tail
-    scarf = Ramp('#9e2b2b')
-    jacket = Part(s, 'jacket')
-    for x in range(jacket.wrap_width):
-        jacket.paint(x, 0, scarf['base'])
-    for y in (1, 2, 3, 4):
-        jacket.paint(jacket.front_x(1), y, scarf['lo'] if y % 2 else scarf['base'])
-    P.belt(s, Ramp('#6b4630'), buckle=hex_rgb('#b8b8c0'), row=9, layer='jacket')
-    # scarf tail and a small pack on the back
-    for y in (1, 2, 3):
-        jacket.paint(jacket.back_x(6), y, scarf['lo'])
-    for y in range(4, 8):
-        for bx in range(2, 6):
-            jacket.paint(jacket.back_x(bx), y, Ramp('#6b4630')['base'] if y > 4 else Ramp('#6b4630')['hi'])
-    P.hair(s, hair, 'bob', fringe='side', highlight_cols=(2,))
-    P.face(s, skin, eyes=hex_rgb('#3b2f2a'), brows=hair['base'], mouth='smirk', lip=hex_rgb('#9a5a4a'))
-    return s
-
-
-def marlo():
+def lucas():
     """Rogue. Charming thief: tousled chestnut hair, stubble, plum doublet with brass buttons, gold earring."""
     s = Skin(slim=False)
     skin, hair = Ramp('#e0b08a'), Ramp('#5a3420')
@@ -171,41 +94,7 @@ def marlo():
     return s
 
 
-def isolde():
-    """Guardian. Paladin: polished breastplate under a white tabard with a golden sun, dark hair tied back."""
-    s = Skin(slim=False)
-    skin, hair = Ramp('#6b4430'), Ramp('#20160f')
-    P.body_skin(s, skin)
-    P.shirt(s, Ramp('#2f4c86'), arms_to=9)
-    steel = Ramp('#b8bec6')
-    P.plate(s, steel, 'body', rows=(0, 6))
-    P.trousers(s, Ramp('#26324d'))
-    P.boots(s, Ramp('#7a8088'), top_row=8)
-    P.plate(s, steel, 'rpants', rows=(3, 7), faces=('front', 'right', 'left'))
-    P.plate(s, steel, 'lpants', rows=(3, 7), faces=('front', 'right', 'left'))
-    # white tabard with blue edges, front and back
-    tabard = Ramp('#e8e6e0')
-    jacket = Part(s, 'jacket')
-    for y in range(3, 12):
-        for fx in range(1, 7):
-            tone = tabard['base'] if fx not in (1, 6) else hex_rgb('#3a5aa0')
-            if y == 11:
-                tone = tabard['lo']
-            jacket.paint(jacket.front_x(fx), y, tone)
-            jacket.paint(jacket.back_x(fx), y, shade(tone, -0.04))
-    sun = hex_rgb('#d8b44a')
-    P.emblem(s, 'jacket', [(3, 5), (4, 5), (3, 6), (4, 6), (2, 5), (5, 6), (3, 4), (4, 7)], sun)
-    P.belt(s, Ramp('#4a3020'), buckle=hex_rgb('#d8b44a'), row=8, layer='jacket')
-    P.pauldron(s, steel, side='right', rows=(0, 2))
-    P.pauldron(s, steel, side='left', rows=(0, 2))
-    P.bracers(s, steel, rows=(7, 9))
-    P.gloves(s, Ramp('#8a9098'), rows=(10, 11))
-    P.hair(s, hair, 'tied', fringe='centre')
-    P.face(s, skin, eyes=hex_rgb('#3a2618'), brows=hair['base'], mouth='neutral', lip=hex_rgb('#5a3226'))
-    return s
-
-
-def aldric():
+def conoby():
     """Guardian. Grey-bearded knight-protector: blue surcoat with a silver tower crest over mail and plate."""
     s = Skin(slim=False)
     skin, hair = Ramp('#e8c2a6'), Ramp('#9a9a98')
@@ -234,7 +123,7 @@ def aldric():
     return s
 
 
-def pip():
+def samuel():
     """Farmhand. Farm lad: messy black curls, freckles, yellow shirt, brown overalls with a patch, red kerchief."""
     s = Skin(slim=False)
     skin, hair = Ramp('#9a6744'), Ramp('#1e1610')
@@ -274,81 +163,7 @@ def pip():
     return s
 
 
-def tilly():
-    """Farmhand. Cheerful farm girl: ginger braids, red headscarf, green dress, cream apron and blouse."""
-    s = Skin(slim=True)
-    skin, hair = Ramp('#f3d6c2'), Ramp('#c8642c')
-    P.body_skin(s, skin)
-    blouse = Ramp('#efe6d2')
-    P.shirt(s, blouse, arms_to=4, neck='round')
-    P.rolled_sleeves(s, blouse, roll_row=4)
-    dress = Ramp('#4f7a3a')
-    body = Part(s, 'body')
-    body.fill_rows(3, 11, dress)
-    for y in (4, 6):
-        P.emblem(s, 'body', [(3, y), (4, y)], hex_rgb('#e8dcc0'))  # bodice laces
-    # stockings and boots
-    for leg in ('rleg', 'lleg'):
-        Part(s, leg).fill_rows(0, 8, Ramp('#4a3a30'))
-    P.boots(s, Ramp('#6b4a2e'), top_row=9)
-    # skirt (outer layer on the legs) with an apron in front
-    for leg in ('rpants', 'lpants'):
-        p = Part(s, leg)
-        for y in range(0, 7):
-            for x in range(p.wrap_width):
-                face, fx = p.face_of(x)
-                inner = (leg == 'rpants' and face == 'left') or (leg == 'lpants' and face == 'right')
-                if inner:
-                    continue
-                p.paint(x, y, dress['lo'] if y == 6 else dress['base'])
-            for fx in range(4):
-                if (leg == 'rpants' and fx >= 1) or (leg == 'lpants' and fx <= 2):
-                    p.paint(p.front_x(fx), y, shade(blouse['base'], -0.02 if y < 6 else -0.08))
-    jacket = Part(s, 'jacket')
-    for y in range(8, 12):
-        for fx in range(1, 7):
-            jacket.paint(jacket.front_x(fx), y, blouse['base'] if y < 11 else blouse['lo'])
-    P.belt(s, Ramp('#d8cdb2'), buckle=hex_rgb('#e8dcc0'), row=8, layer='jacket')
-    P.hair(s, hair, 'braids', fringe='side')
-    # red headscarf band on the hat layer
-    hat = Part(s, 'hat')
-    for x in range(hat.wrap_width):
-        hat.paint(x, 1, hex_rgb('#b23a2e'))
-    P.face(s, skin, eyes=hex_rgb('#5a8a5a'), brows=hair['lo'], mouth='smile', lip=hex_rgb('#d0807a'), freckles=True)
-    return s
-
-
-def sable():
-    """Mystic. Violet-robed wanderer: long black hair with a silver streak, amethyst pendant, sash and trim."""
-    s = Skin(slim=True)
-    skin, hair = Ramp('#e9d6cf'), Ramp('#16131c')
-    P.body_skin(s, skin)
-    robe = Ramp('#3d2a55')
-    P.shirt(s, robe, arms_to=9)
-    for leg in ('rleg', 'lleg'):
-        Part(s, leg).fill_rows(0, 8, Ramp('#24202c'))
-    P.boots(s, Ramp('#2c2430'), top_row=9)
-    trim = hex_rgb('#b8b8c8')
-    P.coat(s, robe, rows=(0, 11), open_front=False, sleeves_to=9, cuff=trim, skirt_rows=9)
-    jacket = Part(s, 'jacket')
-    for y in range(1, 12):
-        jacket.paint(jacket.front_x(3), y, trim if y % 2 else shade(trim, -0.08))
-    P.belt(s, Ramp('#5a2e6e'), buckle=hex_rgb('#b07ae0'), row=8, height=2, layer='jacket')
-    P.emblem(s, 'jacket', [(4, 2), (4, 3)], hex_rgb('#b07ae0'))  # amethyst pendant
-    P.emblem(s, 'jacket', [(4, 1)], hex_rgb('#c8c8d4'))
-    P.hood_down(s, Ramp('#2e1f42'))
-    P.hair(s, hair, 'long', fringe='side', highlight_cols=())
-    head = Part(s, 'head')
-    for row in range(0, 3):
-        head.paint(head.front_x(6), row, hex_rgb('#c8c8d4'))  # silver streak
-    hat = Part(s, 'hat')
-    hat.paint(hat.back_x(1), 2, hex_rgb('#c8c8d4'))
-    hat.paint(hat.back_x(1), 3, hex_rgb('#a8a8b8'))
-    P.face(s, skin, eyes=hex_rgb('#8a5ac8'), brows=hair['base'], mouth='neutral', lip=hex_rgb('#8a5a7a'))
-    return s
-
-
-def ashe():
+def casper():
     """Mystic. Hooded seer: ash-grey cloak with the hood up, amber eyes, glowing teal rune marks, rope belt."""
     s = Skin(slim=False)
     skin, hair = Ramp('#4a2f22'), Ramp('#151012')
@@ -394,8 +209,8 @@ def ashe():
 
 
 CAST = [
-    ('bram', bram), ('hilde', hilde), ('wren', wren), ('tobias', tobias), ('cass', cass), ('marlo', marlo),
-    ('isolde', isolde), ('aldric', aldric), ('pip', pip), ('tilly', tilly), ('sable', sable), ('ashe', ashe),
+    ('bram', bram), ('freya', W.freya), ('hazel', W.hazel), ('emmett', emmett), ('cass', W.cass), ('lucas', lucas),
+    ('daisy', W.daisy), ('conoby', conoby), ('samuel', samuel), ('rosie', W.rosie), ('luna', W.luna), ('casper', casper),
 ]
 
 

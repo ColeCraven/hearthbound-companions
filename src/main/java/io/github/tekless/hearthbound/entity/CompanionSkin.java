@@ -53,7 +53,7 @@ public enum CompanionSkin {
 		return new String[] {"minecraft", "textures/entity/player/" + (decodeSlim(encoded) ? "slim/" : "wide/") + decodeSkin(encoded).id() + ".png"};
 	}
 
-	/** Short description of a variant for messages, e.g. "noor (slim)" or "Wren's outfit". */
+	/** Short description of a variant for messages, e.g. "noor (slim)" or "Hazel's outfit". */
 	public static String describe(int encoded) {
 		return CastMember.bySkinVariant(encoded).map(c -> c.displayName() + "'s outfit")
 				.orElse(decodeSkin(encoded).id() + " (" + (decodeSlim(encoded) ? "slim" : "wide") + ")");
