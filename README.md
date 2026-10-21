@@ -212,7 +212,7 @@ short list, and the game double-checks it the same way. If the game says no, the
 thrown out and the companion tells you the real reason instead.
 
 <p align="center">
-  <img src="docs/images/party-conversation.png" width="80%" alt="A party chatting, and Charlie explaining he can only build a shelter, a wall or a bridge">
+  <img src="docs/images/party-conversation.png" width="80%" alt="A party chatting, and Charlie explaining he can only build a shelter, a wall, a bridge or a camp">
 </p>
 
 <br>

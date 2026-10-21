@@ -269,6 +269,6 @@ public final class AiService {
 		});
 		return new PromptBuilder.Context(companion.companionName(), companion.archetype(), playerName, world, recent,
 				companion.memory().events(), told, companion.memory().affinity(), companion.order().describe(), companion.isRecruited(),
-				companion.castMember().map(member -> companion.companionName() + " (" + member.pronouns() + "), " + member.background()).orElse(null));
+				companion.castMember().map(member -> companion.companionName() + " (" + member.pronouns() + "), " + member.background() + ". Your role in the party is " + member.role().label().toLowerCase(java.util.Locale.ROOT) + ", so that is what you are best at; you can still do anything you are asked").orElse(null));
 	}
 }
