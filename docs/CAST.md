@@ -19,11 +19,11 @@ sheet so they stay consistent.
 | **Cass** (she/her, slim) | Rogue | Dark shoulder-length waves under a crimson bandana, green eyes; cream blouse, brown leather vest with brass toggles, crimson sash, a dagger at the hip, tall boots | A sharp-tongued treasure hunter with a few too many tomb stories |
 | **Lucas** (he/him) | Rogue | Tousled chestnut hair, stubble, gold earring; plum doublet with brass buttons over a loose white shirt, bandolier | A silver-tongued thief with a weakness for shiny things |
 | **Daisy** (she/her, slim) | Guardian | Long dark braid over one shoulder, gold circlet; silver breastplate with gold trim, white tabard with a golden sun, royal-blue cape | A paladin of the Dawn, sworn to guard travellers on the wild roads |
-| **Conoby** (he/him) | Guardian | Wheat-blond hair and beard going grey at the temples and chin; polished plate over mail, crimson tabard with a silver sword, crimson cape | An old knight-protector who won't lose another friend |
+| **Conoby** (he/him) | Guardian | Slicked-back blond hair greying at the temples, an arched brow, a pointed goatee and a smirk; black leather brigandine with gold rivets, one old steel pauldron, crimson cuffs, buff riding breeches, tall boots, a rapier and a half-cape | A retired rogue-knight, once the most daring blade around, who won't lose another friend |
 | **Rosie** (she/her, slim) | Farmhand | Honey-blonde waves and a flower crown, freckles; puff-sleeved blouse with the sleeves rolled up, sky-blue laced bodice and short skirt over leggings, satchel, sturdy boots | A sunny farm girl who calms animals and bakes when she's nervous |
-| **Samuel** (he/him) | Farmhand | Black curls, freckles; faded yellow shirt, patched brown overalls, red kerchief, rolled cuffs, muddy boots | A farm lad still not sure leaving home was a good idea |
+| **Samuel** (he/him) | Farmhand | Dark brown curls, freckles, green eyes; cream shirt with rolled sleeves, denim overalls with a green patch and brass buckles, red kerchief, muddy boots | A farm lad still not sure leaving home was a good idea |
 | **Luna** (she/her, slim) | Mystic | Waist-length silver-lavender hair, violet eyes, gold circlet with a blue gem; midnight tunic over leggings, leather bracers, tall buckled boots, violet cape stitched with stars, amethyst amulet | A stargazer who reads omens in the night sky |
-| **Casper** (he/him) | Mystic | Black hair tied back with one silver streak, amber eyes, stubble; long dark-teal coat with silver edges and glowing runes, rune ring on the back, hood down | A rune-mage who speaks rarely and notices everything |
+| **Casper** (he/him) | Mystic | Black hair tied back with one silver streak, amber eyes; emerald robe with gold buttons and hem, brown leather mantle, a spellbook on his belt and a glowing amber charm | A young sorcerer who speaks rarely and notices everything |
 
 ## Design notes
 
@@ -31,7 +31,7 @@ sheet so they stay consistent.
   rosy lips; long hair frames the face on the outer layer and falls down the back and over the
   shoulders. The men keep simpler, sturdier faces with brows, beards and stubble.
 - **Readable at a distance:** each character has a signature colour (Freya's teal, Bram's
-  oxblood, Hazel's sage, Cass's crimson bandana, Conoby's crimson and steel, Daisy's white and gold, Luna's midnight blue) and a
+  oxblood, Hazel's sage, Cass's crimson bandana, Conoby's black and gold, Daisy's white and gold, Luna's midnight blue) and a
   silhouette detail on the outer layer, such as a fur mantle, bandana, cape, coat tails or crown.
 - **Practical adventuring gear:** belts, straps, corsets, bracers and boots rather than
   over-the-top costumes, in the spirit of classic fantasy adventures.

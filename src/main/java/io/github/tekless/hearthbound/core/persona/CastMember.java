@@ -25,7 +25,7 @@ public enum CastMember {
 	DAISY("Daisy", Archetype.GUARDIAN, true, "she/her",
 			"a paladin of the Dawn with a gold circlet and a long braid, sworn to guard travellers on the wild roads"),
 	CONOBY("Conoby", Archetype.GUARDIAN, false, "he/him",
-			"a blond, greying old knight in plate and a crimson tabard who has buried too many friends and refuses to lose another"),
+			"a retired knight with slicked-back blond hair, a devilish grin and a rapier, once the most daring blade in the realm, who has buried too many friends and refuses to lose another"),
 	SAMUEL("Samuel", Archetype.FARMHAND, false, "he/him",
 			"a farm lad who ran off to see the world and still isn't sure it was a good idea"),
 	ROSIE("Rosie", Archetype.FARMHAND, true, "she/her",
@@ -33,7 +33,7 @@ public enum CastMember {
 	LUNA("Luna", Archetype.MYSTIC, true, "she/her",
 			"a silver-haired mystic in a star-stitched travelling cape, who reads omens in the night sky and is drawn to the End"),
 	CASPER("Casper", Archetype.MYSTIC, false, "he/him",
-			"a quiet rune-mage in a long coat stitched with glowing runes, who speaks rarely and notices everything");
+			"a young sorcerer in an emerald robe with a spellbook on his hip, who speaks rarely and notices everything");
 
 	/** Skin variants from this value up are cast skins; below are the 18 default player skins. */
 	public static final int SKIN_OFFSET = 100;

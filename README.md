@@ -40,11 +40,11 @@ with wide or slim arms).
 | **Cass** | Rogue | Treasure hunter with a sharp tongue. Pockets anything you leave on the ground. |
 | **Lucas** | Rogue | Smooth-talking thief who calls you "partner" and means it, mostly. |
 | **Daisy** | Guardian | Paladin with a gold circlet and a long braid. Will not hurt a villager, ever. |
-| **Conoby** | Guardian | Blond old knight, greying at the edges, who has lost enough friends already. |
+| **Conoby** | Guardian | Retired rogue-knight with a rapier and a devilish grin. Has lost enough friends already. |
 | **Rosie** | Farmhand | Flower crown, first real adventure, nervous about caves, adores every cow she meets. |
 | **Samuel** | Farmhand | Farm lad who still isn't sure leaving home was a good idea. |
 | **Luna** | Mystic | Silver-haired stargazer in a star-stitched cape. Likes the night more than you do. |
-| **Casper** | Mystic | Rune-mage in a long coat of glowing runes. Says very little, notices everything. |
+| **Casper** | Mystic | Young sorcerer in an emerald robe. Says very little, notices everything. |
 
 <p align="center">
   <img src="docs/images/cast/group-2.png" width="49%" alt="Cass, Lucas, Daisy and Conoby">
