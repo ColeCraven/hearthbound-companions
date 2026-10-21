@@ -24,9 +24,9 @@ Recruit them, chat with them, and go on adventures together.
 <br>
 
 I've always loved a good RPG companion: the one who carries way too much of your loot and has a
-dry comment for every dungeon. Minecraft adventures feel a bit lonely in comparison, so I made this: a
-mod that adds companions who look like players, have their own personalities, and actually help
-you out.
+dry comment for every dungeon. Minecraft adventures feel a bit lonely in comparison, so I made
+this: a mod that adds companions who look like players, have their own personalities, and actually
+help you out.
 
 Walk up to one, ask them to join you, and from then on they follow you around, fight next to you,
 chop wood, dig, build, wander off to look at flowers when you stop, and talk back when you talk to
@@ -157,7 +157,8 @@ also nag you to eat, suggest finding shelter before dark, and bicker with each o
 
 On the move they keep a comfortable distance, hurry when you sprint off, and if you get separated
 (or jump through a portal) they catch up next to you on safe ground. They warn you about creepers
-and mobs sneaking up behind you. By default they're knocked down instead of killed, so you never lose someone you've got attached to.
+and mobs sneaking up behind you. By default they're knocked down instead of killed, so you never
+lose someone you've got attached to.
 
 Right-click one with an item to give it to them. Everyone has favourites (emeralds for Cass, bread
 for Rosie, amethyst for Luna), and it warms them up towards you. Give a fighter a better sword and

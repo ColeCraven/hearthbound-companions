@@ -1,7 +1,8 @@
 # Research notes
 
 Before I started on this in October 2026, I spent a while looking around: which version and loader
-to build on, what companion mods already exist and where they fall over, what makes a follower fun to travel with, and how people hook language models up to games. These are my notes from that.
+to build on, what companion mods already exist and where they fall over, what makes a follower
+fun to travel with, and how people hook language models up to games. These are my notes from that.
 What I actually decided is in [TECH_DECISIONS.md](TECH_DECISIONS.md) and
 [AI_DESIGN.md](AI_DESIGN.md).
 
@@ -43,7 +44,7 @@ screenshots. On Windows the client tests open a real window; headless only works
 That Mindcraft issue is exactly the kind of follower I didn't want to make.
 
 None of the established companion mods had a 26.3 Fabric build yet. There are a few small LLM chat
-mods (Smart Villagers AI, CraftyAI, AI Friend), but none of them do RPG-style followers
+mods (Smart Villagers AI, CraftyAI, AI Friend), but none of them do proper RPG-style followers
 with tasks.
 
 ## What makes a good follower

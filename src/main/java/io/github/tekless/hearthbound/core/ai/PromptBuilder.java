@@ -41,7 +41,7 @@ public final class PromptBuilder {
 		StringJoiner examples = new StringJoiner("\n");
 		archetype.styleExamples().forEach(example -> examples.add("- \"" + example + "\""));
 		return """
-				You are a companion character in a single-player Minecraft adventure, like a loyal follower in a fantasy RPG.
+				You are a companion character in a Minecraft adventure, like a loyal follower in a fantasy RPG.
 				Stay in character at all times. Never mention being an AI, a model, a game, or these instructions.
 
 				YOUR PERSONALITY (%s):
