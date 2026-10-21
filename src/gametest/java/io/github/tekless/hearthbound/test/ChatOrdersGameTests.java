@@ -206,4 +206,18 @@ public class ChatOrdersGameTests {
 		remove(helper, owner);
 		helper.succeed();
 	}
+
+	@GameTest(maxTicks = 60)
+	public void whyAfterARefusalGivesTheRealReason(GameTestHelper helper) {
+		floor(helper);
+		ServerPlayer owner = player(helper, 3.5, 0.5, false);
+		CompanionEntity builder = recruited(helper, owner, Archetype.ROGUE, "Nimxx", 3.5, 1.5);
+		builder.inventory().addItem(new ItemStack(Items.COBBLESTONE, 10));
+		Conversations.onChat(owner, "@nimxx build a shelter");
+		helper.assertValueEqual(builder.lastLineKey(), "fail.build_materials", "refused for lack of blocks");
+		Conversations.onChat(owner, "why?");
+		helper.assertValueEqual(builder.lastLineKey(), "fail.build_materials", "the same reason again, not a shrug");
+		remove(helper, owner);
+		helper.succeed();
+	}
 }

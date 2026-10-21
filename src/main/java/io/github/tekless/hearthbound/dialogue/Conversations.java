@@ -111,6 +111,10 @@ public final class Conversations {
 		long tick;
 		String subject;
 		String lastItem;
+		/** The last refusal or failure, so "why?" can be answered with the real reason. */
+		String failKey;
+		Map<String, String> failVars = Map.of();
+		long failTick;
 	}
 
 	private enum Group {
@@ -161,7 +165,7 @@ public final class Conversations {
 				if (text.contains("@")) {
 					return false; // talking to (or about) someone else
 				}
-				CompanionEntity partner = conversationPartner(player);
+				CompanionEntity partner = conversationPartner(player, text);
 				if (partner == null) {
 					return false;
 				}
@@ -275,7 +279,7 @@ public final class Conversations {
 	 * has to be facing them, so chat with friends isn't taken over. With nobody else around, plain
 	 * chat starts a conversation with the companion they're looking at, or the nearest one.
 	 */
-	private static CompanionEntity conversationPartner(ServerPlayer player) {
+	private static CompanionEntity conversationPartner(ServerPlayer player, String text) {
 		long now = player.level().getGameTime();
 		boolean alone = aloneWithCompanions(player);
 		Chat chat = CHATS.get(player.getUUID());
@@ -300,7 +304,9 @@ public final class Conversations {
 		CompanionEntity mine = CompanionTracker.near(player, NEAREST_RANGE).stream().filter(c -> c.isOwnedBy(player))
 				.min(Comparator.comparingDouble(c -> c.distanceToSqr(player))).orElse(null);
 		if (mine != null) {
-			return mine;
+			// Someone a long way off only picks up plain chat that is actually an order, not idle talk.
+			boolean far = mine.distanceTo(player) > 16;
+			return !far || PARSER.parse(text, List.of(mine.companionName())) instanceof ParseResult.Command ? mine : null;
 		}
 		return CompanionTracker.near(player, STRANGER_RANGE).stream()
 				.min(Comparator.comparingDouble(c -> c.distanceToSqr(player))).orElse(null);
@@ -571,6 +577,11 @@ public final class Conversations {
 		Outcome outcome = apply(player, companion, resolved);
 		if (outcome.accepted() && resolved.type() == IntentType.GATHER && resolved.item() != null) {
 			ctx.lastItem = resolved.item();
+		}
+		if (!outcome.accepted() && outcome.lineKey() != null) {
+			ctx.failKey = outcome.lineKey();
+			ctx.failVars = outcome.vars();
+			ctx.failTick = companion.level().getGameTime();
 		}
 		if (outcome.lineKey() != null) {
 			if ("fail.no_target".equals(outcome.lineKey())) {
@@ -1109,6 +1120,11 @@ public final class Conversations {
 		String biome = biomeName(companion);
 		Context ctx = context(companion);
 		long now = companion.level().getGameTime();
+		// "why?" straight after a refusal gets the real reason again, in fresh words.
+		if ((topic == TalkTopic.WHY || topic == TalkTopic.MEAN || topic == TalkTopic.REALLY) && ctx.failKey != null && now - ctx.failTick < 1200) {
+			companion.say(ctx.failKey, ctx.failVars);
+			return;
+		}
 		// "and you?" and "tell me more" lean on what we were just talking about.
 		if ((topic == TalkTopic.MORE || topic == TalkTopic.AND_YOU) && ctx.topic != null && now - ctx.tick < 2400) {
 			topic = ctx.topic;

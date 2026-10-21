@@ -132,7 +132,9 @@ public final class CompanionCommands {
 
 	/** In single-player the host can always change these; on a server it takes operator rights. */
 	private static boolean mayConfigure(CommandSourceStack source) {
-		return source.getServer().isSingleplayer() || Commands.hasPermission(Commands.LEVEL_GAMEMASTERS).test(source);
+		// The command tree is also built for each joining player with no server on the source: show it then,
+		// the real check happens again when the command runs.
+		return source.getServer() == null || source.getServer().isSingleplayer() || Commands.hasPermission(Commands.LEVEL_GAMEMASTERS).test(source);
 	}
 
 	/** {@code /companion tell <name|party|everyone> <message>}: the same as typing @name message in chat. */
