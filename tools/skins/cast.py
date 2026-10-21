@@ -96,11 +96,10 @@ def aj():
 
 
 def cole():
-    """Guardian. Retired rogue-knight: slicked-back blond hair greying at the temples, a devilish goatee and arched brow,
+    """Guardian. Young roguish adventurer: tousled golden-blond hair, clean-shaven with an arched brow and a smirk,
     black leather brigandine with gold rivets, one old steel pauldron, crimson-lined half-cape, rapier at the hip."""
     s = Skin(slim=False)
-    skin, hair = Ramp('#ecc2a4'), Ramp('#e0c070')
-    grey = hex_rgb('#dcd8cc')
+    skin, hair = Ramp('#f2c8aa'), Ramp('#ecd070')
     leather = Ramp('#2c2a30')
     crimson = Ramp('#a8283a')
     steel = Ramp('#aab1ba')
@@ -145,22 +144,17 @@ def cole():
         for x in range(left, left + jacket.d):
             jacket.paint(x, y, leather['deep'] if x < left + jacket.d - 1 else crimson['base'])
     P.gloves(s, Ramp('#3a2a20'), rows=(10, 11))
-    # slicked-back hair: combed lines on the crown, no fringe, grey at the temples
-    P.hair(s, hair, 'short', fringe='none')
+    # tousled hair swept to one side, a few spikes of highlight
+    P.hair(s, hair, 'short', fringe='side')
     head = Part(s, 'head')
-    for col in (1, 3, 5):
+    for col in (0, 2, 4, 6):
         head.paint(head.front_x(col), 0, hair['hi'])
-    for x in (head.d - 2, head.d - 1, head.d + head.w, head.d + head.w + 1):
-        for y in (2, 3):
-            head.paint(x, y, grey)
-    P.face(s, skin, eyes=hex_rgb('#4f86c8'), brows=hair['lo'], mouth='smirk', lip=hex_rgb('#a86a5a'))
-    # one brow arched, a pointed goatee and moustache corners
+    P.face(s, skin, eyes=hex_rgb('#4f86c8'), brows=hair['lo'], mouth='smirk', lip=hex_rgb('#b87a68'))
+    # one brow arched, a scatter of freckles across the nose, no beard
     head.paint(head.front_x(6), 2, hair['lo'])
     head.paint(head.front_x(6), 3, skin['base'])
-    P.beard(s, hair, 'goatee')
-    head.paint(head.front_x(3), 7, hair['lo'])
-    head.paint(head.front_x(4), 7, grey)
-    head.paint(head.front_x(1), 6, shade(skin['base'], -0.04))  # laugh line
+    for fx in (2, 5):
+        head.paint(head.front_x(fx), 5, shade(skin['base'], -0.07))
     return s
 
 
@@ -206,62 +200,49 @@ def samuel():
 
 
 def luke():
-    """Mystic. Young sorcerer: black hair tied back with a silver streak, emerald robe trimmed in gold,
-    brown leather mantle and belt with a spellbook, a glowing amber charm."""
+    """Builder. Young sorcerer turned wanderer: black hair tied back with a silver streak, a linen shirt with rolled
+    sleeves under a brown leather jerkin, an emerald scarf, leather bracers, a belt with a spellbook and pouch,
+    and a glowing amber charm."""
     s = Skin(slim=False)
     skin, hair = Ramp('#f0ccb0'), Ramp('#1e1a1e')
-    robe = Ramp('#1f6a4a')
+    linen = Ramp('#d9c9a6')
+    jerkin = Ramp('#6b4a30')
+    scarf = Ramp('#1f6a4a')
+    bracer = Ramp('#4a3426')
     gold = hex_rgb('#e2b84c')
-    leather = Ramp('#6b4a30')
     glow = hex_rgb('#ffc85a')
     silver = hex_rgb('#c8ccd4')
     P.body_skin(s, skin)
-    P.shirt(s, robe, arms_to=9)
-    P.trousers(s, Ramp('#2e2a2a'))
-    P.boots(s, Ramp('#4a3426'), top_row=8, cuff=Ramp('#5e4430'))
-    body = Part(s, 'body')
-    for y in range(0, 12):
-        body.paint(body.front_x(3), y, robe['lo'])  # front closure with gold buttons
-        body.paint(body.front_x(4), y, robe['deep'])
-    for y in (4, 6, 9):
-        body.paint(body.front_x(3), y, gold)
-    for fx, y in ((3, 0), (4, 0), (3, 1)):
-        body.paint(body.front_x(fx), y, hex_rgb('#e8e0cc'))  # undershirt at the collar
-    for arm in ('rarm', 'larm'):
-        p = Part(s, arm)
-        for x in range(p.wrap_width):
-            p.paint(x, 9, gold)  # gold cuffs
-    # robe skirt to the knee, split at the front
-    for leg in ('rpants', 'lpants'):
-        p = Part(s, leg)
-        for y in range(0, 5):
-            for x in range(p.wrap_width):
-                face, fx = p.face_of(x)
-                inner = (leg == 'rpants' and face == 'left') or (leg == 'lpants' and face == 'right')
-                if inner:
-                    continue
-                if face == 'front' and ((leg == 'rpants' and fx == 3) or (leg == 'lpants' and fx == 0)):
-                    p.paint(x, y, gold if y == 4 else robe['lo'])
-                    continue
-                p.paint(x, y, gold if y == 4 else robe['base'])
-    # short leather mantle over the shoulders
+    P.shirt(s, linen, arms_to=5, neck='open', skin=skin)  # sleeves rolled to the elbow
+    P.trousers(s, Ramp('#4a3a2c'))
+    P.boots(s, Ramp('#3a2a20'), top_row=6, cuff=Ramp('#5e4430'))
+    # sleeveless leather jerkin, open down the front so the linen shows
     jacket = Part(s, 'jacket')
-    for x in range(jacket.wrap_width):
-        face, fx = jacket.face_of(x)
-        rows = {'front': 2, 'right': 3, 'left': 3, 'back': 4}[face]
-        for y in range(rows):
+    for y in range(1, 9):
+        for x in range(jacket.wrap_width):
+            face, fx = jacket.face_of(x)
             if face == 'front' and fx in (3, 4):
                 continue
-            jacket.paint(x, y, leather['lo'] if y == rows - 1 else leather['base'])
+            jacket.paint(x, y, jerkin['lo'] if y == 8 else jerkin['base'])
+    for y in (2, 4, 6):
+        jacket.paint(jacket.front_x(2), y, jerkin['hi'])  # lacing eyelets
+        jacket.paint(jacket.front_x(5), y, jerkin['hi'])
+    # emerald scarf round the neck with a tail down the front
+    for x in range(jacket.wrap_width):
+        jacket.paint(x, 0, scarf['base'])
+    jacket.paint(jacket.front_x(3), 1, scarf['base'])
+    jacket.paint(jacket.front_x(4), 1, scarf['lo'])
+    jacket.paint(jacket.front_x(4), 2, scarf['lo'])
+    # leather bracers on the forearms
     for arm in ('rsleeve', 'lsleeve'):
         p = Part(s, arm)
-        p.fill_rows(0, 1, leather)
-        p.top(lambda x, y: leather['base'])
-    P.belt(s, leather, buckle=gold, row=7, layer='jacket')
-    P.emblem(s, 'jacket', [(6, 8), (6, 9)], hex_rgb('#7a2a2a'))  # spellbook on the hip
-    P.emblem(s, 'jacket', [(7, 8)], hex_rgb('#e8dcc0'))
-    P.emblem(s, 'jacket', [(3, 2), (4, 2)], hex_rgb('#3a2a20'))  # charm cord
-    P.emblem(s, 'jacket', [(3, 3)], glow)
+        p.fill_rows(7, 10, bracer)
+    P.belt(s, bracer, buckle=gold, row=8, layer='jacket')
+    P.emblem(s, 'jacket', [(6, 9), (6, 10)], hex_rgb('#7a2a2a'))  # spellbook on the hip
+    P.emblem(s, 'jacket', [(7, 9)], hex_rgb('#e8dcc0'))
+    P.emblem(s, 'jacket', [(1, 9), (1, 10)], jerkin['hi'])  # belt pouch on the other side
+    P.emblem(s, 'jacket', [(3, 4), (4, 4)], hex_rgb('#3a2a20'))  # charm cord
+    P.emblem(s, 'jacket', [(3, 5)], glow)
     P.hair(s, hair, 'tied', fringe='side')
     head = Part(s, 'head')
     for row in range(0, 3):

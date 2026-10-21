@@ -35,7 +35,7 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 | `CompanionMemoryTest` (3) | Switching conversation partner forgets the previous player's lines but keeps shared events and affinity |
 | `HttpModelsTest` (7) | Ollama / OpenAI-compatible / Anthropic request shapes and response parsing against a local fake server; refusal, HTTP 401, timeout and unreachable server all fail cleanly |
 
-### Server GameTests: 46 passing (plus a smoke test)
+### Server GameTests: 48 passing (plus a smoke test)
 
 These run in a real Minecraft server world on every `./gradlew build`:
 
@@ -82,6 +82,7 @@ These run in a real Minecraft server world on every `./gradlew build`:
 | `buildersLightDarkSpotsOnlyWithTorches` | No torches in the pack, no torch job |
 | `buildsACampWithAFire` | No campfire: refused with the reason; with one, a campfire and seats appear |
 | `companionsChatToEachOther` | A short exchange between two companions: opening line, then the answer |
+| `oldCastNamesLoadAsTheNewCharacters` / `aCustomNameOnACastSkinIsLeftAlone` | Companions saved under the pre-0.4 names (with their old voices) load as the new characters with the right voice and role; a custom name on a cast skin is left alone |
 | `crouchingTwiceGetsACrouchBack` | Two quick crouches while looking at a companion: they crouch back |
 | `anAdvancementGetsAReaction` | Completing "Stone Age" gets a line from the nearest companion (this also proves the mixin is applied) |
 | `aLevelMilestoneGetsAReaction` | Reaching level 10 gets a reaction |

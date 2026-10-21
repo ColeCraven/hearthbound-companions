@@ -107,7 +107,7 @@ The easiest setup is Ollama on the server machine. It's free, and nothing leaves
 
 ## How I tested it
 
-There are 47 in-game server tests, 7 of them for multiplayer: stranger orders refused, stranger
+There are 49 in-game server tests, 7 of them for multiplayer: stranger orders refused, stranger
 damage blocked, companions never targeting players, protected areas and the build guard, the hub
 spawning each resident once and taking them back, replies and per-speaker memory, `@name` in the
 middle of a message, and plain chat carrying on a conversation.
