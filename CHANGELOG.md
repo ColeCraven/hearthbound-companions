@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.5.0 - talking to groups, obey mode, and big projects that really happen (2026-10-21)
+
+Playtesting showed that "all my builders, ..." was ignored when it was typed without an @, and that
+settings only reached your own party. This release fixes both and adds the jobs behind them.
+
+**Groups, with no @**
+- "Everyone", "everybody", "guys", "team", "you all" and "all of you" reach everyone within 48 blocks
+  plus your party. "All my builders", "farmers", "collectors", "guardians" (also with @) reach that role.
+  A role mentioned later in a message ("work with the collectors") is a mention, not the addressee.
+- One of them answers for the group, and a grey *Heard by* line says who got it.
+
+**Obey mode**
+- `/companion obey on|off` (alias `lead`): every companion in the world takes your orders even if
+  you haven't recruited them. They only join if you ask, and go back to their own business afterwards.
+  On by default for the host in single-player; on a server it is off, op only, and per operator.
+- `/companion chattiness` and `/companion autonomy` now apply to every companion in the world. With
+  autonomy on, wanderers and hub residents pick jobs around their own home, with the same limits
+  (protected areas, player builds, no chests, a cap per minute).
+
+**Big projects**
+- New blueprints: a cottage, and a storehouse with a chest and a furnace. A farm is a plot beside
+  water (or around water poured from a bucket).
+- Builders pick spaced-out sites, craft planks, sticks, a chest, doors, a furnace, torches and a wooden hoe from what they
+  carry, chop wood when short, and say so when they can't. Collectors gather and hand logs over.
+  Farmers till, plant, harvest, replant and fill storehouse chests (never a player's chest).
+- Both example requests ("all my builders, ... their own house ...", "all my farmers, build a farm
+  ... store and cook food") work as typed.
+
+**Homes and fights**
+- `/companion sethome <who> [here|x y z]`, `/companion home <who> [teleport]`, `/companion tphome`;
+  "go home" walks, "teleport home" or "go home now" teleports. "You can go home now" is still a dismissal.
+- Companions fight a named player or companion only when you direct it, never you or their owner, not
+  players while PvP is off, and companions stop when one is knocked down.
+- `/companion hub list` and `hub home` work from the server console, and `hub home` can respawn a cast
+  member who is on record but has no body loaded.
+
 ## 0.4.0 - orders that land, roles, and a renamed cast (2026-10-21)
 
 Playtesting showed companions ignoring plain requests and answering things nobody asked, so most of

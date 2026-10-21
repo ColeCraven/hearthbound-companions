@@ -101,6 +101,9 @@ The easiest setup is Ollama on the server machine. It's free, and nothing leaves
 - Other players' companions don't take your orders, and yours don't take theirs.
 - `/companion chattiness` and `/companion autonomy` change the world's settings and are saved in
   `config/hearthbound.json`. On a server they need operator rights.
+- `/companion obey on` makes every companion in the world take that operator's orders, recruited or not. It is
+  off by default on a server, needs operator rights, and only applies to the operator who turned it on
+  (stored in `obeyPlayers`). `/companion hub list` and `hub home Name` also work from the server console.
 - There's nothing to do after updating: old cast names in saved worlds,
   the roster and config files keyed by cast name (such as `hearthbound-skins.json` and
   `server.hub.residents`) still work. See [CAST.md](CAST.md#renamed-in-04).

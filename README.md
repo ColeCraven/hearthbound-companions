@@ -161,6 +161,17 @@ proper jobs:
 When they can't do something, they tell you why, in character: there's no iron around here, they
 need a pickaxe, the ground's too uneven to build on, they're short on blocks.
 
+### They work together
+
+- Say "everyone, ..." or "all my builders, ..." and the whole group hears you, with no @ and one
+  short reply from one of them.
+- Ask the builders for a house each and they pick sites near you, spaced apart, craft what they can
+  from their pack, chop wood if they run short, and build. Collectors bring them logs.
+- Ask the farmers for a farm and they till a plot by the water, plant it, harvest and replant, and a builder
+  puts up a storehouse with a chest and a furnace for the food.
+- `/companion obey on` means every companion in the world takes your orders, even the ones you haven't
+  recruited (on by default in single-player), and chattiness and autonomy now apply to everyone.
+
 ### They have a life of their own
 
 Stand still for a bit and they get bored. Hazel goes to study a flower, Maddie grabs loot you left
@@ -268,6 +279,11 @@ personalities differ in [PERSONALITIES.md](docs/PERSONALITIES.md).
 | Let them go | `@Name you're dismissed` | `/companion dismiss Name` |
 | Talk to everyone with you | `@party follow me` (or `@all`) | `/companion tell party follow me` |
 | Talk to every companion you have | `@everyone come to me` | `/companion tell everyone come to me` |
+| Talk to a group, no @ | `everyone, follow me`, `all my builders, ...`, `farmers, ...` | |
+| Big projects | `all my builders, everyone should have their own house`, `farmers, build a farm`, `build a storehouse` | |
+| Send them home | `@Name go home`, `@everyone teleport home` | `/companion sethome Name here`, `/companion home party teleport` |
+| Fight someone, on your say-so | `@Name attack Steve` (players only where PvP is on) | |
+| Make everyone listen | | `/companion obey on` (already on in single-player) |
 | Make them quieter | | `/companion chattiness low` (or `off`, `normal`, `high`) |
 | Let them pick their own jobs | | `/companion autonomy on` |
 | See everything | `@Name what can you do?` | `/companion help` |
@@ -317,6 +333,8 @@ The config lives at `config/hearthbound.json` and gets created the first time yo
 | `ambientChatter` | `1.0` | How much they talk on their own (0 is silent, 2 is very chatty) |
 | `autonomy` | `1.0` | How often they wander off to do their own thing |
 | `routines` | `false` | Let idle companions pick jobs that suit their role (`/companion autonomy on`) |
+| `obeyAll` | `true` | Single-player: every companion takes the host's orders, recruited or not (`/companion obey off` to turn it off) |
+| `obeyPlayers` | `[]` | Servers: the operators (by UUID) who turned `/companion obey on` for themselves |
 | `ai.provider` | `none` | `none`, `ollama`, `openai` or `anthropic` |
 
 </details>

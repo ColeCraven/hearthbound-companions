@@ -18,7 +18,7 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 
 ## Automated tests
 
-### Unit tests (JUnit 5): 275 passing
+### Unit tests (JUnit 5): 285 passing
 
 | Suite | Covers |
 |---|---|
@@ -35,7 +35,7 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 | `CompanionMemoryTest` (3) | Switching conversation partner forgets the previous player's lines but keeps shared events and affinity |
 | `HttpModelsTest` (7) | Ollama / OpenAI-compatible / Anthropic request shapes and response parsing against a local fake server; refusal, HTTP 401, timeout and unreachable server all fail cleanly |
 
-### Server GameTests: 49 passing (plus a smoke test)
+### Server GameTests: 67 passing (plus a smoke test)
 
 These run in a real Minecraft server world on every `./gradlew build`:
 
@@ -84,6 +84,17 @@ These run in a real Minecraft server world on every `./gradlew build`:
 | `companionsChatToEachOther` | A short exchange between two companions: opening line, then the answer |
 | `oldCastNamesLoadAsTheNewCharacters` / `aCustomNameOnACastSkinIsLeftAlone` | Companions saved under the pre-0.4 names (with their old voices) load as the new characters with the right voice and role; a custom name on a cast skin is left alone |
 | `whyAfterARefusalGivesTheRealReason` | Refused to build for lack of blocks, then "why?" gets the same real reason again |
+| `everyoneObeyedWhenObeyIsOn` / `strangersIgnoreGroupOrdersWithoutObey` | "Everyone, come here" and "everyone, follow me" with three strangers; one answers; nothing happens without obey mode |
+| `roleGroupsReachOnlyThatRole` | "Builders, ...", `@farmers ...` and "all my builders, ..." reach only that role |
+| `sendCompanionsHomeAndTeleportThem` / `homeCommandsRespectObey` | sethome, "go home" walks, "teleport home" teleports, and strangers only obey with obey mode on |
+| `hubHomeWorksFromTheConsoleAndRespawnsOnRequest` | Console `hub list` and `hub home`; a cast member with no body is respawned when asked |
+| `directedFightEndsWhenOneIsKnockedDown` / `companionsNeverStartFightsOrAttackTheirOwner` / `fightingAPlayerIsRefusedWhenPvpIsOff` | Fights only on command, never the owner, refused when PvP is off, over when someone is down |
+| `craftingOnlyUsesWhatIsCarried` | Planks, sticks, chest, doors, furnace, torches and hoe from the pack, and nothing from an empty one |
+| `autonomyAppliesToCompanionsWhoAreNotFollowing` / `wanderersChatToEachOtherWhenChattinessIsUp` | Wanderers chop a log by themselves and chat without a hub |
+| `buildersBuildAHouseEachFromTheFirstMessage` | The first example message, verbatim: two houses with doors, a collector sent to gather |
+| `aBuilderShortOfBlocksGathersLogsCraftsPlanksThenBuilds` / `noMaterialsMeansAnHonestBlockerAndNoHouse` | Short of blocks: chops, crafts, builds. No wood anywhere: says what is missing and builds nothing |
+| `farmersBuildAFarmAndABuilderMakesTheStorehouse` | The second example message, verbatim: a farm is sown, ripe wheat is harvested and put into a storehouse chest |
+| `aBuilderMakesAStorehouseWithAChestAndAFurnace` / `aFarmWithNoWaterIsReportedNotFaked` | A storehouse gets its chest and furnace; no water means no farm and a clear message |
 | `crouchingTwiceGetsACrouchBack` | Two quick crouches while looking at a companion: they crouch back |
 | `anAdvancementGetsAReaction` | Completing "Stone Age" gets a line from the nearest companion (this also proves the mixin is applied) |
 | `aLevelMilestoneGetsAReaction` | Reaching level 10 gets a reaction |

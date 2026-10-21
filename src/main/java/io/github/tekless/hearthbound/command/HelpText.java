@@ -16,6 +16,7 @@ final class HelpText {
 				section("Talking"),
 				item("@Name hi", " then just keep typing. Say bye when you're done."),
 				item("@party ...", " (or ", "@all", ") talks to everyone with you. ", "@everyone", " reaches every companion you have, wherever they are."),
+				item("everyone, ...", " · ", "all my builders, ...", " · ", "@farmers ...", " talk to a group with no @ (roles: builders, farmers, collectors, guardians)."),
 				item("/companion tell Name|party|everyone message", " does the same from the command line."),
 				item("G", " opens chat with the name of whoever you're looking at. Right-click someone to say hi."),
 				item("call me Captain", " · ", "I love the ocean", " · ", "I hate spiders", " They remember, and bring it up."),
@@ -28,6 +29,11 @@ final class HelpText {
 				item("get me 16 oak logs", " · ", "give me everything", " · ", "attack that", " (look at it)"),
 				item("collect that", " · ", "build this", " (look at a block, or answer their question)"),
 				plain("Anyone can do any job. Guardians fight best, builders build and dig fastest, collectors gather quickest, farmers farm best."),
+				item("go home", " · ", "teleport home", " · ", "/companion sethome Name|party|everyone|role", " and ", "/companion home Name teleport"),
+				item("attack Steve", " · ", "fight Maddie", " fights only who you name (players only if PvP is on). Stop ends it."),
+				section("Big projects (as many as you like, in one message)"),
+				item("all my builders, everyone should have their own house", " · ", "farmers, build a farm", " · ", "build a storehouse"),
+				plain("They craft what they can from their pack, chop wood if they're short, and tell you what's missing."),
 				section("Digging (needs a pickaxe)"),
 				item("go mining", " digs down, then along, picking up ores."),
 				item("dig a tunnel", " · ", "dig down 20", " · torches go up if they carry some."),
@@ -40,7 +46,8 @@ final class HelpText {
 				section("Commands"),
 				item("/companion list", " · ", "/companion help", " · ", "/companion tell"),
 				item("/companion chattiness off|low|normal|high", " how much they say unprompted"),
-				item("/companion autonomy on|off", " let idle companions pick sensible jobs of their own"));
+				item("/companion autonomy on|off", " let idle companions pick sensible jobs of their own (everyone in the world)"),
+				item("/companion obey on|off", " every companion takes your orders, even if you haven't recruited them"));
 	}
 
 	private static Component section(String title) {

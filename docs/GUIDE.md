@@ -16,6 +16,8 @@ prefer a keyboard, plus a few settings.
 | `hey @Hazel, how are you?` | The same, with the name in the middle of the sentence. |
 | `@party follow me` (or `@all`, `@team`, `@companions`) | Everyone travelling with you: the ones following you, plus any within 64 blocks. |
 | `@everyone come to me` | Every companion you have, wherever they are. |
+| `everyone, follow me` · `hey guys` · `can you all come here` | No @ needed. Everyone within 48 blocks, plus your party. |
+| `all my builders, ...` · `farmers, ...` · `@collectors ...` | Every companion with that role (builders, farmers, collectors, guardians) in your dimension, nearest first. |
 | `/companion tell Hazel hello` | The same as typing `@Hazel hello`. Also takes `party` and `everyone`. |
 | `follow me` (no name) | The companion you're already talking to. See below. |
 
@@ -31,6 +33,23 @@ as long as they're within 64 blocks. They also pick up your plain chat if you're
 With other players nearby I don't want to hijack your chat with friends, so plain chat only
 reaches a companion you're facing. Saying bye, walking off or going quiet ends the conversation.
 
+**Groups without an @.** Say "everyone", "everybody", "guys", "team", "you all" or "all of you" at
+the start of a message ("hey everyone, ..."), or "you all" anywhere ("can you all come here"), and
+it goes to everyone within 48 blocks plus the companions with you. A role at the start of a message
+("all my builders, ...", "farmers, ...", or `@builders`) reaches that role: loaded, same dimension,
+nearest first, twelve at the most. A role mentioned later ("work with the collectors") is just
+a mention, not who you're talking to. Ordinary chat that happens to say "everyone" is left alone when
+other players are close by and it isn't an order.
+
+For a group order one of them answers (not all of them), and a grey *Heard by* line says who got it
+and who couldn't.
+
+**Obey mode.** `/companion obey on` (or `lead on`) makes every companion in the world take orders
+from you, recruited or not. They don't join you unless you ask them to ("follow me" does that, and
+the usual limit of three applies), and they go back to what they were doing when the job is done.
+It is on by default for the host of a single-player world. On a server it is off, needs operator
+rights, and only applies to the operator who turns it on. Saved in `config/hearthbound.json`.
+
 **Reports.** When you use `@party` or `@everyone` you get one short grey line saying who heard it,
 and another for anyone who couldn't:
 
@@ -41,7 +60,7 @@ and another for anyone who couldn't:
 
 **Other people's companions.** Only the player a companion travels with can give them orders.
 Everyone else gets a polite no. Strangers (companions who haven't joined anyone) will talk to you,
-and will offer to join you if you ask them to do a job (see "Strangers" below).
+and, unless obey mode is on, offer to join you if you ask them to do a job (see "Strangers" below).
 
 ## Implemented: orders
 
@@ -94,6 +113,62 @@ the current job and says what it was.
 in their own voice: no tool, not enough blocks, the ground is uneven, there's lava, the area is
 protected, nothing of that kind nearby.
 
+## Implemented: big projects
+
+Ask a group for something big and they work it out between them. Both of these work as typed:
+
+> All my builders, please help expand this village. Everyone should have their own house, unless
+> you all want to share, or just some of you do. Work with the collectors, gather materials and
+> start building.
+
+Every builder lays out a small cottage (5 by 5, a door, a window gap on each side, a flat roof,
+room for a bed) on its own site near you, spaced apart, facing the middle of the village, and clear
+of existing buildings, other people's builds and protected areas. If there is only room for some,
+the rest share a house and the acknowledgement says who shares with whom. Collectors nearby gather
+logs and hand them to the builders.
+
+> All my farmers, build a farm and start harvesting food for us to eat. Connect with the builders
+> and maybe build a building for us to store and cook food.
+
+The farmers till a plot of up to twenty tiles beside open water (or around a water source they place
+from a bucket), plant whatever seeds, carrots or potatoes they carry, tend it for a few minutes,
+harvest what is ripe and replant. A builder makes a small storehouse with a chest and a furnace. Farmers put
+their surplus food into storehouse chests that companions built, and never into a chest a player
+placed.
+
+How it stays honest:
+
+- They only use what is in their pack. Logs become planks, planks become sticks, a chest, doors or a
+  wooden hoe, cobblestone becomes a furnace, coal and a stick become torches. Nothing appears from
+  nowhere.
+- A builder who is short of blocks says so, waits a little for collectors if you asked for them, then
+  chops its own wood. If it still can't, it says what it needs and stops. It never claims a building is
+  done unless the blocks are placed.
+- No water, no seeds, no hoe, no room or no materials are reported by name instead of going quiet.
+- One project at a time per companion, buildings of about seventy blocks, and any other order
+  (including "stop") replaces the project.
+
+## Implemented: going home
+
+`@Name go home` walks them home. `@everyone teleport home`, `go home now` or `tp home` takes them
+there at once. Someone who travels with you stays yours and waits at home; someone who doesn't just goes back
+to their usual spot. Homes are saved with the companion.
+
+| Command | What it does |
+|---|---|
+| `/companion sethome <name\|party\|everyone\|role> [here\|x y z]` | Sets their home to where you stand, or to the coordinates. |
+| `/companion home <who> [teleport]` | Sends them home. With `teleport` (or `/companion tphome <who>`) they go straight there. |
+
+Both report who went and who couldn't (another dimension, not loaded, not yours to command).
+
+## Implemented: fighting each other on your say-so
+
+"Attack Steve" or "Charlie, attack that player" (looking at them) makes a companion fight that
+player or companion, and only that one. Never on their own, never you or their own owner, and never
+a player while the world's `pvp` game rule is off (they tell you why). Two companions told to fight
+spar until one is knocked down; nobody is killed. "Stop" ends it. Villagers, golems and pets are
+still off limits. Note that on peaceful difficulty Minecraft takes the damage off players anyway.
+
 ## Implemented: roles
 
 Every companion has a role next to their personality. The personality is how they talk. The role is
@@ -125,9 +200,16 @@ without a cast identity get a role from their personality.
 | `/companion autonomy off` | Back to only doing what you ask. |
 
 In single-player you can always use these. On a server they need operator rights. Both are saved
-to `config/hearthbound.json`.
+to `config/hearthbound.json` and apply to **every companion in the world**, not only your party:
+hub residents and wanderers chat with each other at the chosen level, and with autonomy on they
+pick jobs around their own home.
 
-**Autonomy.** With it on, while a companion is following you and you stand still for a bit, they may
+| Command | What it does |
+|---|---|
+| `/companion obey on\|off` (or `lead`) | Every companion takes your orders, recruited or not. On by default in single-player. |
+
+**Autonomy.** With it on, while a companion is following you and you stand still for a bit (or, for
+one who isn't with anyone, while they pass the time around their home and nobody is close), they may
 pick a job that suits their role (it is one of the things they might do with their free time, so it
 doesn't happen constantly):
 
@@ -166,13 +248,16 @@ taken from chests or storage, and nothing if their pack is nearly full.
 | `/companion say Hazel hello` | Sends a chat message to one companion. |
 | `/companion skin Hazel noor slim` | Changes outfit (a default skin, or a cast outfit like `daisy`). |
 | `/companion summon hazel` | Spawns a cast member or personality (needs cheats). Old names still work. |
-| `/companion hub list`, `spawn`, `home Name` | Hub tools for servers (operators). |
+| `/companion hub list`, `spawn`, `home Name` | Hub tools for servers (operators). `list` and `home` also work from the server console. If a cast member is on record as travelling with someone but no body is loaded anywhere, `hub home Name` respawns them at the hub (only when you ask, so there are no automatic duplicates). |
 
 Keys: <kbd>G</kbd> opens chat with the name of the companion you're looking at, <kbd>H</kbd>
 toggles the party list.
 
 ## Limits you should know about
 
+- Storehouse chests are remembered while the server runs, so after a restart farmers keep their
+  crops until a new storehouse is built.
+- Houses are one size and farms are a flat plot beside water. Anything fancier is planned.
 - A companion in an unloaded chunk can't hear you or act. That's how Minecraft works, and I
   don't fake it. Go back near them.
 - If you teleport very far away, they catch up once their chunk loads.
@@ -187,7 +272,7 @@ These are things I want but haven't built, so please don't expect them yet:
 
 - Asking for torches or plants on demand ("light up this cave", "plant these seeds"). Builders
   place torches by themselves with autonomy on, but there's no order for it yet.
-- A proper farming order ("start a farm"). Farmers harvest and replant what's already there.
+- Bigger or custom buildings, walls of a village, and remembering storehouses after a restart.
 - Counting what they carry in a chat reply ("how many logs do you have?").
 - Bows and ranged fighting.
 - Showing the role under the name on modded clients. For now it's the grey line on servers.
