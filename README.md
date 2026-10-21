@@ -8,7 +8,7 @@
 ![Fabric](https://img.shields.io/badge/Loader-Fabric-DBD0B4)
 ![Java 25](https://img.shields.io/badge/Java-25-E76F00)
 ![License: MIT](https://img.shields.io/badge/License-MIT-3A7BD5)
-![Status: v0.1 preview](https://img.shields.io/badge/Status-v0.1%20preview-8A63D2)
+![Status: v0.2 preview](https://img.shields.io/badge/Status-v0.2%20preview-8A63D2)
 
 ![Freya, Bram, Hazel and Emmett](docs/images/cast/group-1.png)
 
@@ -124,7 +124,8 @@ You'll need Minecraft Java Edition 26.3 with Fabric.
 
 1. Install [Fabric Loader](https://fabricmc.net/use/installer/) (0.19.5 or newer) for 26.3.
 2. Drop [Fabric API](https://modrinth.com/mod/fabric-api) into your `mods` folder.
-3. Drop `hearthbound-0.1.0.jar` in there too (grab it from [Releases](../../releases)).
+3. Drop `hearthbound-0.2.0.jar` in there too (grab it from [Releases](../../releases)). Only want
+   single player? v0.1.0 there is the version from before server support was added.
 4. Launch the Fabric profile.
 
 To meet someone quickly, grab a **Companion Spawn Egg** from the creative menu, or with cheats on
@@ -216,7 +217,7 @@ python tools/skins/cast.py
 ## Testing
 
 I tried to test this properly instead of just eyeballing it. There are 113 unit tests (the chat
-parser, the gathering logic, the AI response handling), 20 tests that run inside a real game
+parser, the gathering logic, the AI response handling), 21 tests that run inside a real game
 server (gathering logs and handing them over, cancelling halfway, catching up after a teleport,
 saving and loading), and a few scripted runs in the actual game client. One of those drops two
 companions into a normal generated world, walks them across the terrain, fights zombies at night,

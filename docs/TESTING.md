@@ -1,7 +1,7 @@
 # Testing
 
 How Hearthbound Companions is tested, and an honest record of what is **verified** versus what
-**still needs testing**. Last updated: 2026-10-20 (v0.1 preview).
+**still needs testing**. Last updated: 2026-10-21 (v0.2 preview).
 
 ## How to run
 
@@ -18,7 +18,7 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 
 ## Automated tests
 
-### Unit tests (JUnit 5): 106 passing
+### Unit tests (JUnit 5): 113 passing
 
 | Suite | Covers |
 |---|---|
@@ -28,9 +28,11 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 | `LineBankTest` (16) | Every personality has lines for every situation the game uses; placeholders match what code supplies; frequent situations have 3+ variants; personalities don't share lines; selector cycles through all variants and never repeats back-to-back |
 | `AiContractTest` (7) | Model JSON parsing, intent allow-list, count clamping, formatting-code stripping, promise guard, prompt-injection containment (player text can't close a data block), schema validity |
 | `CastMemberTest` (4) | Cast names unique and not reused by wanderers; one woman and one man per personality; every cast member has a valid 64x64 skin; skin variants round-trip |
+| `RateLimiterTest` (4) | Per-player AI limit per rolling minute; refused requests don't use up the allowance; 0 means unlimited |
+| `CompanionMemoryTest` (3) | Switching conversation partner forgets the previous player's lines but keeps shared events and affinity |
 | `HttpModelsTest` (7) | Ollama / OpenAI-compatible / Anthropic request shapes and response parsing against a local fake server; refusal, HTTP 401, timeout and unreachable server all fail cleanly |
 
-### Server GameTests: 14 passing (plus a smoke test)
+### Server GameTests: 20 passing (plus a smoke test)
 
 These run in a real Minecraft server world on every `./gradlew build`:
 
@@ -48,6 +50,12 @@ These run in a real Minecraft server world on every `./gradlew build`:
 | `giveHandsOverCarriedItems` / `cannotGiveWhatYouDontHave` | Exactly the requested items are handed over; asking for something they don't carry is refused with a reason |
 | `dismissedCompanionsWalkHome` | Dismissal removes them from the party and they walk back to where they were recruited |
 | `followersComeThroughDimensions` | A follower (even knocked down) comes through a dimension change; a waiting companion stays |
+| `onlyTheOwnerGivesOrders` | Another player's orders (and dismissal) are refused with "I'm with ..."; the owner's name is synced |
+| `strangersCantHurtCompanionsAndCompanionsNeverFightPlayers` | A stranger's hit does nothing; companions never target any player |
+| `noGatheringInsideProtectedAreasOrNextToBuilds` | Gathering refused in a protected area (with a reason); blocks beside planks are off limits |
+| `hubSpawnsResidentsOnceAndTakesThemBack` | The hub spawns each resident once, with gear; the roster counts a recruited one; dismissed ones head home to the hub |
+| `summonedCastMembersGetTheirOwnGear` | `/companion summon bram` gives Bram a sellsword's kit |
+| `repliesReachTheSpeakerAndPeopleNearby` | Conversation memory is per speaker; `@name` mid-message works; mentions of players are ignored |
 
 ### Client GameTest: passing
 
@@ -102,4 +110,6 @@ layers and motion. Results are in [docs/images/cast](images/cast) and [CAST.md](
 | Pastimes, suggestions, banter, gifts | Needs a long manual session | Code paths compiled and line coverage tested |
 | Interrupted conversations | Partly verified | New messages supersede pending AI replies (code path); scripted replies are instant |
 | Save, quit to title, reload in the real client | Verified (adventure playtest) | |
+| Server with unmodded players | Verified on a copy of the real server | Mojang's unmodified 26.3 client joins; mannequins, names, status lines, signed skins, greeting, recruiting and following all work. Details in [SERVER.md](SERVER.md#how-it-was-tested) |
+| Player with the mod on that server | Verified (dev client) | Joins and sees companions fine |
 | AI dialogue with a real model | **Not tested** | Requires Ollama or an API key; client code is tested against fake servers only |

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased: server support (2026-10-21)
+## 0.2.0 - server support (2026-10-21)
 
 - Runs on a dedicated server with no client mod needed: with Polymer installed, companions are sent
   to unmodded players as mannequins with their skin, name and a status line.

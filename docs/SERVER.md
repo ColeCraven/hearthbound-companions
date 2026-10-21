@@ -14,7 +14,7 @@ for everyone.
 - [Polymer](https://modrinth.com/mod/polymer) (the `polymer-bundled` jar for 26.3). It's what turns
   companions into something an unmodded client understands. Without it the mod still loads, but
   players without the mod can't join.
-- `hearthbound-0.1.0.jar` in the `mods` folder
+- `hearthbound-0.2.0.jar` (or newer) in the `mods` folder
 
 The mod notices it's on a dedicated server with Polymer installed and switches this mode on by
 itself (`server.vanillaClients: "auto"`). Nothing is added that a player would have to download:
