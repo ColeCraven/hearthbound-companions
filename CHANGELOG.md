@@ -13,6 +13,10 @@
 - Per-speaker conversation memory, a per-player AI rate limit and a cap on concurrent AI requests.
 - A world roster and loaded-companion tracker replace large entity scans.
 - Redrawn skins for Cass, Conoby, Samuel and Casper; travel outfits for Rosie and Luna.
+- Signed cast skins for unmodded players: `tools/skins/mineskin_upload.py` makes
+  `config/hearthbound-skins.json` (notes starting with `_` are ignored).
+- Fixed: `/companion summon <name>` gave the gear of a random personality; hub residents could be
+  placed on the hub's centre block (e.g. a campfire) when their side of the ring was blocked.
 
 ## 0.1.0 - preview (2026-10-20)
 

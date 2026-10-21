@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.reflect.TypeToken;
 import com.mojang.serialization.JsonOps;
 import io.github.tekless.hearthbound.Hearthbound;
 import io.github.tekless.hearthbound.core.persona.CastMember;
@@ -71,18 +70,23 @@ public final class SkinProfiles {
 			return;
 		}
 		try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
-			Map<String, Map<String, String>> raw = new Gson().fromJson(reader, new TypeToken<Map<String, Map<String, String>>>() { }.getType());
+			JsonObject raw = new Gson().fromJson(reader, JsonObject.class);
 			if (raw != null) {
-				raw.forEach((name, entry) -> {
+				for (Map.Entry<String, JsonElement> entry : raw.entrySet()) {
+					String name = entry.getKey();
+					if (name.startsWith("_")) {
+						continue; // notes and comments
+					}
 					Optional<CastMember> member = CastMember.byName(name);
-					String value = entry == null ? null : entry.get("value");
-					String signature = entry == null ? null : entry.get("signature");
+					JsonObject skin = entry.getValue().isJsonObject() ? entry.getValue().getAsJsonObject() : null;
+					String value = skin != null && skin.has("value") ? skin.get("value").getAsString() : null;
+					String signature = skin != null && skin.has("signature") ? skin.get("signature").getAsString() : null;
 					if (member.isPresent() && value != null && !value.isBlank() && signature != null && !signature.isBlank()) {
 						SIGNED.put(member.get().id(), new Signed(value.trim(), signature.trim()));
-					} else if (!name.startsWith("_")) {
+					} else {
 						Hearthbound.LOGGER.warn("hearthbound-skins.json: skipping '{}' (needs a cast name with \"value\" and \"signature\")", name);
 					}
-				});
+				}
 			}
 			Hearthbound.LOGGER.info("Loaded signed skins for {} cast members", SIGNED.size());
 		} catch (IOException | JsonParseException e) {

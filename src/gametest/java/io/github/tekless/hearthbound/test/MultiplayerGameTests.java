@@ -180,6 +180,23 @@ public class MultiplayerGameTests {
 	}
 
 	@GameTest(maxTicks = 40)
+	public void summonedCastMembersGetTheirOwnGear(GameTestHelper helper) {
+		floor(helper);
+		ServerPlayer op = player(helper, 3.5, 1.5);
+		var server = helper.getLevel().getServer();
+		server.getCommands().performPrefixedCommand(server.createCommandSourceStack().withEntity(op).withPosition(op.position())
+				.withLevel(helper.getLevel()), "companion summon bram");
+		CompanionEntity bram = CompanionTracker.all().stream()
+				.filter(c -> c.level() == helper.getLevel() && c.companionName().equals("Bram") && c.distanceTo(op) < 4)
+				.findFirst().orElseThrow(() -> helper.assertionException("Bram was summoned"));
+		helper.assertValueEqual(bram.archetype(), Archetype.SELLSWORD, "Bram is a sellsword");
+		helper.assertTrue(bram.getMainHandItem().is(net.minecraft.world.item.Items.IRON_SWORD), "with a sellsword's iron sword, not someone else's kit");
+		bram.discard();
+		remove(helper, op);
+		helper.succeed();
+	}
+
+	@GameTest(maxTicks = 40)
 	public void repliesReachTheSpeakerAndPeopleNearby(GameTestHelper helper) {
 		floor(helper);
 		ServerPlayer owner = player(helper, 1.5, 1.5);

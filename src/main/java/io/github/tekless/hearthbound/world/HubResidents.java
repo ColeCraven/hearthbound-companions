@@ -182,21 +182,39 @@ public final class HubResidents {
 		}
 	}
 
-	/** A standing spot on a ring around the hub centre (falls back to the centre itself). */
+	/**
+	 * A standing spot on a ring around the hub centre. If that direction is blocked (a bench, a
+	 * stall), nearby directions and distances are tried; the centre itself is the very last resort,
+	 * since it's often a fountain or a campfire.
+	 */
 	private static BlockPos findSpot(ServerLevel level, CompanionEntity companion, BlockPos hub, int index, int count) {
 		int radius = Math.max(2, Math.min(6, Hearthbound.config().server.hub.wanderRadius / 2));
 		double angle = (Math.PI * 2 * index) / Math.max(1, count);
-		for (int r = radius; r >= 1; r--) {
-			int x = hub.getX() + (int) Math.round(Math.cos(angle) * r);
-			int z = hub.getZ() + (int) Math.round(Math.sin(angle) * r);
-			for (int dy = 3; dy >= -3; dy--) {
-				BlockPos pos = new BlockPos(x, hub.getY() + dy, z);
-				if (standable(level, pos)) {
-					return pos;
+		for (int step = 0; step < 16; step++) {
+			// 0, +1, -1, +2, -2 ... sixteenths of a turn away from the preferred direction
+			double a = angle + Math.PI / 8 * ((step + 1) / 2) * (step % 2 == 0 ? 1 : -1);
+			for (int r : new int[] {radius, radius + 1, radius - 1, radius + 2, radius - 2}) {
+				if (r < 2) {
+					continue;
+				}
+				BlockPos found = standableColumn(level, hub.getX() + (int) Math.round(Math.cos(a) * r),
+						hub.getY(), hub.getZ() + (int) Math.round(Math.sin(a) * r));
+				if (found != null) {
+					return found;
 				}
 			}
 		}
 		return hub;
+	}
+
+	private static BlockPos standableColumn(ServerLevel level, int x, int y, int z) {
+		for (int dy = 3; dy >= -3; dy--) {
+			BlockPos pos = new BlockPos(x, y + dy, z);
+			if (standable(level, pos)) {
+				return pos;
+			}
+		}
+		return null;
 	}
 
 	private static boolean standable(Level level, BlockPos pos) {

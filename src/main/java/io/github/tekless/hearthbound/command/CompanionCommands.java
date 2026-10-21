@@ -162,7 +162,7 @@ public final class CompanionCommands {
 			return 0;
 		}
 		companion.snapTo(player.getX() + player.getLookAngle().x * 2, player.getY(), player.getZ() + player.getLookAngle().z * 2, player.getYRot() + 180, 0);
-		companion.finalizeSpawn(level, level.getCurrentDifficultyAt(companion.blockPosition()), EntitySpawnReason.COMMAND, null);
+		// Pick who they are first, so the starting gear suits the character (a random one is rolled otherwise).
 		CastMember castMember = archetypeId == null ? null : CastMember.byName(archetypeId).orElse(null);
 		if (castMember != null) {
 			companion.initIdentity(castMember);
@@ -179,6 +179,10 @@ public final class CompanionCommands {
 					: CompanionSkin.values()[level.getRandom().nextInt(CompanionSkin.values().length)];
 			boolean slim = model != null ? model.equalsIgnoreCase("slim") : level.getRandom().nextBoolean();
 			companion.initIdentity(archetype, chosenName, skin, slim);
+		}
+		companion.finalizeSpawn(level, level.getCurrentDifficultyAt(companion.blockPosition()), EntitySpawnReason.COMMAND, null);
+		if (archetypeId != null) {
+			companion.giveStarterGear();
 		}
 		level.addFreshEntity(companion);
 		ctx.getSource().sendSuccess(() -> Component.literal("Summoned " + companion.companionName() + " the "

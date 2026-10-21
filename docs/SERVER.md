@@ -68,8 +68,10 @@ Operator commands: `/companion hub list`, `/companion hub spawn`, `/companion hu
 `server.skins` picks where a mannequin's skin comes from, per viewer:
 
 1. **Signed skins**: put a `value`/`signature` pair per cast member in
-   `config/hearthbound-skins.json` (for example by uploading the PNGs to mineskin.org). Every vanilla
-   client shows these, with nothing to download.
+   `config/hearthbound-skins.json`. Every vanilla client shows these, with nothing to download.
+   `python tools/skins/mineskin_upload.py config/hearthbound-skins.json` uploads the cast PNGs to
+   [MineSkin](https://mineskin.org) (unlisted, no account needed), which has Mojang sign and host them,
+   and writes the file for you. This is what my server uses.
 2. **Resource pack**: the cast textures are added to Polymer's resource pack. A player who accepts the
    pack sees the hand-drawn outfits. Polymer's pack hosting must be on for this.
 3. **Default skins**: otherwise each cast member wears one of the game's default skins picked to suit
