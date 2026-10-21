@@ -53,6 +53,12 @@ class LineBankTest {
 		REQUIRED.put("combat.kill", plus(base, "mob"));
 		REQUIRED.put("callout.hostile_behind", plus(base, "mob"));
 		REQUIRED.put("callout.ore", plus(base, "item"));
+		for (String key : List.of("suggest.eat", "suggest.shelter", "suggest.carry", "greet.friend", "greet.cold")) {
+			REQUIRED.put(key, base);
+		}
+		REQUIRED.put("banter.reply", plus(base, "other"));
+		REQUIRED.put("pastime.study", plus(base, "thing"));
+		REQUIRED.put("pastime.loot", plus(base, "item"));
 		for (FailureReason reason : FailureReason.values()) {
 			REQUIRED.putIfAbsent(reason.lineKey(), plus(base, "item", "tool", "count", "have", "mob"));
 		}
@@ -93,6 +99,20 @@ class LineBankTest {
 		for (String key : List.of("ack.follow", "ack.wait", "ack.gather", "unclear.generic", "talk.generic", "ambient.idle", "greet.owner")) {
 			assertTrue(bank.get(key).size() >= 3, archetype + " needs at least 3 variants for " + key);
 		}
+	}
+
+	/** Pastimes each archetype can choose by itself (see Pastimes.pick) must have their own lines. */
+	@Test
+	void everyChosenPastimeHasLines() {
+		Map<Archetype, List<String>> pastimes = Map.of(
+				Archetype.SELLSWORD, List.of("pastime.patrol", "pastime.practice"),
+				Archetype.NATURALIST, List.of("pastime.flower"),
+				Archetype.ROGUE, List.of("pastime.patrol"),
+				Archetype.GUARDIAN, List.of("pastime.patrol"),
+				Archetype.FARMHAND, List.of("pastime.pet", "pastime.flower"),
+				Archetype.MYSTIC, List.of("pastime.stargaze", "pastime.patrol"));
+		pastimes.forEach((archetype, keys) -> keys.forEach(key ->
+				assertFalse(LineBank.of(archetype).get(key).isEmpty(), archetype + " needs lines for " + key)));
 	}
 
 	@Test

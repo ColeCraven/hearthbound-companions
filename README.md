@@ -58,6 +58,19 @@ When a request can't be done, companions say why, in character: the item isn't g
 there's none within reach, they need a stone pickaxe, their pack is full, they won't attack a
 villager, or "I don't build."
 
+**A life of their own**
+- When you stop to build or mine, companions find something to do by themselves - and really do it:
+  the Naturalist goes to study a flower or an animal (and may pick a wild flower), the Rogue
+  pockets loot you left lying around (and tells you), the Farmhand fusses over a nearby cow, the
+  Sellsword and Guardian walk a guard circuit, the Mystic stargazes at night. They drop it the
+  moment you move on or give an order.
+- They make suggestions - eat something, find shelter before dark, let them carry your overflowing
+  pack - but never act on them without you.
+- Party members banter: one comments, another answers back in their own voice.
+- Give gifts by right-clicking with an item. Everyone has favourites (the Rogue loves emeralds, the
+  Farmhand bread, the Mystic amethyst...). Gifts raise affinity, which warms up their greetings;
+  weapons and armour you give them get equipped. Fighters start with a sword.
+
 **Adventuring**
 - Essential by default: at zero health a companion is knocked down for 15 seconds instead of dying.
 - Warnings when a creeper is close, a mob is behind you, your health is low, or there's lava nearby.
@@ -142,6 +155,7 @@ More detail: [Architecture](docs/ARCHITECTURE.md), [AI design](docs/AI_DESIGN.md
 | `essentialCompanions` | `true` | Knocked down instead of killed |
 | `partyLimit` | `3` | Companions per player |
 | `ambientChatter` | `1.0` | 0 = silent, 2 = chatty |
+| `autonomy` | `1.0` | How often companions do things of their own accord: 0 = never, 2 = often |
 | `ai.provider` | `none` | `none`, `ollama`, `openai` (any OpenAI-compatible API), `anthropic` |
 
 ### Optional AI dialogue

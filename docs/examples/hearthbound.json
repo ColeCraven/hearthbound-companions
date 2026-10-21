@@ -2,6 +2,7 @@
   "essentialCompanions": true,
   "partyLimit": 3,
   "ambientChatter": 1.0,
+  "autonomy": 1.0,
   "ai": {
     "provider": "none",
     "model": "",

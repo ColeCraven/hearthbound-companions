@@ -18,18 +18,18 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 
 ## Automated tests
 
-### Unit tests (JUnit 5): 101 passing
+### Unit tests (JUnit 5): 102 passing
 
 | Suite | Covers |
 |---|---|
 | `CommandParserTest` (58) | Every order type, politeness and addressing ("Wren, could you..."), quantities in digits/words/stacks/dozens, "chop trees" = logs, attack vs gather ("get that zombie" vs "get some logs"), give-all vs give-item, small-talk topics, unsupported actions ("build me a house"), non-items ("I need help") |
 | `GatherMachineTest` (9) | Success only after full delivery; nothing found (no invented items); partial delivery when supply runs out; unreachable targets skipped then explained; missing tool fails before moving; full pack brings back what fits; cancel is immediate and final; owner leaving keeps the items |
 | `MovementPolicyTest` (5) | Follow band, hysteresis, hurry and teleport thresholds, dimension/cliff/stuck teleport, stuck detection windows |
-| `LineBankTest` (15) | Every personality has lines for every situation the game uses; placeholders match what code supplies; frequent situations have 3+ variants; personalities don't share lines; selector cycles through all variants and never repeats back-to-back |
+| `LineBankTest` (16) | Every personality has lines for every situation the game uses; placeholders match what code supplies; frequent situations have 3+ variants; personalities don't share lines; selector cycles through all variants and never repeats back-to-back |
 | `AiContractTest` (7) | Model JSON parsing, intent allow-list, count clamping, formatting-code stripping, promise guard, prompt-injection containment (player text can't close a data block), schema validity |
 | `HttpModelsTest` (7) | Ollama / OpenAI-compatible / Anthropic request shapes and response parsing against a local fake server; refusal, HTTP 401, timeout and unreachable server all fail cleanly |
 
-### Server GameTests: 10 passing (plus a smoke test)
+### Server GameTests: 14 passing (plus a smoke test)
 
 These run in a real Minecraft server world on every `./gradlew build`:
 
@@ -44,6 +44,9 @@ These run in a real Minecraft server world on every `./gradlew build`:
 | `guardianRefusesToAttackVillagers` | Personality refusal is enforced by game code |
 | `strangersDontTakeOrdersAndPartyIsLimited` | Unrecruited companions refuse orders; the 4th recruit is refused |
 | `saveAndLoadKeepsIdentityOrdersAndMemory` | Save/load round trip keeps name, archetype, skin + slim flag, owner, wait order, inventory, conversation and events |
+| `giveHandsOverCarriedItems` / `cannotGiveWhatYouDontHave` | Exactly the requested items are handed over; asking for something they don't carry is refused with a reason |
+| `dismissedCompanionsWalkHome` | Dismissal removes them from the party and they walk back to where they were recruited |
+| `followersComeThroughDimensions` | A follower (even knocked down) comes through a dimension change; a waiting companion stays |
 
 ### Client GameTest: passing
 
@@ -55,6 +58,29 @@ These run in a real Minecraft server world on every `./gradlew build`:
   none nearby), and "wait here" (party HUD switches to "waiting here");
 - grows trees and sends a companion for 6 logs.
 
+### Adventure playtest (client, normally generated world): passing
+
+`AdventurePlaytest` runs in a real generated world (seed "hearthbound") with mobs and day/night,
+and prints a report. Latest run:
+
+| Check | Result |
+|---|---|
+| Follow across 6 terrain hops of ~10 blocks | Both companions 2-4 blocks away after every hop; no teleports needed |
+| Gather 4 logs from trees on real terrain | Delivered 4 logs; "delivered" only said after hand-over. (An earlier run with awkwardly placed trees correctly reported "unreachable" and claimed nothing.) |
+| Night fight, 3 zombies | Nobody died; the aggressive Sellsword fought until knocked down, the defensive Naturalist stayed out of it |
+| Interrupted order ("gather 10 sand" -> "never mind" -> "what are you doing?") | Order really cancelled; status reply matched reality |
+| Travel to the Nether and back | The follower (knocked down at the time) came along both ways; the waiting companion stayed put |
+| Save, quit to title, reopen the world | Both companions kept personality, skin, follow/wait mode, equipment and conversation memory |
+
+Bugs this playtest found and fixed: knocked-down followers were left behind on dimension change;
+with no free space next to the player, followers couldn't catch up (they now step into the player's
+own position); companions said "I'm hurt" lines while being killed by commands.
+
+### Chat path playtest (client): passing
+
+Types `@Bram join me` into the real chat box (recruits him), then presses the Talk key, which
+pre-fills `@Bram `, and asks "what are you doing?" (correct follow status).
+
 ## Manual playtests
 
 | Area | Status | Notes |
@@ -63,9 +89,10 @@ These run in a real Minecraft server world on every `./gradlew build`:
 | Recruit / talk / refuse | Verified (client test) | Personality voices clearly distinct |
 | Party HUD | Verified (client test) | Shows task and health; updates on order change |
 | Gathering trees in a real world | See below | |
-| Navigation over rough terrain, water, doors | Needs testing | Vanilla pathfinding; covered only in flat test worlds so far |
-| Night combat, creepers, retreat | Needs testing | Logic in place; not yet observed in a long session |
-| Nether portal travel with followers | Needs testing | Implemented via level-change event |
+| Navigation over rough terrain | Verified (adventure playtest) | Doors, rivers and caves not yet specifically tested |
+| Night combat | Verified (adventure playtest) | Creeper avoidance and retreat not yet observed in a long session |
+| Dimension travel with followers | Verified by command teleport (adventure playtest + GameTest) | Not yet walked through a real portal by hand |
+| Pastimes, suggestions, banter, gifts | Needs a long manual session | Code paths compiled and line coverage tested |
 | Interrupted conversations | Partly verified | New messages supersede pending AI replies (code path); scripted replies are instant |
-| Save, quit to title, reload in the real client | Verified by GameTest round trip; needs a manual run | |
+| Save, quit to title, reload in the real client | Verified (adventure playtest) | |
 | AI dialogue with a real model | **Not tested** | Requires Ollama or an API key; client code is tested against fake servers only |

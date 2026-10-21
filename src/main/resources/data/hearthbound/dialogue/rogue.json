@@ -377,6 +377,48 @@
     "fail.give_missing": [
       "No {item} on me. Check my pockets if you like.",
       "I'm fresh out of {item}. Want me to go find some?"
+    ],
+    "pastime.loot": [
+      "Found {item} lying around. Finders keepers. You can have it if you ask nicely.",
+      "Ooh, {item}. Free real estate.",
+      "Picked up some {item}. Don't worry, it's in the shared pile. My pile."
+    ],
+    "pastime.study": [
+      "Just admiring that {thing}. Professionally.",
+      "That {thing}'s worth something. Probably.",
+      "Hm. {thing}. I've seen those go for a lot."
+    ],
+    "pastime.patrol": [
+      "Casing the area. Old habit.",
+      "Just making sure nobody's watching us. Or our stuff."
+    ],
+    "suggest.eat": [
+      "Boss, eat something. You're no good to me hungry.",
+      "Your stomach's making deals I can't afford. Eat."
+    ],
+    "suggest.shelter": [
+      "Getting dark. Bad things love the dark. Well, except me.",
+      "Shelter soon? I'd rather not be someone's dinner."
+    ],
+    "suggest.carry": [
+      "Your pockets are full. Mine aren't. Coincidence? Let me help.",
+      "I'll carry some of that. For a small fee. Kidding."
+    ],
+    "banter.reply": [
+      "Sure, {other}. Sure.",
+      "{other}, you're adorable.",
+      "Nobody asked, {other}.",
+      "Ha! Good one, {other}."
+    ],
+    "greet.friend": [
+      "Partner! My favourite person. Don't tell the others.",
+      "There you are. Things are more profitable with you around.",
+      "Boss! Got any schemes for me?"
+    ],
+    "greet.cold": [
+      "Oh. It's you.",
+      "What do you want now?",
+      "Make it worth my while."
     ]
   }
 }

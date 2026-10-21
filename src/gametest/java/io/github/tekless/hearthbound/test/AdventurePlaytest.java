@@ -67,7 +67,10 @@ public class AdventurePlaytest implements FabricClientGameTest {
 			context.takeScreenshot("playtest-terrain");
 			report.add("followers further than 12 blocks after a hop: " + teleports + " of 12 checks");
 
-			// 2. Gather from whatever trees the world has.
+			// 2. Gather: plant two trees on the real terrain nearby, then ask for wood.
+			server.runCommand("execute at @p run place feature minecraft:oak ~6 ~ ~4");
+			server.runCommand("execute at @p run place feature minecraft:oak ~-5 ~ ~6");
+			context.waitTicks(5);
 			int logsBefore = playerLogs(server);
 			say(server, "Bram", "chop 4 logs");
 			server.waitFor(s -> snapshot(s, "Bram").map(b -> !b.order().equals("GATHER")).orElse(true), 2400);
@@ -81,9 +84,9 @@ public class AdventurePlaytest implements FabricClientGameTest {
 
 			// 3. Night fight.
 			server.runCommand("time set 14000");
-			server.runCommand("execute at @p run summon zombie ~6 ~ ~");
-			server.runCommand("execute at @p run summon zombie ~-6 ~ ~3");
-			server.runCommand("execute at @p run summon zombie ~0 ~ ~-6");
+			server.runCommand("execute at @p run summon zombie ~6 ~ ~ {Tags:[\"hb_test\"]}");
+			server.runCommand("execute at @p run summon zombie ~-6 ~ ~3 {Tags:[\"hb_test\"]}");
+			server.runCommand("execute at @p run summon zombie ~0 ~ ~-6 {Tags:[\"hb_test\"]}");
 			context.waitTicks(60);
 			context.takeScreenshot("playtest-night-fight");
 			context.waitTicks(400);
@@ -108,17 +111,29 @@ public class AdventurePlaytest implements FabricClientGameTest {
 			// 5. Nether trip: followers come along; a waiting companion stays.
 			say(server, "Wren", "wait here");
 			context.waitTicks(5);
+			String home = server.computeOnServer(s -> {
+				ServerPlayer p = s.getPlayerList().getPlayers().get(0);
+				return String.format(Locale.ROOT, "%.2f %.2f %.2f", p.getX(), p.getY(), p.getZ());
+			});
+			// Load the target area first: fill silently fails on unloaded chunks.
+			server.runCommand("execute in minecraft:the_nether run forceload add 0 0 10 10");
+			context.waitTicks(20);
 			server.runCommand("execute in minecraft:the_nether run fill 0 120 0 10 120 10 minecraft:stone");
 			server.runCommand("execute in minecraft:the_nether run fill 0 121 0 10 124 10 minecraft:air");
 			server.runCommand("execute in minecraft:the_nether run tp @p 5 121 5");
 			context.waitTicks(60);
 			List<Snapshot> nether = snapshots(server);
+			report.add("player now in: " + server.computeOnServer(s -> s.getPlayerList().getPlayers().get(0).level().dimension().identifier().toString()));
 			report.add("after portal-style travel: " + nether);
 			check(nether.stream().anyMatch(s -> s.name().equals("Bram") && s.dimension().equals("the_nether")), "following Bram came to the Nether");
-			check(nether.stream().anyMatch(s -> s.name().equals("Wren") && s.dimension().equals("overworld")), "waiting Wren stayed behind");
+			// Wren's overworld chunk unloads once nobody is there, so "not in the Nether" is what we can check.
+			check(nether.stream().noneMatch(s -> s.name().equals("Wren") && s.dimension().equals("the_nether")), "waiting Wren stayed behind");
 			context.takeScreenshot("playtest-nether");
-			server.runCommand("execute in minecraft:overworld run spreadplayers 0 0 0 4 false @p");
+			server.runCommand("execute in minecraft:the_nether run forceload remove 0 0 10 10");
+			server.runCommand("execute in minecraft:overworld run tp @p " + home);
 			context.waitTicks(60);
+			check(snapshots(server).stream().anyMatch(s -> s.name().equals("Bram") && s.dimension().equals("overworld")), "Bram came back too");
+			check(snapshots(server).stream().anyMatch(s -> s.name().equals("Wren") && s.order().equals("WAIT")), "Wren is still waiting");
 
 			// 6. Prepare state to check after reloading.
 			server.runCommand("item replace entity @e[type=hearthbound:companion,name=Bram] weapon.mainhand with minecraft:iron_sword");
@@ -173,7 +188,7 @@ public class AdventurePlaytest implements FabricClientGameTest {
 		int count = 0;
 		for (ServerLevel level : server.getAllLevels()) {
 			for (Entity entity : level.getAllEntities()) {
-				if (entity instanceof Zombie && entity.isAlive()) {
+				if (entity instanceof Zombie && entity.isAlive() && entity.entityTags().contains("hb_test")) {
 					count++;
 				}
 			}

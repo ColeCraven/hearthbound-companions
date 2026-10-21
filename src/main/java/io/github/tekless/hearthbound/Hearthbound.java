@@ -91,9 +91,12 @@ public final class Hearthbound implements ModInitializer {
 		origin.getAllEntities().forEach(loaded::add);
 		for (Entity entity : loaded) {
 			// Only loaded companions are here, i.e. the ones that were near the player when they left.
+			// Knocked-down followers come too: otherwise they'd be stranded in an unloaded chunk.
 			if (entity instanceof CompanionEntity companion && companion.isOwnedBy(player) && companion.isAlive()
-					&& companion.baseMode() == CompanionOrder.Kind.FOLLOW && !companion.isDowned()) {
-				companion.teleportNear(player);
+					&& companion.baseMode() == CompanionOrder.Kind.FOLLOW) {
+				boolean moved = companion.teleportNear(player);
+				LOGGER.info("{} followed {} from {}: {}", companion.companionName(), player.getName().getString(),
+						origin.dimension().identifier(), moved ? "ok" : "no safe spot");
 			}
 		}
 	}

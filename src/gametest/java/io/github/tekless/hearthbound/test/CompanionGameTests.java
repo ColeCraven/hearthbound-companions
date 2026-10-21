@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.Vec3;
+import java.util.List;
 
 /**
  * In-world tests run by {@code ./gradlew build} (and {@code runGameTest}). Each builds a tiny scene,
@@ -198,6 +199,85 @@ public class CompanionGameTests {
 		helper.succeedWhen(() -> {
 			helper.assertTrue(companion.distanceTo(player) < 6, "caught up (distance " + companion.distanceTo(player) + ")");
 			helper.assertTrue(companion.level().getBlockState(companion.blockPosition().below()).isSolidRender(), "landed on solid ground");
+			removePlayer(helper, player);
+		});
+	}
+
+	@GameTest(maxTicks = 200)
+	public void giveHandsOverCarriedItems(GameTestHelper helper) {
+		floor(helper);
+		ServerPlayer player = owner(helper, 1.5, 1.5);
+		CompanionEntity companion = companion(helper, Archetype.ROGUE, "Jory", 5.5, 5.5);
+		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
+		companion.inventory().addItem(new ItemStack(Items.EMERALD, 5));
+		companion.inventory().addItem(new ItemStack(Items.COBBLESTONE, 20));
+		helper.assertTrue(Conversations.apply(player, companion, Intent.give("cobblestone", 8)).accepted(), "give accepted");
+		helper.succeedWhen(() -> {
+			helper.assertValueEqual(player.getInventory().countItem(Items.COBBLESTONE), 8, "exactly 8 cobblestone handed over");
+			helper.assertValueEqual(companion.countCarried(s -> s.is(Items.EMERALD)), 5, "other items kept");
+			helper.assertValueEqual(companion.lastLineKey(), "ack.give", "says what was handed over");
+			removePlayer(helper, player);
+		});
+	}
+
+	@GameTest(maxTicks = 40)
+	public void cannotGiveWhatYouDontHave(GameTestHelper helper) {
+		floor(helper);
+		ServerPlayer player = owner(helper, 1.5, 1.5);
+		CompanionEntity companion = companion(helper, Archetype.GUARDIAN, "Maren", 3.5, 3.5);
+		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
+		Conversations.Outcome outcome = Conversations.apply(player, companion, Intent.give("diamonds", 2));
+		helper.assertFalse(outcome.accepted(), "nothing to give");
+		helper.assertValueEqual(outcome.lineKey(), "fail.give_missing", "explains they don't carry any");
+		removePlayer(helper, player);
+		helper.succeed();
+	}
+
+	@GameTest(maxTicks = 300)
+	public void dismissedCompanionsWalkHome(GameTestHelper helper) {
+		floor(helper);
+		ServerPlayer player = owner(helper, 1.5, 1.5);
+		CompanionEntity companion = companion(helper, Archetype.FARMHAND, "Tilly", 6.5, 6.5);
+		Conversations.apply(player, companion, Intent.of(IntentType.RECRUIT));
+		companion.snapTo(helper.absoluteVec(new Vec3(1.5, 1, 3.5)));
+		Conversations.Outcome outcome = Conversations.apply(player, companion, Intent.of(IntentType.DISMISS));
+		helper.assertTrue(outcome.accepted(), "dismissed");
+		helper.assertFalse(companion.isRecruited(), "no longer in the party");
+		helper.succeedWhen(() -> {
+			helper.assertTrue(companion.distanceToSqr(helper.absoluteVec(new Vec3(6.5, 1, 6.5))) < 9, "walked back home");
+			removePlayer(helper, player);
+		});
+	}
+
+	@GameTest(maxTicks = 100)
+	public void followersComeThroughDimensions(GameTestHelper helper) {
+		floor(helper);
+		ServerPlayer player = owner(helper, 1.5, 1.5);
+		CompanionEntity follower = companion(helper, Archetype.SELLSWORD, "Ragna", 3.5, 3.5);
+		CompanionEntity waiter = companion(helper, Archetype.NATURALIST, "Linnea", 5.5, 5.5);
+		Conversations.apply(player, follower, Intent.of(IntentType.RECRUIT));
+		Conversations.apply(player, waiter, Intent.of(IntentType.RECRUIT));
+		Conversations.apply(player, waiter, Intent.of(IntentType.WAIT));
+		ServerLevel nether = helper.getLevel().getServer().getLevel(net.minecraft.world.level.Level.NETHER);
+		BlockPos base = new BlockPos(1000, 120, 1000);
+		for (int dx = -4; dx <= 4; dx++) {
+			for (int dz = -4; dz <= 4; dz++) {
+				nether.setBlockAndUpdate(base.offset(dx, 0, dz), Blocks.STONE.defaultBlockState());
+				for (int dy = 1; dy <= 3; dy++) {
+					nether.setBlockAndUpdate(base.offset(dx, dy, dz), Blocks.AIR.defaultBlockState());
+				}
+			}
+		}
+		// Knocked down just before the trip (as can happen right after a fight): still comes along.
+		follower.hurtServer(helper.getLevel(), helper.getLevel().damageSources().generic(), 100.0F);
+		helper.assertTrue(follower.isDowned(), "follower knocked down before travelling");
+		player.teleportTo(nether, base.getX() + 0.5, base.getY() + 1, base.getZ() + 0.5, java.util.Set.of(), 0, 0, false);
+		helper.succeedWhen(() -> {
+			List<CompanionEntity> inNether = nether.getEntitiesOfClass(CompanionEntity.class, new net.minecraft.world.phys.AABB(base).inflate(8));
+			helper.assertTrue(inNether.stream().anyMatch(c -> c.companionName().equals("Ragna")), "follower came through to the Nether");
+			helper.assertTrue(inNether.stream().noneMatch(c -> c.companionName().equals("Linnea")), "waiting companion stayed behind");
+			helper.assertTrue(waiter.isAlive() && waiter.level() == helper.getLevel(), "waiter still in the overworld");
+			inNether.forEach(c -> c.discard());
 			removePlayer(helper, player);
 		});
 	}

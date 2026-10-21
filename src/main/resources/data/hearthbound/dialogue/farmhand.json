@@ -383,6 +383,51 @@
     "fail.give_missing": [
       "I don't have any {item}! Want me to find some?",
       "No {item} in my pockets. Just a seed."
+    ],
+    "pastime.pet": [
+      "Hello, little {mob}! Aren't you lovely?",
+      "This {mob} likes me! I think. It hasn't run away.",
+      "Oh, look at this {mob}! Can we keep it?"
+    ],
+    "pastime.flower": [
+      "I picked a {item}! For my gran.",
+      "Look, a {item}! I'm keeping it.",
+      "Got a {item}. It smells nice. I think."
+    ],
+    "pastime.study": [
+      "Ooh, {thing}! We have those back home. Sort of.",
+      "Just looking at this {thing}. Is that allowed?"
+    ],
+    "pastime.loot": [
+      "Someone dropped {item}! I'll keep it safe for you."
+    ],
+    "suggest.eat": [
+      "{player}, you need to eat! Gran always said so.",
+      "Have something to eat, please. You look peaky."
+    ],
+    "suggest.shelter": [
+      "It's getting dark... can we go inside somewhere? Please?",
+      "Night's coming. Shelter? Shelter would be good. Very good."
+    ],
+    "suggest.carry": [
+      "Your bag's all full! I can carry things. I'm good at carrying.",
+      "Let me carry some! I used to carry hay all day."
+    ],
+    "banter.reply": [
+      "Hee, {other}!",
+      "Oh, {other}, don't say that!",
+      "Wait, really, {other}?",
+      "Um. Okay, {other}."
+    ],
+    "greet.friend": [
+      "{player}! You're back! I'm so happy!",
+      "My favourite person! Hi!",
+      "Oh, it's you! Everything feels safer now."
+    ],
+    "greet.cold": [
+      "Oh. Hi.",
+      "Um. Hello.",
+      "Yes? Sorry. Yes?"
     ]
   }
 }

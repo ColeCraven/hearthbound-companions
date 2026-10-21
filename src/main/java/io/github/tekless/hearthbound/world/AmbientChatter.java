@@ -28,6 +28,11 @@ import net.minecraft.world.phys.Vec3;
  */
 public final class AmbientChatter {
 	private static final Map<CompanionEntity, State> STATES = new WeakHashMap<>();
+	/** Replies from one companion to another, said a couple of seconds later. */
+	private static final java.util.List<Banter> PENDING = new java.util.ArrayList<>();
+
+	private record Banter(CompanionEntity speaker, String other, long dueTick) {
+	}
 
 	private static final class State {
 		int cooldown = 200;
@@ -37,6 +42,9 @@ public final class AmbientChatter {
 		boolean wasRaining;
 		boolean wasUnderground;
 		boolean warnedLowHealth;
+		boolean suggestedEat;
+		long shelterDay = -1;
+		long lastCarry = -100000;
 	}
 
 	private AmbientChatter() {
@@ -46,16 +54,72 @@ public final class AmbientChatter {
 	public static void tick(ServerPlayer player) {
 		HearthboundNetwork.sendPartyStatus(player);
 		double chatter = Hearthbound.config().ambientChatter;
+		long now = player.level().getGameTime();
+		PENDING.removeIf(banter -> {
+			if (now < banter.dueTick()) {
+				return false;
+			}
+			if (banter.speaker().isAlive() && !banter.speaker().isDowned()) {
+				banter.speaker().say("banter.reply", Map.of("other", banter.other()));
+			}
+			return true;
+		});
 		boolean someoneSpoke = false;
-		for (CompanionEntity companion : Conversations.party(player)) {
+		java.util.List<CompanionEntity> party = Conversations.party(player);
+		for (CompanionEntity companion : party) {
 			State state = STATES.computeIfAbsent(companion, c -> initialState(c));
 			state.cooldown -= 20;
 			state.warningCooldown -= 20;
 			if (companion.isDowned() || chatter <= 0 || someoneSpoke) {
 				continue;
 			}
-			someoneSpoke = warn(player, companion, state) || comment(player, companion, state, chatter);
+			if (warn(player, companion, state)) {
+				someoneSpoke = true;
+			} else if (suggest(player, companion, state) || comment(player, companion, state, chatter)) {
+				someoneSpoke = true;
+				maybeBanter(companion, party, now, chatter);
+			}
 		}
+	}
+
+	/** Another nearby companion sometimes answers what was just said. */
+	private static void maybeBanter(CompanionEntity speaker, java.util.List<CompanionEntity> party, long now, double chatter) {
+		java.util.List<CompanionEntity> listeners = party.stream()
+				.filter(c -> c != speaker && !c.isDowned() && c.distanceTo(speaker) < 16).toList();
+		if (listeners.isEmpty() || speaker.getRandom().nextDouble() > 0.35 * Math.min(2.0, chatter)) {
+			return;
+		}
+		CompanionEntity listener = listeners.get(speaker.getRandom().nextInt(listeners.size()));
+		PENDING.add(new Banter(listener, speaker.companionName(), now + 40 + speaker.getRandom().nextInt(40)));
+	}
+
+	/** Practical suggestions: eat, find shelter, hand over some of that load. Never acted on alone. */
+	private static boolean suggest(ServerPlayer player, CompanionEntity companion, State state) {
+		if (state.cooldown > 0 && state.warningCooldown > 0) {
+			return false;
+		}
+		int food = player.getFoodData().getFoodLevel();
+		if (food <= 6 && !state.suggestedEat) {
+			state.suggestedEat = true;
+			return speak(companion, state, "suggest.eat", Map.of(), true);
+		}
+		if (food > 12) {
+			state.suggestedEat = false;
+		}
+		ServerLevel level = (ServerLevel) companion.level();
+		long time = level.getOverworldClockTime() % 24000;
+		long day = level.getOverworldClockTime() / 24000;
+		if (time >= 11800 && time < 12600 && state.shelterDay != day && level.canSeeSky(player.blockPosition())
+				&& companion.archetype() != Archetype.MYSTIC) {
+			state.shelterDay = day;
+			return speak(companion, state, "suggest.shelter", Map.of(), true);
+		}
+		long now = level.getGameTime();
+		if (player.getInventory().getFreeSlot() < 0 && now - state.lastCarry > 12000) {
+			state.lastCarry = now;
+			return speak(companion, state, "suggest.carry", Map.of(), true);
+		}
+		return false;
 	}
 
 	private static State initialState(CompanionEntity companion) {

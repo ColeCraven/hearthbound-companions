@@ -380,6 +380,52 @@
     "fail.give_missing": [
       "I carry no {item}.",
       "No {item}. Ask the earth, not me. Or ask me to gather some."
+    ],
+    "pastime.stargaze": [
+      "The stars are restless tonight.",
+      "Look up. That cluster? It's watching the End.",
+      "Some of those lights died long ago. Still shining. Stubborn."
+    ],
+    "pastime.study": [
+      "A {thing}. It has a story. Most things do.",
+      "I'm listening to the {thing}. Don't interrupt.",
+      "That {thing}... interesting."
+    ],
+    "pastime.loot": [
+      "Someone abandoned {item}. I've adopted it."
+    ],
+    "suggest.eat": [
+      "Eat, {player}. Even legends starve.",
+      "Your hunger is loud. Feed it."
+    ],
+    "suggest.shelter": [
+      "Night falls. For you, shelter. For me, wonders.",
+      "The dark is coming. You might want walls. I won't."
+    ],
+    "suggest.carry": [
+      "You're laden like a pack mule. Give me some.",
+      "I can carry what you can't. For now."
+    ],
+    "banter.reply": [
+      "Hm. {other}.",
+      "Charming, {other}.",
+      "If you insist, {other}.",
+      "{other}, the stars disagree."
+    ],
+    "greet.friend": [
+      "{player}. You're the best thing on this road.",
+      "Ah, you. Good.",
+      "I was hoping you'd find me."
+    ],
+    "greet.cold": [
+      "Hm.",
+      "What now.",
+      "Speak, if you must."
+    ],
+    "pastime.patrol": [
+      "I'll walk the edges. Shadows like edges.",
+      "Circling. Listening.",
+      "Something's out there. Probably nothing. Probably."
     ]
   }
 }

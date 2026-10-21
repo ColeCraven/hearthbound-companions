@@ -419,6 +419,52 @@
     "fail.give_missing": [
       "I've got no {item} on me.",
       "No {item} in my pack. Want me to go get some?"
+    ],
+    "pastime.patrol": [
+      "Walking the perimeter. Habit.",
+      "Checking the flanks. Nothing yet.",
+      "I'll keep an eye on the treeline.",
+      "Standing watch. Take your time."
+    ],
+    "pastime.practice": [
+      "Keeping the arm loose.",
+      "Swing, step, swing. Old drill.",
+      "Can't let the blade get lazy."
+    ],
+    "pastime.study": [
+      "Hm. {thing}. Could be useful.",
+      "Looking at that {thing}. Don't mind me."
+    ],
+    "pastime.loot": [
+      "Found {item} lying around. I'll carry it."
+    ],
+    "suggest.eat": [
+      "Eat something, {player}. Hungry soldiers make mistakes.",
+      "Your stomach's louder than a zombie. Eat."
+    ],
+    "suggest.shelter": [
+      "Sun's going. Wall at our backs would be nice.",
+      "Dark soon. Find cover or find a fight."
+    ],
+    "suggest.carry": [
+      "Your pack's bursting. Hand me some of it.",
+      "I can haul that. Shove it in my pack."
+    ],
+    "banter.reply": [
+      "Less talk, {other}.",
+      "If you say so, {other}.",
+      "{other}. Focus.",
+      "Heh. Not bad, {other}."
+    ],
+    "greet.friend": [
+      "{player}. Good to see you. Really.",
+      "There's my favourite employer.",
+      "Hey. Missed having someone worth guarding."
+    ],
+    "greet.cold": [
+      "What.",
+      "You again.",
+      "Make it quick."
     ]
   }
 }

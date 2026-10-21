@@ -108,6 +108,7 @@ public class CompanionEntity extends PathfinderMob {
 	private int catchUpCooldown;
 	private int toolSlotSwapped = -1;
 	private int talkCooldown;
+	private long lastGiftTime = -100000;
 	/** Situation key of the last scripted line (useful for tests and debugging). */
 	private String lastLineKey = "";
 
@@ -339,6 +340,16 @@ public class CompanionEntity extends PathfinderMob {
 				return true;
 			}
 		}
+		// Nowhere free nearby (a tight tunnel, a 1x2 hole): wherever the player can stand, so can we.
+		if (owner.onGround() || owner.isInWater() || targetLevel != level()) {
+			getNavigation().stop();
+			if (targetLevel == level()) {
+				snapTo(owner.getX(), owner.getY(), owner.getZ(), getYRot(), getXRot());
+			} else {
+				teleportTo(targetLevel, owner.getX(), owner.getY(), owner.getZ(), Set.of(), getYRot(), getXRot(), false);
+			}
+			return true;
+		}
 		return false;
 	}
 
@@ -445,6 +456,13 @@ public class CompanionEntity extends PathfinderMob {
 		lastLineKey = key;
 		String text = lines.pick(LineBank.of(archetype), key, withDefaults(vars));
 		sayLiteral(text);
+	}
+
+	/** Says a line only sometimes (and never over itself), for optional flavour. */
+	public void sayMaybe(String key, Map<String, String> vars, double chance) {
+		if (talkCooldown <= 0 && random.nextDouble() < chance * Math.max(0.0, Math.min(2.0, Hearthbound.config().ambientChatter))) {
+			say(key, vars);
+		}
 	}
 
 	public String lastLineKey() {
@@ -666,6 +684,21 @@ public class CompanionEntity extends PathfinderMob {
 		return base + tier;
 	}
 
+	public long lastGiftTime() {
+		return lastGiftTime;
+	}
+
+	public void setLastGiftTime(long time) {
+		lastGiftTime = time;
+	}
+
+	/** Re-checks gear on the next equipment pass (after receiving a weapon or armour). */
+	public void equipFromPackSoon() {
+		if (!(order instanceof GatherOrder)) {
+			equipBestGear();
+		}
+	}
+
 	public void openInventory(ServerPlayer player) {
 		player.openMenu(new SimpleMenuProvider((id, playerInventory, p) -> new ChestMenu(net.minecraft.world.inventory.MenuType.GENERIC_9x2, id, playerInventory, inventory, 2),
 				Component.translatable("container.hearthbound.companion", companionName())));
@@ -685,12 +718,25 @@ public class CompanionEntity extends PathfinderMob {
 			openInventory(serverPlayer);
 			return InteractionResult.SUCCESS;
 		}
-		if (player.getItemInHand(hand).isEmpty()) {
+		ItemStack held = player.getItemInHand(hand);
+		if (held.isEmpty()) {
 			getLookControl().setLookAt(player);
-			say(isOwnedBy(player) ? "greet.owner" : "greet.stranger", Map.of("player", player.getName().getString()));
+			say(greetingKey(player), Map.of("player", player.getName().getString()));
+			return InteractionResult.SUCCESS;
+		}
+		if (isOwnedBy(player) && !Gifts.isTool(held)) {
+			Gifts.receive(this, serverPlayer, held);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;
+	}
+
+	private String greetingKey(Player player) {
+		if (!isOwnedBy(player)) {
+			return "greet.stranger";
+		}
+		int affinity = memory.affinity();
+		return affinity >= 25 ? "greet.friend" : affinity <= -20 ? "greet.cold" : "greet.owner";
 	}
 
 	// ------------------------------------------------------------------ damage, downed state, death
@@ -784,9 +830,27 @@ public class CompanionEntity extends PathfinderMob {
 			String name = rolled.names().get(random.nextInt(rolled.names().size()));
 			CompanionSkin skin = CompanionSkin.values()[random.nextInt(CompanionSkin.values().length)];
 			initIdentity(rolled, name, skin, random.nextBoolean());
+			giveStarterGear();
 		}
 		home = blockPosition();
 		return data;
+	}
+
+	/** A weapon (and a piece of armour for fighters) that suits the personality. */
+	private void giveStarterGear() {
+		switch (archetype) {
+			case SELLSWORD -> {
+				setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(net.minecraft.world.item.Items.IRON_SWORD));
+				setItemSlot(EquipmentSlot.CHEST, new ItemStack(net.minecraft.world.item.Items.CHAINMAIL_CHESTPLATE));
+			}
+			case GUARDIAN -> {
+				setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(net.minecraft.world.item.Items.IRON_SWORD));
+				setItemSlot(EquipmentSlot.HEAD, new ItemStack(net.minecraft.world.item.Items.IRON_HELMET));
+			}
+			case ROGUE, MYSTIC -> setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(net.minecraft.world.item.Items.STONE_SWORD));
+			case NATURALIST -> setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(net.minecraft.world.item.Items.STONE_AXE));
+			case FARMHAND -> setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(net.minecraft.world.item.Items.STONE_SHOVEL));
+		}
 	}
 
 	// ------------------------------------------------------------------ saving

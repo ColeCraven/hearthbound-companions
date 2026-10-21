@@ -24,6 +24,8 @@ public final class HearthboundConfig {
 	public int partyLimit = 3;
 	/** 0 = never comment unprompted, 1 = normal, 2 = chatty. */
 	public double ambientChatter = 1.0;
+	/** How often companions do things of their own accord while you stand still: 0 = never, 1 = normal, 2 = often. */
+	public double autonomy = 1.0;
 	public Ai ai = new Ai();
 
 	public static final class Ai {

@@ -386,6 +386,48 @@
     "fail.give_missing": [
       "I don't have any {item}, sorry! Shall I gather some?",
       "No {item} in my bag. Just notes and pebbles."
+    ],
+    "pastime.study": [
+      "Ooh, a {thing}! Hold on, I need a closer look.",
+      "Look at this {thing}! Isn't it marvellous?",
+      "Just studying this {thing}. Two minutes. Maybe five.",
+      "A {thing}! I'm sketching it."
+    ],
+    "pastime.flower": [
+      "I picked a {item}. For the collection!",
+      "Couldn't resist this {item}. It's perfect.",
+      "One {item}, pressed and saved. Don't tell anyone."
+    ],
+    "pastime.loot": [
+      "Someone dropped {item}. I'll keep it safe."
+    ],
+    "suggest.eat": [
+      "{player}, you should eat something. Even I can hear your stomach!",
+      "When did you last eat? Food, please!"
+    ],
+    "suggest.shelter": [
+      "It'll be dark soon. Shall we find somewhere safe?",
+      "Night's coming. Maybe a shelter? I'll help you look."
+    ],
+    "suggest.carry": [
+      "Your bag looks full! I've got room in mine.",
+      "Want me to carry some of that? I'll label it."
+    ],
+    "banter.reply": [
+      "Ooh, good point, {other}!",
+      "Really, {other}? I'd never thought of that.",
+      "{other}, that's fascinating. Wrong, but fascinating.",
+      "Ha! Write that down, {other}."
+    ],
+    "greet.friend": [
+      "{player}! I was hoping you'd come and talk!",
+      "My favourite expedition leader!",
+      "Oh good, it's you. I've so much to tell you."
+    ],
+    "greet.cold": [
+      "Oh. Hello.",
+      "Yes? Is this about the... never mind.",
+      "Mm. What do you need?"
     ]
   }
 }

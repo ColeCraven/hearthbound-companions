@@ -31,6 +31,11 @@ public final class HearthboundClient implements ClientModInitializer {
 		return hudVisible;
 	}
 
+	/** The "talk to companion" key (exposed for client game tests). */
+	public static KeyMapping talkKey() {
+		return talkKey;
+	}
+
 	@Override
 	public void onInitializeClient() {
 		EntityRendererRegistry.register(ModEntities.COMPANION, CompanionRenderer::new);

@@ -28,6 +28,26 @@ An archetype is **not just flavour text**. It changes three separate things:
 | **Chattiness** | Low | High | Medium-high | Medium | High when scared | Low |
 | **Hard refusals** | - | Won't strip-mine rare plants | - | Won't attack villagers, golems or pets | Won't attack farm animals | - |
 
+## Free will: what they do on their own
+
+When you stand still for a few seconds, a following companion may pick a pastime (code:
+`entity/Pastimes.java`). Pastimes are real actions, chosen by personality, kept within a few blocks
+of you, and abandoned instantly when you move on, give an order, or a fight starts.
+
+| Archetype | Pastimes |
+|---|---|
+| Sellsword | Walks a guard circuit, practises sword swings, picks up long-abandoned loot |
+| Naturalist | Studies flowers, animals, trees and moss up close; picks a wild flower (never from gardens) |
+| Rogue | Pockets loot left on the ground (and admits it), sizes up chests and gold, cases the area |
+| Guardian | Walks a guard circuit, looking outwards |
+| Farmhand | Pets nearby animals (hearts!), picks wild flowers, admires crops and beehives |
+| Mystic | Stargazes at night, studies obsidian, amethyst, sculk and lava, prowls the edges |
+
+They also make **suggestions** (eat, find shelter before dark, hand over some of your full pack),
+**banter** with each other, and react to **gifts** according to their tastes. Suggestions are
+only ever words: companions don't take actions you didn't ask for, apart from these small,
+harmless pastimes.
+
 ## Avoiding repetition
 
 * Every situation (acknowledging an order, a refusal reason, spotting an ore, nightfall...) has a

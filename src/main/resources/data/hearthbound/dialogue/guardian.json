@@ -380,6 +380,47 @@
     "fail.give_missing": [
       "I carry no {item}, friend.",
       "I have no {item} to give. Shall I gather some?"
+    ],
+    "pastime.patrol": [
+      "I will keep watch while you work.",
+      "Walking the line. All is quiet.",
+      "I'll stand here and guard your back.",
+      "Nothing approaches. Rest easy."
+    ],
+    "pastime.study": [
+      "A {thing}. Peaceful, isn't it?",
+      "I paused to look at this {thing}. Forgive me."
+    ],
+    "pastime.loot": [
+      "Someone left {item} here. I'll hold it for you."
+    ],
+    "suggest.eat": [
+      "You must eat, {player}. Your strength matters.",
+      "An empty stomach makes for a poor fighter. Please, eat."
+    ],
+    "suggest.shelter": [
+      "Night approaches. We should find shelter, my friend.",
+      "Darkness comes. A wall and a door would serve us well."
+    ],
+    "suggest.carry": [
+      "You carry too much. Let me bear some of it.",
+      "Give me some of your burden, friend."
+    ],
+    "banter.reply": [
+      "Well said, {other}.",
+      "Peace, {other}.",
+      "Hm. Wise words, {other}.",
+      "Let us focus, {other}."
+    ],
+    "greet.friend": [
+      "My friend. It gladdens me to see you.",
+      "{player}! I am always glad of your company.",
+      "There you are. All is well now."
+    ],
+    "greet.cold": [
+      "I am here.",
+      "Yes?",
+      "Speak."
     ]
   }
 }
