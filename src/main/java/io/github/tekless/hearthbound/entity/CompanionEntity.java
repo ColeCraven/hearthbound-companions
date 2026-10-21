@@ -730,7 +730,7 @@ public class CompanionEntity extends PathfinderMob {
 			return true;
 		}
 		boolean hurt = super.hurtServer(level, source, damage);
-		if (hurt && getHealth() / getMaxHealth() < archetype.retreatHealth() && talkCooldown <= 0) {
+		if (hurt && isAlive() && getHealth() > 0 && getHealth() / getMaxHealth() < archetype.retreatHealth() && talkCooldown <= 0) {
 			say("combat.low_health", Map.of());
 		}
 		return hurt;

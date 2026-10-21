@@ -1,0 +1,14 @@
+{
+  "essentialCompanions": true,
+  "partyLimit": 3,
+  "ambientChatter": 1.0,
+  "ai": {
+    "provider": "ollama",
+    "model": "qwen3.5:9b",
+    "baseUrl": "http://127.0.0.1:11434",
+    "timeoutSeconds": 12,
+    "sharePlayerName": true,
+    "allowCloudModels": false,
+    "effort": "low"
+  }
+}

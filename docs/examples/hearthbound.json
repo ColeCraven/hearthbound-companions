@@ -1,0 +1,14 @@
+{
+  "essentialCompanions": true,
+  "partyLimit": 3,
+  "ambientChatter": 1.0,
+  "ai": {
+    "provider": "none",
+    "model": "",
+    "baseUrl": "",
+    "timeoutSeconds": 12,
+    "sharePlayerName": true,
+    "allowCloudModels": false,
+    "effort": "low"
+  }
+}
