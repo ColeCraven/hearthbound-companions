@@ -276,7 +276,8 @@ public class ObeyAndTeamGameTests {
 			helper.assertTrue(job.status() == io.github.tekless.hearthbound.core.task.TaskStatus.SUCCEEDED,
 					"finished (" + job.placed() + "/" + job.total() + ", " + maddie.order().describe() + " / " + luke.order().describe() + " / " + hazel.order().describe() + ")");
 			helper.assertTrue(job.placed() > 48, "more blocks went in than the builders started with, so the collector's wood was used");
-			helper.assertTrue(count(helper, s -> s.is(Blocks.OAK_PLANKS)) >= 60, "the house stands");
+			int planks = count(helper, s -> s.is(Blocks.OAK_PLANKS));
+			helper.assertTrue(planks >= 60, "the house stands (" + planks + " planks, " + count(helper, s -> s.is(Blocks.OAK_LOG)) + " logs)");
 			helper.assertTrue(count(helper, s -> s.getBlock() instanceof DoorBlock) <= 2, "one house, one door at most");
 			remove(helper, owner);
 		});

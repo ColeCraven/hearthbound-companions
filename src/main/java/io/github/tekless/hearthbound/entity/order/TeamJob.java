@@ -371,6 +371,7 @@ public final class TeamJob {
 				claim = null;
 				return;
 			}
+			Crafting.planksFromLogs(c); // logs handed over a moment ago go in as planks, not as bits of tree
 			ItemStack material = BuildOrder.pickMaterial(c);
 			if (material == null) {
 				return;
