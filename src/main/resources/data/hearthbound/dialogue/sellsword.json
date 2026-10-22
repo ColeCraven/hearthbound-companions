@@ -1149,6 +1149,42 @@
     "team.done": [
       "That's {thing} built. Good work, all of you.",
       "Done. {thing}, standing. Nobody fell off the roof."
+    ],
+    "blueprint.unknown": [
+      "Never heard of {thing}. I know {names}.",
+      "{thing}? Not one of yours. You've saved {names}."
+    ],
+    "blueprint.done_partly": [
+      "{thing}'s up. {count} blocks wouldn't go in. Couldn't reach them, or nothing to hold them.",
+      "Done, mostly. {count} blocks missing from {thing}. Not for want of trying."
+    ],
+    "supply.gather": [
+      "Short on stuff for {thing}. Getting {count} {item}.",
+      "Need {count} {item} first. Back soon."
+    ],
+    "supply.craft": [
+      "Making {item} for {thing}.",
+      "Crafting {item} first. Won't be long."
+    ],
+    "supply.smelt": [
+      "{count} {item} to smelt. It takes as long as it takes.",
+      "Firing up a furnace for {count} {item}."
+    ],
+    "supply.blocked": [
+      "Can't finish {thing}. Still missing {missing}, and I can't make or find that.",
+      "Stuck on {thing}. Short of {missing}. Bring it and I'll carry on."
+    ],
+    "craft.no_table": [
+      "No crafting table, and nothing to make one with. Four planks would do.",
+      "Need a crafting table. Haven't got one, can't make one."
+    ],
+    "smelt.no_furnace": [
+      "No furnace about, and I've not got the cobblestone for one. Eight would do.",
+      "Need a furnace. None here, none in my pack."
+    ],
+    "smelt.no_fuel": [
+      "Nothing to burn. Coal, wood, anything.",
+      "Furnace is cold and I've no fuel."
     ]
   }
 }

@@ -1112,6 +1112,42 @@
     "team.done": [
       "That's {thing} built! We did that, all of us!",
       "Finished! {thing}, all done, and nobody fell off the roof!"
+    ],
+    "blueprint.unknown": [
+      "Hmm, I don't know {thing}. The ones you've saved are {names}.",
+      "I've not got a plan for {thing}, sorry! I know {names}."
+    ],
+    "blueprint.done_partly": [
+      "{thing} is up! Well, nearly: {count} blocks wouldn't go in. I couldn't reach them, or they had nothing to sit on.",
+      "Mostly done! {count} blocks of {thing} just wouldn't stay put."
+    ],
+    "supply.gather": [
+      "I'm short for {thing}, so I'll fetch {count} {item} first.",
+      "Off to find {count} {item}! Won't be a tick."
+    ],
+    "supply.craft": [
+      "Just making some {item} for {thing}.",
+      "A spot of crafting first: {item}."
+    ],
+    "supply.smelt": [
+      "Smelting {count} {item}. I love watching the furnace glow.",
+      "{count} {item} into the furnace. It takes a little while."
+    ],
+    "supply.blocked": [
+      "I can't finish {thing}, I'm afraid. I still need {missing}, and I can't make or find it myself.",
+      "Oh dear. {thing} needs {missing}, and I've no way of getting it. Could you bring some?"
+    ],
+    "craft.no_table": [
+      "I'd need a crafting table for that, or four planks to make one.",
+      "No crafting table nearby, and nothing to make one from. Sorry!"
+    ],
+    "smelt.no_furnace": [
+      "There's no furnace about, and I haven't the cobblestone to make one. Eight pieces would do it.",
+      "I'd need a furnace for that. None here, and none in my bag."
+    ],
+    "smelt.no_fuel": [
+      "I've nothing to burn! Coal, or a bit of wood, would do.",
+      "The furnace needs fuel and I haven't any."
     ]
   }
 }

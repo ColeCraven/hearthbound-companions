@@ -189,6 +189,7 @@ public final class CompanionCommands {
 				.then(Commands.literal("home")
 						.then(Commands.argument("name", StringArgumentType.word()).suggests(NEARBY_NAMES)
 								.executes(CompanionCommands::hubHome))));
+		BlueprintCommands.register(root);
 		dispatcher.register(root);
 	}
 

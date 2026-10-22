@@ -1102,6 +1102,42 @@
     "team.done": [
       "That's {thing} built. Take a bow, everyone.",
       "Done! {thing}, all ours. Who wants to sign it?"
+    ],
+    "blueprint.unknown": [
+      "{thing}? Never seen the plans. I've got {names}.",
+      "Don't know a {thing}, boss. The plans I've got are {names}."
+    ],
+    "blueprint.done_partly": [
+      "{thing}'s standing. {count} blocks wouldn't go in. Call it character.",
+      "Done, give or take {count} blocks. Couldn't get at them."
+    ],
+    "supply.gather": [
+      "Bit short for {thing}. Grabbing {count} {item}.",
+      "Need {count} {item} first. Free, for once."
+    ],
+    "supply.craft": [
+      "Knocking up some {item} for {thing}.",
+      "Bit of crafting: {item}. Watch and learn."
+    ],
+    "supply.smelt": [
+      "{count} {item} in the oven. No peeking.",
+      "Smelting {count} {item}. Patience is a virtue, apparently."
+    ],
+    "supply.blocked": [
+      "Can't finish {thing}, partner. Still need {missing}, and I can't nick it from anywhere.",
+      "{thing}'s stuck. Missing {missing}. Bring it and we're back in business."
+    ],
+    "craft.no_table": [
+      "No crafting table, and nothing to make one. Four planks, boss.",
+      "I need a crafting table. Don't suppose you've got one?"
+    ],
+    "smelt.no_furnace": [
+      "No furnace here and no cobblestone to make one. Eight bits, that's all.",
+      "Need a furnace, partner. Can't conjure one."
+    ],
+    "smelt.no_fuel": [
+      "Nothing to burn. Bit of coal? Some wood?",
+      "Furnace wants feeding and I'm out."
     ]
   }
 }

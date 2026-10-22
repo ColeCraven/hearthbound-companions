@@ -206,6 +206,13 @@ public final class Conversations {
 			player.sendSystemMessage(Texts.tr(key, name).withStyle(ChatFormatting.GRAY));
 			return true;
 		}
+		if (group == Group.PARTY && targets.size() > 1 && PARSER.parse(body, List.of()) instanceof ParseResult.Command command
+				&& command.intent().type() == IntentType.BUILD
+				&& io.github.tekless.hearthbound.blueprint.Blueprints.match(player.level().getServer(), command.intent().item()).isPresent()) {
+			// "@party build my cottage": one build, shared, not one each.
+			report(player, groupCopyBuild(player, targets, command.intent()), List.of());
+			return true;
+		}
 		for (CompanionEntity companion : targets) {
 			handleMessage(player, companion, body, group == null);
 		}
@@ -229,6 +236,9 @@ public final class Conversations {
 	 * @return true if it was a request and someone took it on (or said why not)
 	 */
 	private static boolean teamRequest(ServerPlayer player, String text) {
+		if (savedBuildRequest(player, text)) {
+			return true;
+		}
 		Optional<TeamRequest.Job> parsed = TeamRequest.parse(text, PARSER);
 		if (parsed.isEmpty()) {
 			return false;
@@ -299,6 +309,41 @@ public final class Conversations {
 		return true;
 	}
 
+	/**
+	 * "Build my cottage here" with nobody named and a blueprint by that name: the builders close by who take this
+	 * player's orders put it up (whoever is closest, if there are no builders). Only when it reads as a request, and
+	 * not while the player is in a conversation with one of them (that one takes it on the normal path).
+	 */
+	private static boolean savedBuildRequest(ServerPlayer player, String text) {
+		if (!(PARSER.parse(text, List.of()) instanceof ParseResult.Command command) || command.intent().type() != IntentType.BUILD) {
+			return false;
+		}
+		Optional<String> name = io.github.tekless.hearthbound.blueprint.Blueprints.match(player.level().getServer(), command.intent().item());
+		if (name.isEmpty()) {
+			return false;
+		}
+		List<CompanionEntity> crew = new ArrayList<>(CompanionTracker.near(player, TEAM_RANGE).stream()
+				.filter(c -> !c.isDowned() && c.isRecruited() && listens(player, c)).sorted(Comparator.comparingDouble(c -> c.distanceToSqr(player))).toList());
+		if (crew.isEmpty() || (!aloneWithCompanions(player) && crew.stream().noneMatch(c -> isFacing(player, c)))) {
+			return false;
+		}
+		Chat chat = CHATS.get(player.getUUID());
+		if (chat != null && crew.contains(chat.companion()) && player.level().getGameTime() - chat.lastTick() <= CHAT_TIMEOUT_TICKS) {
+			return false;
+		}
+		List<CompanionEntity> builders = crew.stream().filter(c -> c.role() == Role.BUILDER).toList();
+		List<CompanionEntity> team = builders.isEmpty() ? List.of(crew.get(0)) : builders;
+		CompanionEntity lead = team.get(0);
+		beginChat(player, lead);
+		lead.noteSpeaker(player);
+		Outcome outcome = copyBuild(player, team, name.get());
+		lead.say(outcome.lineKey(), outcome.vars());
+		if (team.size() > 1) {
+			report(player, team, List.of());
+		}
+		return true;
+	}
+
 	/** Who answers a plain request: the one the player is talking to or looking at, else the nearest who suits the job. */
 	private static CompanionEntity lead(ServerPlayer player, List<CompanionEntity> crew, TeamRequest.Job job) {
 		Chat chat = CHATS.get(player.getUUID());
@@ -364,6 +409,9 @@ public final class Conversations {
 				heard.get(0).say("project.ack.group", Map.of("plan", launch.plan()));
 				told = new ArrayList<>(new java.util.LinkedHashSet<>(java.util.stream.Stream.concat(heard.stream(), launch.involved().stream()).toList()));
 			}
+		} else if (parsed instanceof ParseResult.Command command && command.intent().type() == IntentType.BUILD
+				&& io.github.tekless.hearthbound.blueprint.Blueprints.match(player.level().getServer(), command.intent().item()).isPresent()) {
+			told = groupCopyBuild(player, heard, command.intent());
 		} else if (parsed instanceof ParseResult.Command command) {
 			groupOrder(player, heard, command.intent());
 		} else {
@@ -372,6 +420,32 @@ public final class Conversations {
 		}
 		report(player, told, List.of());
 		return true;
+	}
+
+	/** "Builders, build my cottage": the builders among them share it (or everyone, if there are no builders). */
+	private static List<CompanionEntity> groupCopyBuild(ServerPlayer player, List<CompanionEntity> heard, Intent intent) {
+		String name = io.github.tekless.hearthbound.blueprint.Blueprints.match(player.level().getServer(), intent.item()).orElseThrow();
+		List<CompanionEntity> crew = new ArrayList<>(heard.stream().filter(c -> c.role() == Role.BUILDER && !c.isDowned()).toList());
+		if (crew.isEmpty()) {
+			crew = new ArrayList<>(heard.stream().filter(c -> !c.isDowned()).toList());
+		}
+		if (crew.isEmpty()) {
+			heard.get(0).say("fail.downed", Map.of());
+			return List.of(heard.get(0));
+		}
+		if (crew.stream().anyMatch(c -> !c.isRecruited()) && !Obey.active(player)) {
+			orderFromChat(player, crew.get(0), intent); // a stranger offers to join first
+			return List.of(crew.get(0));
+		}
+		Outcome outcome = copyBuild(player, crew, name);
+		crew.get(0).say(outcome.lineKey(), outcome.vars());
+		if (!outcome.accepted()) {
+			Context ctx = context(crew.get(0));
+			ctx.failKey = outcome.lineKey();
+			ctx.failVars = outcome.vars();
+			ctx.failTick = crew.get(0).level().getGameTime();
+		}
+		return crew;
 	}
 
 	/** Companions this player can speak to as a group: their own, plus anyone else in obey mode; nearest first. */
@@ -971,7 +1045,7 @@ public final class Conversations {
 	private static boolean answerTask(ServerPlayer player, CompanionEntity companion, CompanionEntity.AskedQuestion asked, String text, ParseResult result) {
 		switch (asked.kind()) {
 			case BUILD_WHAT -> {
-				if (Blueprint.Kind.byPhrase(text).isPresent()) {
+				if (Blueprint.Kind.byPhrase(text).isPresent() || io.github.tekless.hearthbound.blueprint.Blueprints.match(player.level().getServer(), text).isPresent()) {
 					orderFromChat(player, companion, Intent.build(text));
 					return true;
 				}
@@ -1285,10 +1359,43 @@ public final class Conversations {
 		};
 	}
 
+	/**
+	 * A build the player saved as a blueprint, put up again in front of them by one builder or several. The first in
+	 * {@code crew} leads (gets what's missing and answers); the rest place what they can.
+	 */
+	public static Outcome copyBuild(ServerPlayer player, List<CompanionEntity> crew, String name) {
+		ServerLevel level = (ServerLevel) player.level();
+		Optional<io.github.tekless.hearthbound.blueprint.SavedBuild> build = io.github.tekless.hearthbound.blueprint.Blueprints.load(level.getServer(), name);
+		if (build.isEmpty()) {
+			return Outcome.no("blueprint.unknown", Map.of("thing", io.github.tekless.hearthbound.core.blueprint.Layout.spoken(name), "names", "none I can read"));
+		}
+		for (CompanionEntity companion : crew) {
+			if (companion.level() != level) {
+				return Outcome.no("fail.owner_gone", Map.of());
+			}
+		}
+		io.github.tekless.hearthbound.entity.order.CopyBuild.Result result = io.github.tekless.hearthbound.entity.order.CopyBuild.start(player, crew, build.get());
+		if (result instanceof io.github.tekless.hearthbound.entity.order.CopyBuild.Refusal refusal) {
+			return Outcome.no(refusal.lineKey(), refusal.vars());
+		}
+		io.github.tekless.hearthbound.entity.order.CopyBuild.Launch launch = (io.github.tekless.hearthbound.entity.order.CopyBuild.Launch) result;
+		String thing = "your " + io.github.tekless.hearthbound.core.blueprint.Layout.spoken(name);
+		return crew.size() > 1 ? Outcome.yes("team.plan", Map.of("plan", launch.plan(), "thing", thing)) : Outcome.yes("ack.build", Map.of("thing", thing));
+	}
+
 	/** Lays the structure out in front of the player and checks site and materials before agreeing. */
 	private static Outcome build(ServerPlayer player, CompanionEntity companion, Intent intent) {
+		Optional<String> saved = io.github.tekless.hearthbound.blueprint.Blueprints.match(player.level().getServer(), intent.item());
+		if (saved.isPresent()) {
+			return copyBuild(player, List.of(companion), saved.get());
+		}
 		Optional<Blueprint.Kind> kind = Blueprint.Kind.byPhrase(intent.item());
 		if (kind.isEmpty()) {
+			List<String> names = io.github.tekless.hearthbound.blueprint.Blueprints.names(player.level().getServer());
+			if (!names.isEmpty()) {
+				return Outcome.no("blueprint.unknown", Map.of("thing", clip(intent.item() == null ? "that" : intent.item()),
+						"names", io.github.tekless.hearthbound.core.dialogue.English.list(names.stream().map(io.github.tekless.hearthbound.core.blueprint.Layout::spoken).toList())));
+			}
 			return Outcome.no("fail.build_unknown", Map.of("things", BUILD_THINGS));
 		}
 		String thing = kind.get().label();
@@ -1442,7 +1549,8 @@ public final class Conversations {
 			case BUILD -> Outcome.yes("status.build", Map.of("thing", ((BuildOrder) order).blueprint().kind().label()));
 			case PROJECT -> Outcome.yes("status.build", Map.of("thing", order instanceof ProjectOrder project ? project.label()
 					: order instanceof io.github.tekless.hearthbound.entity.order.TeamJob.Builder part ? part.job().label()
-					: order instanceof io.github.tekless.hearthbound.entity.order.TeamJob.Watch watch ? watch.job().label() : "a farm"));
+					: order instanceof io.github.tekless.hearthbound.entity.order.TeamJob.Watch watch ? watch.job().label()
+					: order instanceof io.github.tekless.hearthbound.entity.order.CopyBuild.Worker copy ? copy.job().label() : "a farm"));
 			case HOME -> {
 				if (order instanceof io.github.tekless.hearthbound.entity.order.HomeOrder home && home.activity() != null) {
 					// Their day at home: what they're up to, and a favour they're after, if any.

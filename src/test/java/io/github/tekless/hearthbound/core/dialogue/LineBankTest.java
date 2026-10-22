@@ -153,6 +153,16 @@ class LineBankTest {
 		REQUIRED.put("team.plan", plus(base, "plan", "thing"));
 		REQUIRED.put("team.progress", plus(base, "thing", "count"));
 		REQUIRED.put("team.done", plus(base, "thing"));
+		// Copying a saved build, and getting what it needs (0.7).
+		REQUIRED.put("blueprint.unknown", plus(base, "thing", "names"));
+		REQUIRED.put("blueprint.done_partly", plus(base, "thing", "count"));
+		for (String key : List.of("supply.gather", "supply.craft", "supply.smelt")) {
+			REQUIRED.put(key, plus(base, "count", "item", "thing"));
+		}
+		REQUIRED.put("supply.blocked", plus(base, "thing", "missing"));
+		for (String key : List.of("craft.no_table", "smelt.no_furnace", "smelt.no_fuel")) {
+			REQUIRED.put(key, base);
+		}
 	}
 
 	private static Set<String> plus(Set<String> base, String... extra) {

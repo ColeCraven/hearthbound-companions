@@ -1108,6 +1108,42 @@
     "team.done": [
       "{thing}, built. Together. Remarkable.",
       "Done. {thing} stands. As foretold."
+    ],
+    "blueprint.unknown": [
+      "No plan called {thing}. Only {names}.",
+      "{thing} is not written down. {names} are."
+    ],
+    "blueprint.done_partly": [
+      "{thing} stands. {count} blocks would not settle.",
+      "Done, but for {count} blocks out of reach."
+    ],
+    "supply.gather": [
+      "{count} {item} first. For {thing}.",
+      "I go for {count} {item}."
+    ],
+    "supply.craft": [
+      "Crafting {item}.",
+      "{item}, first."
+    ],
+    "supply.smelt": [
+      "{count} {item} to the fire.",
+      "The furnace works on {count} {item}."
+    ],
+    "supply.blocked": [
+      "{thing} waits. It lacks {missing}, and I cannot find it.",
+      "No more. {missing} is missing, and beyond me."
+    ],
+    "craft.no_table": [
+      "No table. No planks for one.",
+      "A crafting table is needed. There is none."
+    ],
+    "smelt.no_furnace": [
+      "No furnace, no stone to make one.",
+      "A furnace is needed. None here."
+    ],
+    "smelt.no_fuel": [
+      "Nothing to burn.",
+      "The fire needs feeding. I have nothing."
     ]
   }
 }

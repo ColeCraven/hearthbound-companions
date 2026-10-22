@@ -1102,6 +1102,42 @@
     "team.done": [
       "{thing} stands, built by all of us. Well done.",
       "It is finished. {thing}, raised together. I am proud of us."
+    ],
+    "blueprint.unknown": [
+      "I know of no plan called {thing}. You have saved {names}.",
+      "{thing} is not among your plans, friend. I know {names}."
+    ],
+    "blueprint.done_partly": [
+      "{thing} stands, though {count} blocks would not go in. I could not reach them, or they had nothing to rest on.",
+      "It is raised, all but {count} blocks. I am sorry for those."
+    ],
+    "supply.gather": [
+      "I am short for {thing}. I will gather {count} {item} first.",
+      "First, {count} {item}. Then we build."
+    ],
+    "supply.craft": [
+      "I will craft {item} for {thing}.",
+      "Some crafting first: {item}."
+    ],
+    "supply.smelt": [
+      "{count} {item} to smelt. The fire will do its work.",
+      "I am smelting {count} {item}. It will take a little time."
+    ],
+    "supply.blocked": [
+      "I cannot finish {thing}. I still need {missing}, and I cannot make or find it.",
+      "{thing} must wait. It needs {missing}, which I cannot get myself."
+    ],
+    "craft.no_table": [
+      "I need a crafting table, or four planks to make one.",
+      "There is no crafting table here, and I have nothing to make one."
+    ],
+    "smelt.no_furnace": [
+      "There is no furnace here, and I lack the cobblestone to build one. Eight would do.",
+      "I would need a furnace. I have none."
+    ],
+    "smelt.no_fuel": [
+      "I have nothing to burn. Coal or wood would serve.",
+      "The furnace needs fuel, and I have none."
     ]
   }
 }
