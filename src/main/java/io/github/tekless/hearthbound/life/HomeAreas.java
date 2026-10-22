@@ -134,6 +134,7 @@ public final class HomeAreas {
 	/** Saves and forgets the cached data (the server is stopping). */
 	public static void close() {
 		if (current != null) {
+			current.dirty = true; // the homes' clocks move every second without marking anything
 			current.save();
 		}
 		current = null;
@@ -568,10 +569,9 @@ public final class HomeAreas {
 
 	// ---------------------------------------------------------------- the clock
 
-	/** Notes that someone here is living through the day right now. */
+	/** Notes that someone here is living through the day right now (written out with the next save). */
 	public void touch(Area area, long now) {
 		area.lastLive = now;
-		dirty = true;
 	}
 
 	/** Players close enough to hear about this area. */

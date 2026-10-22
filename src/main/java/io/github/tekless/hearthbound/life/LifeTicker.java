@@ -61,6 +61,9 @@ public final class LifeTicker {
 			bonds(level, areas, area, residents);
 			deliverNews(level, area, areas);
 		}
+		if (server.getTickCount() % 1200 == 0 && !live.isEmpty()) {
+			areas.markDirty(); // keep the homes' clocks on disk about once a minute
+		}
 		if (server.getTickCount() % 200 == 0) {
 			areas.save();
 		}

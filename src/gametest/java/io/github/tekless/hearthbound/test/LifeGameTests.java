@@ -91,7 +91,14 @@ public class LifeGameTests {
 
 	/** A bed whose head is at (x, 1, z), lying north to south. */
 	private static void bed(GameTestHelper helper, int x, int z) {
-		BlockState head = Blocks.RED_BED.defaultBlockState().setValue(BedBlock.FACING, Direction.NORTH).setValue(BedBlock.PART, BedPart.HEAD);
+		Block bedBlock = Blocks.AIR;
+		for (Block block : net.minecraft.core.registries.BuiltInRegistries.BLOCK) {
+			if (block instanceof BedBlock) {
+				bedBlock = block;
+				break;
+			}
+		}
+		BlockState head = bedBlock.defaultBlockState().setValue(BedBlock.FACING, Direction.NORTH).setValue(BedBlock.PART, BedPart.HEAD);
 		helper.setBlock(x, 1, z, head);
 		helper.setBlock(x, 1, z + 1, head.setValue(BedBlock.PART, BedPart.FOOT));
 	}

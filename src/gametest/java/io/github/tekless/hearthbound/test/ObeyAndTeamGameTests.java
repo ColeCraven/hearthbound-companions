@@ -16,7 +16,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -156,7 +155,7 @@ public class ObeyAndTeamGameTests {
 				helper.assertTrue(Conversations.apply(host, worker, Intent.give("planks", 1)).accepted(), who + ": give");
 				helper.assertTrue(Conversations.apply(host, worker, new Intent(IntentType.HOME, null, null, "walk")).accepted(), who + ": go home");
 			}
-			var zombie = helper.spawn(EntityType.ZOMBIE, new Vec3(4.5, 1, 6.5));
+			var zombie = helper.spawn(net.minecraft.world.entity.EntityTypes.ZOMBIE, new Vec3(4.5, 1, 6.5));
 			helper.assertTrue(Conversations.apply(host, stranger, Intent.attack("zombie")).accepted(), "attack");
 			zombie.discard();
 			helper.assertTrue(Conversations.apply(host, stranger, Intent.of(IntentType.FOLLOW)).accepted() && stranger.isOwnedBy(host), "follow (joins the host)");

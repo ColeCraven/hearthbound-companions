@@ -111,6 +111,34 @@ A goal can take over movement for a bit (to fight a zombie, say) and then hands 
 
 Everything here goes through the same line banks, with cooldowns so nobody talks over anyone.
 
+## Daily life at home
+
+A companion who isn't travelling with anyone runs a `HomeOrder`, and with daily life on that order
+hands each tick to a `DailyRoutine`:
+
+- Every three seconds (staggered per companion) it reads the clock and asks `core.life.Schedule` what
+  they should be doing: sleep, getting up, work, a meal, leisure, the evening together, or shelter from
+  the rain. The schedule is plain Java, shaped by the personality, a per-companion seed, and their
+  `Needs` (hunger, tiredness, loneliness), so it's covered by JUnit tests.
+- In between it walks them to the right place and does the thing there: lies down in their bed with
+  `startSleeping`, eats from their pack, works by role (farm chores, the usual autonomy jobs, a guardian's
+  rounds), or stands with the others at the meeting spot.
+- `HomeAreas` (`<world>/data/hearthbound_places.json`) groups homes within 32 blocks into one area and
+  keeps its places: what a scan of the surroundings found (`PlaceScan`, at most once a second for one
+  area, every couple of minutes per area), what a player marked with `setplace`, and the hub's config.
+  It also keeps claimed beds, players' beds, friendships between companions, storehouse chests, and the
+  game time each area was last live.
+- `LifeTicker` runs once a second for each area with someone loaded: it notices when an area comes back
+  after a long gap and runs `CatchUp` (crop growth from `core.life.CropGrowth`, harvests into storage only),
+  lights and puts out the meeting fire, starts group moments through `Exchanges`, and lets friendships grow.
+- `Initiative` is what a resident does about a brand-new world with autonomy on (a shelter, a farm by
+  water, a hoe from a couple of logs), each tried at most every few days, and otherwise says what's missing
+  once a day.
+
+Plain requests with nobody named ("let's build a house") are read by `core.intent.TeamRequest` and run
+by `TeamJob`: one blueprint and one list of open spots that several builders claim from, with
+collectors' `GatherOrder`s delivering to the builders and guardians on a `Watch` order round the site.
+
 ## Memory
 
 `CompanionMemory` holds the recent conversation (only with the current speaker, so one player's
@@ -128,6 +156,7 @@ current mode and any unfinished gathering, inventory, memory and facts.
 `CompanionRoster` (`<world>/data/hearthbound_roster.json`) keeps a small record of every companion
 in the world even while their chunk isn't loaded: name, cast member, owner and whether they live at
 the hub. It's used for the party limit, for never spawning a cast member twice, and for the hub.
+`HomeAreas` (`<world>/data/hearthbound_places.json`) keeps the homes and their places (above).
 `CompanionTracker` keeps the set of currently loaded companions so nothing has to scan every
 entity in every level.
 

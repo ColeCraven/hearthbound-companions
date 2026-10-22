@@ -78,7 +78,7 @@ public final class DailyRoutine {
 			return "at home";
 		}
 		if (job instanceof Garden.Plant) {
-			return "planting their garden";
+			return "planting my flower bed";
 		}
 		return activity.describe();
 	}

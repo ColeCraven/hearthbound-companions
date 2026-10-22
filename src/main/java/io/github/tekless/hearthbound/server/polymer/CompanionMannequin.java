@@ -43,7 +43,8 @@ final class CompanionMannequin implements PolymerEntity {
 		boolean hasPack = PolymerBridge.hasResourcePack(player);
 		data.add(SynchedEntityData.DataValue.create(MannequinData.PROFILE, SkinProfiles.forViewer(companion.skinVariant(), hasPack)));
 		data.add(SynchedEntityData.DataValue.create(MannequinData.DESCRIPTION, Optional.of(description())));
-		data.add(SynchedEntityData.DataValue.create(MannequinData.POSE, companion.isDowned() || companion.getPose() == Pose.CROUCHING ? Pose.CROUCHING : Pose.STANDING));
+		Pose pose = companion.isSleeping() ? Pose.SLEEPING : companion.isDowned() || companion.getPose() == Pose.CROUCHING ? Pose.CROUCHING : Pose.STANDING;
+		data.add(SynchedEntityData.DataValue.create(MannequinData.POSE, pose));
 	}
 
 	private Component description() {
