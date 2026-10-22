@@ -298,8 +298,10 @@ public final class Mobility {
 		double dz = target.getZ() - c.getZ();
 		Direction dir = Math.abs(dx) > Math.abs(dz) ? (dx > 0 ? Direction.EAST : Direction.WEST) : (dz > 0 ? Direction.SOUTH : Direction.NORTH);
 		BlockPos feet = c.blockPosition();
+		// Standing a step short of the edge is fine: the blocks are still in reach.
+		int start = !open(level.getBlockState(feet.relative(dir, 1).below())) && open(level.getBlockState(feet.relative(dir, 2).below())) ? 2 : 1;
 		int gaps = 0;
-		for (int i = 1; i <= MAX_GAP + 1; i++) {
+		for (int i = start; i <= start + MAX_GAP; i++) {
 			BlockPos floor = feet.relative(dir, i).below();
 			if (open(level.getBlockState(floor))) {
 				gaps++;
@@ -310,7 +312,7 @@ public final class Mobility {
 		if (gaps < 1 || gaps > MAX_GAP) {
 			return false;
 		}
-		BlockPos far = feet.relative(dir, gaps + 1);
+		BlockPos far = feet.relative(dir, start + gaps);
 		if (open(level.getBlockState(far.below())) || !open(level.getBlockState(far)) || !open(level.getBlockState(far.above()))) {
 			return false;
 		}
@@ -323,14 +325,14 @@ public final class Mobility {
 		if (have < gaps) {
 			return false;
 		}
-		for (int i = 1; i <= gaps; i++) {
+		for (int i = start; i < start + gaps; i++) {
 			BlockPos spot = feet.relative(dir, i).below();
 			if (!mayBuildAt(level, spot) || level.getFluidState(spot).is(FluidTags.LAVA) || level.getFluidState(spot.below()).is(FluidTags.LAVA)
 					|| !open(level.getBlockState(spot.above())) || !open(level.getBlockState(spot.above(2)))) {
 				return false;
 			}
 		}
-		bridgeFrom = feet;
+		bridgeFrom = feet.relative(dir, start - 1);
 		bridgeDir = dir;
 		bridgeGaps = gaps;
 		return true;

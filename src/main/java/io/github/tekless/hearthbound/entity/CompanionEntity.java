@@ -391,6 +391,9 @@ public class CompanionEntity extends PathfinderMob {
 				heal(1.0F);
 			}
 		}
+		if (getTarget() != null && getOffhandItem().isEmpty() && tickCount % 5 == 0) {
+			equipShield(); // a fight starting doesn't wait for the next look through the pack
+		}
 		guardWithShield();
 		eatWhenHurt(level);
 		if (isSleeping() && (getTarget() != null || !(order instanceof HomeOrder))) {

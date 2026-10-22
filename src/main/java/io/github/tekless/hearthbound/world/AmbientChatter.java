@@ -132,7 +132,7 @@ public final class AmbientChatter {
 			state.fedHurt = false;
 		}
 		boolean starving = food <= 6 && !state.suggestedEat;
-		boolean hurt = player.getHealth() <= 6 && player.getFoodData().needsFood() && !state.fedHurt && !player.isCreative();
+		boolean hurt = player.getHealth() <= 6 && player.getFoodData().needsFood() && !state.fedHurt;
 		if ((!starving && !hurt) || companion.distanceTo(player) > 6) {
 			return false;
 		}

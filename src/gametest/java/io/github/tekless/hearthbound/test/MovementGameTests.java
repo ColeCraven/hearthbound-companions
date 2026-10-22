@@ -111,7 +111,7 @@ public class MovementGameTests {
 		noTeleports(helper, cole);
 		double far = helper.absoluteVec(new Vec3(5, 0, 0)).x;
 		helper.succeedWhen(() -> {
-			helper.assertTrue(cole.getX() >= far, "across the gap");
+			helper.assertTrue(cole.getX() >= far, "across the gap (at " + cole.blockPosition() + ", far side " + far + ", " + cole.order().describe() + ")");
 			helper.assertValueEqual(cole.countCarried(s -> s.is(Items.COBBLESTONE)), 2, "on a two-block bridge");
 			remove(helper, owner);
 		});
