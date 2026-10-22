@@ -120,11 +120,22 @@ public class FreshWorldGameTests {
 		BlockState head = bedBlock.defaultBlockState().setValue(BedBlock.FACING, Direction.NORTH).setValue(BedBlock.PART, BedPart.HEAD);
 		helper.setBlock(5, 1, 2, head);
 		helper.setBlock(5, 1, 3, head.setValue(BedBlock.PART, BedPart.FOOT));
-		helper.setBlock(2, 1, 5, Blocks.CHEST);
+		helper.setBlock(2, 1, 5, Blocks.FURNACE);
+		helper.setBlock(3, 1, 5, Blocks.CHEST);
 		areas.rescanSoon(area);
 		Places after = areas.places(helper.getLevel(), area);
-		helper.assertTrue(after.storage().contains(helper.absolutePos(new BlockPos(2, 1, 5))), "the new chest is the store: " + after.storage());
-		helper.assertValueEqual(areas.bedFor(helper.getLevel(), area, wynn), helper.absolutePos(new BlockPos(5, 1, 2)), "and the new bed is theirs");
+		helper.assertValueEqual(areas.bedFor(helper.getLevel(), area, wynn), helper.absolutePos(new BlockPos(5, 1, 2)), "the new bed is theirs");
+		BlockPos furnace = helper.absolutePos(new BlockPos(2, 1, 5));
+		helper.assertTrue(after.kitchen().distManhattan(furnace) <= 4, "a furnace by a chest is the kitchen now (" + after.kitchen() + ")");
+		helper.assertTrue(after.storage().isEmpty(), "but a chest is never used for storage until you say so");
+		BlockPos by = helper.absolutePos(new BlockPos(3, 1, 4));
+		try {
+			helper.getLevel().getServer().getCommands().getDispatcher().execute("companion setplace storage Gtwyn " + by.getX() + " " + by.getY() + " " + by.getZ(),
+					helper.getLevel().getServer().createCommandSourceStack().withSuppressedOutput());
+		} catch (com.mojang.brigadier.exceptions.CommandSyntaxException e) {
+			throw new AssertionError(e.getMessage(), e);
+		}
+		helper.assertTrue(areas.places(helper.getLevel(), area).storage().contains(helper.absolutePos(new BlockPos(3, 1, 5))), "and once marked, it's the store");
 		helper.succeed();
 	}
 }
