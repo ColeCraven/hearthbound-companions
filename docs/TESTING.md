@@ -40,7 +40,9 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 
 ### Server GameTests: 81 passing (plus a smoke test)
 
-These run in a real Minecraft server world on every `./gradlew build`:
+These run in a real Minecraft server world on every `./gradlew build`. The build log says
+`All 83 required tests passed`: the 81 below, the smoke test, and `minecraft:always_pass`, which the game
+brings along itself.
 
 | Test | What it checks |
 |---|---|
