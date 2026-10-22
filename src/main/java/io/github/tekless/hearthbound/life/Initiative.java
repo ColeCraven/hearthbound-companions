@@ -37,7 +37,7 @@ final class Initiative {
 				|| WorldRules.isProtected(level, home) || coveredNear(level, home) || !c.tryEvery("own_shelter", day, 3)) {
 			return false;
 		}
-		if (!Routines.enabled()) {
+		if (!Routines.enabled(c)) {
 			mention(c, level, day, "a roof over our heads");
 			return false;
 		}
@@ -56,7 +56,7 @@ final class Initiative {
 		if (c.role() != Role.FARMER || places.farm() != null || !c.tryEvery("own_farm", day, 2)) {
 			return false;
 		}
-		if (!Routines.enabled()) {
+		if (!Routines.enabled(c)) {
 			mention(c, level, day, "a bit of farmland");
 			return false;
 		}

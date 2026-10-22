@@ -52,6 +52,11 @@ public final class Routines {
 		return Hearthbound.config().routines;
 	}
 
+	/** Autonomy as this companion sees it: the config, unless a test has set it for them. */
+	public static boolean enabled(CompanionEntity companion) {
+		return companion.testAutonomy() != null ? companion.testAutonomy() : enabled();
+	}
+
 	/** A job that suits this companion's role and the surroundings, or nothing. */
 	public static Optional<Pastimes.Pastime> pick(CompanionEntity companion, ServerPlayer owner) {
 		return pickAround(companion, owner.blockPosition());
@@ -62,7 +67,7 @@ public final class Routines {
 	 * (their home) with the same limits - never in protected areas, beside player builds, or from chests.
 	 */
 	public static Optional<Pastimes.Pastime> pickAround(CompanionEntity companion, BlockPos centre) {
-		if (!enabled() || !(companion.level() instanceof ServerLevel level) || !allowed(companion, level, centre)) {
+		if (!enabled(companion) || !(companion.level() instanceof ServerLevel level) || !allowed(companion, level, centre)) {
 			return Optional.empty();
 		}
 		return switch (companion.role()) {

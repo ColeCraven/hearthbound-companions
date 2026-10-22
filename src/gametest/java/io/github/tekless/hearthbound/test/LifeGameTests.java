@@ -283,31 +283,26 @@ public class LifeGameTests {
 	public void aFarmerInANewWorldStartsAFarmByTheWater(GameTestHelper helper) {
 		floor(helper, Blocks.GRASS_BLOCK);
 		helper.setBlock(5, 0, 5, Blocks.WATER);
-		boolean routines = Hearthbound.config().routines;
-		Hearthbound.config().routines = true;
 		CompanionEntity farmer = resident(helper, Archetype.FARMHAND, "Plaxx", 2, 2, 2000);
+		farmer.setTestAutonomy(true);
 		farmer.inventory().addItem(new ItemStack(Items.WOODEN_HOE));
 		farmer.inventory().addItem(new ItemStack(Items.WHEAT_SEEDS, 8));
-		helper.succeedWhen(() -> {
-			helper.assertTrue(farmer.order() instanceof FarmOrder, "with seeds, a hoe and water, they start a farm of their own (" + farmer.order().describe() + ")");
-			Hearthbound.config().routines = routines;
-		});
+		helper.succeedWhen(() -> helper.assertTrue(farmer.order() instanceof FarmOrder,
+				"with seeds, a hoe and water, they start a farm of their own (" + farmer.order().describe() + ")"));
 	}
 
 	@GameTest(maxTicks = 400, padding = 40)
 	public void withNothingToWorkWithTheySayWhatTheyNeedOnce(GameTestHelper helper) {
 		floor(helper, Blocks.STONE);
-		boolean routines = Hearthbound.config().routines;
-		Hearthbound.config().routines = false;
 		ServerPlayer visitor = player(helper, 5.5, 5.5);
 		CompanionEntity farmer = resident(helper, Archetype.FARMHAND, "Nedxx", 2, 2, 2000);
+		farmer.setTestAutonomy(false);
 		boolean[] said = {false};
 		helper.onEachTick(() -> said[0] |= farmer.lastLineKey().equals("life.need"));
 		helper.succeedWhen(() -> {
 			helper.assertTrue(said[0], "no farm and autonomy off: they say what they'd need");
 			helper.assertFalse(farmer.tryEvery("need:a bit of farmland", farmer.clockTime() / 24000, 1), "and it's noted, so it isn't said again today");
 			helper.assertValueEqual(farmer.order().kind(), CompanionOrder.Kind.HOME, "and they carry on with their day");
-			Hearthbound.config().routines = routines;
 			remove(helper, visitor);
 		});
 	}

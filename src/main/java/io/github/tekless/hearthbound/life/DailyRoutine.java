@@ -409,7 +409,7 @@ public final class DailyRoutine {
 			return;
 		}
 		jobCooldown = 60;
-		boolean autonomy = Routines.enabled();
+		boolean autonomy = Routines.enabled(c);
 		long day = c.clockTime() / Schedule.DAY;
 		// What isn't there yet in a new world: a roof, a farm. Started at most every few days, or just mentioned.
 		if (Initiative.shelter(c, level, area, home, day) || Initiative.farm(c, level, places, home, day)) {
@@ -449,7 +449,7 @@ public final class DailyRoutine {
 			return;
 		}
 		jobCooldown = 100;
-		if (!Routines.enabled()) {
+		if (!Routines.enabled(c)) {
 			return;
 		}
 		// Their own little project: a flower bed, a flower a day.

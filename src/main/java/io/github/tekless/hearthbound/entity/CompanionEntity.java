@@ -161,6 +161,8 @@ public class CompanionEntity extends PathfinderMob {
 	private @Nullable Boolean dailyLife;
 	/** Tests only: the time of day this companion sees (null: the world's clock). */
 	private @Nullable Long testClock;
+	/** Tests only: autonomy on or off for this one companion, whatever the config says (null: the config decides). */
+	private @Nullable Boolean testAutonomy;
 
 	/** A question this companion asked, so the player's next words can be read as the answer. */
 	public record AskedQuestion(QuestionKind kind, UUID player, long tick) {
@@ -747,6 +749,15 @@ public class CompanionEntity extends PathfinderMob {
 	/** Tests only: fix the time of day this companion lives by (null for the real clock). */
 	public void setTestClock(@Nullable Long clock) {
 		testClock = clock;
+	}
+
+	/** Tests only: autonomy for this companion alone (null: the config decides), so tests can run side by side. */
+	public void setTestAutonomy(@Nullable Boolean autonomy) {
+		testAutonomy = autonomy;
+	}
+
+	public @Nullable Boolean testAutonomy() {
+		return testAutonomy;
 	}
 
 	/**

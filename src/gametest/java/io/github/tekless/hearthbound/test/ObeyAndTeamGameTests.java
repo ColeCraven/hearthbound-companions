@@ -16,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.LevelBasedPermissionSet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -106,7 +107,8 @@ public class ObeyAndTeamGameTests {
 		MinecraftServer server = helper.getLevel().getServer();
 		ServerPlayer op = player(helper, 1.5, 0.5);
 		ServerPlayer guest = player(helper, 6.5, 0.5);
-		server.getPlayerList().op(op.nameAndId());
+		// The test server makes plain ops level 0, so this one is given gamemaster rights (level 2) outright.
+		server.getPlayerList().op(op.nameAndId(), java.util.Optional.of(LevelBasedPermissionSet.GAMEMASTER), java.util.Optional.empty());
 		CompanionEntity stranger = companion(helper, Archetype.SELLSWORD, "Wanxx", 3.5, 5.5);
 		try {
 			server.getCommands().performPrefixedCommand(guest.createCommandSourceStack(), "companion obey on");
