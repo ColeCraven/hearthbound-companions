@@ -1,7 +1,7 @@
 # Testing
 
 This is how I test the mod, what I've actually checked, and what I haven't got to yet. Last
-updated 2026-10-22 (v0.6).
+updated 2026-10-22 (v0.7).
 
 ## How to run
 
@@ -18,12 +18,12 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 
 ## Automated tests
 
-### Unit tests (JUnit 5): 339 passing
+### Unit tests (JUnit 5): 359 passing
 
 | Suite | Covers |
 |---|---|
 | `ChatOrdersParserTest` (53) | "this" and "that" (collect that, fight that, get that), build with no subject, hunt, "go and kill", "I need a shelter", "set up camp", the follow-ups "why?", "really?", "and you?", "tell me more", "what do you mean?", and conversational phrasing landing on the right topic ("what are you good at?", "it's getting dark", "let's go home" is not a dismissal) |
-| `CommandParserTest` (114) | Every order type, politeness and addressing ("Hazel, could you..."), quantities in digits/words/stacks/dozens, "chop trees" = logs, attack vs gather ("get that zombie" vs "get some logs"), give-all vs give-item, build and dig orders ("dig down 30", "bridge this gap"), "mine some iron" is still gathering, small-talk topics, telling a companion about yourself ("call me Captain", "I hate spiders"), and the things that aren't facts ("I love it here", "call me when you're done"), unsupported actions, non-items ("I need help") |
+| `CommandParserTest` (129) | Every order type, chests, smelting and crafting ("put the logs in that chest", "cook the beef", "could you craft 4 torches", and what isn't one: "make way", "make me laugh"), politeness and addressing ("Hazel, could you..."), quantities in digits/words/stacks/dozens, "chop trees" = logs, attack vs gather ("get that zombie" vs "get some logs"), give-all vs give-item, build and dig orders ("dig down 30", "bridge this gap"), "mine some iron" is still gathering, small-talk topics, telling a companion about yourself ("call me Captain", "I hate spiders"), and the things that aren't facts ("I love it here", "call me when you're done"), unsupported actions, non-items ("I need help") |
 | `AnswersTest` (42) | Reading replies to a companion's own questions: the thing in "has to be the ocean", a nickname in "just call me the boss", non-answers ("dunno", "you") left alone, mood ("not bad" is good, "not great" is bad), and forgiving `@name` matching (short forms and one-letter typos) |
 | `PlayerFactsTest` (6) | Likes match the world ignoring plurals and articles ("diamonds" for diamond ore), changing your mind, keeping the most recent few, the "you go by..., you like..." summary, facts kept per player, and memories stored as full clauses even from old saves |
 | `GatherMachineTest` (9) | Success only after full delivery; nothing found (no invented items); partial delivery when supply runs out; unreachable targets skipped then explained; missing tool fails before moving; full pack brings back what fits; cancel is immediate and final; owner leaving keeps the items |
@@ -36,12 +36,13 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 | `CastMemberTest` (6) | Cast names unique and not reused by wanderers; every role has at least two characters; old names still find the right character; roles are fair (never below 80%); every cast member has a valid 64x64 skin; skin variants round-trip |
 | `RateLimiterTest` (4) | Per-player AI limit per rolling minute; refused requests don't use up the allowance; 0 means unlimited |
 | `CompanionMemoryTest` (3) | Switching conversation partner forgets the previous player's lines but keeps shared events and affinity |
+| `LayoutTest` (5) | Blueprints: turning a saved build to face the player, where it goes in front of them, size limits, names and finding a name in a sentence |
 | `HttpModelsTest` (7) | Ollama / OpenAI-compatible / Anthropic request shapes and response parsing against a local fake server; refusal, HTTP 401, timeout and unreachable server all fail cleanly |
 
-### Server GameTests: 81 passing (plus a smoke test)
+### Server GameTests: 122 passing (plus a smoke test)
 
 These run in a real Minecraft server world on every `./gradlew build`. The build log says
-`All 83 required tests passed`: the 81 below, the smoke test, and `minecraft:always_pass`, which the game
+`All 124 required tests passed`: the 122 below, the smoke test, and `minecraft:always_pass`, which the game
 brings along itself.
 
 | Test | What it checks |
@@ -119,6 +120,35 @@ brings along itself.
 | `aPlainRequestBecomesOneHouseBuiltTogether` | "let's build a house" with two builders and a collector nearby: one plan, one shared blueprint, the collector brings wood, and one house stands with more blocks than the builders started with |
 | `aStatementStartsNoWork` | "I built a house yesterday", "I love building houses" and "we don't need a farm" change nothing |
 
+New in 0.7:
+
+| Test | What it checks |
+|---|---|
+| `aSavedBuildGoesUpFacingThePlayer` | A saved blueprint is built in front of the player, turned to face the way they face, block for block |
+| `aCopyShortOfPlanksMakesThemFromLogs` | Short of planks: they're crafted from logs in the pack, then the copy goes up |
+| `stairsAreCraftedAtATableTheyPutDownAndPickUp` | Stairs for a copy are crafted at a crafting table they place, and the table is picked up again |
+| `whatCantBeHadIsSaidAndNothingIsBuilt` | A blueprint with sponge in it: they say what they can't get and place nothing |
+| `aStructureBlockFileCanBeBuiltByName` | A structure block `.nbt` file is built by name like any blueprint |
+| `buildersShareASavedBuild` | "@party build my gt wall": one build shared between them, not one each |
+| `aFollowerClimbsALadderToReachYou` / `aFollowerBuildsTheirWayOutOfAHole` | Up a ladder, and up out of a pit with blocks from the pack, with no teleport |
+| `aFollowerBridgesASmallGap` / `noBridgeBesideSomethingAPlayerBuilt` | A two-block gap gets a two-block bridge; next to a player's planks, no blocks are placed |
+| `aFollowerSwimsAfterYou` | Across a channel of water and out the other side, no teleport |
+| `aGuardianShootsFromRange` / `upCloseTheSwordComesOut` | A guardian with a bow shoots arrows from the pack and hits; up close the sword is used and no arrows are wasted |
+| `aRaisedShieldTakesTheHit` | The shield goes in the off hand, goes up against a skeleton, and stops a hit from the front |
+| `aHurtCompanionEatsFromTheirPack` / `aBadlyHurtPlayerIsHandedFood` | Bread is eaten (not rotten flesh) and heals; a badly hurt player is handed two pieces of food |
+| `wornGearIsSwappedForASpare` / `wornGearWithNoSpareIsPutAwayBeforeItBreaks` / `wornGearIsMendedAtAnAnvilWithRealMaterials` | Spare worn in, worn one kept; no spare: put away unbroken and mentioned; mended at an anvil using the iron in the pack, and not without it |
+| `logsGoIntoTheChestYouLookAt` / `breadComesOutOfTheChestAndNothingElse` | Only the chest being looked at, only what was asked for |
+| `noChestInSightIsSaidAndNothingMoves` / `walkingOffStopsTheChestJob` | No chest in sight: asked which; walking away stops the job before anything moves |
+| `ironIsSmeltedInTheFurnaceNearby` / `noFuelNoSmelting` | Three raw iron become three ingots in real furnace time, one coal burnt; no fuel is said up front |
+| `aStonePickaxeIsCraftedAndHandedOver` / `aPickaxeIsTheBestThePackCanMake` / `whatsMissingForACraftIsSaid` | A table made, used and picked up; "a pickaxe" is the best the pack allows; short of iron is said with the amount, nonsense has no recipe |
+| `aLineFromTheScreenIsAnOrderLikeChat` / `onlyYoursOrSomeoneCloseCanBeTalkedTo` | A line from the conversation screen does what chat does; the screen shows name, role, mood, need, task, history and suggestions; strangers far away can't be reached |
+| `aRefusedCraftIsExplained` / `aPartyOrderNamesEveryoneItWasFor` / `blockersAreListedAndTheConsoleCanAsk` | `/companion explain`: what was heard, how it was read, who it was for, the result, the blockers, and it works from the console |
+| `withoutAKeyYouAreToldWhereItGoes` / `anOllamaThatIsntRunningIsSaidPlainly` | AI setup with no key explains where it goes and changes nothing; no Ollama running gets a plain reason |
+| `godModeAndPlayerDamageAreTheHostsCall` | God mode and "players can't hurt companions" from the console, checked and put back within one tick |
+| `placesCanBeMarkedFromTheConsole` | `setplace` with coordinates, with `execute positioned`, and `places` listing every home from the console |
+| `aCollectorInABareWorldFetchesLogsFirst` / `aBuilderWithNoRoofPutsUpAShelter` | In a bare world with autonomy on: logs first, and a shelter of their own |
+| `needsAreSaidOnceNotOnALoop` / `aBedAndChestPutDownLaterAreUsed` | A need is said once, not on a loop; a bed and a furnace by a chest put down later are picked up, and the chest is storage once marked |
+
 ### Client GameTest: passing
 
 `CompanionClientGameTest` drives the real client:
@@ -182,3 +212,7 @@ results are in [docs/images/cast](images/cast) and [CAST.md](CAST.md).
 | Server with unmodded players | Verified on a copy of my real server | Mojang's unmodified 26.3 client joins; mannequins, names, status lines, signed skins, greeting, recruiting and following all work. Details in [SERVER.md](SERVER.md#how-i-tested-it) |
 | Player with the mod on that server | Verified (dev client) | Joins and sees companions fine |
 | AI dialogue with a real model | **Not tested** | Requires Ollama or an API key; client code is tested against fake servers only |
+| `/companion ai setup` against a real Ollama or API | **Not tested** | The no-key and no-Ollama paths are GameTested; the model list, test reply and roll-back need a live model |
+| Conversation screen in the real client | **Not tested yet** | Builds and the server side is GameTested; the screen itself needs a look in a real game |
+| Copying a big build in a real world | Needs a manual session | Saving, turning, materials, crafting and shared builds are GameTested on small test builds |
+| Bows, shields and anvils in a long fight | Needs a manual session | Each is GameTested on its own |

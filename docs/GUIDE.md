@@ -147,6 +147,162 @@ start the job when they arrive.
 in their own voice: no tool, not enough blocks, the ground is uneven, there's lava, the area is
 protected, nothing of that kind nearby.
 
+## Implemented: chests, smelting and crafting
+
+All of these work in chat. They use what's in the companion's pack, and they say so when something's
+missing instead of pretending.
+
+- **Into a chest.** Look at a chest or barrel and say "put everything in that chest", "put the logs in the
+  chest", "stash 16 cobblestone in there" or "empty your pack into that chest". Only the chest you're
+  looking at (within 6 blocks), and only while you stay within 10 blocks of it. Walk off and they stop.
+- **Out of a chest.** "take the iron from that chest", "grab the bread out of the barrel", "get everything
+  out of there". Same rules. A full pack is said out loud, and so is a chest with none of what you asked for.
+- **Smelting.** "smelt this iron", "cook the beef", "smelt 8 sand". They need fuel in their pack (coal,
+  charcoal, planks, logs and so on) and a furnace: one within 12 blocks, one in their pack, or one they make
+  from 8 cobblestone. A furnace they put down gets picked up again afterwards. It takes real furnace time, so
+  three iron takes about half a minute. If you're holding the thing to smelt, they ask you to hand it over.
+- **Crafting.** "craft me a pickaxe", "make me a stone pickaxe", "could you craft 4 torches", "make a cake".
+  The game's own recipes, a crafting table for anything bigger than two by two (one nearby, or one they make
+  from planks and pick up again), and only what's in their pack: they don't go off gathering for this. "A
+  pickaxe" means the best one their pack can make. When they're short they say exactly what of ("For an iron
+  sword I'd need 2 iron ingots"), and an item with no recipe gets an honest "don't know how to make that".
+  What they make is handed to you if you're close, or kept in their pack if you've wandered off.
+
+Brewing and enchanting aren't something they do yet, and they'll say so. Netherite gear (a smithing table job)
+isn't crafting, so "craft a netherite sword" gets "don't know how to make that".
+
+## Implemented: copying a build
+
+Build something you like, save it as a blueprint, and have a companion (or a whole crew) build a copy.
+
+| Command | What it does |
+|---|---|
+| `/companion blueprint corner1` | Marks one corner: the block you're looking at (within 8 blocks), else the one under your feet. |
+| `/companion blueprint corner2` | Marks the opposite corner. |
+| `/companion blueprint save <name>` | Saves everything between the corners. Up to 48 wide, 48 deep and 32 high, and 4096 blocks. Saving over someone else's blueprint isn't allowed. |
+| `/companion blueprint` or `/companion blueprint list` | Every blueprint this world has. |
+| `/companion blueprint info <name>` | Its size and what it takes to build. |
+| `/companion blueprint delete <name>` | Removes it (the one who saved it, the host or an operator). |
+
+Then just ask, in chat:
+
+- "@Maddie build my cottage here", "Maddie, build my cottage", "build my cottage" (to whoever you're talking to).
+- "builders, build cottage" or "@party build my cottage": everyone addressed shares one build. Said to
+  everyone nearby, the builders take it on, or everyone if there are no builders.
+- Name a blueprint that doesn't exist while you have others and they say so, with the names of the ones
+  you do have.
+
+The copy goes up in front of you, turned to face the way you're facing. They pack the materials first:
+anything in the builders' packs, logs, planks, cobblestone and sticks the helpers hand over, things crafted
+from what they have (planks, stairs, slabs, sticks and so on, at a crafting table they put down and pick up
+again), things smelted (glass, stone), and basics they can gather (logs, sand, cobblestone). Whatever can't be
+had is said up front, by name and number, and nothing is built. The site is checked too: not inside a
+protected area, no lava, mostly clear, and mostly solid ground under it. Doors, beds and other two-part
+blocks are placed whole. Grass, flowers, air and water aren't part of a blueprint.
+
+Blueprints live with the world in `<world>/data/hearthbound/blueprints`. Structure block files (`.nbt`)
+work too: anything saved with a structure block in this world (`<world>/generated/*/structures`) or put in
+`config/hearthbound/blueprints` can be built by name.
+
+## Implemented: getting about
+
+Following you or coming over, a companion who can't just walk to you now tries the things a player
+would, before teleporting as a last resort:
+
+- **Ladders and vines.** Up a ladder or vines near them if you're above them.
+- **Building up.** Stuck in a hole or below a cliff, within about 7 blocks across, they put blocks from their
+  pack under their feet and climb out (up to 12 blocks).
+- **Small bridges.** A gap of one to three blocks between you gets bridged with blocks from their pack.
+  Never inside a protected area, and never beside anything a player built (the same distance gathering keeps
+  to, `server.buildGuardRadius`).
+- **Swimming.** Straight through the water after you, and back out.
+- **Stuck.** About a second and a half without getting anywhere and they try the above. If none of it helps,
+  they catch up the old way.
+
+## Implemented: fighting and looking after themselves
+
+- **Bows and crossbows.** A guardian with a bow or crossbow and arrows in their pack shoots from range (about 6
+  to 24 blocks) when they can see the target, and only when the shot is clear of you and other companions.
+  Arrows come out of the pack and can be picked up again. Up close, or out of arrows, the sword comes out.
+- **Shields.** Anyone with a shield in their pack puts it in their off hand and raises it against archers and
+  anything closing in. A raised shield really blocks a hit from the front, like yours does.
+- **Eating.** Hurt (below about 60%, or 35% mid-fight) with food in their pack, they eat, and it heals them by
+  what the food is worth. Rotten flesh, spider eyes and the like stay in the pack.
+- **Food for you.** If you're starving, or badly hurt and could eat, a companion close by with food hands you
+  some, once per bad patch. That gets through whatever the chattiness.
+- **Worn gear.** Gear that's nearly broken is swapped for a spare of the same kind from the pack. With no
+  spare it's put away before it breaks, and they mention it (once a day).
+- **Mending.** At home, with an anvil within 12 blocks and the right material in their pack (iron ingots for
+  iron gear, diamonds for diamond gear, planks for wood and so on), they mend worn gear: about a quarter of
+  the damage per material, and the anvil can chip like it does for you. Without the material, nothing happens.
+
+## Implemented: the conversation screen
+
+With the mod on your game and on the server (or in single player), <kbd>J</kbd> opens a conversation
+screen for the companion you're looking at, else the one you last talked to, else the first in your party:
+
+- Who they are, their role, their mood, what they need and what they're doing, at the top.
+- What's been said between you, newest at the bottom (scroll for older lines).
+- A button for each companion in your party, to switch between them.
+- Quick replies: Follow, Wait, Come, Status, and Give (which fills in "Give me " for you to finish).
+- A few suggestions for right now: "Put everything in that chest" when you're looking at one, "Smelt the
+  raw iron" when they carry some, "Give me the oak log", "Build my cottage here" if you have a blueprint,
+  "Go home" at night, "Will you join me?" for a stranger.
+- A box to type anything else, which goes through the same reader as chat, so it does exactly what saying it
+  would. It just doesn't go out to everyone.
+
+The chat box still works the same, <kbd>G</kbd> included. On a server without the mod, <kbd>J</kbd> opens the
+chat box instead, and players without the mod don't see any of this.
+
+## Implemented: why didn't they do it?
+
+`/companion explain <name>` shows, for that companion:
+
+- the last thing they heard, who from and how long ago,
+- how it was read (an order and what for, a question, chat, something they can't do),
+- who it was meant for (just them, or your party, or a group, by name),
+- what came of it ("accepted", or "refused" with the reason, the same one they said),
+- the last thing they said, what they're doing now,
+- and anything in their way: knocked down, asleep, short of materials for the current job, waiting for the
+  lead builder, pack full, badly hurt, hungry or tired, not with anyone yet, travelling with someone else.
+
+It works from the server console and command blocks too (the nearest companion by that name).
+
+## Implemented: AI replies, set up in game
+
+Companions work fine without any AI. If you want free-form replies on top, the host (or an operator) can
+set it up without touching a file:
+
+| Command | What it does |
+|---|---|
+| `/companion ai setup` | Looks for [Ollama](https://ollama.com) on this machine (`http://127.0.0.1:11434`) and lists the models it has. Click one, or use the next command. If Ollama isn't running, or has no models, it says what to do. |
+| `/companion ai setup ollama <model>` | Switches to that model, then asks it for one test reply. |
+| `/companion ai setup openai <model>` | Uses an OpenAI-compatible API. |
+| `/companion ai setup anthropic [model]` | Uses Anthropic's API. |
+| `/companion ai status` | What's on, which model, at what address, and where the key comes from (never the key itself). |
+| `/companion ai off` | Back to their own lines. |
+
+For OpenAI and Anthropic the key never goes in chat. Put it in the `OPENAI_API_KEY` or `ANTHROPIC_API_KEY`
+(or `HEARTHBOUND_API_KEY`) environment variable before the game or server starts, or in
+`config/hearthbound-secrets.json` as `{"apiKey": "your key"}`. If there's no key yet, the setup command makes
+that file for you to paste into, and changes nothing else. With a key it switches over and makes one test
+call. If the test reply doesn't come back, you see why (the key is blanked out of any message) and the old
+settings come back. Keys are never logged or sent to players. Settings are saved in `config/hearthbound.json`.
+
+## Implemented: who can hurt companions
+
+For the host, or operators on a server. Saved in `config/hearthbound.json`.
+
+| Command | What it does |
+|---|---|
+| `/companion damage` | Shows the current rules. |
+| `/companion damage players on\|off` | Whether players can hurt companions at all. On (the default): your own hits only sting. Off: nobody's do. Saved as `server.playersCanHurt`. |
+| `/companion damage others on\|off` | Whether other players can hurt your companions. Off by default. Saved as `server.otherPlayersCanHurt`. |
+| `/companion godmode on\|off` | Companions take no damage at all (only `/kill` gets through). Off by default. Saved as `server.godmode`. |
+
+Either way, companions are still knocked down instead of killed unless `essentialCompanions` is turned off
+in the config.
+
 ## Implemented: big projects
 
 Ask a group for something big and they work it out between them. Both of these work as typed:
@@ -274,6 +430,14 @@ You can see it all, and change it:
 farmers`, `/companion setplace bed Samuel`). Without one, it's the home nearest you. Marking places is
 for the single-player host or operators on a server.
 
+**From the console or a command block.** `setplace` also takes coordinates at the end:
+`/companion setplace <bed|commons|kitchen|farm|storage|patrol> [name|role] <x y z>`, for example
+`/companion setplace storage Samuel 120 64 -40`. Without coordinates it uses wherever the command runs: the
+command block's own spot, or `execute positioned 120 64 -40 run companion setplace commons`. From a player
+it's still the spot you stand on. `/companion places` from the console lists every home in every dimension,
+and `/companion places <name>` that one's home. Asking for `places` also makes the home look around again
+straight away, so a bed or chest you've just put down shows up.
+
 On a server the hub's places can go in the config instead, under `server.hub.places`: a meeting spot,
 kitchen, farm and storage (boxes from one corner to another), beds by name, patrol points, and other spots
 residents like to wander to. [skyhaven-places.json](examples/skyhaven-places.json) is a full example for an
@@ -319,9 +483,9 @@ to be one marked for them, or autonomy on.
   food for their meals, and something their work uses (seeds for farmers, torches for builders, an emerald
   for collectors, iron for guardians). It's what they eat and what they pay favours with.
 
-## Implemented: a brand-new world
+## Implemented: fresh world
 
-None of this needs a special build, fixed coordinates or a hub. In a fresh world:
+None of this needs a special build, fixed coordinates or a hub. In a world you made five minutes ago:
 
 1. Get a companion: `/companion summon` (cheats on), the spawn egg in Creative, or "Open to LAN" with
    cheats allowed in a survival world.
@@ -329,13 +493,22 @@ None of this needs a special build, fixed coordinates or a hub. In a fresh world
    `/companion sethome`, to move it.
 3. They live their day there straight away, dozing in the open and eating at home until there's more.
 4. Put down what you like and they'll find it: a bed each, a bell or campfire, a furnace by a chest, some
-   farmland. Or mark things with `/companion setplace`.
-5. With `/companion autonomy on` they help get things going: collectors gather wood and stone, a builder
-   with no roof puts up a small shelter (chopping the wood if they must), and a farmer with seeds starts a
-   plot by the nearest water (making a hoe from a couple of logs first if they need one).
-6. When something's missing they say what they need ("We could do with a bed round here"), once a day, and
-   get on with something else. A farmer with a full pack and no storage chest also gets you a grey tip on
-   how to give them one.
+   farmland. Homes look around every couple of minutes, and straight away when you run `/companion places`.
+   Or mark things with `/companion setplace`.
+5. With `/companion autonomy on` they help get things going:
+   - a **collector** fetches the first logs, then stone, until the home has about 16 of each (in their pack
+     and the storage chests together), at most once a day each,
+   - a **builder** with no roof over home and no beds about puts up a small shelter (chopping the wood if they
+     must), at most every three days,
+   - a **farmer** with seeds starts a plot by the nearest water (making a hoe from a couple of logs first if
+     they need one), at most every two days.
+6. When something's missing they say what they need ("We could do with a bed round here"), and only when
+   someone's close enough to hear: once, then again after a day, after two days, then every four days at
+   most. They get on with something else in between instead of trying the impossible over and over. A
+   farmer with a full pack and no storage chest also gets you a grey tip on how to give them one.
+
+Existing worlds and configs keep working as they were: the hub, `routines` (autonomy), `protectedAreas`,
+the skins file and `server.hub.places` mean exactly what they meant before.
 
 ## Implemented: settings you can change in game
 
@@ -391,9 +564,13 @@ except ripe crops), nothing taken from chests, and nothing if their pack is near
 | `/companion skin Hazel noor slim` | Changes outfit (a default skin, or a cast outfit like `daisy`). |
 | `/companion summon hazel` | Spawns a cast member or personality (needs cheats). Old names still work. |
 | `/companion hub list`, `spawn`, `home Name` | Hub tools for servers (operators). `list` and `home` also work from the server console. |
+| `/companion explain Hazel` | What Hazel last heard, how it was read, what came of it, and what's in the way. |
+| `/companion blueprint ...` | Saving and managing blueprints (see "Copying a build"). |
+| `/companion ai ...` | AI replies: setup, status, off (see above). |
+| `/companion damage ...`, `/companion godmode ...` | Who can hurt companions (see above). |
 
-Keys: <kbd>G</kbd> opens chat with the name of the companion you're looking at, <kbd>H</kbd>
-toggles the party list.
+Keys: <kbd>G</kbd> opens chat with the name of the companion you're looking at, <kbd>J</kbd> opens the
+conversation screen, <kbd>H</kbd> toggles the party list. All three can be changed in Controls.
 
 ## Limits you should know about
 
@@ -402,7 +579,11 @@ toggles the party list.
 - They can't craft beds (no wool), so a home needs you to put the beds down.
 - Houses are one size, farms are a flat plot, and the flower bed is the only personal project so far.
 - Building uses blocks from their pack and only places into empty space. It won't replace anything.
-- They fight in melee only.
+- Only guardians use bows and crossbows; everyone else fights up close.
+- Blueprints are capped at 48 by 48 by 32 and 4096 blocks, and are only ever built into empty space.
+- Crafting on request uses only what's in their pack. Copying a build is the job that goes and gathers.
+- The conversation screen needs the mod on both your game and the server.
+- The AI setup's test reply needs the model to be reachable from the machine running the world.
 - English only.
 
 ## Planned
@@ -410,11 +591,8 @@ toggles the party list.
 These are things I want but haven't built, so please don't expect them yet:
 
 - Companions turning up on their own in a world (now you summon them, or use the spawn egg).
-- Copying a building you made and having them build it again.
-- Smarter movement: ladders, pillaring out of holes, bridging small gaps, swimming after you.
-- Bows, shields, eating when hurt, swapping worn-out gear.
-- Putting things in chests, smelting and crafting on request.
-- A conversation screen with your history.
+- Bows and crossbows for anyone, not just guardians.
+- Saying "copy this" while looking at a build, instead of marking corners.
 - Asking for torches or plants on demand ("light up this cave", "plant these seeds").
 - Counting what they carry in a chat reply ("how many logs do you have?").
 - More personal projects than the flower bed.

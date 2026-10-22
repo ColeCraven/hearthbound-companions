@@ -7,7 +7,7 @@
 **RPG-style companions for Minecraft.**<br>
 Recruit them, chat with them, and go on adventures together.
 
-<a href="https://github.com/ColeCraven/hearthbound-companions/releases/latest"><img src="https://img.shields.io/badge/Download-v0.6.0-2ea44f?style=for-the-badge" alt="Download v0.6.0"></a>
+<a href="https://github.com/ColeCraven/hearthbound-companions/releases/latest"><img src="https://img.shields.io/badge/Download-v0.7.0-2ea44f?style=for-the-badge" alt="Download v0.7.0"></a>
 <a href="#install"><img src="https://img.shields.io/badge/Install-4_easy_steps-3A7BD5?style=for-the-badge" alt="Install in 4 easy steps"></a>
 
 ![Minecraft 26.3](https://img.shields.io/badge/Minecraft-26.3-62B47A)
@@ -17,7 +17,7 @@ Recruit them, chat with them, and go on adventures together.
 
 <img src="docs/images/cast/banner.png" width="100%" alt="All twelve companions standing together in a meadow">
 
-**[Install](#install)** · **[Your first companion](#your-first-companion)** · **[A new world](#in-a-brand-new-world)** · **[What they can do](#what-they-can-do)** · **[Cheat sheet](#cheat-sheet)** · **[Servers](#playing-on-a-server)** · **[FAQ](#faq)**
+**[Install](#install)** · **[Your first companion](#your-first-companion)** · **[Fresh world](#fresh-world)** · **[What they can do](#what-they-can-do)** · **[Cheat sheet](#cheat-sheet)** · **[Servers](#playing-on-a-server)** · **[FAQ](#faq)**
 
 </div>
 
@@ -35,14 +35,17 @@ girl is scared of the dark and won't stop talking about her gran.
 
 - **Just talk.** It all happens in normal chat. Say hi once and keep typing, like you would with a friend.
 - **They get to know you.** Tell them your nickname or what you love, and they remember it and bring it up later.
-- **They pull their weight.** Gathering, mining trips, tunnels, shelters, walls, bridges and camps.
+- **They pull their weight.** Gathering, mining trips, tunnels, shelters, walls, bridges and camps. Putting
+  things in chests, smelting and crafting when you ask.
+- **They copy your builds.** Save something you built as a blueprint, then say "@Maddie build my cottage here".
 - **Everyone has a role.** Guardians fight best, builders build and dig fastest, collectors gather
   quickest and farmers farm best, but anyone can do any job.
 - **They have lives of their own.** When they're not out with you they keep a day: up at dawn, work, a meal at noon,
   evenings round the fire, and bed at night in a bed of their own.
 - **They work as a team.** Say "let's build a house" and whoever's around splits the job: builders on the walls,
   collectors on the wood, guardians on watch.
-- **They never fake it.** If they say they'll do something, the game is really doing it. If they can't, they tell you why.
+- **They never fake it.** If they say they'll do something, the game is really doing it. If they can't, they tell you why,
+  and `/companion explain Name` shows exactly what they heard and what's in the way.
 - **Works in any world**, with nothing to set up, and **on servers** with nothing for your friends to install.
 
 <br>
@@ -59,7 +62,7 @@ the Minecraft version to **26.3** and click **Install**. That adds a Fabric prof
 Launcher.
 
 **2. Download the mod.** From the [latest release](https://github.com/ColeCraven/hearthbound-companions/releases/latest),
-download **`Hearthbound-Companions-0.6.0-install-kit.zip`**. It has the mod, Fabric API (a library
+download **`Hearthbound-Companions-0.7.0-install-kit.zip`**. It has the mod, Fabric API (a library
 the mod needs) and a step-by-step guide.
 
 **3. Drop two files into your `mods` folder.** Unzip the kit and copy both `.jar` files into `mods`:
@@ -80,7 +83,7 @@ Open the `mods` folder in there. If it doesn't exist yet, just make one.
 <summary><b>Using Prism, the Modrinth App or CurseForge instead?</b></summary>
 <br>
 
-Make a new instance for Minecraft 26.3 with Fabric, then drop `hearthbound-0.6.0.jar` and
+Make a new instance for Minecraft 26.3 with Fabric, then drop `hearthbound-0.7.0.jar` and
 [Fabric API](https://modrinth.com/mod/fabric-api) into that instance's `mods` folder. That's it.
 
 </details>
@@ -105,7 +108,7 @@ Forgot something? `/companion help` lists everything you can say and do, right i
 
 <br>
 
-## In a brand-new world
+## Fresh world
 
 Hearthbound works in any world, including one you made five minutes ago. There's no special build, no
 fixed coordinates, and nothing to configure. Here's what happens, and what you can do to help it along:
@@ -114,21 +117,23 @@ fixed coordinates, and nothing to configure. Here's what happens, and what you c
    `/companion sethome Name`) to move them.
 2. **They live their day there straight away.** Up at dawn, work, a meal at noon, the evening together, bed
    at night. With nothing built yet, they doze somewhere dry and eat at home.
-3. **Build and they'll notice.** They look around their home every couple of minutes for:
+3. **Build and they'll notice.** They look around their home every couple of minutes (and straight away when
+   you run `/companion places`) for:
    - a **bed** each (they claim one and lie down in it at night),
    - a **bell or campfire** to meet at in the evening (they light the campfire at dusk),
    - a **furnace or smoker beside a chest** for a kitchen,
    - **farmland** for the farmers.
 4. **Let them help get started.** `/companion autonomy on` lets them change the world for themselves:
-   collectors chop wood and gather stone, a builder with no roof over home puts up a small shelter, and a
+   collectors fetch the first logs and stone, a builder with no roof over home puts up a small shelter, and a
    farmer with seeds starts a plot by the nearest water.
-5. **Point things out if you like.** Stand somewhere and use `/companion setplace bed|commons|kitchen|farm|storage|patrol`.
-   Farmers only ever put the harvest into a chest you mark as storage (or one they built themselves).
-   `/companion places` shows what they've found.
+5. **Point things out if you like.** Stand somewhere and use `/companion setplace bed|commons|kitchen|farm|storage|patrol`,
+   or give coordinates from the console or a command block. Farmers only ever put the harvest into a chest you
+   mark as storage (or one they built themselves). `/companion places` shows what they've found.
 
-When something's missing they tell you ("We could do with a bed round here"), once a day, and get on with
-something else instead of trying the impossible over and over. The full details are in
-[GUIDE.md](docs/GUIDE.md#implemented-a-brand-new-world).
+When something's missing they tell you ("We could do with a bed round here"): once, then after a day, after
+two days, then every four days at most. In between they get on with something else instead of trying the
+impossible over and over. Worlds and configs from earlier versions keep working exactly as before. The full
+details are in [GUIDE.md](docs/GUIDE.md#implemented-fresh-world).
 
 <br>
 
@@ -141,6 +146,12 @@ with anyone: "how are you?", "tell me about your family", "what should we do tod
 until you say bye or wander off, and a typo in a name (`@rsoie`) still gets through. Orders work
 the same way: `@Hazel follow me`, `Charlie, get me 16 oak logs`, `@party wait here`. Press <kbd>G</kbd>
 and the chat opens with the name of whoever you're looking at already filled in.
+
+Press <kbd>J</kbd> instead for a conversation screen: what you've said to each other, their mood, what they
+need and what they're doing, buttons for follow, wait, come, status and give, a few suggestions for right
+now ("Put everything in that chest" when you're looking at one), and a box to type anything else. It does
+exactly what chat does, it just doesn't go out to everyone. It needs the mod on the server too; on a server
+without it, <kbd>J</kbd> opens the chat box.
 
 You don't have to name anyone, either. Say "let's build a house", "we need a farm" or "can someone get
 wood?" and whoever's close by and listens to you picks it up. The wording is up to you: "we need a
@@ -183,6 +194,19 @@ proper jobs:
 - **Build.** "build a shelter", "build a wall" or "build a bridge" (across water or a gap in front of
   you), using blocks from their pack. A shelter gets a door and a torch if they have them. "set up
   camp" puts down a campfire with three seats, if they carry a campfire.
+- **Chests, smelting and crafting.** Look at a chest and say "put everything in that chest" or "take the iron
+  from that chest". "smelt this iron" uses a furnace nearby (or one they make) and real furnace time. "craft me
+  a pickaxe" uses the game's recipes, a crafting table and what's in their pack, and you get told exactly what's
+  short if they can't.
+- **Copying your builds.** Mark two corners with `/companion blueprint corner1` and `corner2`, save it with
+  `/companion blueprint save cottage`, then say "@Maddie build my cottage here" or "builders, build cottage". They
+  pack the materials, craft, smelt or gather what's missing, and tell you up front what they can't get. Structure
+  block files work too.
+- **Getting about.** They climb ladders and vines, build their way up out of holes, bridge small gaps (never
+  next to your builds) and swim after you, before falling back on catching up by teleport.
+- **Fighting and looking after themselves.** Guardians shoot with a bow or crossbow from their pack and draw
+  the sword up close, shields really block, they eat when they're hurt, hand you food when you're in a bad way,
+  swap worn gear for a spare and mend it at an anvil when they have the materials.
 - **Roles.** Guardians hit harder and take more punishment, builders place and dig faster,
   collectors gather faster and farmers harvest crops faster. Nobody is ever blocked from a job,
   and they'll tell you whether it suits them. On a server the role is the grey line under a
@@ -351,11 +375,19 @@ The left-hand column is just examples. Say it however you like; the wording is f
 | Change the party limit (host or operators) | | `/companion partylimit 5`, `/companion partylimit unlimited` |
 | Make them quieter | | `/companion chattiness low` (or `off`, `normal`, `high`) |
 | Let them do work of their own | | `/companion autonomy on` |
+| Use a chest | look at it: "put everything in that chest", "take the bread out of that chest" | |
+| Smelt or craft | "smelt this iron", "cook the beef", "craft me a pickaxe", "make 4 torches" | |
+| Save a build | | `/companion blueprint corner1`, `corner2`, `save <name>` |
+| Copy a build | "@Maddie build my cottage here", "builders, build cottage" | `/companion blueprint list` |
+| Find out why they didn't | | `/companion explain Name` |
+| Turn on AI replies (host or operators) | | `/companion ai setup` (Ollama), `/companion ai setup openai\|anthropic [model]`, `/companion ai status\|off` |
+| Who can hurt companions (host or operators) | | `/companion damage players on\|off`, `/companion damage others on\|off`, `/companion godmode on\|off` |
 | See everything | "what can you do?" | `/companion help` |
 
 | Key | What it does |
 |---|---|
 | <kbd>G</kbd> | Opens chat with the name of the companion you're looking at |
+| <kbd>J</kbd> | Opens the conversation screen (with the mod on the server too) |
 | <kbd>H</kbd> | Shows or hides the party list in the corner |
 | Right-click | Say hi, or hand over the item you're holding |
 | Sneak + right-click | Open their pack |
@@ -410,7 +442,10 @@ The config lives at `config/hearthbound.json` and gets created the first time yo
 | `obeyAll` | `true` | Single-player: every companion takes the host's orders, even other players' (`/companion obey off` to turn it off) |
 | `obeyPlayers` | `[]` | Servers: the operators (by UUID) who turned `/companion obey on` for themselves |
 | `server.hub.places` | | Where things are at the hub (beds by name, meeting spot, kitchen, farm, storage, patrol); anything left out is found on its own |
-| `ai.provider` | `none` | `none`, `ollama`, `openai` or `anthropic` |
+| `server.playersCanHurt` | `true` | Players can hurt companions at all; your own hits only sting (`/companion damage players on\|off`) |
+| `server.otherPlayersCanHurt` | `false` | Other players can hurt your companions (`/companion damage others on\|off`) |
+| `server.godmode` | `false` | Companions take no damage at all (`/companion godmode on\|off`) |
+| `ai.provider` | `none` | `none`, `ollama`, `openai` or `anthropic` (`/companion ai setup` sets it for you) |
 
 </details>
 
@@ -423,13 +458,16 @@ you can plug in a language model.
 
 The option I'd recommend is **[Ollama](https://ollama.com)**, which runs on your own PC, costs
 nothing, and keeps everything private. Install it, run `ollama pull qwen3.5:9b` (about 6.6 GB,
-wants roughly 8 to 10 GB of graphics memory, or use `qwen3.5:4b` on smaller cards), and copy
-[this config](docs/examples/hearthbound-ollama.json).
+wants roughly 8 to 10 GB of graphics memory, or use `qwen3.5:4b` on smaller cards), then type
+`/companion ai setup` in game. It lists the models Ollama has; click one and it asks for a test reply to
+check it works. (Or copy [this config](docs/examples/hearthbound-ollama.json) if you'd rather.)
 
 You can also use a cloud API: anything OpenAI-compatible (OpenAI, OpenRouter, Groq, LM Studio) or
-Anthropic's Claude. Put your API key in an environment variable (`HEARTHBOUND_API_KEY`) or in
-`config/hearthbound-secrets.json` ([example](docs/examples/hearthbound-secrets.example.json)),
-never in the main config. A typical reply is cheap, around $0.03 per hundred messages on the
+Anthropic's Claude. Put your API key in an environment variable (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY` or
+`HEARTHBOUND_API_KEY`) or in `config/hearthbound-secrets.json` ([example](docs/examples/hearthbound-secrets.example.json)),
+never in the main config and never in chat, then run `/companion ai setup openai <model>` or
+`/companion ai setup anthropic`. It checks with one test reply and puts things back if that fails.
+`/companion ai status` shows what's on, and `/companion ai off` turns it off. A typical reply is cheap, around $0.03 per hundred messages on the
 smallest models. Only your conversation with that one companion, a short memory, and a basic
 description of where you are (biome, time, weather, health) gets sent. Your coordinates never are.
 
@@ -446,7 +484,7 @@ More detail in [AI_DESIGN.md](docs/AI_DESIGN.md).
 <summary><b>The game won't start, or it says Fabric API is required</b></summary>
 <br>
 
-Make sure both jars from the kit are in your `mods` folder: `hearthbound-0.6.0.jar` and
+Make sure both jars from the kit are in your `mods` folder: `hearthbound-0.7.0.jar` and
 `fabric-api-0.164.0+26.3.jar`. If the error mentions a Minecraft version, re-run the Fabric
 installer and pick 26.3.
 
@@ -561,13 +599,16 @@ python tools/skins/cast.py
 <summary><b>Testing</b></summary>
 <br>
 
-I tried to test this properly instead of just eyeballing it. There are over 300 unit tests (the chat
-parser, plain requests and statements, the daily schedule, needs, crops growing while you're away, the
-gathering logic, the AI response handling), 81 tests that run inside a real game server (gathering logs and
-handing them over, digging a tunnel, stopping before lava, building a shelter, a bridge and a camp, orders
-typed in plain chat, a house built by three of them together from "let's build a house", a resident going to
-bed in their own bed, the farm caught up after three days with the harvest in the storage chest and nowhere
-else, obey mode for the host and operators but not for anyone else, saving and loading), and a few scripted runs in the actual game client.
+I tried to test this properly instead of just eyeballing it. There are over 350 unit tests (the chat
+parser, plain requests and statements, chests, smelting and crafting requests, blueprint layout, the daily
+schedule, needs, crops growing while you're away, the gathering logic, the AI response handling), 122 tests
+that run inside a real game server (gathering logs and handing them over, digging a tunnel, stopping before
+lava, building a shelter, a bridge and a camp, orders typed in plain chat, a house built by three of them
+together from "let's build a house", a saved build copied in front of you, climbing, bridging and swimming
+after you, bows, shields and mending at an anvil, smelting iron and crafting a pickaxe at a table they put
+down, a resident going to bed in their own bed, the farm caught up after three days with the harvest in the
+storage chest and nowhere else, a bare new world, obey mode for the host and operators but not for anyone
+else, saving and loading), and a few scripted runs in the actual game client.
 One of those drops two companions into a normal generated world, walks them across the terrain,
 fights zombies at night, goes to the Nether and back, then quits and reloads the world to check
 nothing got lost. It caught a couple of real bugs along the way.
@@ -594,16 +635,18 @@ The full write-up, including what still needs testing, is in [TESTING.md](docs/T
 
 ## Known issues
 
-- They dig and build when you ask, but not on their own to get somewhere. If something is out of
-  reach (like the top of a tall tree) they'll say so and skip it.
+- Getting about, they climb, build up out of holes and bridge gaps of up to three blocks, but they don't dig
+  through walls to reach you. If something is out of reach (like the top of a tall tree) they'll say so and
+  skip it.
 - Companions don't turn up on their own yet: summon one, use the spawn egg, or meet the cast at a server's hub.
 - They can't make beds (no wool), so a home needs you to put the beds down.
 - While a home's chunks are unloaded only the farm is caught up when you come back; nobody builds or
   wanders while you're away.
 - If you teleport really far and their chunk unloads before they notice, they'll stay put until you
   come back.
-- Melee only for now, no bows.
-- Talking happens in the chat box. A proper conversation screen is on my list.
+- Only guardians use bows and crossbows so far.
+- Blueprints top out at 48 by 48 by 32 (4096 blocks), and crafting on request only uses what's in their pack.
+- The conversation screen needs the mod on the server as well as your game.
 - English only.
 - On a server, unmodded players see default skins unless you set up signed skins or the resource
   pack ([how](docs/SERVER.md#skins-for-players-without-the-mod)).
@@ -612,8 +655,8 @@ The full write-up, including what still needs testing, is in [TESTING.md](docs/T
 
 ## What's next
 
-Copying a building you made, smarter climbing and swimming, bows and shields, chests and crafting on
-request, a conversation screen with your history, and more cast members. If you have ideas, open an issue!
+Bows for everyone, saying "copy this" at a build instead of marking corners, companions turning up on
+their own in a world, and more cast members. If you have ideas, open an issue!
 
 ## Credits
 

@@ -1,5 +1,69 @@
 # Changelog
 
+## 0.7.0 - copy your builds, chests and crafting, and a screen to talk on (2026-10-22)
+
+The big one: build something you like, and have a companion build you another. Along with it, a lot of
+things a companion should just be able to do by now.
+
+**Copy this build**
+- Mark two corners (`/companion blueprint corner1`, `corner2`) and save what's between them with
+  `/companion blueprint save cottage`. Up to 48 by 48 by 32 and 4096 blocks. `list`, `info` and `delete` too.
+- "@Maddie build my cottage here", "builders, build cottage" or "@party build my cottage". It goes up in front of
+  you, turned the way you're facing, and everyone addressed shares one build.
+- They pack the materials first: from their packs, from helpers, crafted at a table they put down and pick up
+  again, smelted, or gathered. Anything they can't get is said up front, by name and number, and nothing is built.
+- Blueprints are saved per world. Structure block files work too, from the world or `config/hearthbound/blueprints`.
+
+**Getting about**
+- Up ladders and vines, building up out of holes and off cliff bottoms, bridging gaps of one to three blocks
+  (never in protected areas or next to your builds), and swimming after you. Stuck for a second and a half, they
+  try these before catching up the old way.
+
+**Fighting and looking after themselves**
+- Guardians use bows and crossbows with arrows from their pack, from range and only with a clear shot, and draw
+  the sword up close. Arrows can be picked up again.
+- Shields go in the off hand and really block hits from the front.
+- They eat from their pack when they're hurt, and hand you food when you're starving or badly hurt.
+- Nearly broken gear is swapped for a spare, or put away before it breaks, and mended at an anvil when they carry
+  the right material.
+
+**Chests, smelting and crafting on request**
+- "put everything in that chest", "take the iron from that chest": only the chest you're looking at, and only while
+  you stay by it.
+- "smelt this iron", "cook the beef": a furnace nearby (or one they make), real fuel, real furnace time.
+- "craft me a pickaxe", "make 4 torches": the game's recipes, a crafting table, only what's in their pack, and an
+  exact list of what's short when they can't.
+
+**A screen to talk on**
+- <kbd>J</kbd> opens a conversation screen: what's been said, their role, mood, need and current job, buttons for
+  each companion in your party, quick replies (follow, wait, come, status, give), suggestions for right now, and a
+  box to type in. It goes through the same reader as chat. The chat box works as before, and players without the
+  mod see nothing different.
+
+**Why didn't they do it?**
+- `/companion explain <name>`: the last thing they heard, how it was read, who it was for, what came of it, and
+  anything in the way (short of materials, pack full, asleep, knocked down, travelling with someone else...).
+  Works from the console too.
+
+**AI replies, set up in game**
+- `/companion ai setup` finds Ollama on your machine and lists its models; click one and it checks with a test
+  reply. `ai setup openai <model>` and `ai setup anthropic` explain where the key goes (an environment variable or
+  `config/hearthbound-secrets.json`, never chat), then check with one test call and put everything back if it
+  fails. `ai status` and `ai off`. Keys are never shown or logged.
+
+**Host controls**
+- `/companion damage players on|off`, `/companion damage others on|off` and `/companion godmode on|off`, saved
+  in the config. Knocked down instead of killed stays the default either way.
+- `/companion setplace` takes coordinates (`/companion setplace storage Samuel 120 64 -40`), and without them uses
+  wherever the command runs, so it works from the console, command blocks and `execute positioned`.
+  `/companion places` from the console lists every home.
+
+**Fresh worlds**
+- With autonomy on, a collector fetches the first logs and stone for a home that has hardly any.
+- Needs nobody can meet yet are said once, then after a day, two days, then every four days at most.
+- `/companion places` makes a home look around again straight away, so a bed or furnace you just put down is
+  picked up. Older worlds and configs keep working as they were.
+
 ## 0.6.0 - lives of their own (2026-10-22)
 
 The companions you aren't travelling with used to stand around waiting for you. Now they get on with

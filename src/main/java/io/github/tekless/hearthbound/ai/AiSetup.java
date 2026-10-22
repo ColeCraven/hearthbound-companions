@@ -87,9 +87,6 @@ public final class AiSetup {
 	public static Cloud cloud(MinecraftServer server, String provider, String model) {
 		HearthboundConfig.Ai ai = Hearthbound.config().ai;
 		String name = model == null || model.isBlank() ? (provider(ai).equals(provider) ? ai.model : "") : model.trim();
-		if (name.isBlank() && provider.equals("anthropic")) {
-			name = "claude-opus-5-5";
-		}
 		boolean local = provider.equals("openai") && (ai.baseUrl.contains("localhost") || ai.baseUrl.contains("127.0.0.1"));
 		if (Secrets.source(provider, configDir()).isEmpty() && !local) {
 			boolean made = Secrets.writeTemplate(configDir());
@@ -101,10 +98,11 @@ public final class AiSetup {
 			out.add("Then run /companion ai setup " + provider + (name.isBlank() ? " <model>" : " " + name) + " again. Nothing has changed yet.");
 			return new Cloud(out, null);
 		}
-		if (name.isBlank()) {
+		if (name.isBlank() && provider.equals("openai")) {
 			return new Cloud(List.of("Which model? Run /companion ai setup openai <model>, with the model's name as your provider lists it."), null);
 		}
-		return new Cloud(List.of("Key found. Switching to " + label(provider) + " " + name + " and asking for one test reply..."),
+		// Anthropic with no model named: the usual default (see ai.model in the config).
+		return new Cloud(List.of("Key found. Switching to " + label(provider) + (name.isBlank() ? "" : " " + name) + " and asking for one test reply..."),
 				enableAndTest(server, provider, name, local ? ai.baseUrl : provider(ai).equals(provider) ? ai.baseUrl : ""));
 	}
 
