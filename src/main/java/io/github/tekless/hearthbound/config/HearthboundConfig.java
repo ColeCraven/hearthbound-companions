@@ -79,6 +79,10 @@ public final class HearthboundConfig {
 		public String skins = "auto";
 		/** Players other than the owner can hurt companions. */
 		public boolean otherPlayersCanHurt = false;
+		/** Whether players can hurt companions at all (a companion's own player only ever does a little). /companion damage players on|off. */
+		public boolean playersCanHurt = true;
+		/** Companions take no damage from anything but /kill. /companion godmode on|off. */
+		public boolean godmode = false;
 		/** Gathering skips blocks this close to anything man-made (planks, glass, doors, beds...). 0 turns it off. */
 		public int buildGuardRadius = 4;
 		/** Extra places where companions never break blocks. */

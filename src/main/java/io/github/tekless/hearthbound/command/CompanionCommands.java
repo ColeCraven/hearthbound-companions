@@ -38,6 +38,7 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.EntitySpawnReason;
 
 /**
@@ -163,9 +164,13 @@ public final class CompanionCommands {
 				.requires(CompanionCommands::mayConfigure)
 				.then(Commands.argument("place", StringArgumentType.word())
 						.suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("bed", "commons", "kitchen", "farm", "storage", "patrol"), b))
-						.executes(ctx -> setPlace(ctx, null))
+						.executes(ctx -> setPlace(ctx, null, null))
+						.then(Commands.argument("pos", BlockPosArgument.blockPos())
+								.executes(ctx -> setPlace(ctx, null, BlockPosArgument.getBlockPos(ctx, "pos"))))
 						.then(Commands.argument("who", StringArgumentType.word()).suggests(WHO)
-								.executes(ctx -> setPlace(ctx, StringArgumentType.getString(ctx, "who"))))));
+								.executes(ctx -> setPlace(ctx, StringArgumentType.getString(ctx, "who"), null))
+								.then(Commands.argument("pos", BlockPosArgument.blockPos())
+										.executes(ctx -> setPlace(ctx, StringArgumentType.getString(ctx, "who"), BlockPosArgument.getBlockPos(ctx, "pos")))))));
 		root.then(Commands.literal("places")
 				.executes(ctx -> places(ctx, null))
 				.then(Commands.argument("who", StringArgumentType.word()).suggests(NEARBY_NAMES)
@@ -192,6 +197,7 @@ public final class CompanionCommands {
 						.then(Commands.argument("name", StringArgumentType.word()).suggests(NEARBY_NAMES)
 								.executes(CompanionCommands::hubHome))));
 		BlueprintCommands.register(root);
+		AdminCommands.register(root);
 		dispatcher.register(root);
 	}
 
@@ -199,13 +205,13 @@ public final class CompanionCommands {
 	 * The single-player host, an operator, or the server console. Commands that change things for everyone
 	 * check this when they run, since in a LAN world {@link #mayConfigure} lets every player see them.
 	 */
-	private static boolean isAdmin(CommandSourceStack source) {
+	static boolean isAdmin(CommandSourceStack source) {
 		ServerPlayer player = source.getPlayer();
 		return player == null ? Commands.hasPermission(Commands.LEVEL_GAMEMASTERS).test(source) : Obey.mayUse(player);
 	}
 
 	/** In single-player the host can always change these; on a server it takes operator rights. */
-	private static boolean mayConfigure(CommandSourceStack source) {
+	static boolean mayConfigure(CommandSourceStack source) {
 		// The command tree is also built for each joining player with no server on the source: show it then,
 		// the real check happens again when the command runs.
 		return source.getServer() == null || source.getServer().isSingleplayer() || Commands.hasPermission(Commands.LEVEL_GAMEMASTERS).test(source)
@@ -427,30 +433,31 @@ public final class CompanionCommands {
 	}
 
 	/**
-	 * {@code /companion setplace <bed|commons|kitchen|farm|storage|patrol> [name|role]}: marks the spot you stand on as
-	 * one of the places of the home nearby (or the home of the named companion, or of someone with that role).
+	 * {@code /companion setplace <bed|commons|kitchen|farm|storage|patrol> [name|role] [x y z]}: marks the spot you stand
+	 * on (or the one given) as one of the places of the home nearby (or the home of the named companion, or of someone
+	 * with that role). From the console or a command block, without coordinates, it's where the command runs
+	 * ({@code execute positioned ... run companion setplace ...}).
 	 */
-	private static int setPlace(CommandContext<CommandSourceStack> ctx, String who) throws CommandSyntaxException {
+	private static int setPlace(CommandContext<CommandSourceStack> ctx, String who, BlockPos given) throws CommandSyntaxException {
 		CommandSourceStack source = ctx.getSource();
-		ServerPlayer player = source.getPlayerOrException();
 		if (!isAdmin(source)) {
 			source.sendFailure(Component.literal("Only the host of a single-player world or a server operator can mark places."));
 			return 0;
 		}
 		String place = StringArgumentType.getString(ctx, "place").toLowerCase(Locale.ROOT);
-		ServerLevel level = (ServerLevel) player.level();
+		ServerLevel level = source.getLevel();
+		BlockPos at = given != null ? given.immutable() : BlockPos.containing(source.getPosition());
 		HomeAreas areas = HomeAreas.get(source.getServer());
-		List<CompanionEntity> chosen = who == null ? List.of() : residentsCalled(player, who);
+		List<CompanionEntity> chosen = who == null ? List.of() : residentsCalled(level, Vec3.atBottomCenterOf(at), who);
 		if (who != null && chosen.isEmpty()) {
 			source.sendFailure(Component.literal("Nobody called " + who + " lives around here. Places are for companions who aren't travelling with anyone."));
 			return 0;
 		}
-		HomeAreas.Area area = !chosen.isEmpty() ? areas.areaOf(chosen.get(0)) : nearbyArea(player, areas);
+		HomeAreas.Area area = !chosen.isEmpty() ? areas.areaOf(chosen.get(0)) : nearbyArea(level, at, areas);
 		if (area == null) {
-			source.sendFailure(Component.literal("Nobody lives near here yet. Dismiss a companion here (or give one a home with /companion sethome), then mark places."));
+			source.sendFailure(Component.literal("Nobody lives near " + at.toShortString() + " yet. Dismiss a companion there (or give one a home with /companion sethome), then mark places."));
 			return 0;
 		}
-		BlockPos at = player.blockPosition();
 		String what;
 		switch (place) {
 			case "bed" -> {
@@ -461,7 +468,7 @@ public final class CompanionCommands {
 				}
 				CompanionEntity sleeper = !chosen.isEmpty() ? chosen.get(0) : areas.residents(area).stream()
 						.filter(c -> !area.markedBeds.contains(c.getUUID().toString()))
-						.min(java.util.Comparator.comparingDouble(c -> c.distanceToSqr(player))).orElse(null);
+						.min(java.util.Comparator.comparingDouble(c -> c.blockPosition().distSqr(at))).orElse(null);
 				if (sleeper == null) {
 					source.sendFailure(Component.literal("Say whose bed it is: /companion setplace bed <name>."));
 					return 0;
@@ -515,18 +522,45 @@ public final class CompanionCommands {
 		return 1;
 	}
 
-	/** {@code /companion places [name]}: what the home nearby has, as the companions see it. */
+	/**
+	 * {@code /companion places [name]}: what the home nearby has, as the companions see it. From the console (or with
+	 * nobody living near the command), every home in every dimension is listed.
+	 */
 	private static int places(CommandContext<CommandSourceStack> ctx, String who) throws CommandSyntaxException {
 		CommandSourceStack source = ctx.getSource();
-		ServerPlayer player = source.getPlayerOrException();
 		HomeAreas areas = HomeAreas.get(source.getServer());
-		List<CompanionEntity> chosen = who == null ? List.of() : residentsCalled(player, who);
-		HomeAreas.Area area = !chosen.isEmpty() ? areas.areaOf(chosen.get(0)) : nearbyArea(player, areas);
-		if (area == null) {
+		ServerLevel here = source.getLevel();
+		BlockPos at = BlockPos.containing(source.getPosition());
+		List<CompanionEntity> chosen = who == null ? List.of() : residentsCalled(here, source.getPosition(), who);
+		if (who != null && chosen.isEmpty()) {
+			source.sendFailure(Component.literal("Nobody called " + who + " lives anywhere loaded."));
+			return 0;
+		}
+		HomeAreas.Area area = !chosen.isEmpty() ? areas.areaOf(chosen.get(0)) : source.getPlayer() != null ? nearbyArea(here, at, areas) : null;
+		if (area != null) {
+			listPlaces(source, areas, (ServerLevel) (chosen.isEmpty() ? here : chosen.get(0).level()), area);
+			return 1;
+		}
+		if (source.getPlayer() != null) {
 			source.sendFailure(Component.literal("Nobody lives near here yet."));
 			return 0;
 		}
-		ServerLevel level = (ServerLevel) player.level();
+		// The console: every home there is.
+		int listed = 0;
+		for (ServerLevel level : source.getServer().getAllLevels()) {
+			String dimension = level.dimension().identifier().toString();
+			for (HomeAreas.Area each : areas.areas().stream().filter(a -> a.dimension.equals(dimension)).toList()) {
+				listPlaces(source, areas, level, each);
+				listed++;
+			}
+		}
+		if (listed == 0) {
+			source.sendFailure(Component.literal("Nobody has a home anywhere yet."));
+		}
+		return listed;
+	}
+
+	private static void listPlaces(CommandSourceStack source, HomeAreas areas, ServerLevel level, HomeAreas.Area area) {
 		Places places = areas.places(level, area);
 		List<String> lines = new java.util.ArrayList<>();
 		lines.add("Meeting spot: " + places.commons().toShortString() + (places.commonsFire() ? " (a campfire, lit at dusk)" : ""));
@@ -540,31 +574,37 @@ public final class CompanionCommands {
 			lines.add(resident.companionName().split(" ")[0] + ": " + resident.order().describe() + ", " + resident.needs().mood()
 					+ (bed == null ? ", no bed yet" : ", sleeps at " + bed.toShortString()));
 		}
-		source.sendSuccess(() -> Component.literal("Home around " + area.centrePos().toShortString() + ":").withStyle(ChatFormatting.YELLOW), false);
+		source.sendSuccess(() -> Component.literal("Home around " + area.centrePos().toShortString() + " (" + level.dimension().identifier().getPath() + "):")
+				.withStyle(ChatFormatting.YELLOW), false);
 		for (String line : lines) {
 			source.sendSuccess(() -> Component.literal("  " + line).withStyle(ChatFormatting.GRAY), false);
 		}
-		return 1;
 	}
 
-	/** Companions not travelling with anyone, called this or of this role ("farmers"), nearest first. */
-	private static List<CompanionEntity> residentsCalled(ServerPlayer player, String who) {
+	/** Loaded companions in this dimension within {@code range} of a spot. */
+	private static List<CompanionEntity> companionsNear(ServerLevel level, Vec3 at, double range) {
+		return CompanionTracker.all().stream().filter(c -> c.level() == level && c.position().distanceToSqr(at) <= range * range).toList();
+	}
+
+	/** Companions not travelling with anyone, called this or of this role ("farmers"), nearest the spot first. */
+	private static List<CompanionEntity> residentsCalled(ServerLevel level, Vec3 at, String who) {
 		io.github.tekless.hearthbound.core.intent.GroupAddress.Result role = io.github.tekless.hearthbound.core.intent.GroupAddress.parse("@" + who);
 		String wanted = who.toLowerCase(Locale.ROOT);
-		return CompanionTracker.near(player, 256).stream()
+		return companionsNear(level, at, 256).stream()
 				.filter(c -> !c.isRecruited())
 				.filter(c -> role != null ? c.role() == role.role() : c.companionName().toLowerCase(Locale.ROOT).split(" ")[0].equals(wanted))
-				.sorted(java.util.Comparator.comparingDouble(c -> c.distanceToSqr(player))).toList();
+				.sorted(java.util.Comparator.comparingDouble(c -> c.position().distanceToSqr(at))).toList();
 	}
 
-	/** The home nearest the player: an area within 48 blocks, or that of the nearest companion living within 32. */
-	private static HomeAreas.Area nearbyArea(ServerPlayer player, HomeAreas areas) {
-		HomeAreas.Area area = areas.nearest(player.level().dimension().identifier().toString(), player.blockPosition(), 48);
+	/** The home nearest a spot: an area within 48 blocks, or that of the nearest companion living within 32. */
+	private static HomeAreas.Area nearbyArea(ServerLevel level, BlockPos at, HomeAreas areas) {
+		HomeAreas.Area area = areas.nearest(level.dimension().identifier().toString(), at, 48);
 		if (area != null) {
 			return area;
 		}
-		return CompanionTracker.near(player, 32).stream().filter(c -> !c.isRecruited())
-				.min(java.util.Comparator.comparingDouble(c -> c.distanceToSqr(player))).map(areas::areaOf).orElse(null);
+		Vec3 centre = Vec3.atBottomCenterOf(at);
+		return companionsNear(level, centre, 32).stream().filter(c -> !c.isRecruited())
+				.min(java.util.Comparator.comparingDouble(c -> c.position().distanceToSqr(centre))).map(areas::areaOf).orElse(null);
 	}
 
 	private static BlockPos bedNear(ServerLevel level, BlockPos at) {

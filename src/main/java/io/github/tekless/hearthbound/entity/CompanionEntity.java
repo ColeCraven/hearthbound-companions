@@ -1266,6 +1266,10 @@ public class CompanionEntity extends PathfinderMob {
 
 	@Override
 	public boolean hurtServer(ServerLevel level, DamageSource source, float damage) {
+		io.github.tekless.hearthbound.config.HearthboundConfig.Server rules = Hearthbound.config().server;
+		if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && (rules.godmode || (source.getEntity() instanceof Player && !rules.playersCanHurt))) {
+			return false; // god mode, or players can't hurt companions on this world (both set by the host)
+		}
 		if (source.getEntity() instanceof Player player && !isOwnedBy(player) && !Hearthbound.config().server.otherPlayersCanHurt) {
 			return false; // someone else's companion (or a hub resident) is off limits; ops can still use /kill
 		}
