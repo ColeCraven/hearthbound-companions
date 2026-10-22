@@ -14,7 +14,9 @@ import net.minecraft.world.phys.Vec3;
  * owner stands still for a while, the companion may pick a pastime of its own (see {@link Pastimes}).
  */
 public final class FollowOrder implements CompanionOrder {
-	private final StuckDetector stuck = new StuckDetector(60, 0.75);
+	/** Half the old window: being stuck is noticed in about a second and a half. */
+	private final StuckDetector stuck = new StuckDetector(30, 0.6);
+	private final io.github.tekless.hearthbound.entity.Mobility mobility = new io.github.tekless.hearthbound.entity.Mobility();
 	private boolean moving;
 	private int repathCooldown;
 	private Pastimes.Pastime pastime;
@@ -59,6 +61,15 @@ public final class FollowOrder implements CompanionOrder {
 			pastimeCooldown--;
 		}
 		boolean isStuck = stuck.update(companion.getX(), companion.getZ(), moving);
+		// Climb, build up, bridge or swim before anything drastic; a teleport is only for when none of that will do.
+		if (sameLevel && horizontal <= FollowPolicy.TELEPORT_DISTANCE && vertical <= FollowPolicy.TELEPORT_VERTICAL
+				&& (horizontal > companion.followPolicy().min() || vertical >= 1.5)
+				&& mobility.assist(companion, owner, isStuck && stuck.consecutiveStuck() <= 2)) {
+			moving = true;
+			stuck.reset();
+			return;
+		}
+		mobility.settle(companion);
 
 		FollowPolicy.Action action = companion.followPolicy().decide(horizontal, vertical, sameLevel, moving, isStuck);
 		switch (action) {
@@ -118,6 +129,7 @@ public final class FollowOrder implements CompanionOrder {
 		}
 		moving = false;
 		stuck.reset();
+		mobility.reset(companion);
 		CompanionOrder.super.pause(companion);
 	}
 
@@ -126,6 +138,7 @@ public final class FollowOrder implements CompanionOrder {
 		if (pastime != null) {
 			endPastime(companion);
 		}
+		mobility.reset(companion);
 		companion.getNavigation().stop();
 	}
 
@@ -136,6 +149,7 @@ public final class FollowOrder implements CompanionOrder {
 
 	@Override
 	public String describe() {
-		return pastime != null ? "following you (pottering about)" : "following you";
+		String moving = mobility.activity();
+		return pastime != null ? "following you (pottering about)" : moving != null ? "following you (" + moving + ")" : "following you";
 	}
 }

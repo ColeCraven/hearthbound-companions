@@ -9,7 +9,8 @@ import net.minecraft.server.level.ServerPlayer;
 public final class ComeOrder implements CompanionOrder {
 	private static final int TIMEOUT = 1200;
 
-	private final StuckDetector stuck = new StuckDetector(60, 0.75);
+	private final StuckDetector stuck = new StuckDetector(30, 0.6);
+	private final io.github.tekless.hearthbound.entity.Mobility mobility = new io.github.tekless.hearthbound.entity.Mobility();
 	private TaskStatus status = TaskStatus.RUNNING;
 	private int ticks;
 	private int repathCooldown;
@@ -45,6 +46,7 @@ public final class ComeOrder implements CompanionOrder {
 		}
 		if (companion.distanceTo(owner) <= 2.5) {
 			companion.getNavigation().stop();
+			mobility.reset(companion);
 			status = TaskStatus.SUCCEEDED;
 			if (then != null) {
 				then.accept(companion);
@@ -56,7 +58,11 @@ public final class ComeOrder implements CompanionOrder {
 			companion.requestCatchUp(owner);
 			return;
 		}
-		if (++ticks > TIMEOUT || (stuck.update(companion.getX(), companion.getZ(), true) && stuck.consecutiveStuck() >= 3)) {
+		boolean isStuck = stuck.update(companion.getX(), companion.getZ(), true);
+		if (mobility.assist(companion, owner, isStuck && stuck.consecutiveStuck() <= 2)) {
+			return;
+		}
+		if (++ticks > TIMEOUT || (isStuck && stuck.consecutiveStuck() >= 3)) {
 			// Couldn't walk there: catching up by teleport is better than standing around.
 			companion.requestCatchUp(owner);
 			status = TaskStatus.SUCCEEDED;
@@ -73,6 +79,7 @@ public final class ComeOrder implements CompanionOrder {
 		if (!status.isFinished()) {
 			status = TaskStatus.CANCELLED;
 		}
+		mobility.reset(companion);
 		companion.getNavigation().stop();
 	}
 

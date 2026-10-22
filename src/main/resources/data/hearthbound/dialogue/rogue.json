@@ -1138,6 +1138,14 @@
     "smelt.no_fuel": [
       "Nothing to burn. Bit of coal? Some wood?",
       "Furnace wants feeding and I'm out."
+    ],
+    "move.pillar": [
+      "Nobody saw me fall in. I'm building my way out.",
+      "Give me a sec, making myself some stairs. Well, a pillar."
+    ],
+    "move.bridge": [
+      "Mind the gap. I'll fix it.",
+      "Bridging this. Don't tell anyone I can do honest work."
     ]
   }
 }

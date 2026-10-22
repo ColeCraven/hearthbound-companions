@@ -1144,6 +1144,14 @@
     "smelt.no_fuel": [
       "Nothing to burn.",
       "The fire needs feeding. I have nothing."
+    ],
+    "move.pillar": [
+      "Up, block by block.",
+      "I rise on stone."
+    ],
+    "move.bridge": [
+      "A gap. I close it.",
+      "Stone across the gap."
     ]
   }
 }

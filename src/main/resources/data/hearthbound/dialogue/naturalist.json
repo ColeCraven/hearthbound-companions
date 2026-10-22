@@ -1148,6 +1148,14 @@
     "smelt.no_fuel": [
       "I've nothing to burn! Coal, or a bit of wood, would do.",
       "The furnace needs fuel and I haven't any."
+    ],
+    "move.pillar": [
+      "I'll stack a few blocks and climb up to you!",
+      "Bit of a hole, this. I'll build my way out."
+    ],
+    "move.bridge": [
+      "Oh, a gap! I'll put a few blocks across.",
+      "Just bridging this bit, one moment."
     ]
   }
 }

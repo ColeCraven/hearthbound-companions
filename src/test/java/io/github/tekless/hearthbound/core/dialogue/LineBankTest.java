@@ -160,7 +160,7 @@ class LineBankTest {
 			REQUIRED.put(key, plus(base, "count", "item", "thing"));
 		}
 		REQUIRED.put("supply.blocked", plus(base, "thing", "missing"));
-		for (String key : List.of("craft.no_table", "smelt.no_furnace", "smelt.no_fuel")) {
+		for (String key : List.of("craft.no_table", "smelt.no_furnace", "smelt.no_fuel", "move.pillar", "move.bridge")) {
 			REQUIRED.put(key, base);
 		}
 	}

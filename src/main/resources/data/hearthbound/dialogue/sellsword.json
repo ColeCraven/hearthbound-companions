@@ -1185,6 +1185,14 @@
     "smelt.no_fuel": [
       "Nothing to burn. Coal, wood, anything.",
       "Furnace is cold and I've no fuel."
+    ],
+    "move.pillar": [
+      "Hang on. Building my way up.",
+      "Stuck down here. Give me a moment and some cobble."
+    ],
+    "move.bridge": [
+      "Gap. I'll bridge it.",
+      "Hold on, putting a few blocks down."
     ]
   }
 }
