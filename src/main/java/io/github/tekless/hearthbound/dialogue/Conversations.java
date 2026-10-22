@@ -210,7 +210,7 @@ public final class Conversations {
 				&& command.intent().type() == IntentType.BUILD
 				&& io.github.tekless.hearthbound.blueprint.Blueprints.match(player.level().getServer(), command.intent().item()).isPresent()) {
 			// "@party build my cottage": one build, shared, not one each.
-			report(player, groupCopyBuild(player, targets, command.intent()), List.of());
+			report(player, groupCopyBuild(player, targets, command.intent(), false), List.of());
 			return true;
 		}
 		for (CompanionEntity companion : targets) {
@@ -411,7 +411,7 @@ public final class Conversations {
 			}
 		} else if (parsed instanceof ParseResult.Command command && command.intent().type() == IntentType.BUILD
 				&& io.github.tekless.hearthbound.blueprint.Blueprints.match(player.level().getServer(), command.intent().item()).isPresent()) {
-			told = groupCopyBuild(player, heard, command.intent());
+			told = groupCopyBuild(player, heard, command.intent(), group.scope() == GroupAddress.Scope.NEARBY);
 		} else if (parsed instanceof ParseResult.Command command) {
 			groupOrder(player, heard, command.intent());
 		} else {
@@ -422,10 +422,13 @@ public final class Conversations {
 		return true;
 	}
 
-	/** "Builders, build my cottage": the builders among them share it (or everyone, if there are no builders). */
-	private static List<CompanionEntity> groupCopyBuild(ServerPlayer player, List<CompanionEntity> heard, Intent intent) {
+	/**
+	 * "Builders, build my cottage" or "@party build my cottage": everyone addressed shares one build. Said to everyone
+	 * nearby ({@code buildersFirst}), the builders among them take it on, or everyone if there are no builders.
+	 */
+	private static List<CompanionEntity> groupCopyBuild(ServerPlayer player, List<CompanionEntity> heard, Intent intent, boolean buildersFirst) {
 		String name = io.github.tekless.hearthbound.blueprint.Blueprints.match(player.level().getServer(), intent.item()).orElseThrow();
-		List<CompanionEntity> crew = new ArrayList<>(heard.stream().filter(c -> c.role() == Role.BUILDER && !c.isDowned()).toList());
+		List<CompanionEntity> crew = new ArrayList<>(heard.stream().filter(c -> (!buildersFirst || c.role() == Role.BUILDER) && !c.isDowned()).toList());
 		if (crew.isEmpty()) {
 			crew = new ArrayList<>(heard.stream().filter(c -> !c.isDowned()).toList());
 		}
