@@ -436,7 +436,7 @@ for the single-player host or operators on a server.
 command block's own spot, or `execute positioned 120 64 -40 run companion setplace commons`. From a player
 it's still the spot you stand on. `/companion places` from the console lists every home in every dimension,
 and `/companion places <name>` that one's home. Asking for `places` also makes the home look around again
-straight away, so a bed or chest you've just put down shows up.
+straight away, so a bed or furnace you've just put down shows up.
 
 On a server the hub's places can go in the config instead, under `server.hub.places`: a meeting spot,
 kitchen, farm and storage (boxes from one corner to another), beds by name, patrol points, and other spots
