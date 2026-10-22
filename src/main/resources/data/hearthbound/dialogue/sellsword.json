@@ -1205,6 +1205,78 @@
     "gear.repaired": [
       "Mended my {item}. Good as it gets.",
       "{item}'s sorted. Cost me some metal."
+    ],
+    "chest.none": [
+      "Which chest? Look at it and say it again.",
+      "Point me at the chest first. Look at it."
+    ],
+    "chest.ack.store": [
+      "{item} into the chest. Fine.",
+      "Right. {item}, in the box."
+    ],
+    "chest.ack.take": [
+      "Getting {item} out of there.",
+      "{item} from the chest. On it."
+    ],
+    "chest.stored": [
+      "{count} {item} in the chest.",
+      "Done. {count} {item} stowed."
+    ],
+    "chest.full": [
+      "Chest's full. Got {count} {item} in, the rest stays with me.",
+      "No more room in there. {count} {item} went in."
+    ],
+    "chest.taken": [
+      "Got {count} {item} out of it.",
+      "{count} {item}. In my pack now."
+    ],
+    "chest.none_of": [
+      "There's no {item} in that chest.",
+      "Looked. No {item} in there."
+    ],
+    "chest.left": [
+      "You walked off, so I left the chest alone.",
+      "Not touching a chest with you gone. Stopped."
+    ],
+    "smelt.ack": [
+      "{count} {item} to smelt. Give it a bit.",
+      "Smelting {count} {item}. Takes time."
+    ],
+    "smelt.done": [
+      "{count} {item}, done. In my pack.",
+      "Smelted. {count} {item}."
+    ],
+    "smelt.nothing": [
+      "I've got no {item} to smelt.",
+      "Nothing to smelt. No {item} on me."
+    ],
+    "smelt.hand_over": [
+      "Give me the {item} first. Then I'll smelt it.",
+      "Hand over the {item} and I'll see to it."
+    ],
+    "craft.ack": [
+      "{count} {item}. Making it.",
+      "Fine. {count} {item}, coming up."
+    ],
+    "craft.done": [
+      "Here. {count} {item}.",
+      "Made it. {count} {item}, yours."
+    ],
+    "craft.done_kept": [
+      "Made {count} {item}. It's in my pack.",
+      "{count} {item}, done. Ask and it's yours."
+    ],
+    "craft.missing": [
+      "For {item} I'd need {missing}.",
+      "Can't make {item}. Short of {missing}."
+    ],
+    "craft.unknown": [
+      "Don't know how to make {item}.",
+      "{item}? No recipe I know."
+    ],
+    "status.task": [
+      "I'm {task}.",
+      "Busy. {task}."
     ]
   }
 }

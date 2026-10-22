@@ -1168,6 +1168,78 @@
     "gear.repaired": [
       "There, my {item} is mended! Anvils are clever things.",
       "All patched up. My {item} feels like new."
+    ],
+    "chest.none": [
+      "Which chest do you mean? Look at it and ask me again.",
+      "Show me the chest first. Just look at it!"
+    ],
+    "chest.ack.store": [
+      "Putting {item} away in the chest!",
+      "Of course, {item} into the chest."
+    ],
+    "chest.ack.take": [
+      "I'll fetch {item} out of the chest.",
+      "{item} from the chest, coming up."
+    ],
+    "chest.stored": [
+      "{count} {item}, all tucked away in the chest.",
+      "There, {count} {item} in the chest."
+    ],
+    "chest.full": [
+      "The chest's full, I'm afraid. {count} {item} went in, the rest is still with me.",
+      "No room left in there! I got {count} {item} in."
+    ],
+    "chest.taken": [
+      "I've got {count} {item} from the chest.",
+      "{count} {item}, safely in my bag now."
+    ],
+    "chest.none_of": [
+      "I've looked, but there's no {item} in that chest.",
+      "No {item} in there, sorry!"
+    ],
+    "chest.left": [
+      "You wandered off, so I've left the chest alone.",
+      "I won't rummage in a chest without you there, so I've stopped."
+    ],
+    "smelt.ack": [
+      "I'll smelt {count} {item}. It takes a little while.",
+      "Into the furnace with {count} {item}!"
+    ],
+    "smelt.done": [
+      "Done! {count} {item}, in my bag.",
+      "There we are, {count} {item}."
+    ],
+    "smelt.nothing": [
+      "I don't have any {item} to smelt.",
+      "Hmm, I've no {item} with me to smelt."
+    ],
+    "smelt.hand_over": [
+      "Could you give me the {item} first? Then I'll smelt it.",
+      "Hand me the {item} and I'll get it smelting."
+    ],
+    "craft.ack": [
+      "Making {count} {item}! This is the fun part.",
+      "{count} {item}, let me work it out."
+    ],
+    "craft.done": [
+      "Here you are, {count} {item}!",
+      "All done: {count} {item}, for you."
+    ],
+    "craft.done_kept": [
+      "I've made {count} {item}. It's in my bag when you want it.",
+      "{count} {item}, finished and packed."
+    ],
+    "craft.missing": [
+      "To make {item} I'd need {missing}.",
+      "I can't make {item} yet. I'd need {missing}."
+    ],
+    "craft.unknown": [
+      "I don't know how to make {item}, sorry.",
+      "I've never seen a recipe for {item}."
+    ],
+    "status.task": [
+      "I'm {task}.",
+      "Just {task}, nearly there."
     ]
   }
 }

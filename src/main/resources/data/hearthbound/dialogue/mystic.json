@@ -1164,6 +1164,78 @@
     "gear.repaired": [
       "Mended. The {item} holds.",
       "The anvil sang. My {item} is whole."
+    ],
+    "chest.none": [
+      "Which chest? Look at it.",
+      "Show me the chest."
+    ],
+    "chest.ack.store": [
+      "{item}, into the chest.",
+      "To the chest with {item}."
+    ],
+    "chest.ack.take": [
+      "{item}, from the chest.",
+      "I take {item} out."
+    ],
+    "chest.stored": [
+      "{count} {item}, stored.",
+      "Stored. {count} {item}."
+    ],
+    "chest.full": [
+      "Full. {count} {item} went in.",
+      "No room. {count} {item} stored."
+    ],
+    "chest.taken": [
+      "{count} {item}, taken.",
+      "{count} {item}, with me now."
+    ],
+    "chest.none_of": [
+      "No {item} there.",
+      "The chest holds no {item}."
+    ],
+    "chest.left": [
+      "You left. So did I.",
+      "Stopped. You are not here."
+    ],
+    "smelt.ack": [
+      "{count} {item} to the fire.",
+      "Smelting {count} {item}."
+    ],
+    "smelt.done": [
+      "{count} {item}. Done.",
+      "The fire gave {count} {item}."
+    ],
+    "smelt.nothing": [
+      "No {item} to smelt.",
+      "I carry no {item}."
+    ],
+    "smelt.hand_over": [
+      "Give me the {item} first.",
+      "The {item}, first."
+    ],
+    "craft.ack": [
+      "{count} {item}.",
+      "Making {count} {item}."
+    ],
+    "craft.done": [
+      "{count} {item}. Yours.",
+      "Here. {count} {item}."
+    ],
+    "craft.done_kept": [
+      "{count} {item}, in my pack.",
+      "Made. {count} {item}, kept."
+    ],
+    "craft.missing": [
+      "{item} needs {missing}.",
+      "Not yet. {missing} is lacking."
+    ],
+    "craft.unknown": [
+      "I know no way to make {item}.",
+      "{item} is beyond me."
+    ],
+    "status.task": [
+      "{task}.",
+      "I am {task}."
     ]
   }
 }

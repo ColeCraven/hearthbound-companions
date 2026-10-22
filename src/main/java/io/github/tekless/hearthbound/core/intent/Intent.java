@@ -40,6 +40,22 @@ public record Intent(IntentType type, String item, Integer count, String target)
 		return new Intent(IntentType.MINE, null, length, shape);
 	}
 
+	public static Intent store(String item, Integer count) {
+		return new Intent(IntentType.STORE, item, count, "chest");
+	}
+
+	public static Intent take(String item, Integer count) {
+		return new Intent(IntentType.TAKE, item, count, "chest");
+	}
+
+	public static Intent smelt(String item, Integer count) {
+		return new Intent(IntentType.SMELT, item, count, null);
+	}
+
+	public static Intent craft(String item, Integer count) {
+		return new Intent(IntentType.CRAFT, item, count, null);
+	}
+
 	public Intent withCount(Integer newCount) {
 		return new Intent(type, item, newCount, target);
 	}

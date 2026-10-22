@@ -98,6 +98,28 @@ public final class CommandParser {
 	private static final Pattern BUILD = Pattern.compile("^(lets |let us )?(build|construct|put up|set up|throw up|make|knock up|raise)( me| us)?( a| an| some| the| another)?( (?<thing>.+))?$");
 	private static final Pattern BRIDGE_VERB = Pattern.compile("^bridge (this|that|the|over|across)?\\b.*|\\b(get|take) us (across|over)\\b");
 	private static final Pattern DIGITS = Pattern.compile("\\b(\\d{1,3})\\b");
+	private static final String CONTAINER = "(the |that |this |my |your |our )?(chest|barrel|box|container|storage|crate)s?( here| there| over there)?";
+	/** "Put everything in that chest", "put the logs in the chest", "stash the cobblestone in there". */
+	private static final Pattern STORE = Pattern.compile("^(put|place|store|stash|stow|dump|drop|leave|deposit|unload|empty)\\b(?<rest>.*?) ?\\b(in|into|inside)( to)? (" + CONTAINER
+			+ "|there|here)$");
+	/** "Take the iron from that chest", "grab the bread out of the chest", "get everything out of there". */
+	private static final Pattern TAKE = Pattern.compile("^(take|grab|get|fetch|bring|collect|pull)( me| us)?\\b(?<rest>.*?) ?\\b(from|out of|outta)( in)? (" + CONTAINER
+			+ "|there|here)$");
+	/** "Smelt this iron", "cook the beef", "smelt 8 raw iron". */
+	private static final Pattern SMELT = Pattern.compile("^(smelt|cook|roast|bake|melt)( me| us| up| down)?(?<rest>( .+)?)$");
+	/** "Craft me a pickaxe", "make some sticks", "craft 4 torches". */
+	private static final Pattern CRAFT = Pattern.compile("^(craft|make|forge)( me| us)?(?<rest>( .+)?)$");
+	/** What follows "make" when it isn't about making a thing ("make sure", "make way"). */
+	private static final Set<String> NOT_MADE = Set.of("sure", "way", "it", "yourself", "sense", "peace", "friends", "noise", "haste", "room", "space",
+			"time", "progress", "a", "an", "the", "some", "do", "believe", "camp", "up", "out", "me", "us", "them", "him", "her", "that", "this",
+			"laugh", "smile", "happy", "proud", "cry", "fun", "trouble", "money", "friend", "mistakes", "mistake", "love", "dinner", "lunch");
+	/** "Make a pickaxe", "make some sticks": an article, then the thing. */
+	private static final Set<String> ARTICLES = Set.of("a", "an", "the", "some", "another", "few", "couple");
+	/** "Cook dinner" is a chat about food, not an order to smelt something. */
+	private static final Set<String> NOT_SMELTED = Set.of("dinner", "lunch", "breakfast", "supper", "tea", "something", "food", "anything", "a meal",
+			"for us", "for me", "meal", "a feast");
+	private static final Set<String> STORE_ALL = Set.of("", "everything", "it all", "all", "all of it", "your stuff", "your things", "your items",
+			"your pack", "your bag", "your backpack", "your inventory", "all your stuff", "all your things", "it", "them", "the lot", "stuff", "things");
 	private static final Set<String> UNSUPPORTED_VERBS = Set.of(
 			"craft", "make", "plant", "sow", "farm", "breed", "tame", "ride", "fly", "swim", "sleep",
 			"cook", "smelt", "brew", "enchant", "sell", "buy", "fish", "teleport", "tp", "explore", "scout", "map", "sing",
@@ -246,6 +268,10 @@ public final class CommandParser {
 				&& cmd.intent().item() == null && message.trim().endsWith("?") && DEFEND_ME.matcher(c).matches()) {
 			return new ParseResult.Talk(TalkTopic.QUESTION); // "can you fight?" is a question, not an order
 		}
+		if (command instanceof ParseResult.Command cmd && cmd.intent().item() == null && message.trim().endsWith("?")
+				&& (cmd.intent().type() == IntentType.SMELT || cmd.intent().type() == IntentType.CRAFT)) {
+			return new ParseResult.Talk(TalkTopic.QUESTION); // "can you cook?" asks, it doesn't order
+		}
 		if (command != null) {
 			return command;
 		}
@@ -285,9 +311,17 @@ public final class CommandParser {
 		if (STATUS.matcher(c).find()) {
 			return command(Intent.of(IntentType.STATUS));
 		}
+		ParseResult chest = parseChest(c);
+		if (chest != null) {
+			return chest;
+		}
 		ParseResult work = parseWork(c);
 		if (work != null) {
 			return work;
+		}
+		ParseResult making = parseMaking(c);
+		if (making != null) {
+			return making;
 		}
 		if (COME.matcher(c).matches()) {
 			return command(Intent.of(IntentType.COME));
@@ -307,6 +341,61 @@ public final class CommandParser {
 			return command(Intent.of(IntentType.WAIT));
 		}
 		return parseGather(c, tokens);
+	}
+
+	/** Putting things into, or taking them out of, the chest the player is looking at. */
+	private static ParseResult parseChest(String c) {
+		Matcher store = STORE.matcher(c);
+		if (store.matches()) {
+			String[] item = itemAndCount(store.group("rest"));
+			return command(Intent.store(item[0], item[1] == null ? null : Integer.valueOf(item[1])));
+		}
+		Matcher take = TAKE.matcher(c);
+		if (take.matches()) {
+			String[] item = itemAndCount(take.group("rest"));
+			return command(Intent.take(item[0], item[1] == null ? null : Integer.valueOf(item[1])));
+		}
+		return null;
+	}
+
+	/** Smelting and crafting: "smelt this iron", "craft me a pickaxe", "make 4 torches". */
+	private static ParseResult parseMaking(String c) {
+		Matcher smelt = SMELT.matcher(c);
+		if (smelt.matches()) {
+			String rest = smelt.group("rest").trim();
+			if (!NOT_SMELTED.contains(rest)) {
+				String[] item = itemAndCount(rest);
+				return command(Intent.smelt(item[0], item[1] == null ? null : Integer.valueOf(item[1])));
+			}
+		}
+		Matcher craft = CRAFT.matcher(c);
+		if (craft.matches()) {
+			String rest = craft.group("rest").trim();
+			String[] words = rest.isEmpty() ? new String[0] : rest.split(" ");
+			String first = words.length == 0 ? "" : words[0];
+			boolean thing = words.length > 0 && (c.startsWith("craft") || c.startsWith("forge") || !NOT_MADE.contains(first)
+					|| words.length > 1 && ARTICLES.contains(first) && !NOT_MADE.contains(words[1]));
+			if (thing || c.startsWith("craft")) {
+				String[] item = itemAndCount(rest);
+				return command(Intent.craft(item[0], item[1] == null ? null : Integer.valueOf(item[1])));
+			}
+		}
+		return null;
+	}
+
+	/** {item phrase or null for "everything", count or null} from what follows the verb. */
+	private static String[] itemAndCount(String rest) {
+		String cleaned = rest == null ? "" : rest.trim();
+		if (STORE_ALL.contains(cleaned)) {
+			return new String[] {null, null};
+		}
+		List<String> words = new ArrayList<>(Arrays.asList(cleaned.split(" ")));
+		Quantity.Result quantity = Quantity.parse(words, 0);
+		String item = cleanItemPhrase(words.subList(Math.min(quantity.consumed(), words.size()), words.size()));
+		if (STORE_ALL.contains(item)) {
+			item = null;
+		}
+		return new String[] {item, quantity.value() == null ? null : Integer.toString(quantity.value())};
 	}
 
 	private ParseResult parseGive(String c) {

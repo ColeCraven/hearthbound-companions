@@ -33,6 +33,7 @@ public final class ProjectOrder implements CompanionOrder {
 		}
 	}
 
+	private final Kind kind;
 	private final String label;
 	private final List<Step> steps;
 	private final Runnable onEnd;
@@ -42,6 +43,12 @@ public final class ProjectOrder implements CompanionOrder {
 
 	/** @param onEnd runs once when the project ends, however it ends (frees the building site) */
 	public ProjectOrder(String label, List<Step> steps, Runnable onEnd) {
+		this(Kind.PROJECT, label, steps, onEnd);
+	}
+
+	/** @param kind what sort of job it is (a project, or crafting on request) */
+	public ProjectOrder(Kind kind, String label, List<Step> steps, Runnable onEnd) {
+		this.kind = kind;
 		this.label = label;
 		this.steps = steps;
 		this.onEnd = onEnd;
@@ -53,7 +60,7 @@ public final class ProjectOrder implements CompanionOrder {
 
 	@Override
 	public Kind kind() {
-		return Kind.PROJECT;
+		return kind;
 	}
 
 	@Override

@@ -36,7 +36,11 @@ public interface CompanionOrder {
 		MINE,
 		BUILD,
 		HOME,
-		PROJECT;
+		PROJECT,
+		/** Putting things into, or taking them out of, a chest the player pointed at. */
+		STORE,
+		/** Smelting or crafting something on request. */
+		CRAFT;
 
 		/** Follow and wait are standing modes; the others are tasks that end. */
 		public boolean isMode() {

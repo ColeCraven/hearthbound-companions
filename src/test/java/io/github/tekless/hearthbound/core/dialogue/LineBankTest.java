@@ -163,6 +163,18 @@ class LineBankTest {
 		for (String key : List.of("gear.swapped", "gear.worn", "gear.repaired")) {
 			REQUIRED.put(key, plus(base, "item"));
 		}
+		// Chests, smelting and crafting on request (0.7).
+		REQUIRED.put("chest.none", base);
+		REQUIRED.put("chest.left", base);
+		for (String key : List.of("chest.ack.store", "chest.ack.take", "smelt.nothing", "smelt.hand_over", "craft.unknown")) {
+			REQUIRED.put(key, plus(base, "item"));
+		}
+		for (String key : List.of("chest.stored", "chest.full", "chest.taken", "chest.none_of", "craft.ack", "craft.done", "craft.done_kept", "smelt.done")) {
+			REQUIRED.put(key, plus(base, "count", "item", "have"));
+		}
+		REQUIRED.put("smelt.ack", plus(base, "count", "item", "thing"));
+		REQUIRED.put("craft.missing", plus(base, "item", "missing"));
+		REQUIRED.put("status.task", plus(base, "task"));
 		for (String key : List.of("craft.no_table", "smelt.no_furnace", "smelt.no_fuel", "move.pillar", "move.bridge")) {
 			REQUIRED.put(key, base);
 		}

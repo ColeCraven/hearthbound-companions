@@ -207,9 +207,45 @@ class CommandParserTest {
 
 	@Test
 	void unsupportedActionsAreNamed() {
-		ParseResult result = parser.parse("craft a sword", List.of());
-		assertEquals("craft", assertInstanceOf(ParseResult.Unsupported.class, result).action());
-		assertEquals("make", assertInstanceOf(ParseResult.Unsupported.class, parser.parse("make a cake", List.of())).action());
+		ParseResult result = parser.parse("brew a potion", List.of());
+		assertEquals("brew", assertInstanceOf(ParseResult.Unsupported.class, result).action());
+		assertEquals("enchant", assertInstanceOf(ParseResult.Unsupported.class, parser.parse("enchant my sword", List.of())).action());
+	}
+
+	@ParameterizedTest
+	@CsvSource(value = {
+			"put everything in that chest|STORE|",
+			"put the logs in the chest|STORE|logs",
+			"stash 16 cobblestone in there|STORE|cobblestone",
+			"empty your pack into that chest|STORE|",
+			"take the iron from that chest|TAKE|iron",
+			"grab the bread out of the barrel|TAKE|bread",
+			"get everything out of there|TAKE|",
+			"smelt this iron|SMELT|iron",
+			"cook the beef|SMELT|beef",
+			"craft me a pickaxe|CRAFT|pickaxe",
+			"make me a stone pickaxe|CRAFT|stone pickaxe",
+			"could you craft 4 torches|CRAFT|torches",
+			"make a cake|CRAFT|cake",
+			"craft a sword|CRAFT|sword"
+	}, delimiter = '|')
+	void chestsSmeltingAndCrafting(String message, String type, String item) {
+		Intent intent = command(message);
+		assertEquals(IntentType.valueOf(type), intent.type(), message);
+		assertEquals(item == null || item.isEmpty() ? null : item, intent.item(), message);
+	}
+
+	@Test
+	void notEveryMakeIsCrafting() {
+		for (String message : List.of("make sure you follow me", "make way", "make me laugh", "cook dinner", "can you cook?", "get me some logs",
+				"drop the logs")) {
+			ParseResult result = parser.parse(message, List.of());
+			if (result instanceof ParseResult.Command command) {
+				assertFalse(command.intent().type() == IntentType.CRAFT || command.intent().type() == IntentType.SMELT
+						|| command.intent().type() == IntentType.STORE || command.intent().type() == IntentType.TAKE, message + " -> " + result);
+			}
+		}
+		assertEquals(4, command("could you craft 4 torches").count());
 	}
 
 	@ParameterizedTest

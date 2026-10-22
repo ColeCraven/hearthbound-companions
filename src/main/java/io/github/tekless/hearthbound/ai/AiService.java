@@ -198,7 +198,7 @@ public final class AiService {
 			case HOME -> "ack.home";
 			case BUILD -> "ack.build";
 			case MINE -> "ack.mine";
-			case STATUS, INVENTORY -> "talk.generic";
+			case STATUS, INVENTORY, STORE, TAKE, SMELT, CRAFT -> "talk.generic";
 		};
 	}
 

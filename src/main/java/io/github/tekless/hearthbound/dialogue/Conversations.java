@@ -907,7 +907,8 @@ public final class Conversations {
 	}
 
 	private static boolean isTask(IntentType type) {
-		return type == IntentType.GATHER || type == IntentType.BUILD || type == IntentType.MINE || type == IntentType.ATTACK;
+		return type == IntentType.GATHER || type == IntentType.BUILD || type == IntentType.MINE || type == IntentType.ATTACK
+				|| type == IntentType.STORE || type == IntentType.TAKE || type == IntentType.SMELT || type == IntentType.CRAFT;
 	}
 
 	private static boolean isDemonstrative(String phrase) {
@@ -1254,7 +1255,7 @@ public final class Conversations {
 			return Outcome.no("fail.downed", Map.of());
 		}
 		CompanionOrder.Kind current = companion.order().kind();
-		if ((type == IntentType.GATHER || type == IntentType.BUILD || type == IntentType.MINE)
+		if ((type == IntentType.GATHER || type == IntentType.BUILD || type == IntentType.MINE || type == IntentType.SMELT || type == IntentType.CRAFT)
 				&& companion.level() == player.level() && companion.distanceTo(player) > TRAVEL_FIRST) {
 			// Too far away to work at the player's spot: come over first, then start (ComeOrder teleports if it must).
 			companion.setOrder(new ComeOrder(arrived -> {
@@ -1319,12 +1320,70 @@ public final class Conversations {
 				}
 				yield Outcome.yes(now ? "ack.home.teleport" : "ack.home", Map.of());
 			}
+			case STORE -> chest(player, companion, intent, io.github.tekless.hearthbound.entity.order.ChestOrder.Mode.STORE);
+			case TAKE -> chest(player, companion, intent, io.github.tekless.hearthbound.entity.order.ChestOrder.Mode.TAKE);
+			case SMELT -> made(io.github.tekless.hearthbound.entity.order.MakeOrders.smelt(player, companion, intent.item(), intent.count()));
+			case CRAFT -> made(io.github.tekless.hearthbound.entity.order.MakeOrders.craft(player, companion, intent.item(), intent.count()));
 			case RECRUIT -> Outcome.no("recruit.already", Map.of());
 			case DISMISS -> {
 				companion.dismiss();
 				yield Outcome.yes("dismiss.accept", Map.of());
 			}
 		};
+	}
+
+	private static Outcome made(io.github.tekless.hearthbound.entity.order.MakeOrders.Result result) {
+		return new Outcome(result.accepted(), result.lineKey(), result.vars());
+	}
+
+	/**
+	 * "Put everything in that chest", "take the iron from that chest": only the chest the player is looking at, and only
+	 * while they stay by it (the order stops if they walk off).
+	 */
+	private static Outcome chest(ServerPlayer player, CompanionEntity companion, Intent intent, io.github.tekless.hearthbound.entity.order.ChestOrder.Mode mode) {
+		BlockPos pos = lookedAtChest(player);
+		if (pos == null) {
+			return Outcome.no("chest.none", Map.of());
+		}
+		Predicate<ItemStack> filter;
+		Predicate<ItemStack> looser = null;
+		String name;
+		if (intent.item() == null) {
+			filter = stack -> true;
+			name = "everything";
+		} else {
+			String wanted = CommandParserAccess.singular(intent.item().toLowerCase(Locale.ROOT));
+			Predicate<ItemStack> byName = stack -> stack.getHoverName().getString().toLowerCase(Locale.ROOT).contains(wanted)
+					|| BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath().replace('_', ' ').contains(wanted);
+			if (GatherCatalog.resolve(intent.item()) instanceof GatherCatalog.Resolution.Gatherable gatherable) {
+				filter = gatherable.spec().counts();
+				looser = byName;
+				name = gatherable.spec().displayName();
+			} else {
+				filter = byName;
+				name = wanted;
+			}
+		}
+		boolean store = mode == io.github.tekless.hearthbound.entity.order.ChestOrder.Mode.STORE;
+		if (store && companion.countCarried(filter) == 0 && (looser == null || companion.countCarried(looser) == 0)) {
+			return intent.item() == null ? Outcome.no("ack.give.nothing", Map.of()) : Outcome.no("fail.give_missing", Map.of("item", clip(name)));
+		}
+		int max = intent.count() == null ? Integer.MAX_VALUE : intent.count();
+		companion.setOrder(new io.github.tekless.hearthbound.entity.order.ChestOrder(mode, pos, player, filter, looser, clip(name), max));
+		return Outcome.yes(store ? "chest.ack.store" : "chest.ack.take", Map.of("item", clip(name)));
+	}
+
+	/** The chest or barrel under the player's crosshair, within reach, or null. */
+	private static BlockPos lookedAtChest(ServerPlayer player) {
+		Vec3 eye = player.getEyePosition();
+		Vec3 end = eye.add(player.getViewVector(1.0F).scale(6));
+		net.minecraft.world.phys.BlockHitResult hit = player.level().clip(new net.minecraft.world.level.ClipContext(eye, end,
+				net.minecraft.world.level.ClipContext.Block.OUTLINE, net.minecraft.world.level.ClipContext.Fluid.NONE, player));
+		if (hit.getType() != net.minecraft.world.phys.HitResult.Type.BLOCK) {
+			return null;
+		}
+		return io.github.tekless.hearthbound.entity.order.ChestOrder.containerAt((ServerLevel) player.level(), hit.getBlockPos()) != null
+				? hit.getBlockPos().immutable() : null;
 	}
 
 	private static Outcome recruit(ServerPlayer player, CompanionEntity companion) {
@@ -1549,6 +1608,7 @@ public final class Conversations {
 						"have", Integer.toString(Math.max(0, gather.collected())), "count", Integer.toString(gather.goal())));
 			}
 			case MINE -> Outcome.yes("status.mine", Map.of("count", Integer.toString(((MineOrder) order).stepsDone())));
+			case STORE, CRAFT -> Outcome.yes("status.task", Map.of("task", order.describe()));
 			case BUILD -> Outcome.yes("status.build", Map.of("thing", ((BuildOrder) order).blueprint().kind().label()));
 			case PROJECT -> Outcome.yes("status.build", Map.of("thing", order instanceof ProjectOrder project ? project.label()
 					: order instanceof io.github.tekless.hearthbound.entity.order.TeamJob.Builder part ? part.job().label()

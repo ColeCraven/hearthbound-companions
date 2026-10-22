@@ -55,6 +55,7 @@ public final class CommitmentGuard {
 			case MINE -> verb.matches("mine|dig|head|go|get|find");
 			case HOME -> verb.matches("go|head|walk|return|come|teleport|send");
 			case CANCEL, STATUS, INVENTORY, RECRUIT, DISMISS -> verb.matches("follow|wait|stay|come|head|give|hand");
+			case STORE, TAKE, SMELT, CRAFT -> verb.matches("put|store|take|get|grab|smelt|cook|craft|make|bring|give|fetch");
 		};
 	}
 }

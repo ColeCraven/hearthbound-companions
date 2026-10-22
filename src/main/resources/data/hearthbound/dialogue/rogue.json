@@ -1158,6 +1158,78 @@
     "gear.repaired": [
       "Fixed my {item}. Didn't even nick the anvil.",
       "{item}, mended. Look at that craftsmanship."
+    ],
+    "chest.none": [
+      "Which chest, boss? Look at it and ask again.",
+      "Point me at a chest. Any chest. Well, that one."
+    ],
+    "chest.ack.store": [
+      "{item} into the chest. My favourite kind of storage.",
+      "Stashing {item}. I know a thing or two about stashing."
+    ],
+    "chest.ack.take": [
+      "Getting {item} out of there. Legally, for once.",
+      "{item} from the chest. Watch me work."
+    ],
+    "chest.stored": [
+      "{count} {item}, stashed.",
+      "In it goes. {count} {item}."
+    ],
+    "chest.full": [
+      "Chest's stuffed. {count} {item} went in, I'm holding the rest.",
+      "No room at the inn. Got {count} {item} in."
+    ],
+    "chest.taken": [
+      "Lifted {count} {item}. With permission.",
+      "{count} {item}, in my pockets now."
+    ],
+    "chest.none_of": [
+      "No {item} in that chest. Someone beat me to it.",
+      "Searched it. No {item}."
+    ],
+    "chest.left": [
+      "You walked off. I'm not rummaging in a chest without a witness.",
+      "Stopped. Chests and me alone? Bad look."
+    ],
+    "smelt.ack": [
+      "{count} {item} in the oven. Don't wait up.",
+      "Smelting {count} {item}. Patience, boss."
+    ],
+    "smelt.done": [
+      "{count} {item}, fresh out the furnace.",
+      "Done. {count} {item}, in my pack."
+    ],
+    "smelt.nothing": [
+      "I've got no {item} to smelt. Check my pockets if you like.",
+      "No {item} on me, partner."
+    ],
+    "smelt.hand_over": [
+      "Hand me the {item} first. I'll smelt it, promise.",
+      "Give us the {item} and I'll sort it."
+    ],
+    "craft.ack": [
+      "{count} {item}, coming right up.",
+      "Making {count} {item}. Watch the master."
+    ],
+    "craft.done": [
+      "Here. {count} {item}. Freshly made, not stolen.",
+      "{count} {item}, all yours."
+    ],
+    "craft.done_kept": [
+      "Made {count} {item}. It's in my pack. Ask nicely.",
+      "{count} {item}, done and stashed."
+    ],
+    "craft.missing": [
+      "For {item} I'd need {missing}. Don't look at me.",
+      "Can't make {item}, boss. Short of {missing}."
+    ],
+    "craft.unknown": [
+      "{item}? Never heard of a recipe for that.",
+      "Don't know how to make {item}. Ask a smith."
+    ],
+    "status.task": [
+      "I'm {task}.",
+      "Busy, boss. {task}."
     ]
   }
 }

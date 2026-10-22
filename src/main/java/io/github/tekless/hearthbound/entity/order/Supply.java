@@ -97,7 +97,13 @@ public final class Supply {
 
 	/** Works out how to get everything in {@code wanted} from what is carried. */
 	public static Plan plan(ServerLevel level, Map<Item, Integer> carried, Map<Item, Integer> wanted) {
+		return plan(level, carried, wanted, true);
+	}
+
+	/** @param gather whether natural blocks may be gathered for it (crafting on request only uses what is carried) */
+	public static Plan plan(ServerLevel level, Map<Item, Integer> carried, Map<Item, Integer> wanted, boolean gather) {
 		Planner planner = new Planner(level, new HashMap<>(carried));
+		planner.gather = gather;
 		// Take everything wanted from the pack first, so nothing wanted is used up making something else.
 		Map<Item, Integer> stillWanted = new LinkedHashMap<>();
 		wanted.forEach((item, count) -> {
@@ -168,6 +174,7 @@ public final class Supply {
 		final List<Action> actions = new ArrayList<>();
 		final Map<Item, Integer> missing = new LinkedHashMap<>();
 		final Set<Item> visiting = new HashSet<>();
+		boolean gather = true;
 
 		Planner(ServerLevel level, Map<Item, Integer> have) {
 			this.level = level;
@@ -187,7 +194,7 @@ public final class Supply {
 			}
 			visiting.add(item);
 			try {
-				Optional<GatherSpec> spec = gatherable(item);
+				Optional<GatherSpec> spec = gather ? gatherable(item) : Optional.empty();
 				if (spec.isPresent()) {
 					actions.add(new Gather(spec.get(), item, amount));
 					return true;
@@ -238,7 +245,7 @@ public final class Supply {
 					}
 				}
 			}
-			if (!(GatherCatalog.resolve("logs") instanceof GatherCatalog.Resolution.Gatherable logs)) {
+			if (!gather || !(GatherCatalog.resolve("logs") instanceof GatherCatalog.Resolution.Gatherable logs)) {
 				return false;
 			}
 			actions.add(new Gather(logs.spec(), Items.OAK_LOG, (int) Math.ceil(items / 1.5)));
@@ -261,7 +268,7 @@ public final class Supply {
 				return best;
 			}
 			for (Item option : options) {
-				if (gatherable(option).isPresent()) {
+				if (gather && gatherable(option).isPresent()) {
 					return option;
 				}
 			}
@@ -338,6 +345,7 @@ public final class Supply {
 		private final Supplier<Map<Item, Integer>> wanted;
 		private final Workshop workshop;
 		private final String thing;
+		private boolean gather = true;
 		private ProjectOrder.@Nullable Step current;
 		private int steps;
 		private int failures;
@@ -349,6 +357,12 @@ public final class Supply {
 			this.wanted = wanted;
 			this.workshop = workshop;
 			this.thing = thing;
+		}
+
+		/** Only what's carried (crafting on request): nothing is gathered for it. */
+		public Step withoutGathering() {
+			gather = false;
+			return this;
 		}
 
 		/** What couldn't be had, when the step failed. */
@@ -370,7 +384,7 @@ public final class Supply {
 			}
 			ServerLevel level = (ServerLevel) c.level();
 			Map<Item, Integer> want = wanted.get();
-			Plan plan = plan(level, carried(c), want);
+			Plan plan = plan(level, carried(c), want, gather);
 			if (plan.actions().isEmpty() && plan.possible()) {
 				return ProjectOrder.State.DONE;
 			}

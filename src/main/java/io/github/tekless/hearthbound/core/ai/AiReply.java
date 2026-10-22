@@ -63,7 +63,7 @@ public record AiReply(String reply, Optional<Intent> intent) {
 		if (!intentName.isEmpty() && !intentName.equalsIgnoreCase("none")) {
 			IntentType type = IntentType.byId(intentName)
 					.orElseThrow(() -> new IllegalArgumentException("unknown intent " + intentName));
-			if (type == IntentType.INVENTORY) {
+			if (type == IntentType.INVENTORY || type == IntentType.STORE || type == IntentType.TAKE || type == IntentType.SMELT || type == IntentType.CRAFT) {
 				throw new IllegalArgumentException("intent not allowed for the model: " + intentName);
 			}
 			String item = blankToNull(clean(string(json, "item")));
