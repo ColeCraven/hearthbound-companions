@@ -1156,6 +1156,18 @@
     "move.bridge": [
       "There's a gap! I'll put some blocks down, Gran would never jump that.",
       "Hang on, I'm making a little bridge."
+    ],
+    "gear.swapped": [
+      "My {item} was nearly broken! I've got the spare on now.",
+      "Swapped my {item}. Gran always said keep a spare."
+    ],
+    "gear.worn": [
+      "Oh no, my {item}'s about to break, so I've put it away. Have you got another, or something to mend it?",
+      "My {item}'s nearly done for. It's safe in my pack. Could you help?"
+    ],
+    "gear.repaired": [
+      "I mended my {item} at the anvil! It's like new.",
+      "There, my {item}'s fixed. That was loud."
     ]
   }
 }

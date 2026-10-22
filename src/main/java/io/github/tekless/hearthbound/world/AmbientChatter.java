@@ -53,6 +53,7 @@ public final class AmbientChatter {
 		boolean wasUnderground;
 		boolean warnedLowHealth;
 		boolean suggestedEat;
+		boolean fedHurt;
 		long shelterDay = -1;
 		long lastCarry = -100000;
 		long lastQuestion = -100000;
@@ -93,8 +94,8 @@ public final class AmbientChatter {
 			if (companion.isDowned() || someoneSpoke) {
 				continue;
 			}
-			// Warnings always get through; everything else waits for a pause in the conversation and respects chattiness.
-			if (warn(player, companion, state)) {
+			// Warnings and food for someone in need always get through; everything else waits for a pause and respects chattiness.
+			if (feed(player, companion, state) || warn(player, companion, state)) {
 				someoneSpoke = true;
 			} else if (chatter > 0 && !Conversations.isChatting(player)
 					&& (suggest(player, companion, state) || comment(player, companion, state, chatter))) {
@@ -118,6 +119,38 @@ public final class AmbientChatter {
 		PENDING.add(new Banter(listener, speaker.companionName(), now + 40 + speaker.getRandom().nextInt(40)));
 	}
 
+	/**
+	 * Food handed over when the player is starving, or badly hurt and could eat, if this companion carries some and is
+	 * close by. Once per bad patch, whatever the chattiness: it's help, not chatter.
+	 */
+	private static boolean feed(ServerPlayer player, CompanionEntity companion, State state) {
+		int food = player.getFoodData().getFoodLevel();
+		if (food > 12) {
+			state.suggestedEat = false;
+		}
+		if (player.getHealth() > 12) {
+			state.fedHurt = false;
+		}
+		boolean starving = food <= 6 && !state.suggestedEat;
+		boolean hurt = player.getHealth() <= 6 && player.getFoodData().needsFood() && !state.fedHurt && !player.isCreative();
+		if ((!starving && !hurt) || companion.distanceTo(player) > 6) {
+			return false;
+		}
+		Optional<ItemStack> snack = bestFood(companion);
+		if (snack.isEmpty()) {
+			return false;
+		}
+		Item item = snack.get().getItem();
+		String name = snack.get().getHoverName().getString().toLowerCase(java.util.Locale.ROOT);
+		int given = companion.giveTo(player, stack -> stack.is(item), hurt && !starving ? 2 : 3);
+		if (given <= 0) {
+			return false;
+		}
+		state.suggestedEat |= starving;
+		state.fedHurt |= hurt;
+		return speak(companion, state, "gift.food", Map.of("item", name), true);
+	}
+
 	/** Practical suggestions: eat, find shelter, hand over some of that load. Never acted on alone. */
 	private static boolean suggest(ServerPlayer player, CompanionEntity companion, State state) {
 		if (state.cooldown > 0 && state.warningCooldown > 0) {
@@ -125,20 +158,8 @@ public final class AmbientChatter {
 		}
 		int food = player.getFoodData().getFoodLevel();
 		if (food <= 6 && !state.suggestedEat) {
-			state.suggestedEat = true;
-			Optional<ItemStack> snack = bestFood(companion);
-			if (snack.isPresent() && companion.distanceTo(player) < 6) {
-				Item item = snack.get().getItem();
-				String name = snack.get().getHoverName().getString().toLowerCase(java.util.Locale.ROOT);
-				int given = companion.giveTo(player, stack -> stack.is(item), 3);
-				if (given > 0) {
-					return speak(companion, state, "gift.food", Map.of("item", name), true);
-				}
-			}
+			state.suggestedEat = true; // feed() already handed over anything they had
 			return speak(companion, state, "suggest.eat", Map.of(), true);
-		}
-		if (food > 12) {
-			state.suggestedEat = false;
 		}
 		ServerLevel level = (ServerLevel) companion.level();
 		long time = level.getOverworldClockTime() % 24000;

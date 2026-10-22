@@ -1152,6 +1152,18 @@
     "move.bridge": [
       "A gap. I close it.",
       "Stone across the gap."
+    ],
+    "gear.swapped": [
+      "The {item} was failing. The spare now.",
+      "A fresh {item}."
+    ],
+    "gear.worn": [
+      "My {item} is near its end. Put away. Another would help.",
+      "The {item} rests in my pack. It would not last another blow."
+    ],
+    "gear.repaired": [
+      "Mended. The {item} holds.",
+      "The anvil sang. My {item} is whole."
     ]
   }
 }

@@ -1146,6 +1146,18 @@
     "move.bridge": [
       "Mind the gap. I'll fix it.",
       "Bridging this. Don't tell anyone I can do honest work."
+    ],
+    "gear.swapped": [
+      "{item}'s on its last legs. Spare's out. Always carry a spare, boss.",
+      "Swapped my {item}. Never trust the old one."
+    ],
+    "gear.worn": [
+      "My {item} is about to give up, so it's in the pack. Got a spare lying about? Asking for me.",
+      "Put my {item} away before it breaks. A new one would be lovely. Hint."
+    ],
+    "gear.repaired": [
+      "Fixed my {item}. Didn't even nick the anvil.",
+      "{item}, mended. Look at that craftsmanship."
     ]
   }
 }

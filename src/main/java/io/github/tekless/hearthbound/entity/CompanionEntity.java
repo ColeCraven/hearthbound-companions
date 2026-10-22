@@ -213,17 +213,18 @@ public class CompanionEntity extends PathfinderMob {
 		goalSelector.addGoal(1, new DownedGoal());
 		goalSelector.addGoal(2, new AvoidEntityGoal<>(this, Creeper.class, c -> ((Creeper) c).getSwellDir() > 0 || ((Creeper) c).isIgnited(), 6.0F, 1.1, 1.4, e -> true));
 		goalSelector.addGoal(3, new RetreatGoal());
-		goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.2, true));
-		goalSelector.addGoal(5, new OrderGoal());
-		goalSelector.addGoal(6, new OpenDoorGoal(this, true));
-		goalSelector.addGoal(7, new IdleStrollGoal());
-		goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F) {
+		goalSelector.addGoal(4, new RangedGoal());
+		goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.2, true));
+		goalSelector.addGoal(6, new OrderGoal());
+		goalSelector.addGoal(7, new OpenDoorGoal(this, true));
+		goalSelector.addGoal(8, new IdleStrollGoal());
+		goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F) {
 			@Override
 			public boolean canUse() {
 				return !isSleeping() && super.canUse();
 			}
 		});
-		goalSelector.addGoal(9, new RandomLookAroundGoal(this) {
+		goalSelector.addGoal(10, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
 				return !isSleeping() && super.canUse();
@@ -385,10 +386,13 @@ public class CompanionEntity extends PathfinderMob {
 		}
 		if (tickCount % 40 == 0) {
 			equipBestGear();
+			careForGear(level);
 			if (getHealth() < getMaxHealth() && getTarget() == null && tickCount % 80 == 0) {
 				heal(1.0F);
 			}
 		}
+		guardWithShield();
+		eatWhenHurt(level);
 		if (isSleeping() && (getTarget() != null || !(order instanceof HomeOrder))) {
 			stopSleeping();
 		}
@@ -1057,7 +1061,7 @@ public class CompanionEntity extends PathfinderMob {
 		ItemStack best = null;
 		float bestSpeed = 1.0F;
 		for (ItemStack stack : allCarried()) {
-			if (stack.isEmpty()) {
+			if (stack.isEmpty() || nearlyBroken(stack)) {
 				continue;
 			}
 			float speed = stack.getDestroySpeed(state);
@@ -1102,19 +1106,34 @@ public class CompanionEntity extends PathfinderMob {
 	}
 
 	private void equipBestGear() {
-		if (!(order instanceof GatherOrder) && !(order instanceof MineOrder)) {
+		if (!(order instanceof GatherOrder) && !(order instanceof MineOrder) && !isRanged(getMainHandItem())) {
 			equipBestWeapon();
 		}
+		equipShield();
 		for (EquipmentSlot slot : new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
 			if (!getItemBySlot(slot).isEmpty()) {
 				continue;
 			}
 			for (int i = 0; i < inventory.getContainerSize(); i++) {
 				ItemStack stack = inventory.getItem(i);
-				if (!stack.isEmpty() && getEquipmentSlotForItem(stack) == slot) {
+				if (!stack.isEmpty() && getEquipmentSlotForItem(stack) == slot && !nearlyBroken(stack)) {
 					setItemSlot(slot, inventory.removeItemNoUpdate(i));
 					break;
 				}
+			}
+		}
+	}
+
+	/** A shield from the pack goes in the off hand, if the off hand is free. */
+	private void equipShield() {
+		if (!getOffhandItem().isEmpty()) {
+			return;
+		}
+		for (int i = 0; i < inventory.getContainerSize(); i++) {
+			ItemStack stack = inventory.getItem(i);
+			if (stack.has(net.minecraft.core.component.DataComponents.BLOCKS_ATTACKS) && !nearlyBroken(stack)) {
+				setItemSlot(EquipmentSlot.OFFHAND, inventory.removeItemNoUpdate(i));
+				return;
 			}
 		}
 	}
@@ -1138,7 +1157,7 @@ public class CompanionEntity extends PathfinderMob {
 	}
 
 	private static int weaponRank(ItemStack stack) {
-		if (stack.isEmpty()) {
+		if (stack.isEmpty() || nearlyBroken(stack)) {
 			return 0;
 		}
 		int base = stack.is(ItemTags.SWORDS) ? 20 : stack.is(ItemTags.AXES) ? 10 : 0;
@@ -1257,6 +1276,9 @@ public class CompanionEntity extends PathfinderMob {
 		}
 		if (isDowned() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
 			return false;
+		}
+		if (blocksWithShield(source)) {
+			return super.hurtServer(level, source, damage); // the shield takes it, the game works out how much
 		}
 		boolean essential = Hearthbound.config().essentialCompanions();
 		if (essential && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && damage >= getHealth()) {
@@ -1484,7 +1506,409 @@ public class CompanionEntity extends PathfinderMob {
 		});
 	}
 
+	// ------------------------------------------------------------------ fighting at range, shields, food and worn gear
+
+	private int eatTicks;
+	private ItemStack eating = ItemStack.EMPTY;
+	private int eatCooldown;
+
+	/** Food a companion won't eat (or give anyone). */
+	public static final Set<net.minecraft.world.item.Item> BAD_FOOD = Set.of(net.minecraft.world.item.Items.ROTTEN_FLESH,
+			net.minecraft.world.item.Items.SPIDER_EYE, net.minecraft.world.item.Items.POISONOUS_POTATO, net.minecraft.world.item.Items.PUFFERFISH,
+			net.minecraft.world.item.Items.SUSPICIOUS_STEW, net.minecraft.world.item.Items.CHORUS_FRUIT);
+
+	/** Worn so far that one or two more uses would break it. */
+	public static boolean nearlyBroken(ItemStack stack) {
+		return stack.isDamageableItem() && stack.getMaxDamage() - stack.getDamageValue() <= Math.max(2, stack.getMaxDamage() / 40);
+	}
+
+	public static boolean isRanged(ItemStack stack) {
+		return stack.getItem() instanceof net.minecraft.world.item.BowItem || stack.getItem() instanceof net.minecraft.world.item.CrossbowItem;
+	}
+
+	/** A bow or crossbow in the pack that isn't about to break, or empty. */
+	private ItemStack rangedInPack() {
+		for (ItemStack stack : inventory.getItems()) {
+			if (isRanged(stack) && !nearlyBroken(stack)) {
+				return stack;
+			}
+		}
+		return ItemStack.EMPTY;
+	}
+
+	public boolean hasArrows() {
+		return countCarried(s -> s.is(ItemTags.ARROWS)) > 0;
+	}
+
+	/** True while eating something from the pack. */
+	public boolean isEating() {
+		return eatTicks > 0;
+	}
+
+	/** Takes a bow or crossbow out of the pack (the sword goes in). */
+	private void holdRanged() {
+		if (isRanged(getMainHandItem())) {
+			return;
+		}
+		for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
+			ItemStack stack = inventory.getItem(slot);
+			if (isRanged(stack) && !nearlyBroken(stack)) {
+				ItemStack previous = getMainHandItem();
+				setItemSlot(EquipmentSlot.MAINHAND, stack);
+				inventory.setItem(slot, previous);
+				return;
+			}
+		}
+	}
+
+	/** Nobody friendly in the way: no player, companion, villager, golem or pet between us and the target. */
+	private boolean clearShot(LivingEntity target) {
+		Vec3 from = getEyePosition();
+		Vec3 to = target.getEyePosition();
+		for (net.minecraft.world.entity.Entity other : level().getEntities(this, new net.minecraft.world.phys.AABB(from, to).inflate(1.0),
+				e -> e != target && (e instanceof Player || e instanceof CompanionEntity || e instanceof net.minecraft.world.entity.npc.villager.AbstractVillager
+						|| e instanceof net.minecraft.world.entity.animal.golem.IronGolem || e instanceof net.minecraft.world.entity.TamableAnimal tame && tame.isTame()))) {
+			if (other.getBoundingBox().inflate(0.4).clip(from, to).isPresent()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/** One arrow from the pack, from the bow or crossbow in hand, at the target. */
+	private void shoot(LivingEntity target, ItemStack weapon) {
+		ItemStack arrows = null;
+		for (ItemStack stack : inventory.getItems()) {
+			if (!stack.isEmpty() && stack.is(ItemTags.ARROWS)) {
+				arrows = stack;
+				break;
+			}
+		}
+		if (arrows == null || !(level() instanceof ServerLevel serverLevel)) {
+			return;
+		}
+		boolean crossbow = weapon.getItem() instanceof net.minecraft.world.item.CrossbowItem;
+		net.minecraft.world.entity.projectile.arrow.AbstractArrow arrow = net.minecraft.world.entity.projectile.ProjectileUtil.getMobArrow(this,
+				arrows.copyWithCount(1), 1.0F, weapon);
+		arrow.pickup = net.minecraft.world.entity.projectile.arrow.AbstractArrow.Pickup.ALLOWED; // a real arrow: you can pick it up again
+		double dx = target.getX() - getX();
+		double dz = target.getZ() - getZ();
+		double dy = target.getY(0.3333) - arrow.getY();
+		double flat = Math.sqrt(dx * dx + dz * dz);
+		arrow.shoot(dx, dy + flat * (crossbow ? 0.1 : 0.2), dz, crossbow ? 3.15F : 1.6F, 2.0F);
+		serverLevel.addFreshEntity(arrow);
+		playSound(crossbow ? net.minecraft.sounds.SoundEvents.CROSSBOW_SHOOT : net.minecraft.sounds.SoundEvents.ARROW_SHOOT, 1.0F,
+				1.0F / (getRandom().nextFloat() * 0.4F + 0.8F));
+		arrows.shrink(1);
+		weapon.hurtAndBreak(1, this, EquipmentSlot.MAINHAND);
+	}
+
+	/** Up with the shield while something hostile closes in or takes aim; down again to swing. */
+	private void guardWithShield() {
+		ItemStack offhand = getOffhandItem();
+		LivingEntity target = getTarget();
+		boolean raise = false;
+		if (offhand.has(net.minecraft.core.component.DataComponents.BLOCKS_ATTACKS) && target != null && target.isAlive() && !isDowned()
+				&& !(isUsingItem() && getUsedItemHand() == InteractionHand.MAIN_HAND)) {
+			double distance = distanceTo(target);
+			boolean shooter = target instanceof net.minecraft.world.entity.monster.RangedAttackMob;
+			raise = (shooter && distance > 2.8 && distance < 24 && hasLineOfSight(target)) || (distance > 2.8 && distance < 7);
+		}
+		if (raise && !isUsingItem()) {
+			startUsingItem(InteractionHand.OFF_HAND);
+		} else if (!raise && isUsingItem() && getUsedItemHand() == InteractionHand.OFF_HAND) {
+			stopUsingItem();
+		}
+	}
+
+	/** The shield is up and the hit comes from in front (and isn't the kind shields can't stop). */
+	private boolean blocksWithShield(DamageSource source) {
+		if (!isBlocking() || source.is(DamageTypeTags.BYPASSES_SHIELD) || source.getSourcePosition() == null) {
+			return false;
+		}
+		Vec3 towards = source.getSourcePosition().subtract(position()).multiply(1, 0, 1);
+		Vec3 look = getViewVector(1.0F).multiply(1, 0, 1);
+		return towards.lengthSqr() > 1.0E-4 && look.lengthSqr() > 1.0E-4 && towards.normalize().dot(look.normalize()) > 0;
+	}
+
+	/** Hurt and carrying food: eat some (a couple of seconds of munching), which heals as much as the food is worth. */
+	private void eatWhenHurt(ServerLevel level) {
+		if (eatTicks > 0) {
+			eatTicks--;
+			if (eatTicks % 4 == 0) {
+				level.playSound(null, blockPosition(), net.minecraft.sounds.SoundEvents.GENERIC_EAT.value(), net.minecraft.sounds.SoundSource.NEUTRAL, 0.5F,
+						0.9F + getRandom().nextFloat() * 0.2F);
+				level.sendParticles(new net.minecraft.core.particles.ItemParticleOption(net.minecraft.core.particles.ParticleTypes.ITEM, eating.getItem()),
+						getX(), getEyeY() - 0.2, getZ(), 4, 0.15, 0.1, 0.15, 0.05);
+			}
+			if (eatTicks == 0) {
+				for (ItemStack stack : inventory.getItems()) {
+					if (!stack.isEmpty() && stack.is(eating.getItem())) {
+						net.minecraft.world.food.FoodProperties food = stack.get(net.minecraft.core.component.DataComponents.FOOD);
+						stack.shrink(1);
+						heal(food == null ? 2.0F : Math.max(1, food.nutrition()));
+						level.playSound(null, blockPosition(), net.minecraft.sounds.SoundEvents.PLAYER_BURP, net.minecraft.sounds.SoundSource.NEUTRAL, 0.5F, 1.0F);
+						break;
+					}
+				}
+				eating = ItemStack.EMPTY;
+				eatCooldown = 40;
+			}
+			return;
+		}
+		if (eatCooldown > 0) {
+			eatCooldown--;
+			return;
+		}
+		if (tickCount % 20 != 0 || isDowned() || isSleeping() || getHealth() >= getMaxHealth()) {
+			return;
+		}
+		float share = getHealth() / getMaxHealth();
+		if (share < (getTarget() != null ? 0.35F : 0.6F)) {
+			ItemStack food = bestFoodInPack();
+			if (food != null) {
+				eating = food.copyWithCount(1);
+				eatTicks = 32;
+				swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, true);
+			}
+		}
+	}
+
+	/** The most filling food in the pack (never anything that would make them ill). */
+	public @Nullable ItemStack bestFoodInPack() {
+		ItemStack best = null;
+		int bestValue = 0;
+		for (ItemStack stack : inventory.getItems()) {
+			net.minecraft.world.food.FoodProperties food = stack.isEmpty() ? null : stack.get(net.minecraft.core.component.DataComponents.FOOD);
+			if (food != null && !BAD_FOOD.contains(stack.getItem()) && food.nutrition() > bestValue) {
+				best = stack;
+				bestValue = food.nutrition();
+			}
+		}
+		return best;
+	}
+
+	/**
+	 * Before something breaks: a spare of the same kind from the pack takes its place. With no spare it goes into the
+	 * pack, unbroken, and they say so once a day. (Mending happens at an anvil, see Pastimes.)
+	 */
+	private void careForGear(ServerLevel level) {
+		for (EquipmentSlot slot : new EquipmentSlot[] {EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND, EquipmentSlot.HEAD, EquipmentSlot.CHEST,
+				EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
+			ItemStack worn = getItemBySlot(slot);
+			if (worn.isEmpty() || !nearlyBroken(worn)) {
+				continue;
+			}
+			if ((slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) && isUsingItem()) {
+				stopUsingItem();
+			}
+			int spare = -1;
+			for (int i = 0; i < inventory.getContainerSize(); i++) {
+				ItemStack stack = inventory.getItem(i);
+				if (!stack.isEmpty() && !nearlyBroken(stack) && sameKind(stack, worn, slot)) {
+					spare = i;
+					break;
+				}
+			}
+			String name = gearName(worn);
+			if (spare >= 0) {
+				ItemStack replacement = inventory.getItem(spare);
+				inventory.setItem(spare, worn);
+				setItemSlot(slot, replacement);
+				sayMaybe("gear.swapped", Map.of("item", name), 0.8);
+			} else {
+				setItemSlot(slot, ItemStack.EMPTY);
+				storeOrDrop(worn);
+				if (tryEvery("worn:" + net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(worn.getItem()), clockTime() / 24000L, 1)) {
+					say("gear.worn", Map.of("item", name));
+				}
+			}
+		}
+	}
+
+	private static String gearName(ItemStack stack) {
+		String name = stack.getHoverName().getString().toLowerCase(java.util.Locale.ROOT);
+		return name.contains(".") ? net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath().replace('_', ' ') : name;
+	}
+
+	private boolean sameKind(ItemStack candidate, ItemStack worn, EquipmentSlot slot) {
+		if (slot.isArmor()) {
+			return getEquipmentSlotForItem(candidate) == slot;
+		}
+		for (net.minecraft.tags.TagKey<net.minecraft.world.item.Item> kind : List.of(ItemTags.SWORDS, ItemTags.AXES, ItemTags.PICKAXES, ItemTags.SHOVELS, ItemTags.HOES)) {
+			if (worn.is(kind)) {
+				return candidate.is(kind);
+			}
+		}
+		if (worn.has(net.minecraft.core.component.DataComponents.BLOCKS_ATTACKS)) {
+			return candidate.has(net.minecraft.core.component.DataComponents.BLOCKS_ATTACKS);
+		}
+		return candidate.getItem().getClass() == worn.getItem().getClass();
+	}
+
+	/** Gear worn down by a quarter or more, with the material to mend it in the pack, or null. */
+	public @Nullable ItemStack mendable() {
+		for (ItemStack stack : gear()) {
+			if (!stack.isEmpty() && stack.isDamageableItem() && stack.getDamageValue() >= stack.getMaxDamage() / 4 && repairMaterial(stack) != null) {
+				return stack;
+			}
+		}
+		return null;
+	}
+
+	/** Everything they carry or wear. */
+	private List<ItemStack> gear() {
+		List<ItemStack> all = new java.util.ArrayList<>(inventory.getItems());
+		for (EquipmentSlot slot : EquipmentSlot.values()) {
+			all.add(getItemBySlot(slot));
+		}
+		return all;
+	}
+
+	private @Nullable ItemStack repairMaterial(ItemStack worn) {
+		for (ItemStack stack : inventory.getItems()) {
+			if (!stack.isEmpty() && stack != worn && worn.isValidRepairItem(stack)) {
+				return stack;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Mends worn gear at an anvil, a material at a time, each putting back a quarter of the wear (as an anvil does for
+	 * you). Each use can chip the anvil. Companions have no experience to spend, so it costs only the material.
+	 *
+	 * @return how many materials were used
+	 */
+	public int repairAt(ServerLevel level, BlockPos anvil) {
+		int used = 0;
+		while (used < 16) {
+			ItemStack worn = null;
+			for (ItemStack stack : gear()) {
+				if (!stack.isEmpty() && stack.isDamageableItem() && stack.getDamageValue() >= Math.max(1, stack.getMaxDamage() / 8) && repairMaterial(stack) != null) {
+					worn = stack;
+					break;
+				}
+			}
+			BlockState state = level.getBlockState(anvil);
+			if (worn == null || !state.is(BlockTags.ANVIL)) {
+				break;
+			}
+			ItemStack material = repairMaterial(worn);
+			if (material == null) {
+				break;
+			}
+			material.shrink(1);
+			worn.setDamageValue(Math.max(0, worn.getDamageValue() - worn.getMaxDamage() / 4));
+			used++;
+			level.playSound(null, anvil, net.minecraft.sounds.SoundEvents.ANVIL_USE, net.minecraft.sounds.SoundSource.BLOCKS, 0.8F, 1.0F);
+			if (getRandom().nextFloat() < 0.12F) {
+				BlockState chipped = net.minecraft.world.level.block.AnvilBlock.damage(state);
+				if (chipped == null) {
+					level.removeBlock(anvil, false);
+					level.playSound(null, anvil, net.minecraft.sounds.SoundEvents.ANVIL_BREAK, net.minecraft.sounds.SoundSource.BLOCKS, 1.0F, 1.0F);
+					break;
+				}
+				level.setBlockAndUpdate(anvil, chipped);
+			}
+		}
+		if (used > 0) {
+			swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, true);
+		}
+		return used;
+	}
+
+	/** Damage from a companion only ever reaches the one they're fighting (never a friend caught by an arrow). */
+	public boolean mayHarm(net.minecraft.world.entity.Entity victim) {
+		if (victim == getTarget()) {
+			return true;
+		}
+		boolean friendly = victim instanceof Player || victim instanceof CompanionEntity || victim instanceof net.minecraft.world.entity.npc.villager.AbstractVillager
+				|| victim instanceof net.minecraft.world.entity.animal.golem.IronGolem || victim instanceof net.minecraft.world.entity.TamableAnimal tame && tame.isTame();
+		return !friendly || victim.getUUID().equals(directedId);
+	}
+
 	// ------------------------------------------------------------------ goals
+
+	/**
+	 * Guardians with a bow or crossbow and arrows in the pack shoot from range, standing their ground when they can see the
+	 * target; up close (or out of arrows) the sword takes over.
+	 */
+	private final class RangedGoal extends Goal {
+		private int draw;
+		private int cooldown;
+
+		RangedGoal() {
+			setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+		}
+
+		@Override
+		public boolean canUse() {
+			LivingEntity target = getTarget();
+			return target != null && target.isAlive() && !isDowned() && role() == io.github.tekless.hearthbound.core.persona.Role.GUARDIAN
+					&& distanceTo(target) > 6 && distanceTo(target) < 24 && hasArrows()
+					&& (isRanged(getMainHandItem()) || !rangedInPack().isEmpty()) && hasLineOfSight(target);
+		}
+
+		@Override
+		public boolean canContinueToUse() {
+			LivingEntity target = getTarget();
+			return target != null && target.isAlive() && !isDowned() && distanceTo(target) > 4 && distanceTo(target) < 28 && hasArrows()
+					&& isRanged(getMainHandItem()) && !nearlyBroken(getMainHandItem());
+		}
+
+		@Override
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
+
+		@Override
+		public void start() {
+			holdRanged();
+			draw = 0;
+			cooldown = 8;
+			setAggressive(true);
+		}
+
+		@Override
+		public void stop() {
+			if (isUsingItem() && getUsedItemHand() == InteractionHand.MAIN_HAND) {
+				stopUsingItem();
+			}
+			setAggressive(false);
+			restoreWeapon();
+		}
+
+		@Override
+		public void tick() {
+			LivingEntity target = getTarget();
+			if (target == null) {
+				return;
+			}
+			getLookControl().setLookAt(target, 30.0F, 30.0F);
+			boolean sees = hasLineOfSight(target);
+			if (!sees || distanceTo(target) > 16) {
+				getNavigation().moveTo(target, 1.0);
+			} else {
+				getNavigation().stop();
+			}
+			if (cooldown > 0) {
+				cooldown--;
+				return;
+			}
+			ItemStack weapon = getMainHandItem();
+			if (!isUsingItem()) {
+				startUsingItem(InteractionHand.MAIN_HAND);
+			}
+			boolean crossbow = weapon.getItem() instanceof net.minecraft.world.item.CrossbowItem;
+			if (++draw >= (crossbow ? 25 : 20) && sees && clearShot(target)) {
+				shoot(target, weapon);
+				stopUsingItem();
+				draw = 0;
+				cooldown = crossbow ? 20 : 12;
+			}
+		}
+	}
 
 	/** While downed: no moving, no fighting, just recovering. */
 	private final class DownedGoal extends Goal {

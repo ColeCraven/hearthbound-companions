@@ -101,6 +101,10 @@ public final class Hearthbound implements ModInitializer {
 		ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register((player, origin, destination) -> bringFollowers(player, origin));
 		ServerTickEvents.END_SERVER_TICK.register(Hearthbound::tick);
 
+		// A companion's arrows and swings only ever hurt what they're fighting: never a player, villager or pet caught in the way.
+		ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) ->
+				!(source.getEntity() instanceof CompanionEntity companion) || companion == entity || companion.mayHarm(entity));
+
 		// Companions notice what happens to their player (advancements come from PlayerAdvancementsMixin).
 		ServerLivingEntityEvents.AFTER_DEATH.register((entity, source) -> {
 			if (entity instanceof ServerPlayer player) {

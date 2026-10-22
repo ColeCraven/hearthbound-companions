@@ -1193,6 +1193,18 @@
     "move.bridge": [
       "Gap. I'll bridge it.",
       "Hold on, putting a few blocks down."
+    ],
+    "gear.swapped": [
+      "{item}'s about done. Swapped it for the spare.",
+      "Changed my {item}. The old one's had it."
+    ],
+    "gear.worn": [
+      "My {item}'s one knock from breaking. It's in the pack. Got a spare, or the stuff to mend it?",
+      "Put my {item} away before it falls apart. I could use another."
+    ],
+    "gear.repaired": [
+      "Mended my {item}. Good as it gets.",
+      "{item}'s sorted. Cost me some metal."
     ]
   }
 }

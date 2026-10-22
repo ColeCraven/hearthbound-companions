@@ -50,6 +50,10 @@ public final class Pastimes {
 	/** Picks something fitting to do now, if anything is available nearby. */
 	public static Optional<Pastime> pick(CompanionEntity companion, ServerPlayer owner) {
 		ServerLevel level = (ServerLevel) companion.level();
+		Optional<Pastime> mend = Mend.find(level, companion);
+		if (mend.isPresent()) {
+			return mend; // worn gear, the material for it and an anvil close by: that comes first
+		}
 		List<Pastime> options = new ArrayList<>();
 		Archetype archetype = companion.archetype();
 		boolean night = level.isDarkOutside();
@@ -129,6 +133,54 @@ public final class Pastimes {
 	}
 
 	// ------------------------------------------------------------------ activities
+
+	/** Walking to an anvil nearby and mending worn gear with materials from the pack. */
+	static final class Mend implements Pastime {
+		private final BlockPos anvil;
+		private int ticks;
+		private int repath;
+
+		Mend(BlockPos anvil) {
+			this.anvil = anvil;
+		}
+
+		static Optional<Pastime> find(ServerLevel level, CompanionEntity companion) {
+			if (companion.mendable() == null) {
+				return Optional.empty();
+			}
+			BlockPos from = companion.blockPosition();
+			BlockPos best = null;
+			for (BlockPos pos : BlockPos.betweenClosed(from.offset(-12, -3, -12), from.offset(12, 3, 12))) {
+				if (level.getBlockState(pos).is(BlockTags.ANVIL) && (best == null || pos.distSqr(from) < best.distSqr(from))) {
+					best = pos.immutable();
+				}
+			}
+			return best == null ? Optional.empty() : Optional.of(new Mend(best));
+		}
+
+		@Override
+		public boolean tick(CompanionEntity companion, ServerPlayer owner) {
+			ServerLevel level = (ServerLevel) companion.level();
+			if (++ticks > 400 || !level.getBlockState(anvil).is(BlockTags.ANVIL)) {
+				return false;
+			}
+			if (companion.getEyePosition().distanceTo(net.minecraft.world.phys.Vec3.atCenterOf(anvil)) > 3.5) {
+				if (--repath <= 0 || companion.getNavigation().isDone()) {
+					repath = 20;
+					companion.getNavigation().moveTo(anvil.getX() + 0.5, anvil.getY() + 1, anvil.getZ() + 0.5, 1.0);
+				}
+				return true;
+			}
+			companion.getNavigation().stop();
+			companion.getLookControl().setLookAt(net.minecraft.world.phys.Vec3.atCenterOf(anvil));
+			ItemStack worn = companion.mendable();
+			String name = worn == null ? "gear" : worn.getHoverName().getString().toLowerCase(Locale.ROOT);
+			if (companion.repairAt(level, anvil) > 0) {
+				companion.say("gear.repaired", java.util.Map.of("item", name.contains(".") ? "gear" : name));
+			}
+			return false;
+		}
+	}
 
 	/** Walk over to something interesting and look at it for a while. */
 	static final class Study implements Pastime {

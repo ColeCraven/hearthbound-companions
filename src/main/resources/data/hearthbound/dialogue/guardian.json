@@ -1146,6 +1146,18 @@
     "move.bridge": [
       "There is a gap. I will bridge it.",
       "Wait a moment. I will lay a few blocks across."
+    ],
+    "gear.swapped": [
+      "My {item} was failing. I have taken up the spare.",
+      "I have changed my {item}. The old one served well."
+    ],
+    "gear.worn": [
+      "My {item} would break at the next blow, so I have set it aside. Have you a spare, or the means to mend it?",
+      "I have put my {item} away before it fails. I will need another, friend."
+    ],
+    "gear.repaired": [
+      "My {item} is mended. It will hold.",
+      "The anvil has done its work. My {item} is whole again."
     ]
   }
 }
