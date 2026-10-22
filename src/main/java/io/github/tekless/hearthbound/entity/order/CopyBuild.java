@@ -287,6 +287,15 @@ public final class CopyBuild {
 		}
 
 		@Override
+		public @org.jspecify.annotations.Nullable String blocker() {
+			if (job.supplying && job.supply != null) {
+				String supply = job.supply.blocker();
+				return supply != null ? supply : job.lead == null ? null : "waiting while " + job.lead.companionName() + " gets the materials together";
+			}
+			return waiting ? "waiting for materials" : null;
+		}
+
+		@Override
 		public Kind kind() {
 			return Kind.PROJECT;
 		}

@@ -89,6 +89,7 @@ public final class Hearthbound implements ModInitializer {
 			io.github.tekless.hearthbound.life.LifeTicker.reset();
 			io.github.tekless.hearthbound.life.Favours.reset();
 			io.github.tekless.hearthbound.blueprint.Blueprints.reset();
+			io.github.tekless.hearthbound.dialogue.HeardLog.reset();
 		});
 
 		// "@Hazel follow me" in normal chat. Runs on the server thread after the message is shown.

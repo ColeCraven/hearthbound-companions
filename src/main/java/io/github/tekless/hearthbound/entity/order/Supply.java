@@ -371,6 +371,12 @@ public final class Supply {
 		}
 
 		@Override
+		public @Nullable String blocker() {
+			String inner = current == null ? null : current.blocker();
+			return inner != null ? inner : lastMissing.isEmpty() ? null : "short of " + Supply.describe(lastMissing);
+		}
+
+		@Override
 		public ProjectOrder.State tick(CompanionEntity c) {
 			if (current != null) {
 				ProjectOrder.State state = current.tick(c);

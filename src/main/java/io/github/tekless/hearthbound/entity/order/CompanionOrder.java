@@ -26,6 +26,11 @@ public interface CompanionOrder {
 	/** Short description for status replies and the HUD, e.g. "gathering oak logs (4/16)". */
 	String describe();
 
+	/** What's holding the job up right now, in a few words ("short of 3 oak planks"), or null if nothing is. */
+	default @org.jspecify.annotations.Nullable String blocker() {
+		return null;
+	}
+
 	enum Kind {
 		FOLLOW,
 		WAIT,

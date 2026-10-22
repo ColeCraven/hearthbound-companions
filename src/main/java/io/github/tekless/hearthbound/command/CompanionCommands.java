@@ -86,6 +86,8 @@ public final class CompanionCommands {
 														StringArgumentType.getString(ctx, "skin"), StringArgumentType.getString(ctx, "model"))))))));
 
 		root.then(Commands.literal("list").executes(CompanionCommands::list));
+		root.then(Commands.literal("explain")
+				.then(Commands.argument("name", StringArgumentType.word()).suggests(NEARBY_NAMES).executes(CompanionCommands::explain)));
 		root.then(Commands.literal("help").executes(CompanionCommands::help));
 		root.executes(CompanionCommands::help);
 
@@ -749,6 +751,32 @@ public final class CompanionCommands {
 		}
 		companion.setSkinVariant(variant);
 		ctx.getSource().sendSuccess(() -> Component.literal(companion.companionName() + " now wears " + CompanionSkin.describe(variant) + "."), false);
+		return 1;
+	}
+
+	/** Why a companion did (or didn't) do what they were told: what they heard, how it was read, what's in the way. */
+	private static int explain(CommandContext<CommandSourceStack> ctx) {
+		String name = StringArgumentType.getString(ctx, "name");
+		ServerPlayer player = ctx.getSource().getPlayer();
+		CompanionEntity companion = null;
+		if (player != null) {
+			List<CompanionEntity> found = Conversations.nearbyNamed(player, name);
+			companion = found.isEmpty() ? null : found.get(0);
+		}
+		if (companion == null) {
+			// From the console, or someone not close: anyone loaded by that name, nearest the command first.
+			net.minecraft.world.phys.Vec3 at = ctx.getSource().getPosition();
+			companion = CompanionTracker.all().stream()
+					.filter(c -> c.companionName().equalsIgnoreCase(name) || c.companionName().split(" ")[0].equalsIgnoreCase(name))
+					.min(java.util.Comparator.comparingDouble(c -> c.position().distanceToSqr(at))).orElse(null);
+		}
+		if (companion == null) {
+			ctx.getSource().sendFailure(Texts.tr("message.hearthbound.no_such_companion", name));
+			return 0;
+		}
+		for (String line : io.github.tekless.hearthbound.dialogue.Explain.lines(companion, player)) {
+			ctx.getSource().sendSuccess(() -> Component.literal(line), false);
+		}
 		return 1;
 	}
 

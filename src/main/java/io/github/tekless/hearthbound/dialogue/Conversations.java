@@ -210,11 +210,17 @@ public final class Conversations {
 				&& command.intent().type() == IntentType.BUILD
 				&& io.github.tekless.hearthbound.blueprint.Blueprints.match(player.level().getServer(), command.intent().item()).isPresent()) {
 			// "@party build my cottage": one build, shared, not one each.
-			report(player, groupCopyBuild(player, targets, command.intent(), false), List.of());
+			List<CompanionEntity> builders = groupCopyBuild(player, targets, command.intent(), false);
+			logGroup(player, targets, body, command, "your party", builders, "one shared build");
+			report(player, builders, List.of());
 			return true;
 		}
 		for (CompanionEntity companion : targets) {
 			handleMessage(player, companion, body, group == null);
+		}
+		if (targets.size() > 1 || group != null) {
+			String who = (group == Group.PARTY ? "your party: " : "everyone called " + name + ": ") + names(targets);
+			targets.forEach(companion -> HeardLog.recipients(companion, who));
 		}
 		if (group == Group.PARTY && targets.size() > 1) {
 			report(player, targets, List.of());
@@ -401,6 +407,7 @@ public final class Conversations {
 			return false;
 		}
 		List<CompanionEntity> told = heard;
+		String scope = group.scope() == GroupAddress.Scope.NEARBY ? "everyone nearby" : "a role group";
 		if (project.isPresent()) {
 			List<CompanionEntity> collectors = project.get().collectors() ? helpers(player, Role.COLLECTOR, heard) : List.of();
 			List<CompanionEntity> builders = project.get().builders() ? helpers(player, Role.BUILDER, heard) : List.of();
@@ -409,17 +416,38 @@ public final class Conversations {
 				heard.get(0).say("project.ack.group", Map.of("plan", launch.plan()));
 				told = new ArrayList<>(new java.util.LinkedHashSet<>(java.util.stream.Stream.concat(heard.stream(), launch.involved().stream()).toList()));
 			}
+			logGroup(player, heard, body, parsed, scope, launch.involved(), "a group job: " + launch.plan());
 		} else if (parsed instanceof ParseResult.Command command && command.intent().type() == IntentType.BUILD
 				&& io.github.tekless.hearthbound.blueprint.Blueprints.match(player.level().getServer(), command.intent().item()).isPresent()) {
 			told = groupCopyBuild(player, heard, command.intent(), group.scope() == GroupAddress.Scope.NEARBY);
+			logGroup(player, heard, body, parsed, scope, told, "one shared build");
 		} else if (parsed instanceof ParseResult.Command command) {
+			logGroup(player, heard, body, parsed, scope, List.of(), null);
 			groupOrder(player, heard, command.intent());
 		} else {
 			handleMessage(player, heard.get(0), body, true);
+			HeardLog.recipients(heard.get(0), scope + " (answered by " + heard.get(0).companionName() + "): " + names(heard));
 			told = List.of(heard.get(0));
 		}
 		report(player, told, List.of());
 		return true;
+	}
+
+	private static String names(List<CompanionEntity> companions) {
+		return String.join(", ", companions.stream().map(CompanionEntity::companionName).toList());
+	}
+
+	/** What a group heard, for /companion explain: who it was for, and whether each one is part of the job. */
+	private static void logGroup(ServerPlayer player, List<CompanionEntity> heard, String body, ParseResult parsed, String scope,
+			List<CompanionEntity> involved, String job) {
+		String who = scope + ": " + names(heard);
+		for (CompanionEntity companion : heard) {
+			HeardLog.heard(companion, player.getName().getString(), body, parsed);
+			HeardLog.recipients(companion, who);
+			if (job != null) {
+				HeardLog.result(companion, involved.contains(companion) ? "accepted: part of " + job : "not needed for " + job);
+			}
+		}
 	}
 
 	/**
@@ -500,6 +528,7 @@ public final class Conversations {
 		Outcome refusal = null;
 		for (CompanionEntity companion : heard) {
 			Outcome outcome = orderFromChat(player, companion, intent, true);
+			HeardLog.result(companion, outcome);
 			if (outcome == QUESTION) {
 				orderFromChat(player, heard.get(0), intent, false); // one of them asks; the answer goes to that one
 				beginChat(player, heard.get(0));
@@ -835,26 +864,41 @@ public final class Conversations {
 		companion.memory().addPlayerLine(text);
 		companion.getLookControl().setLookAt(player);
 		ParseResult result = PARSER.parse(text, List.of(companion.companionName()));
+		HeardLog.heard(companion, player.getName().getString(), text, result);
 		if ((result instanceof ParseResult.Talk talk && talk.topic() == TalkTopic.BYE)
 				|| (result instanceof ParseResult.Command command && command.intent().type() == IntentType.DISMISS)) {
 			endChat(player);
 		}
 		if (asked != null && answer(player, companion, asked, text, result)) {
+			HeardLog.result(companion, "taken as your answer to what they asked (" + asked.kind().name().toLowerCase(Locale.ROOT).replace('_', ' ') + ")");
 			return;
 		}
 		switch (result) {
-			case ParseResult.Command command -> orderFromChat(player, companion, command.intent());
-			case ParseResult.Share share -> share(player, companion, share, text);
-			case ParseResult.Talk talk -> converse(player, companion, text, talk.topic());
+			case ParseResult.Command command -> HeardLog.result(companion, orderFromChat(player, companion, command.intent(), false));
+			case ParseResult.Share share -> {
+				share(player, companion, share, text);
+				HeardLog.result(companion, "noted what you told them");
+			}
+			case ParseResult.Talk talk -> {
+				converse(player, companion, text, talk.topic());
+				HeardLog.result(companion, "talked back");
+			}
 			case ParseResult.Unclear unclear -> {
 				if (unclear.reason() == ParseResult.UnclearReason.GATHER_WHAT) {
 					companion.ask(player, QuestionKind.GATHER_WHAT, "unclear.gather_what", Map.of());
 				} else {
 					companion.say("unclear.generic", Map.of());
 				}
+				HeardLog.result(companion, "asked what you meant (" + companion.lastLineKey() + ")");
 			}
-			case ParseResult.Unsupported unsupported -> companion.say("fail.unsupported", Map.of("action", unsupported.action()));
-			case ParseResult.Unrecognised unrecognised -> converse(player, companion, text, TalkTopic.GENERIC);
+			case ParseResult.Unsupported unsupported -> {
+				companion.say("fail.unsupported", Map.of("action", unsupported.action()));
+				HeardLog.result(companion, "refused: fail.unsupported [action=" + unsupported.action() + "]");
+			}
+			case ParseResult.Unrecognised unrecognised -> {
+				converse(player, companion, text, TalkTopic.GENERIC);
+				HeardLog.result(companion, "talked back");
+			}
 		}
 	}
 

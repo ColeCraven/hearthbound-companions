@@ -31,6 +31,11 @@ public final class ProjectOrder implements CompanionOrder {
 		default String describe() {
 			return "";
 		}
+
+		/** What's holding this stage up, or null. */
+		default @org.jspecify.annotations.Nullable String blocker() {
+			return null;
+		}
 	}
 
 	private final Kind kind;
@@ -115,6 +120,11 @@ public final class ProjectOrder implements CompanionOrder {
 	@Override
 	public TaskStatus status() {
 		return status;
+	}
+
+	@Override
+	public @org.jspecify.annotations.Nullable String blocker() {
+		return index < steps.size() && !status.isFinished() ? steps.get(index).blocker() : null;
 	}
 
 	@Override
