@@ -110,7 +110,13 @@ public class FreshWorldGameTests {
 		Places before = areas.places(helper.getLevel(), area);
 		helper.assertTrue(before.storage().isEmpty(), "no chest yet");
 		helper.assertTrue(areas.bedFor(helper.getLevel(), area, wynn) == null, "no bed yet");
-		Block bedBlock = Blocks.RED_BED;
+		Block bedBlock = Blocks.AIR;
+		for (Block block : net.minecraft.core.registries.BuiltInRegistries.BLOCK) {
+			if (block instanceof BedBlock) {
+				bedBlock = block;
+				break;
+			}
+		}
 		BlockState head = bedBlock.defaultBlockState().setValue(BedBlock.FACING, Direction.NORTH).setValue(BedBlock.PART, BedPart.HEAD);
 		helper.setBlock(5, 1, 2, head);
 		helper.setBlock(5, 1, 3, head.setValue(BedBlock.PART, BedPart.FOOT));
