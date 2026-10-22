@@ -24,5 +24,17 @@
   "message.hearthbound.unreachable": "Could not reach: %s",
   "message.hearthbound.group_couldnt": "Couldn't do that: %s",
   "message.hearthbound.group_none": "Nobody who listens to you is close enough to hear that.",
-  "message.hearthbound.group_strangers": "Nobody nearby is with you yet. Recruit them first, or turn on /companion obey so everyone takes your orders."
+  "message.hearthbound.group_strangers": "Nobody nearby is with you yet. Recruit them first, or turn on /companion obey so everyone takes your orders.",
+  "key.hearthbound.conversation": "Open conversation screen",
+  "screen.hearthbound.talk": "Talk",
+  "screen.hearthbound.talk.input": "Say something",
+  "screen.hearthbound.talk.hint": "Say anything, the same as in chat",
+  "screen.hearthbound.talk.send": "Say",
+  "screen.hearthbound.talk.follow": "Follow",
+  "screen.hearthbound.talk.wait": "Wait",
+  "screen.hearthbound.talk.come": "Come",
+  "screen.hearthbound.talk.status": "Status",
+  "screen.hearthbound.talk.give": "Give...",
+  "screen.hearthbound.talk.waiting": "Listening...",
+  "screen.hearthbound.talk.empty": "Nothing said yet."
 }
