@@ -182,6 +182,7 @@ public class ObeyAndTeamGameTests {
 		ServerPlayer guest = player(helper, 6.5, 0.5);
 		Obey.addTestHost(host.getUUID());
 		int limit = Hearthbound.config().partyLimit;
+		java.util.Map<String, Integer> limits = new java.util.LinkedHashMap<>(Hearthbound.config().partyLimits);
 		try {
 			server.getCommands().performPrefixedCommand(guest.createCommandSourceStack(), "companion partylimit 1");
 			helper.assertValueEqual(Hearthbound.config().partyLimit, limit, "a guest can't change it");
@@ -199,8 +200,11 @@ public class ObeyAndTeamGameTests {
 			helper.assertTrue(Conversations.apply(guest, first, Intent.of(IntentType.RECRUIT)).accepted(), "the guest's first");
 			helper.assertFalse(Conversations.apply(guest, second, Intent.of(IntentType.RECRUIT)).accepted(), "but not a second");
 		} finally {
+			// The command saved the config file, so it is put back on disk too, or the next run starts unlimited.
 			Hearthbound.config().partyLimit = limit;
 			Hearthbound.config().partyLimits.clear();
+			Hearthbound.config().partyLimits.putAll(limits);
+			Hearthbound.config().save();
 			Obey.removeTestHost(host.getUUID());
 		}
 		remove(helper, host);
