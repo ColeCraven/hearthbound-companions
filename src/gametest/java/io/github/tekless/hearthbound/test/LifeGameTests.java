@@ -42,16 +42,10 @@ import net.minecraft.world.phys.Vec3;
  * Daily life at home: the schedule by the clock, sleeping in a bed of their own, marking places, catching up on
  * time away, the evening fire, favours, orders coming first, and what happens in a brand-new world.
  *
- * <p>Daily life is switched on per companion here (the older tests run with it off), and every test has room
- * round it so the homes of two tests never count as one.
+ * <p>Daily life is switched on per companion here (the older tests run with it off, see {@link TestSetup}), and
+ * every test has room round it so the homes of two tests never count as one.
  */
 public class LifeGameTests {
-	static {
-		// The tests written before daily life existed expect companions to stay put at home, so it is off for them;
-		// the tests below switch it on companion by companion.
-		Hearthbound.config().dailyLife = false;
-	}
-
 	private static void floor(GameTestHelper helper, Block block) {
 		for (int x = 0; x < 8; x++) {
 			for (int z = 0; z < 8; z++) {

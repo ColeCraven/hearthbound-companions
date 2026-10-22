@@ -5,6 +5,7 @@
 	"name": "Hearthbound Companions tests",
 	"environment": "*",
 	"entrypoints": {
+		"main": ["io.github.tekless.hearthbound.test.TestSetup"],
 		"fabric-gametest": ["io.github.tekless.hearthbound.test.SmokeGameTest", "io.github.tekless.hearthbound.test.CompanionGameTests", "io.github.tekless.hearthbound.test.MultiplayerGameTests", "io.github.tekless.hearthbound.test.BuildAndDigGameTests", "io.github.tekless.hearthbound.test.FriendshipGameTests", "io.github.tekless.hearthbound.test.ChatOrdersGameTests", "io.github.tekless.hearthbound.test.RoutinesAndCampGameTests", "io.github.tekless.hearthbound.test.MigrationGameTests", "io.github.tekless.hearthbound.test.GroupAndProjectGameTests", "io.github.tekless.hearthbound.test.LifeGameTests", "io.github.tekless.hearthbound.test.ObeyAndTeamGameTests"],
 		"fabric-client-gametest": ["io.github.tekless.hearthbound.test.CompanionClientGameTest", "io.github.tekless.hearthbound.test.AdventurePlaytest", "io.github.tekless.hearthbound.test.ChatPathPlaytest", "io.github.tekless.hearthbound.test.CastShowcase"]
 	},
