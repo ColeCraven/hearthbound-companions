@@ -55,6 +55,12 @@ public final class Hearthbound implements ModInitializer {
 		return ai;
 	}
 
+	/** Starts AI dialogue again from the current config (after /companion ai setup or off). Returns the service, or null if off. */
+	public static AiService restartAi(net.minecraft.server.MinecraftServer server) {
+		ai = AiService.create(config, FabricLoader.getInstance().getConfigDir(), server);
+		return ai;
+	}
+
 	@Override
 	public void onInitialize() {
 		Path configDir = FabricLoader.getInstance().getConfigDir();

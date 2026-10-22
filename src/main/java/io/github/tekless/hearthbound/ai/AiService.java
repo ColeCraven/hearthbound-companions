@@ -117,6 +117,25 @@ public final class AiService {
 		return new AiService(model, server, ai);
 	}
 
+	/** Which model this is, e.g. "Ollama qwen3.5:9b". */
+	public String describe() {
+		return model.describe();
+	}
+
+	/** One short reply, to check the provider answers at all (for /companion ai setup). Completes off the game thread. */
+	public java.util.concurrent.CompletableFuture<String> testReply() {
+		PromptBuilder.Prompt prompt = new PromptBuilder.Prompt(
+				"You are a friendly travelling companion in a world of blocks. Answer as JSON with a short \"reply\" and no intent.",
+				"Say hello to me in one short sentence.");
+		return model.complete(prompt).thenApply(raw -> {
+			try {
+				return AiReply.parse(raw).reply();
+			} catch (RuntimeException e) {
+				return raw.length() > 120 ? raw.substring(0, 120) : raw;
+			}
+		});
+	}
+
 	/** Starts an AI reply. Returns false (caller uses scripts) if the provider is paused. */
 	public boolean converse(ServerPlayer player, CompanionEntity companion, String message) {
 		if (System.currentTimeMillis() < pausedUntil) {

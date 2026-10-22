@@ -47,6 +47,38 @@ public final class Secrets {
 		return Optional.empty();
 	}
 
+	/** Where the key for this provider would come from, in words (never the key itself), or empty if there isn't one. */
+	public static Optional<String> source(String provider, Path configDir) {
+		if (isSet(System.getenv("HEARTHBOUND_API_KEY"))) {
+			return Optional.of("the HEARTHBOUND_API_KEY environment variable");
+		}
+		String providerVar = switch (provider) {
+			case "openai" -> "OPENAI_API_KEY";
+			case "anthropic" -> "ANTHROPIC_API_KEY";
+			default -> null;
+		};
+		if (providerVar != null && isSet(System.getenv(providerVar))) {
+			return Optional.of("the " + providerVar + " environment variable");
+		}
+		return apiKey(provider, configDir).map(key -> "config/hearthbound-secrets.json");
+	}
+
+	/** Makes an empty config/hearthbound-secrets.json to paste a key into, if there isn't one. Returns true if it made one. */
+	public static boolean writeTemplate(Path configDir) {
+		Path file = configDir.resolve("hearthbound-secrets.json");
+		if (Files.exists(file)) {
+			return false;
+		}
+		try {
+			Files.createDirectories(configDir);
+			Files.writeString(file, "{\n  \"apiKey\": \"PUT-YOUR-KEY-HERE\"\n}\n", StandardCharsets.UTF_8);
+			return true;
+		} catch (IOException e) {
+			Hearthbound.LOGGER.warn("Could not create {}: {}", file.getFileName(), e.getMessage());
+			return false;
+		}
+	}
+
 	private static boolean isSet(String value) {
 		return value != null && !value.isBlank() && !value.contains("PUT-YOUR-KEY-HERE");
 	}

@@ -142,6 +142,28 @@ public final class HttpModels {
 		};
 	}
 
+	/** The models an Ollama install has pulled (GET /api/tags), names only. */
+	public static CompletableFuture<java.util.List<String>> ollamaModels(String baseUrl) {
+		String url = (baseUrl == null || baseUrl.isBlank() ? "http://127.0.0.1:11434" : stripSlash(baseUrl)) + "/api/tags";
+		HttpRequest request = HttpRequest.newBuilder(URI.create(url)).timeout(Duration.ofSeconds(5)).GET().build();
+		return CLIENT.sendAsync(request, HttpResponse.BodyHandlers.ofString()).orTimeout(7, TimeUnit.SECONDS).thenApply(response -> {
+			if (response.statusCode() / 100 != 2) {
+				throw new IllegalStateException("HTTP " + response.statusCode());
+			}
+			java.util.List<String> names = new java.util.ArrayList<>();
+			JsonArray models = JsonParser.parseString(response.body()).getAsJsonObject().getAsJsonArray("models");
+			if (models != null) {
+				for (JsonElement model : models) {
+					JsonObject entry = model.getAsJsonObject();
+					if (entry.has("name")) {
+						names.add(entry.get("name").getAsString());
+					}
+				}
+			}
+			return names;
+		});
+	}
+
 	private static JsonArray messages(PromptBuilder.Prompt prompt, boolean includeSystem) {
 		JsonArray messages = new JsonArray();
 		if (includeSystem) {
