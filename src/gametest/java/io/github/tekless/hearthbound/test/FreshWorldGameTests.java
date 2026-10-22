@@ -40,7 +40,7 @@ public class FreshWorldGameTests {
 		CompanionEntity companion = helper.spawn(ModEntities.COMPANION, new Vec3(x + 0.5, 1, z + 0.5));
 		companion.initIdentity(archetype, name, CompanionSkin.STEVE, false);
 		companion.setHomePos(helper.absolutePos(new BlockPos(x, 1, z)));
-		companion.setTestClock(2000L); // a working morning
+		companion.setTestClock(3500L); // mid-morning: everyone is up and at work, whatever their personality
 		companion.setDailyLife(true);
 		companion.setTestAutonomy(autonomy);
 		return companion;
