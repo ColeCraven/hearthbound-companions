@@ -41,11 +41,18 @@ public class AdminGameTests {
 		}
 	}
 
-	private static boolean hurts(GameTestHelper helper, CompanionEntity companion, net.minecraft.world.damagesource.DamageSource source) {
-		companion.invulnerableTime = 0;
-		companion.setHealth(companion.getMaxHealth());
+	/** A fresh companion each time (so no hit lands in another's invulnerable moment), yours if {@code owner} isn't null. */
+	private static boolean hurts(GameTestHelper helper, ServerPlayer owner, net.minecraft.world.damagesource.DamageSource source) {
+		CompanionEntity companion = helper.spawn(ModEntities.COMPANION, new Vec3(4.5, 1, 4.5));
+		companion.initIdentity(Archetype.GUARDIAN, "Gtdmg", CompanionSkin.STEVE, false);
+		if (owner != null) {
+			Conversations.apply(owner, companion, Intent.of(IntentType.RECRUIT));
+		}
+		float before = companion.getHealth();
 		companion.hurtServer(helper.getLevel(), source, 3.0F);
-		return companion.getHealth() < companion.getMaxHealth();
+		boolean hurt = companion.getHealth() < before;
+		companion.discard();
+		return hurt;
 	}
 
 	@GameTest(maxTicks = 40, padding = 40)
@@ -56,28 +63,25 @@ public class AdminGameTests {
 		ServerPlayer owner = helper.makeMockServerPlayerInLevel();
 		Vec3 pos = helper.absoluteVec(new Vec3(2.5, 1, 2.5));
 		owner.snapTo(pos.x, pos.y, pos.z, 0, 0);
-		CompanionEntity tess = helper.spawn(ModEntities.COMPANION, new Vec3(4.5, 1, 4.5));
-		tess.initIdentity(Archetype.GUARDIAN, "Gttes", CompanionSkin.STEVE, false);
-		Conversations.apply(owner, tess, Intent.of(IntentType.RECRUIT));
 		HearthboundConfig.Server rules = Hearthbound.config().server;
 		boolean godmode = rules.godmode;
 		boolean players = rules.playersCanHurt;
 		try {
 			var generic = helper.getLevel().damageSources().generic();
 			var hit = helper.getLevel().damageSources().playerAttack(owner);
-			helper.assertTrue(hurts(helper, tess, generic), "hurt as usual");
+			helper.assertTrue(hurts(helper, null, generic), "hurt as usual");
 			helper.assertValueEqual(run(helper, console, "companion godmode on"), 1, "god mode on");
 			helper.assertTrue(rules.godmode, "saved");
-			helper.assertFalse(hurts(helper, tess, generic), "nothing hurts in god mode");
-			helper.assertFalse(hurts(helper, tess, hit), "not even you");
+			helper.assertFalse(hurts(helper, null, generic), "nothing hurts in god mode");
+			helper.assertFalse(hurts(helper, owner, hit), "not even from you");
 			run(helper, console, "companion godmode off");
-			helper.assertTrue(hurts(helper, tess, generic), "and back to normal");
+			helper.assertTrue(hurts(helper, null, generic), "and back to normal");
 			run(helper, console, "companion damage players off");
 			helper.assertFalse(rules.playersCanHurt, "saved");
-			helper.assertFalse(hurts(helper, tess, hit), "players can't hurt them now");
-			helper.assertTrue(hurts(helper, tess, generic), "the world still can");
+			helper.assertFalse(hurts(helper, owner, hit), "players can't hurt them now, not even you");
+			helper.assertTrue(hurts(helper, null, generic), "the world still can");
 			run(helper, console, "companion damage players on");
-			helper.assertTrue(hurts(helper, tess, hit), "players can again");
+			helper.assertTrue(hurts(helper, owner, hit), "players can again");
 		} finally {
 			rules.godmode = godmode;
 			rules.playersCanHurt = players;
