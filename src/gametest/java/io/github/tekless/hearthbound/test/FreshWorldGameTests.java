@@ -29,8 +29,13 @@ import net.minecraft.world.phys.Vec3;
  */
 public class FreshWorldGameTests {
 	private static void ground(GameTestHelper helper, int size) {
-		for (int x = 0; x < size; x++) {
-			for (int z = 0; z < size; z++) {
+		ground(helper, 0, size);
+	}
+
+	/** Flat grass from {@code from} to {@code to - 1} in both directions (it can reach outside the test's own box). */
+	private static void ground(GameTestHelper helper, int from, int to) {
+		for (int x = from; x < to; x++) {
+			for (int z = from; z < to; z++) {
 				helper.setBlock(x, 0, z, Blocks.GRASS_BLOCK);
 			}
 		}
@@ -71,7 +76,8 @@ public class FreshWorldGameTests {
 
 	@GameTest(maxTicks = 400, padding = 40)
 	public void aBuilderWithNoRoofPutsUpAShelter(GameTestHelper helper) {
-		ground(helper, 16);
+		// Shelter sites are tried nine blocks apart around home, so the ground has to reach the nearest of them.
+		ground(helper, -10, 25);
 		CompanionEntity moss = settler(helper, Archetype.MYSTIC, "Gtmos", 7, 7, true);
 		moss.inventory().addItem(new ItemStack(Items.OAK_PLANKS, 64));
 		moss.inventory().addItem(new ItemStack(Items.OAK_LOG, 16));
