@@ -1617,6 +1617,9 @@ public class CompanionEntity extends PathfinderMob {
 			boolean shooter = target instanceof net.minecraft.world.entity.monster.RangedAttackMob;
 			raise = (shooter && distance > 2.8 && distance < 24 && hasLineOfSight(target)) || (distance > 2.8 && distance < 7);
 		}
+		if (raise) {
+			getLookControl().setLookAt(target, 30.0F, 30.0F); // face what you're shielding against
+		}
 		if (raise && !isUsingItem()) {
 			startUsingItem(InteractionHand.OFF_HAND);
 		} else if (!raise && isUsingItem() && getUsedItemHand() == InteractionHand.OFF_HAND) {
@@ -1626,12 +1629,15 @@ public class CompanionEntity extends PathfinderMob {
 
 	/** The shield is up and the hit comes from in front (and isn't the kind shields can't stop). */
 	private boolean blocksWithShield(DamageSource source) {
-		if (!isBlocking() || source.is(DamageTypeTags.BYPASSES_SHIELD) || source.getSourcePosition() == null) {
+		if (!isBlocking() || source.is(DamageTypeTags.BYPASSES_SHIELD) || source.getSourcePosition() == null
+				|| source.getDirectEntity() instanceof net.minecraft.world.entity.projectile.arrow.AbstractArrow arrow && arrow.getPierceLevel() > 0) {
 			return false;
 		}
+		// The same rule the game uses: the hit has to come from in front of where the head is facing. A little margin, so
+		// anything this lets through to the shield really is blocked.
 		Vec3 towards = source.getSourcePosition().subtract(position()).multiply(1, 0, 1);
-		Vec3 look = getViewVector(1.0F).multiply(1, 0, 1);
-		return towards.lengthSqr() > 1.0E-4 && look.lengthSqr() > 1.0E-4 && towards.normalize().dot(look.normalize()) > 0;
+		Vec3 look = calculateViewVector(0.0F, getYHeadRot());
+		return towards.lengthSqr() > 1.0E-4 && towards.normalize().dot(look) > 0.1;
 	}
 
 	/** Hurt and carrying food: eat some (a couple of seconds of munching), which heals as much as the food is worth. */

@@ -109,9 +109,12 @@ public class MovementGameTests {
 		CompanionEntity cole = follower(helper, owner, Archetype.ROGUE, "Gtcol", 1.5, 5, 3.5);
 		cole.inventory().addItem(new ItemStack(Items.COBBLESTONE, 4));
 		noTeleports(helper, cole);
-		double far = helper.absoluteVec(new Vec3(5, 0, 0)).x;
+		double edge = helper.absoluteVec(new Vec3(3.3, 0, 0)).x;
+		double ground = helper.absoluteVec(new Vec3(0, 5, 0)).y;
 		helper.succeedWhen(() -> {
-			helper.assertTrue(cole.getX() >= far, "across the gap (at " + cole.blockPosition() + ", far side " + far + ", " + cole.order().describe() + ")");
+			// Out over the trench at walking height (they stop a few blocks short of the player, so maybe still on the bridge).
+			helper.assertTrue(cole.getX() >= edge && cole.getY() >= ground - 0.1 && cole.onGround(),
+					"out over the gap (at " + helper.relativePos(cole.blockPosition()) + ", " + cole.order().describe() + ")");
 			helper.assertValueEqual(cole.countCarried(s -> s.is(Items.COBBLESTONE)), 2, "on a two-block bridge");
 			remove(helper, owner);
 		});
