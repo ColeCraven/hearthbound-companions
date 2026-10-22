@@ -63,7 +63,7 @@ public class CombatAndCareGameTests {
 		CompanionEntity dasha = recruited(helper, owner, Archetype.GUARDIAN, "Gtdas", 0.5, 3.5);
 		dasha.inventory().addItem(new ItemStack(Items.BOW));
 		dasha.inventory().addItem(new ItemStack(Items.ARROW, 16));
-		var husk = still(helper, EntityType.HUSK, 7.5, 3.5);
+		var husk = still(helper, net.minecraft.world.entity.EntityTypes.HUSK, 7.5, 3.5);
 		helper.assertTrue(Conversations.apply(owner, dasha, Intent.attack("husk")).accepted(), "told to fight it");
 		helper.succeedWhen(() -> {
 			helper.assertTrue(dasha.countCarried(s -> s.is(Items.ARROW)) < 16, "arrows from the pack");
@@ -80,7 +80,7 @@ public class CombatAndCareGameTests {
 		CompanionEntity charlie = recruited(helper, owner, Archetype.SELLSWORD, "Gtcha", 3.5, 3.5);
 		charlie.inventory().addItem(new ItemStack(Items.BOW));
 		charlie.inventory().addItem(new ItemStack(Items.ARROW, 16));
-		var husk = still(helper, EntityType.HUSK, 5.5, 3.5);
+		var husk = still(helper, net.minecraft.world.entity.EntityTypes.HUSK, 5.5, 3.5);
 		helper.assertTrue(Conversations.apply(owner, charlie, Intent.attack("husk")).accepted(), "told to fight it");
 		helper.succeedWhen(() -> {
 			helper.assertTrue(husk.getHealth() < husk.getMaxHealth() || !husk.isAlive(), "hit it");
@@ -96,7 +96,7 @@ public class CombatAndCareGameTests {
 		ServerPlayer owner = player(helper, 3.5, 0.5);
 		CompanionEntity sigrun = recruited(helper, owner, Archetype.GUARDIAN, "Gtsig", 0.5, 3.5);
 		sigrun.inventory().addItem(new ItemStack(Items.SHIELD));
-		var skeleton = still(helper, EntityType.SKELETON, 7.5, 3.5);
+		var skeleton = still(helper, net.minecraft.world.entity.EntityTypes.SKELETON, 7.5, 3.5);
 		helper.assertTrue(Conversations.apply(owner, sigrun, Intent.attack("skeleton")).accepted(), "told to fight it");
 		boolean[] state = {false, false};
 		helper.onEachTick(() -> {
