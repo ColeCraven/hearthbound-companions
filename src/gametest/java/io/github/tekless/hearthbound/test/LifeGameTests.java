@@ -133,9 +133,9 @@ public class LifeGameTests {
 		BlockPos head = helper.absolutePos(new BlockPos(5, 1, 2));
 		helper.succeedWhen(() -> {
 			helper.assertTrue(luna.isSleeping(), "asleep (" + luna.order().describe() + ")");
-			helper.assertValueEqual(luna.getSleepingPos().orElse(null), head, "in the bed");
+			helper.assertTrue(head.equals(luna.getSleepingPos().orElse(null)), "in the bed");
 			HomeAreas areas = HomeAreas.get(helper.getLevel().getServer());
-			helper.assertValueEqual(areas.bedFor(helper.getLevel(), areas.areaOf(luna), luna), head, "and it is theirs");
+			helper.assertTrue(head.equals(areas.bedFor(helper.getLevel(), areas.areaOf(luna), luna)), "and it is theirs");
 		});
 	}
 
@@ -192,9 +192,9 @@ public class LifeGameTests {
 		HomeAreas.Area area = areas.areaOf(sam);
 		Places places = areas.places(helper.getLevel(), area);
 		helper.assertTrue(places.storage().contains(helper.absolutePos(new BlockPos(6, 1, 6))), "the chest is their storage");
-		helper.assertValueEqual(areas.bedFor(helper.getLevel(), area, sam), helper.absolutePos(new BlockPos(6, 1, 2)), "the bed is Sam's");
+		helper.assertTrue(helper.absolutePos(new BlockPos(6, 1, 2)).equals(areas.bedFor(helper.getLevel(), area, sam)), "the bed is Sam's");
 		helper.assertTrue(places.farm() != null && places.farmMarked() && places.farm().contains(helper.absolutePos(new BlockPos(2, 0, 6))), "the farmland is the farm");
-		helper.assertValueEqual(places.commons(), helper.absolutePos(new BlockPos(4, 1, 4)), "and this is where they meet");
+		helper.assertTrue(helper.absolutePos(new BlockPos(4, 1, 4)).equals(places.commons()), "and this is where they meet");
 		Obey.removeTestHost(host.getUUID());
 		remove(helper, host);
 		helper.succeed();
@@ -255,7 +255,7 @@ public class LifeGameTests {
 		helper.setBlock(4, 1, 4, Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, false));
 		CompanionEntity fennel = resident(helper, Archetype.NATURALIST, "Fenxx", 2, 2, 12500);
 		helper.succeedWhen(() -> {
-			helper.assertValueEqual(activity(fennel), Activity.SOCIAL, "out for the evening");
+			helper.assertTrue(activity(fennel) == Activity.SOCIAL, "out for the evening (" + activity(fennel) + ")");
 			helper.assertTrue(at(helper, 4, 1, 4).getValue(CampfireBlock.LIT), "and the fire is lit");
 		});
 	}
@@ -268,7 +268,7 @@ public class LifeGameTests {
 		hazel.stockPack(); // a collector starts out with some apples and an emerald
 		ServerPlayer visitor = player(helper, 3.5, 3.5);
 		helper.assertTrue(Favours.maybeAsk(hazel, visitor, helper.getLevel().getGameTime()), "asks a favour, having something to give for it");
-		helper.assertValueEqual(hazel.lastLineKey(), "life.favour.ask", "and says what for");
+		helper.assertTrue("life.favour.ask".equals(hazel.lastLineKey()), "and says what for (" + hazel.lastLineKey() + ")");
 		helper.assertTrue(Favours.receive(hazel, visitor, new ItemStack(Items.OAK_LOG, 16)), "takes the logs");
 		helper.assertValueEqual(visitor.getInventory().countItem(Items.EMERALD), 1, "pays with the emerald from their pack");
 		helper.assertValueEqual(hazel.countCarried(s -> s.is(Items.EMERALD)), 0, "which is gone from it");

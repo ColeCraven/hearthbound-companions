@@ -189,7 +189,8 @@ public class ObeyAndTeamGameTests {
 				CompanionEntity member = companion(helper, Archetype.FARMHAND, "Memxx" + (char) ('a' + i), 1.5 + i, 4.5);
 				helper.assertTrue(Conversations.apply(host, member, Intent.of(IntentType.RECRUIT)).accepted(), "recruit number " + (i + 1));
 			}
-			server.getCommands().performPrefixedCommand(host.createCommandSourceStack(), "companion partylimit " + guest.getName().getString() + " 1");
+			// One player's own limit (set directly: the test players all share one name, so the by-name command can't tell them apart).
+			Hearthbound.config().partyLimits.put(guest.getUUID().toString(), 1);
 			helper.assertValueEqual(Hearthbound.config().partyLimitFor(guest.getUUID()), 1, "one player can be given their own limit");
 			CompanionEntity first = companion(helper, Archetype.ROGUE, "Gonexx", 6.5, 6.5);
 			CompanionEntity second = companion(helper, Archetype.ROGUE, "Gtwoxx", 5.5, 6.5);
