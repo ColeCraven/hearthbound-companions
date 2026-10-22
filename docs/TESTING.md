@@ -1,7 +1,7 @@
 # Testing
 
 This is how I test the mod, what I've actually checked, and what I haven't got to yet. Last
-updated 2026-10-21 (v0.4).
+updated 2026-10-22 (v0.6).
 
 ## How to run
 
@@ -18,7 +18,7 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 
 ## Automated tests
 
-### Unit tests (JUnit 5): 285 passing
+### Unit tests (JUnit 5): 339 passing
 
 | Suite | Covers |
 |---|---|
@@ -28,6 +28,9 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 | `PlayerFactsTest` (6) | Likes match the world ignoring plurals and articles ("diamonds" for diamond ore), changing your mind, keeping the most recent few, the "you go by..., you like..." summary, facts kept per player, and memories stored as full clauses even from old saves |
 | `GatherMachineTest` (9) | Success only after full delivery; nothing found (no invented items); partial delivery when supply runs out; unreachable targets skipped then explained; missing tool fails before moving; full pack brings back what fits; cancel is immediate and final; owner leaving keeps the items |
 | `MovementPolicyTest` (5) | Follow band, hysteresis, hurry and teleport thresholds, dimension/cliff/stuck teleport, stuck detection windows |
+| `ScheduleTest` (13) | Every personality works in the morning, eats at noon, meets the others in the evening and sleeps at night (fifty different companions each); waking is spread over dawn; farmhands rise early and mystics stay up; rain sends everyone indoors but nobody out of bed; hunger, tiredness and a full moon move the day; lonely people spend time off with the others; afternoons mix work and leisure; the moon is full every eighth night |
+| `NeedsAndGrowthTest` (6) | Hunger builds and a meal puts it right; sleep rests and company cheers; how needs change chattiness; crops grow about a stage a quarter day on wet farmland; harvests only happen when allowed and are capped; bonus drops; most neighbours warm to each other and clashing ones drift apart |
+| `TeamRequestTest` (35) | Plain requests with nobody named ("let's build a house", "we need a farm", "can someone get wood", "let's set up camp here") and the job each one is; statements and vague ones that must start nothing ("I built a house yesterday", "I love building houses", "we don't need a farm", "build something"); gather jobs keep the item and count |
 | `LineBankTest` (19) | Every personality has lines for every situation the game uses, including the 0.4 keys (questions, mentions, role remarks, chats between companions, routines); per-character files only use placeholders the game supplies; placeholders match what code supplies; frequent situations have 3+ variants; personalities don't share lines; selector cycles through all variants and never repeats back-to-back; a filled-in word that starts a sentence is capitalised; articles agree with what fills them ("an apple", "some sweet berries") |
 | `AiContractTest` (7) | Model JSON parsing, intent allow-list, count clamping, formatting-code stripping, promise guard, prompt-injection containment (player text, including what they told the companion about themselves, can't close a data block), schema validity |
 | `CastMemberTest` (6) | Cast names unique and not reused by wanderers; every role has at least two characters; old names still find the right character; roles are fair (never below 80%); every cast member has a valid 64x64 skin; skin variants round-trip |
@@ -35,7 +38,7 @@ runs a scripted session and saves screenshots to `build/run/clientGameTest/scree
 | `CompanionMemoryTest` (3) | Switching conversation partner forgets the previous player's lines but keeps shared events and affinity |
 | `HttpModelsTest` (7) | Ollama / OpenAI-compatible / Anthropic request shapes and response parsing against a local fake server; refusal, HTTP 401, timeout and unreachable server all fail cleanly |
 
-### Server GameTests: 67 passing (plus a smoke test)
+### Server GameTests: 81 passing (plus a smoke test)
 
 These run in a real Minecraft server world on every `./gradlew build`:
 
@@ -98,6 +101,21 @@ These run in a real Minecraft server world on every `./gradlew build`:
 | `crouchingTwiceGetsACrouchBack` | Two quick crouches while looking at a companion: they crouch back |
 | `anAdvancementGetsAReaction` | Completing "Stone Age" gets a line from the nearest companion (this also proves the mixin is applied) |
 | `aLevelMilestoneGetsAReaction` | Reaching level 10 gets a reaction |
+| `theScheduleFollowsTheClock` | A farmhand at home goes through work, a meal, the evening at the meeting spot and bed as the clock moves |
+| `aResidentSleepsInTheirOwnBed` | At night a resident finds the bed near home, lies down in it (the vanilla sleeping pose) and it is theirs |
+| `ordersComeBeforeTheSchedule` | A sleeping resident told to come here (obey mode) gets up and comes, then goes back to their day |
+| `setplaceMarksTheSpotYouStandOn` | `/companion setplace storage`, `bed`, `farm` and `commons` mark the chest, the bed, the farmland and the meeting spot |
+| `catchUpHarvestsTheFarmIntoTheStorageChestOnly` | Three days away: the farm is harvested and replanted, every bit of reported wheat is in the storage chest, the other chest and the crop outside the farm are untouched, and the summary names who did it |
+| `theMeetingFireIsLitAtDusk` | A resident out for the evening lights the campfire at the meeting spot |
+| `aFavourIsPaidFromTheirOwnPack` | A collector asks a favour only with something to give, takes the logs, and pays with the emerald from their own pack |
+| `aFarmerInANewWorldStartsAFarmByTheWater` | Bare grass and a pool of water: with autonomy on, a farmer with seeds and a hoe starts a farm of their own |
+| `withNothingToWorkWithTheySayWhatTheyNeedOnce` | No farm and autonomy off: the farmer says what they'd need, once a day, and carries on |
+| `theHostCommandsEveryoneIncludingOtherPlayersCompanions` | The host's obey mode reaches a companion with nobody and a friend's companion; the friend's stays the friend's and comes back when called; "join me" is still refused |
+| `operatorsCanUseObeyButOtherPlayersCannot` | A player without operator rights can't turn obey on (by command or otherwise) and is ignored; an operator can, and is obeyed |
+| `everyKindOfOrderWorksInObeyMode` | Wait, come, status, gather, stop, build, dig, give and go home for a companion with nobody and for a friend's companion; attack and follow; the host can send someone else's companion home |
+| `thePartyLimitCanBeLiftedByTheHostButNotByOthers` | A guest can't change the limit; the host lifts it and recruits four; one player can be given their own limit |
+| `aPlainRequestBecomesOneHouseBuiltTogether` | "let's build a house" with two builders and a collector nearby: one plan, one shared blueprint, the collector brings wood, and one house stands with more blocks than the builders started with |
+| `aStatementStartsNoWork` | "I built a house yesterday", "I love building houses" and "we don't need a farm" change nothing |
 
 ### Client GameTest: passing
 

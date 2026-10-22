@@ -114,7 +114,27 @@ public final class Hearthbound implements ModInitializer {
 		EntitySleepEvents.START_SLEEPING.register((entity, pos) -> {
 			if (entity instanceof ServerPlayer player) {
 				Moments.wentToBed(player);
+				// A bed a player sleeps in is theirs: no companion will claim it.
+				if (player.level() instanceof ServerLevel level && io.github.tekless.hearthbound.life.HomeAreas.bedHead(level, pos) != null) {
+					io.github.tekless.hearthbound.life.HomeAreas.get(level.getServer()).markPlayerBed(level, io.github.tekless.hearthbound.life.HomeAreas.bedHead(level, pos));
+				}
 			}
+		});
+		// Right-clicking a bed a companion is asleep in gets them up, and the bed is the player's from then on.
+		net.fabricmc.fabric.api.event.player.UseBlockCallback.EVENT.register((player, world, hand, hit) -> {
+			if (world instanceof ServerLevel level && player instanceof ServerPlayer && !player.isSpectator()) {
+				net.minecraft.core.BlockPos head = io.github.tekless.hearthbound.life.HomeAreas.bedHead(level, hit.getBlockPos());
+				if (head != null) {
+					for (CompanionEntity companion : CompanionTracker.all()) {
+						if (companion.level() == level && companion.isSleeping() && companion.getSleepingPos().filter(head::equals).isPresent()) {
+							companion.wakeUp();
+							io.github.tekless.hearthbound.life.HomeAreas.get(level.getServer()).markPlayerBed(level, head);
+							companion.sayMaybe("life.bed_taken", java.util.Map.of(), 1.0);
+						}
+					}
+				}
+			}
+			return net.minecraft.world.InteractionResult.PASS;
 		});
 		EntitySleepEvents.STOP_SLEEPING.register((entity, pos) -> {
 			if (entity instanceof ServerPlayer player) {

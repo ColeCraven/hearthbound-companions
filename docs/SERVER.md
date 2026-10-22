@@ -98,12 +98,39 @@ The easiest setup is Ollama on the server machine. It's free, and nothing leaves
   `/companion tell <name|party|everyone> <message>` does the same from the command line. You get
   a short grey report of who heard it and who couldn't.
 - Companions in unloaded chunks can't hear you or act. Messages aren't queued: go back near them.
-- Other players' companions don't take your orders, and yours don't take theirs.
+- Other players' companions don't take your orders, and yours don't take theirs (unless an operator
+  uses obey mode, below).
 - `/companion chattiness` and `/companion autonomy` change the world's settings and are saved in
   `config/hearthbound.json`. On a server they need operator rights.
-- `/companion obey on` makes every companion in the world take that operator's orders, recruited or not. It is
-  off by default on a server, needs operator rights, and only applies to the operator who turned it on
-  (stored in `obeyPlayers`). `/companion hub list` and `hub home Name` also work from the server console.
+- `/companion obey on` makes every companion in the world take that operator's orders: ones with nobody,
+  and ones travelling with other players (an override for admins; they never change sides, and their own
+  player can call them back). It is off by default on a server, needs operator rights (level 2), only
+  applies to the operator who turned it on (stored in `obeyPlayers`), and stops working if they lose
+  operator rights. Players without operator rights are refused.
+- `/companion partylimit [player] <number|unlimited>` changes how many companions each player (or one
+  player) can travel with. Operators and the console only; 0 or `unlimited` lifts the limit.
+- `/companion hub list` and `hub home Name` also work from the server console.
+
+## The hub's daily life
+
+Hub residents live a day of their own at the hub: up at dawn, work by role, a meal at noon, the evening
+together at the meeting spot, bed at night in a bed each (see [GUIDE.md](GUIDE.md#implemented-a-day-of-their-own)).
+They find beds, a bell or campfire, a furnace or smoker by a chest, and farmland within about 20 blocks
+of the hub by themselves. The hub is a protected area, so they never break or place anything there on their
+own, with two exceptions you control:
+
+- a farm listed in `server.hub.places.farm` (or marked with `/companion setplace farm`) is theirs to work:
+  ripe crops inside it are harvested and replanted, and nothing outside it is touched;
+- the harvest goes only into chests inside `server.hub.places.storage` (or a chest marked with
+  `/companion setplace storage`).
+
+Everything else in `server.hub.places` is optional: a meeting spot, a kitchen box, beds by name, patrol
+points for the guardians, and named spots residents like to wander to. Anything left out is found on its own.
+A full example for an island hub is in [skyhaven-places.json](examples/skyhaven-places.json).
+
+When the hub has been unloaded for a while (nobody near it, or chunks unloaded), the farm is caught up when
+someone comes back, within a week of time at most, and the first player there gets a one-line summary. A
+server that pauses when empty doesn't move the game clock, so there's nothing to catch up after a pause.
 - There's nothing to do after updating: old cast names in saved worlds,
   the roster and config files keyed by cast name (such as `hearthbound-skins.json` and
   `server.hub.residents`) still work. See [CAST.md](CAST.md#renamed-in-04).

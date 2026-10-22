@@ -115,10 +115,12 @@ public class GroupAndProjectGameTests {
 
 	// ------------------------------------------------------------------ groups and obey mode
 
-	@GameTest(maxTicks = 60)
+	@GameTest(maxTicks = 60, padding = 60)
 	public void everyoneObeyedWhenObeyIsOn(GameTestHelper helper) {
 		floor(helper, Blocks.STONE, 0, 7);
 		ServerPlayer owner = player(helper, 3.5, 0.5);
+		Obey.addTestHost(owner.getUUID()); // obey mode is for the host and operators only
+		boolean obeyAll = Hearthbound.config().obeyAll;
 		Obey.set(owner, true, false);
 		CompanionEntity a = companion(helper, Archetype.SELLSWORD, "Adaxx", 1.5, 5.5);
 		CompanionEntity b = companion(helper, Archetype.NATURALIST, "Boxx", 3.5, 5.5);
@@ -134,6 +136,8 @@ public class GroupAndProjectGameTests {
 			helper.assertTrue(each.isOwnedBy(owner), each.companionName() + " follows because they were asked to");
 			helper.assertValueEqual(each.order().kind(), CompanionOrder.Kind.FOLLOW, each.companionName() + " follows");
 		}
+		Hearthbound.config().obeyAll = obeyAll;
+		Obey.removeTestHost(owner.getUUID());
 		finish(helper, owner);
 		helper.succeed();
 	}
@@ -199,7 +203,7 @@ public class GroupAndProjectGameTests {
 		helper.succeed();
 	}
 
-	@GameTest(maxTicks = 80)
+	@GameTest(maxTicks = 80, padding = 60)
 	public void homeCommandsRespectObey(GameTestHelper helper) {
 		floor(helper, Blocks.STONE, 0, 7);
 		ServerPlayer owner = player(helper, 3.5, 0.5);
@@ -209,12 +213,17 @@ public class GroupAndProjectGameTests {
 		Obey.set(owner, false, false);
 		server.getCommands().performPrefixedCommand(owner.createCommandSourceStack(), "companion sethome strxx here");
 		helper.assertTrue(stranger.home() == null || !stranger.home().equals(owner.blockPosition()), "not theirs to command without obey");
+		helper.assertFalse(Obey.set(owner, true, false), "and a player who isn't the host or an operator can't turn obey on");
+		Obey.addTestHost(owner.getUUID());
+		boolean obeyAll = Hearthbound.config().obeyAll;
 		Obey.set(owner, true, false);
 		server.getCommands().performPrefixedCommand(owner.createCommandSourceStack(), "companion sethome strxx here");
 		helper.assertValueEqual(stranger.home(), owner.blockPosition(), "with obey on, anyone's home can be set");
 		server.getCommands().performPrefixedCommand(owner.createCommandSourceStack(), "companion home strxx teleport");
 		helper.assertTrue(stranger.position().distanceToSqr(start) > 1.0, "teleported to the new home");
 		helper.assertFalse(stranger.isRecruited(), "still nobody's companion");
+		Hearthbound.config().obeyAll = obeyAll;
+		Obey.removeTestHost(owner.getUUID());
 		finish(helper, owner);
 		helper.succeed();
 	}

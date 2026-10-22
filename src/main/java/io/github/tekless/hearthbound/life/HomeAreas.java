@@ -107,6 +107,8 @@ public final class HomeAreas {
 		Map<String, Area> areas = new LinkedHashMap<>();
 		Map<String, Integer> bonds = new LinkedHashMap<>();
 		List<Store> storehouses = new ArrayList<>();
+		/** Beds players have slept in: never claimed by a companion. */
+		List<Store> playerBeds = new ArrayList<>();
 	}
 
 	private final transient Path file;
@@ -337,7 +339,8 @@ public final class HomeAreas {
 		BlockPos home = companion.home() != null ? companion.home() : area.centrePos();
 		BlockPos best = null;
 		for (BlockPos bed : area.found.beds()) {
-			if (takenByOther(level, area, bed, key) || !isBedHead(level, bed) || level.getBlockState(bed).getValue(BedBlock.OCCUPIED)) {
+			if (takenByOther(level, area, bed, key) || !isBedHead(level, bed) || level.getBlockState(bed).getValue(BedBlock.OCCUPIED)
+					|| isPlayerBed(level, bed)) {
 				continue;
 			}
 			if (best == null || bed.distSqr(home) < best.distSqr(home)) {
@@ -444,6 +447,45 @@ public final class HomeAreas {
 	private void changed(Area area) {
 		area.invalidate();
 		dirty = true;
+	}
+
+	// ---------------------------------------------------------------- players' beds
+
+	/**
+	 * A player slept in this bed (or took it back from a companion): it's theirs, so no companion claims it again,
+	 * and anyone who had claimed it (without it being marked for them) looks for another.
+	 */
+	public void markPlayerBed(ServerLevel level, BlockPos head) {
+		if (isPlayerBed(level, head)) {
+			return;
+		}
+		Store bed = new Store();
+		bed.dimension = level.dimension().identifier().toString();
+		bed.pos = array(head);
+		data.playerBeds.add(bed);
+		for (Area area : data.areas.values()) {
+			area.beds.entrySet().removeIf(entry -> head.equals(point(entry.getValue())) && !area.markedBeds.contains(entry.getKey()));
+		}
+		dirty = true;
+	}
+
+	public boolean isPlayerBed(ServerLevel level, BlockPos head) {
+		String dimension = level.dimension().identifier().toString();
+		for (Store bed : data.playerBeds) {
+			if (bed.dimension.equals(dimension) && head.equals(point(bed.pos))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/** The bed's head block for either half of a bed, or null if it isn't one. */
+	public static @Nullable BlockPos bedHead(ServerLevel level, BlockPos pos) {
+		BlockState state = level.getBlockState(pos);
+		if (!(state.getBlock() instanceof BedBlock)) {
+			return null;
+		}
+		return state.getValue(BedBlock.PART) == BedPart.HEAD ? pos.immutable() : pos.relative(state.getValue(BedBlock.FACING)).immutable();
 	}
 
 	// ---------------------------------------------------------------- storehouses companions built
@@ -576,6 +618,9 @@ public final class HomeAreas {
 				}
 				if (loaded.storehouses == null) {
 					loaded.storehouses = new ArrayList<>();
+				}
+				if (loaded.playerBeds == null) {
+					loaded.playerBeds = new ArrayList<>();
 				}
 				for (Area area : loaded.areas.values()) {
 					if (area.patrol == null) {

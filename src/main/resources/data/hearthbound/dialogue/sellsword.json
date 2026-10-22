@@ -969,6 +969,186 @@
     "combat.spar_over": [
       "That's enough. {mob} is down.",
       "{mob} has had enough. We're done."
+    ],
+    "life.wake": [
+      "Up. Boots on.",
+      "Morning. Nobody died in the night. Good start.",
+      "Awake. Coffee would be nice. There's never coffee."
+    ],
+    "life.work": [
+      "Right. Work.",
+      "Shift starts now.",
+      "Back to it."
+    ],
+    "life.meal": [
+      "Food. Finally.",
+      "Midday. I'm eating, don't talk to me.",
+      "Grub. Then back to it."
+    ],
+    "life.leisure": [
+      "Afternoon off. Don't tell anyone.",
+      "Sharpening my sword. That's resting, for me.",
+      "Nothing needs hitting. Odd feeling."
+    ],
+    "life.social": [
+      "Off to the fire. Someone owes me a story.",
+      "Evening. The lot of them will be gathering.",
+      "Time to sit with the others. Briefly."
+    ],
+    "life.sleep": [
+      "Bed. Wake me if something's on fire.",
+      "Night. Sword's under the pillow.",
+      "Turning in."
+    ],
+    "life.shelter": [
+      "Rain. Indoors.",
+      "Wet. Not for me. I'm under a roof.",
+      "Rust weather. Inside."
+    ],
+    "life.fire": [
+      "Fire's going.",
+      "There. Light and warmth. Sit down."
+    ],
+    "life.bed_taken": [
+      "Someone's in my bed. I've slept on worse.",
+      "Bed's taken. Floor it is. Done it a hundred times."
+    ],
+    "life.need": [
+      "We could do with {thing}. Just saying.",
+      "Need {thing} round here. Someone sort it.",
+      "Still without {thing}. Complaining quietly."
+    ],
+    "life.self.shelter": [
+      "No roof anywhere. I'll knock one up.",
+      "Nobody's built a shelter. Fine. I will."
+    ],
+    "life.self.farm": [
+      "Water, seeds. I'll dig a farm. Don't laugh.",
+      "Starting a plot by the water. Soldiers eat too."
+    ],
+    "life.self.tools": [
+      "Need a hoe. Chopping a couple of logs first.",
+      "No hoe. Getting wood for one."
+    ],
+    "life.stored": [
+      "{count} more in the store.",
+      "Stowed {count}. Store's filling up."
+    ],
+    "life.project.progress": [
+      "Flower bed. {count} of {max}. Don't say a word.",
+      "Planted another. {count} of {max}. It's tactical."
+    ],
+    "life.project.done": [
+      "Flower bed's done. All {max}. Tell nobody.",
+      "Finished the flowers. {max} of them. Even I'll admit it looks good."
+    ],
+    "life.favour.ask": [
+      "You. Bring me {count} {item}. I'll pay {reward}.",
+      "Need {count} {item}. Fair trade: {reward}. Interested?"
+    ],
+    "life.favour.partial": [
+      "Good. {count} more {item}.",
+      "Some. Still {count} {item} short."
+    ],
+    "life.favour.thanks": [
+      "That's the lot. Here. {reward}, as promised.",
+      "Deal's done. {reward}. We're square."
+    ],
+    "life.favour.cant_pay": [
+      "Pack's empty. I owe you. I pay my debts.",
+      "Nothing left to give. I'll make it right."
+    ],
+    "status.life": [
+      "Me? {thing}. Feeling {mood}.",
+      "{thing}. Mood's {mood}, if you care."
+    ],
+    "status.favour": [
+      "{thing}. Still after {favour}, if you're offering.",
+      "{thing}. And I've a deal open: {favour}."
+    ],
+    "exchange.meal.open": [
+      "{other}. Pass the bread.",
+      "Good grub, {other}. For once."
+    ],
+    "exchange.meal.reply": [
+      "Get your own bread.",
+      "Don't talk with your mouth full."
+    ],
+    "exchange.meal.close": [
+      "Fine. Mine's better anyway.",
+      "Hm. Fair."
+    ],
+    "exchange.story.open": [
+      "Did I ever tell you about the siege at the river, {other}?",
+      "{other}. You want a story? Three mercenary companies. One survivor. Me."
+    ],
+    "exchange.story.reply": [
+      "Every night, {other}. Every night.",
+      "Go on then. Make it gory."
+    ],
+    "exchange.story.close": [
+      "And that's why I don't trust bridges.",
+      "Moral is: keep your boots dry."
+    ],
+    "exchange.festival.open": [
+      "Full moon, {other}. Everyone's daft tonight.",
+      "{other}. They're dancing. I'm not."
+    ],
+    "exchange.festival.reply": [
+      "You tapped your foot. I saw it.",
+      "One dance. Go on."
+    ],
+    "exchange.festival.close": [
+      "One. Then I'm going to bed.",
+      "Fine. Nobody saw that."
+    ],
+    "exchange.friends.open": [
+      "{other}. Good to have you at my back.",
+      "You're all right, {other}. Don't let it go to your head."
+    ],
+    "exchange.friends.reply": [
+      "Coming from you, that's practically a hug.",
+      "I'll take it. Rare as gold, that."
+    ],
+    "exchange.friends.close": [
+      "Don't get used to it.",
+      "Hm. Glad we're on the same side."
+    ],
+    "exchange.rivals.open": [
+      "{other}. You again.",
+      "Still here, {other}? Shame."
+    ],
+    "exchange.rivals.reply": [
+      "Lovely to see you too.",
+      "Charming as ever."
+    ],
+    "exchange.rivals.close": [
+      "Keep your distance.",
+      "We'll see."
+    ],
+    "exchange.people.open": [
+      "Seen {thing} about, {other}?",
+      "{thing} came by. Decent sort."
+    ],
+    "exchange.people.reply": [
+      "Busy one, {thing}. Always running somewhere.",
+      "Brings us odd jobs. Pays fair."
+    ],
+    "exchange.people.close": [
+      "Good sort. Watch their back.",
+      "Hm. Could be worse."
+    ],
+    "team.plan": [
+      "Right. {plan}. Move.",
+      "Plan's simple: {plan}. Go."
+    ],
+    "team.progress": [
+      "Halfway on {thing}. {count} of {max} blocks in.",
+      "{count} of {max}. Keep going."
+    ],
+    "team.done": [
+      "That's {thing} built. Good work, all of you.",
+      "Done. {thing}, standing. Nobody fell off the roof."
     ]
   }
 }

@@ -130,6 +130,29 @@ class LineBankTest {
 		REQUIRED.put("fail.camp_campfire", base);
 		REQUIRED.put("role.strong", plus(base, "task"));
 		REQUIRED.put("role.weak", plus(base, "task"));
+		// Daily life at home (0.6).
+		for (String key : List.of("life.wake", "life.work", "life.meal", "life.leisure", "life.social", "life.sleep", "life.shelter", "life.fire",
+				"life.bed_taken", "life.self.shelter", "life.self.farm", "life.self.tools", "life.favour.cant_pay")) {
+			REQUIRED.put(key, base);
+		}
+		REQUIRED.put("life.need", plus(base, "thing"));
+		REQUIRED.put("life.stored", plus(base, "count"));
+		REQUIRED.put("life.project.progress", plus(base, "count"));
+		REQUIRED.put("life.project.done", plus(base, "count"));
+		REQUIRED.put("life.favour.ask", plus(base, "count", "item", "reward"));
+		REQUIRED.put("life.favour.partial", plus(base, "count", "item"));
+		REQUIRED.put("life.favour.thanks", plus(base, "reward"));
+		REQUIRED.put("status.life", plus(base, "thing", "favour", "mood"));
+		REQUIRED.put("status.favour", plus(base, "thing", "favour", "mood"));
+		for (String topic : List.of("meal", "story", "festival", "friends", "rivals", "people")) {
+			for (String step : List.of("open", "reply", "close")) {
+				REQUIRED.put("exchange." + topic + "." + step, plus(base, "other", "thing"));
+			}
+		}
+		// Plain requests picked up as a team job (0.6).
+		REQUIRED.put("team.plan", plus(base, "plan", "thing"));
+		REQUIRED.put("team.progress", plus(base, "thing", "count"));
+		REQUIRED.put("team.done", plus(base, "thing"));
 	}
 
 	private static Set<String> plus(Set<String> base, String... extra) {

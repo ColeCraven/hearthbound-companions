@@ -7,7 +7,7 @@
 **RPG-style companions for Minecraft.**<br>
 Recruit them, chat with them, and go on adventures together.
 
-<a href="https://github.com/ColeCraven/hearthbound-companions/releases/latest"><img src="https://img.shields.io/badge/Download-v0.5.0-2ea44f?style=for-the-badge" alt="Download v0.5.0"></a>
+<a href="https://github.com/ColeCraven/hearthbound-companions/releases/latest"><img src="https://img.shields.io/badge/Download-v0.6.0-2ea44f?style=for-the-badge" alt="Download v0.6.0"></a>
 <a href="#install"><img src="https://img.shields.io/badge/Install-4_easy_steps-3A7BD5?style=for-the-badge" alt="Install in 4 easy steps"></a>
 
 ![Minecraft 26.3](https://img.shields.io/badge/Minecraft-26.3-62B47A)
@@ -17,7 +17,7 @@ Recruit them, chat with them, and go on adventures together.
 
 <img src="docs/images/cast/banner.png" width="100%" alt="All twelve companions standing together in a meadow">
 
-**[Install](#install)** · **[Your first companion](#your-first-companion)** · **[What they can do](#what-they-can-do)** · **[Cheat sheet](#cheat-sheet)** · **[Servers](#playing-on-a-server)** · **[FAQ](#faq)**
+**[Install](#install)** · **[Your first companion](#your-first-companion)** · **[A new world](#in-a-brand-new-world)** · **[What they can do](#what-they-can-do)** · **[Cheat sheet](#cheat-sheet)** · **[Servers](#playing-on-a-server)** · **[FAQ](#faq)**
 
 </div>
 
@@ -38,8 +38,12 @@ girl is scared of the dark and won't stop talking about her gran.
 - **They pull their weight.** Gathering, mining trips, tunnels, shelters, walls, bridges and camps.
 - **Everyone has a role.** Guardians fight best, builders build and dig fastest, collectors gather
   quickest and farmers farm best, but anyone can do any job.
+- **They have lives of their own.** When they're not out with you they keep a day: up at dawn, work, a meal at noon,
+  evenings round the fire, and bed at night in a bed of their own.
+- **They work as a team.** Say "let's build a house" and whoever's around splits the job: builders on the walls,
+  collectors on the wood, guardians on watch.
 - **They never fake it.** If they say they'll do something, the game is really doing it. If they can't, they tell you why.
-- **Works on servers** with nothing for your friends to install.
+- **Works in any world**, with nothing to set up, and **on servers** with nothing for your friends to install.
 
 <br>
 
@@ -55,7 +59,7 @@ the Minecraft version to **26.3** and click **Install**. That adds a Fabric prof
 Launcher.
 
 **2. Download the mod.** From the [latest release](https://github.com/ColeCraven/hearthbound-companions/releases/latest),
-download **`Hearthbound-Companions-0.5.0-install-kit.zip`**. It has the mod, Fabric API (a library
+download **`Hearthbound-Companions-0.6.0-install-kit.zip`**. It has the mod, Fabric API (a library
 the mod needs) and a step-by-step guide.
 
 **3. Drop two files into your `mods` folder.** Unzip the kit and copy both `.jar` files into `mods`:
@@ -76,7 +80,7 @@ Open the `mods` folder in there. If it doesn't exist yet, just make one.
 <summary><b>Using Prism, the Modrinth App or CurseForge instead?</b></summary>
 <br>
 
-Make a new instance for Minecraft 26.3 with Fabric, then drop `hearthbound-0.5.0.jar` and
+Make a new instance for Minecraft 26.3 with Fabric, then drop `hearthbound-0.6.0.jar` and
 [Fabric API](https://modrinth.com/mod/fabric-api) into that instance's `mods` folder. That's it.
 
 </details>
@@ -101,6 +105,33 @@ Forgot something? `/companion help` lists everything you can say and do, right i
 
 <br>
 
+## In a brand-new world
+
+Hearthbound works in any world, including one you made five minutes ago. There's no special build, no
+fixed coordinates, and nothing to configure. Here's what happens, and what you can do to help it along:
+
+1. **Wherever a companion appears is their home.** Recruit them and dismiss them somewhere else (or use
+   `/companion sethome Name`) to move them.
+2. **They live their day there straight away.** Up at dawn, work, a meal at noon, the evening together, bed
+   at night. With nothing built yet, they doze somewhere dry and eat at home.
+3. **Build and they'll notice.** They look around their home every couple of minutes for:
+   - a **bed** each (they claim one and lie down in it at night),
+   - a **bell or campfire** to meet at in the evening (they light the campfire at dusk),
+   - a **furnace or smoker beside a chest** for a kitchen,
+   - **farmland** for the farmers.
+4. **Let them help get started.** `/companion autonomy on` lets them change the world for themselves:
+   collectors chop wood and gather stone, a builder with no roof over home puts up a small shelter, and a
+   farmer with seeds starts a plot by the nearest water.
+5. **Point things out if you like.** Stand somewhere and use `/companion setplace bed|commons|kitchen|farm|storage|patrol`.
+   Farmers only ever put the harvest into a chest you mark as storage (or one they built themselves).
+   `/companion places` shows what they've found.
+
+When something's missing they tell you ("We could do with a bed round here"), once a day, and get on with
+something else instead of trying the impossible over and over. The full details are in
+[GUIDE.md](docs/GUIDE.md#implemented-a-brand-new-world).
+
+<br>
+
 ## What they can do
 
 ### Just talk to them
@@ -110,6 +141,10 @@ with anyone: "how are you?", "tell me about your family", "what should we do tod
 until you say bye or wander off, and a typo in a name (`@rsoie`) still gets through. Orders work
 the same way: `@Hazel follow me`, `Charlie, get me 16 oak logs`, `@party wait here`. Press <kbd>G</kbd>
 and the chat opens with the name of whoever you're looking at already filled in.
+
+You don't have to name anyone, either. Say "let's build a house", "we need a farm" or "can someone get
+wood?" and whoever's close by and listens to you picks it up. The wording is up to you: "we need a
+house", "can someone build us a house?" and "build a house" all work.
 
 You can say "this" and "that" too: look at a log and say `collect that`, or look at a zombie and say
 `fight that`. If a request is too vague (`build this`) they ask one short question and use your
@@ -163,24 +198,48 @@ need a pickaxe, the ground's too uneven to build on, they're short on blocks.
 
 ### They work together
 
+- Say "let's build a house" with a few of them around and one of them says the plan ("Maddie and I'll do
+  the walls and the roof, Hazel, get us some logs, and Dasha keeps watch"). The builders share one
+  blueprint, the collectors bring the wood, the guardians walk round the site, and you hear when it's
+  half done and when it's finished (or exactly what's stopping them).
 - Say "everyone, ..." or "all my builders, ..." and the whole group hears you, with no @ and one
   short reply from one of them.
 - Ask the builders for a house each and they pick sites near you, spaced apart, craft what they can
   from their pack, chop wood if they run short, and build. Collectors bring them logs.
 - Ask the farmers for a farm and they till a plot by the water, plant it, harvest and replant, and a builder
   puts up a storehouse with a chest and a furnace for the food.
-- `/companion obey on` means every companion in the world takes your orders, even the ones you haven't
-  recruited (on by default in single-player), and chattiness and autonomy now apply to everyone.
+- `/companion obey on` means every companion in the world takes your orders, even ones travelling with
+  other players. It's for the single-player host (on by default) and server operators only.
 
 ### They have a life of their own
 
-Stand still for a bit and they get bored. Hazel goes to study a flower, Maddie grabs loot you left
-lying around (and admits it), Honey pets the nearest cow, the fighters walk a little guard circuit,
-and Luna stares at the stars at night. They drop it the second you move or give an order. They
-also nag you to eat, suggest finding shelter before dark, and have short chats with each other.
-If you'd like them to be more useful on their own, `/companion autonomy on` lets idle companions
-pick jobs that suit their role (chopping a tree, harvesting a ripe crop, lighting a dark spot,
-dealing with a nearby zombie). It's off by default, and your orders always win.
+The ones who aren't out with you get on with their day. Hub residents, companions you dismissed and
+wanderers all follow the clock: up at dawn (not all at once), work by role in the morning, a meal in the
+kitchen at noon, an afternoon of work or time off, the evening together at the meeting spot with the fire
+lit, and bed at night, lying down in a bed of their own like villagers do. When it rains they go indoors.
+
+- **Everyone's a bit different.** Farmhands are up with the hens, Luna and Luke stay up late, the rogues
+  take most afternoons off. Hunger, tiredness and loneliness nudge their day along, and their mood.
+- **They live together.** Meals turn into a chat, someone tells a story by the fire after dark, and every
+  full moon there's a festival. Friendships grow from time spent together, a few personalities clash,
+  and you'll hear about it.
+- **Small projects and favours.** With autonomy on, a companion makes a little flower bed over a few days.
+  Now and then one asks you for a favour ("bring me 16 logs") and pays you from their own pack.
+- **Time away is caught up.** Come back after a few days and the farm has been worked: crops grown,
+  harvested, replanted and put into storage, with one line telling you who did what. If there's an empty
+  lectern at the meeting spot, it gets a diary too.
+- **Your orders always come first.** Talk to them and they stop to listen (even in bed). Any order replaces
+  their day, and they go back to it after.
+
+Out with you, they're the same as ever. Stand still for a bit and they get bored: Hazel goes to study a
+flower, Maddie grabs loot you left lying around (and admits it), Honey pets the nearest cow, the fighters
+walk a little guard circuit, and Luna stares at the stars at night. They drop it the second you move or
+give an order. They also nag you to eat, suggest finding shelter before dark, and have short chats with
+each other.
+
+`/companion autonomy on` lets them do work that changes the world: chopping a tree, harvesting and
+replanting, lighting a dark spot, dealing with a nearby zombie, putting up a shelter. It's off by default,
+and your orders always win.
 
 Too chatty? `/companion chattiness low` (or `off`) quietens the comments. They still answer you,
 confirm orders and warn you about danger.
@@ -262,31 +321,37 @@ personalities differ in [PERSONALITIES.md](docs/PERSONALITIES.md).
 
 ## Cheat sheet
 
-| You want to | Type in chat | Or use a command |
+The left-hand column is just examples. Say it however you like; the wording is flexible.
+
+| You want to | Say something like | Or use a command |
 |---|---|---|
-| Recruit someone | `@Name join me` | `/companion recruit Name` |
-| Follow / wait / come | `@Name follow me`, `wait here`, `come here` | `/companion follow Name` |
-| Get resources | `@Name get me a stack of cobblestone` | `/companion gather Name 64 cobblestone` |
-| Get your stuff back | `@Name give me everything` | `/companion give Name` |
-| Fight something | look at it, `@Name attack that` | |
-| Dig | `@Name go mining`, `dig a tunnel`, `dig down 20` | |
-| Build | `@Name build a shelter` (or a wall, a bridge, `set up camp`) | |
-| Use what you're looking at | `collect that`, `fight that`, `build this` (they ask what you mean if it's unclear) | |
-| Tell them about you | `call me Captain`, `I love the ocean` | |
-| Check on them | `@Name what are you doing?` | `/companion list` |
-| Stop a task | `@Name stop` | `/companion cancel Name` |
+| Recruit someone | "@Name join me", "want to travel with me?" | `/companion recruit Name` |
+| Follow / wait / come | "follow me", "let's go" · "wait here", "stay put" · "come here", "get over here" | `/companion follow Name` |
+| Get resources | "get me a stack of cobblestone", "I need wood", "could you grab 16 logs?" | `/companion gather Name 64 cobblestone` |
+| Get your stuff back | "give me everything", "hand over the logs" | `/companion give Name` |
+| Fight something | look at it and say "attack that", "kill the nearest creeper" | |
+| Dig | "go mining", "dig a tunnel", "dig down 20" | |
+| Build | "build a shelter", "put up a wall", "bridge this gap", "set up camp" | |
+| Get a job done by whoever's around | "let's build a house", "we need a farm", "can someone get wood?" | |
+| Use what you're looking at | "collect that", "fight that", "build this" (they ask if it's unclear) | |
+| Tell them about you | "call me Captain", "I love the ocean", "I hate spiders" | |
+| Check on them | "what are you doing?", "how's it going?" | `/companion list` |
+| Stop a task | "stop", "never mind", "forget it" | `/companion cancel Name` |
 | Swap items | sneak + right-click them | `/companion inventory Name` |
-| Let them go | `@Name you're dismissed` | `/companion dismiss Name` |
-| Talk to everyone with you | `@party follow me` (or `@all`) | `/companion tell party follow me` |
-| Talk to every companion you have | `@everyone come to me` | `/companion tell everyone come to me` |
-| Talk to a group, no @ | `everyone, follow me`, `all my builders, ...`, `farmers, ...` | |
-| Big projects | `all my builders, everyone should have their own house`, `farmers, build a farm`, `build a storehouse` | |
-| Send them home | `@Name go home`, `@everyone teleport home` | `/companion sethome Name here`, `/companion home party teleport` |
-| Fight someone, on your say-so | `@Name attack Steve` (players only where PvP is on) | |
-| Make everyone listen | | `/companion obey on` (already on in single-player) |
+| Let them go | "you're dismissed", "you can go home" | `/companion dismiss Name` |
+| Talk to everyone with you | "@party follow me" (or `@all`) | `/companion tell party follow me` |
+| Talk to every companion you have | "@everyone come to me" | `/companion tell everyone come to me` |
+| Talk to a group, no @ | "everyone, follow me", "all my builders, ...", "farmers, ..." | |
+| Big projects | "all my builders, everyone should have their own house", "farmers, build a farm" | |
+| Send them home | "go home", "teleport home" | `/companion sethome Name here`, `/companion home party teleport` |
+| See a home's places | | `/companion places` |
+| Mark a place | | `/companion setplace bed\|commons\|kitchen\|farm\|storage\|patrol [name\|role]` |
+| Fight someone, on your say-so | "@Name attack Steve" (players only where PvP is on) | |
+| Make everyone listen (host or operators) | | `/companion obey on` (already on for the single-player host) |
+| Change the party limit (host or operators) | | `/companion partylimit 5`, `/companion partylimit unlimited` |
 | Make them quieter | | `/companion chattiness low` (or `off`, `normal`, `high`) |
-| Let them pick their own jobs | | `/companion autonomy on` |
-| See everything | `@Name what can you do?` | `/companion help` |
+| Let them do work of their own | | `/companion autonomy on` |
+| See everything | "what can you do?" | `/companion help` |
 
 | Key | What it does |
 |---|---|
@@ -314,6 +379,12 @@ else's companion, and they won't break blocks near the hub or anyone's builds.
   <img src="docs/images/server/vanilla-client-hub.png" width="80%" alt="The cast around the campfire at the hub, seen from an unmodded client">
 </p>
 
+The residents live their day at the hub like anyone else. If you'd rather tell them where things are than
+let them look, list the beds, meeting spot, kitchen, farm, storage and patrol points under
+`server.hub.places` ([example for an island hub](docs/examples/skyhaven-places.json)). Operators can make
+every companion listen with `/companion obey on`, and change how many companions each player can have
+with `/companion partylimit`.
+
 Setup, the hub config and the multiplayer rules are in [SERVER.md](docs/SERVER.md).
 
 <br>
@@ -329,12 +400,16 @@ The config lives at `config/hearthbound.json` and gets created the first time yo
 | Setting | Default | What it does |
 |---|---|---|
 | `essentialCompanions` | `true` | Knocked down instead of killed |
-| `partyLimit` | `3` | How many companions you can have at once |
+| `partyLimit` | `3` | How many companions you can have at once (0 means no limit; `/companion partylimit`) |
+| `partyLimits` | `{}` | Per-player limits (by UUID) set with `/companion partylimit <player> <number>` |
+| `dailyLife` | `true` | Companions at home follow a daily schedule (work, meals, evenings, bed) |
+| `diary` | `true` | Write a "while you were away" page into a diary on an empty lectern at the meeting spot |
 | `ambientChatter` | `1.0` | How much they talk on their own (0 is silent, 2 is very chatty) |
 | `autonomy` | `1.0` | How often they wander off to do their own thing |
-| `routines` | `false` | Let idle companions pick jobs that suit their role (`/companion autonomy on`) |
-| `obeyAll` | `true` | Single-player: every companion takes the host's orders, recruited or not (`/companion obey off` to turn it off) |
+| `routines` | `false` | Autonomy: let companions do work of their own that changes the world (`/companion autonomy on`) |
+| `obeyAll` | `true` | Single-player: every companion takes the host's orders, even other players' (`/companion obey off` to turn it off) |
 | `obeyPlayers` | `[]` | Servers: the operators (by UUID) who turned `/companion obey on` for themselves |
+| `server.hub.places` | | Where things are at the hub (beds by name, meeting spot, kitchen, farm, storage, patrol); anything left out is found on its own |
 | `ai.provider` | `none` | `none`, `ollama`, `openai` or `anthropic` |
 
 </details>
@@ -371,7 +446,7 @@ More detail in [AI_DESIGN.md](docs/AI_DESIGN.md).
 <summary><b>The game won't start, or it says Fabric API is required</b></summary>
 <br>
 
-Make sure both jars from the kit are in your `mods` folder: `hearthbound-0.5.0.jar` and
+Make sure both jars from the kit are in your `mods` folder: `hearthbound-0.6.0.jar` and
 `fabric-api-0.164.0+26.3.jar`. If the error mentions a Minecraft version, re-run the Fabric
 installer and pick 26.3.
 
@@ -402,6 +477,37 @@ or grab a spawn egg in Creative. Talking to companions with `@Name` works withou
 Check the name is spelled close enough, with @ in front, and that you're within about 60 blocks.
 If you're chatting with friends nearby, look at the companion you're talking to, so your chat with
 people isn't taken over.
+
+</details>
+
+<details>
+<summary><b>My companion is asleep, or keeps wandering off</b></summary>
+<br>
+
+That's their day. Companions who aren't travelling with you follow the clock: they work, eat, meet up
+in the evening and sleep at night. Talk to them and they stop to listen (even in bed), and any order
+comes first. Ask them to join you and they stay with you. If you'd rather they just stood about, set
+`dailyLife` to `false` in the config.
+
+</details>
+
+<details>
+<summary><b>A companion took my bed</b></summary>
+<br>
+
+Right-click it. They get up, and that bed is yours from then on, so nobody claims it again. Any bed
+you've slept in is left alone already. You can also give someone a particular bed with
+`/companion setplace bed Name`.
+
+</details>
+
+<details>
+<summary><b>They keep saying they need something</b></summary>
+<br>
+
+They're telling you what's missing (a bed, farmland, a chest for the harvest), once a day. Put one
+down near their home, or mark one with `/companion setplace`, and they'll use it. With
+`/companion autonomy on` they also sort out a roof and a farm for themselves where they can.
 
 </details>
 
@@ -455,12 +561,13 @@ python tools/skins/cast.py
 <summary><b>Testing</b></summary>
 <br>
 
-I tried to test this properly instead of just eyeballing it. There are 275 unit tests (the chat
-parser, reading answers to the companions' own questions, the gathering logic, the AI response
-handling), 50 tests that run inside a real game server (gathering logs and handing them over,
-digging a tunnel, stopping before lava, building a shelter, a bridge and a camp, orders typed in
-plain chat with several companions around, "collect that" at a log, a question and its answer,
-remembering a nickname, reacting to an advancement, saving and loading), and a few scripted runs in the actual game client.
+I tried to test this properly instead of just eyeballing it. There are over 300 unit tests (the chat
+parser, plain requests and statements, the daily schedule, needs, crops growing while you're away, the
+gathering logic, the AI response handling), 81 tests that run inside a real game server (gathering logs and
+handing them over, digging a tunnel, stopping before lava, building a shelter, a bridge and a camp, orders
+typed in plain chat, a house built by three of them together from "let's build a house", a resident going to
+bed in their own bed, the farm caught up after three days with the harvest in the storage chest and nowhere
+else, obey mode for the host and operators but not for anyone else, saving and loading), and a few scripted runs in the actual game client.
 One of those drops two companions into a normal generated world, walks them across the terrain,
 fights zombies at night, goes to the Nether and back, then quits and reloads the world to check
 nothing got lost. It caught a couple of real bugs along the way.
@@ -489,6 +596,10 @@ The full write-up, including what still needs testing, is in [TESTING.md](docs/T
 
 - They dig and build when you ask, but not on their own to get somewhere. If something is out of
   reach (like the top of a tall tree) they'll say so and skip it.
+- Companions don't turn up on their own yet: summon one, use the spawn egg, or meet the cast at a server's hub.
+- They can't make beds (no wool), so a home needs you to put the beds down.
+- While a home's chunks are unloaded only the farm is caught up when you come back; nobody builds or
+  wanders while you're away.
 - If you teleport really far and their chunk unloads before they notice, they'll stay put until you
   come back.
 - Melee only for now, no bows.
@@ -501,8 +612,8 @@ The full write-up, including what still needs testing, is in [TESTING.md](docs/T
 
 ## What's next
 
-A conversation screen with your history, bows, a way to set a home for them, more things to build,
-and more cast members. If you have ideas, open an issue!
+Copying a building you made, smarter climbing and swimming, bows and shields, chests and crafting on
+request, a conversation screen with your history, and more cast members. If you have ideas, open an issue!
 
 ## Credits
 

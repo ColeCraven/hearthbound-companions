@@ -6,7 +6,6 @@ import java.util.UUID;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import org.jspecify.annotations.Nullable;
 
 /**
  * Obey mode: every companion in the world takes orders from you, whether they travel with nobody, with you,
@@ -18,16 +17,16 @@ import org.jspecify.annotations.Nullable;
  * working for anyone who loses operator rights.
  */
 public final class Obey {
-	/** A test server is never single-player, so tests name the "host" here. */
-	private static @Nullable UUID testHost;
+	/** A test server is never single-player, so tests name their "hosts" here. */
+	private static final java.util.Set<UUID> TEST_HOSTS = java.util.concurrent.ConcurrentHashMap.newKeySet();
 
 	private Obey() {
 	}
 
 	/** The host of a single-player world (the first player in). */
 	public static boolean isHost(ServerPlayer player) {
-		if (testHost != null) {
-			return testHost.equals(player.getUUID());
+		if (TEST_HOSTS.contains(player.getUUID())) {
+			return true;
 		}
 		MinecraftServer server = player.level().getServer();
 		return server.isSingleplayer() && server.getPlayerList().getPlayers().indexOf(player) == 0;
@@ -73,8 +72,12 @@ public final class Obey {
 		return true;
 	}
 
-	/** Used by tests: treat this player as the single-player host (null to stop). */
-	public static void setTestHost(@Nullable UUID player) {
-		testHost = player;
+	/** Used by tests: treat this player as a single-player host. */
+	public static void addTestHost(UUID player) {
+		TEST_HOSTS.add(player);
+	}
+
+	public static void removeTestHost(UUID player) {
+		TEST_HOSTS.remove(player);
 	}
 }

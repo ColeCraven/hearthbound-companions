@@ -205,7 +205,8 @@ public final class CompanionCommands {
 	private static boolean mayConfigure(CommandSourceStack source) {
 		// The command tree is also built for each joining player with no server on the source: show it then,
 		// the real check happens again when the command runs.
-		return source.getServer() == null || source.getServer().isSingleplayer() || Commands.hasPermission(Commands.LEVEL_GAMEMASTERS).test(source);
+		return source.getServer() == null || source.getServer().isSingleplayer() || Commands.hasPermission(Commands.LEVEL_GAMEMASTERS).test(source)
+				|| (source.getPlayer() != null && Obey.isHost(source.getPlayer()));
 	}
 
 	/** {@code /companion tell <name|party|everyone> <message>}: the same as typing @name message in chat. */

@@ -922,6 +922,186 @@
     "combat.spar_over": [
       "That's enough. {mob} is down.",
       "{mob} has had enough. We're done."
+    ],
+    "life.wake": [
+      "Good morning. The night passed without harm.",
+      "I rise with the sun. Another day to keep.",
+      "Morning has come. I am ready."
+    ],
+    "life.work": [
+      "To work. An honest day's labour honours us all.",
+      "My duties call. I go gladly.",
+      "The day's work awaits. Let it be done well."
+    ],
+    "life.meal": [
+      "Midday. Let us break bread together.",
+      "A meal, and thanks for it.",
+      "We eat now. A full belly makes a steady arm."
+    ],
+    "life.leisure": [
+      "An afternoon of rest. I shall polish my helm.",
+      "There is time to sit a while. I will take it.",
+      "Even a guard must rest. I will be close by."
+    ],
+    "life.social": [
+      "Evening. I will join the others at the fire.",
+      "The day is done. Let us gather, friends.",
+      "To the meeting place. Good company awaits."
+    ],
+    "life.sleep": [
+      "I go to my rest. Call if there is danger.",
+      "Goodnight. May no harm come to this place.",
+      "Sleep now. I will wake at the first alarm."
+    ],
+    "life.shelter": [
+      "The rain falls heavily. I will take shelter.",
+      "Indoors, until the storm passes.",
+      "Wet steel rusts. I will wait out the rain."
+    ],
+    "life.fire": [
+      "The fire is lit. Come, warm yourselves.",
+      "There. Let the fire guard us tonight."
+    ],
+    "life.bed_taken": [
+      "My bed is taken. No matter, I have slept on stone.",
+      "Someone rests in my bed. I will not disturb them."
+    ],
+    "life.need": [
+      "My friend, this place would be the better for {thing}.",
+      "If I may say it, we are in need of {thing}.",
+      "We lack {thing}. I mention it only so you know."
+    ],
+    "life.self.shelter": [
+      "We have no roof. I shall raise one for us.",
+      "No shelter stands here. I will build one, and gladly."
+    ],
+    "life.self.farm": [
+      "There is water, and I carry seed. I shall begin a farm.",
+      "A field by the water will feed us all. I begin now."
+    ],
+    "life.self.tools": [
+      "I have no hoe. I will fetch wood to make one.",
+      "First, a hoe. A couple of logs will do."
+    ],
+    "life.stored": [
+      "{count} more laid in the store. We will not go hungry.",
+      "The store holds {count} more. Good."
+    ],
+    "life.project.progress": [
+      "My flower bed grows. {count} of {max} planted.",
+      "Another bloom set in the earth. {count} of {max}."
+    ],
+    "life.project.done": [
+      "My flower bed is complete, all {max} of them. A small beauty for us all.",
+      "It is finished. {max} flowers, for this home."
+    ],
+    "life.favour.ask": [
+      "My friend, could you bring me {count} {item}? In return I offer {reward}.",
+      "I would ask a kindness: {count} {item}. I can give {reward} for them."
+    ],
+    "life.favour.partial": [
+      "My thanks. {count} more {item}, and it is done.",
+      "Generous. I still need {count} more {item}."
+    ],
+    "life.favour.thanks": [
+      "You have my thanks. Here is {reward}, as I promised.",
+      "A debt repaid. {reward}, with gratitude."
+    ],
+    "life.favour.cant_pay": [
+      "Forgive me, my pack is empty. I owe you, and I will not forget it.",
+      "I have nothing left to give. My word stands: I will repay you."
+    ],
+    "status.life": [
+      "I am {thing}, my friend. In spirit, {mood}.",
+      "{thing}. I am {mood}, thank you."
+    ],
+    "status.favour": [
+      "I am {thing}. I still seek {favour}, if you are able.",
+      "{thing}. And there remains our bargain: {favour}."
+    ],
+    "exchange.meal.open": [
+      "{other}, may I pass you the bread?",
+      "A fine meal, {other}. We are fortunate."
+    ],
+    "exchange.meal.reply": [
+      "With thanks, my friend.",
+      "We are. Good food, good company."
+    ],
+    "exchange.meal.close": [
+      "Then let us eat.",
+      "Truly."
+    ],
+    "exchange.story.open": [
+      "{other}, shall I tell of the bridge at Thornwatch?",
+      "Gather close, {other}. This is a tale of loyalty."
+    ],
+    "exchange.story.reply": [
+      "Please do. I never tire of it.",
+      "I am listening."
+    ],
+    "exchange.story.close": [
+      "And the bridge held, because we held it.",
+      "And so the oath was kept. That is the whole of it."
+    ],
+    "exchange.festival.open": [
+      "The moon is full, {other}. A night for celebration.",
+      "{other}, will you join the dance?"
+    ],
+    "exchange.festival.reply": [
+      "Gladly. Though I dance as I fight: carefully.",
+      "I will. Lead the way."
+    ],
+    "exchange.festival.close": [
+      "Ha! A fine night.",
+      "May every full moon be so merry."
+    ],
+    "exchange.friends.open": [
+      "{other}, I am glad to call you friend.",
+      "There is no one I would rather stand beside, {other}."
+    ],
+    "exchange.friends.reply": [
+      "And I you. Always.",
+      "The feeling is shared."
+    ],
+    "exchange.friends.close": [
+      "Then we are fortunate.",
+      "So be it."
+    ],
+    "exchange.rivals.open": [
+      "{other}. We should speak about your manners.",
+      "Again you test my patience, {other}."
+    ],
+    "exchange.rivals.reply": [
+      "My manners are fine.",
+      "Your patience is very thin."
+    ],
+    "exchange.rivals.close": [
+      "We will speak of it later.",
+      "Hmph."
+    ],
+    "exchange.people.open": [
+      "Have you seen {thing} of late, {other}?",
+      "{thing} passed through today, {other}."
+    ],
+    "exchange.people.reply": [
+      "A good soul, {thing}. Always kind to us.",
+      "I hope they are keeping safe out there."
+    ],
+    "exchange.people.close": [
+      "I will keep watch for their return.",
+      "May the road be gentle to them."
+    ],
+    "team.plan": [
+      "Hear me. {plan}. Let us begin.",
+      "This is our plan: {plan}. Together, then."
+    ],
+    "team.progress": [
+      "We are halfway with {thing}: {count} of {max} blocks laid.",
+      "{count} of {max}. Steady, all."
+    ],
+    "team.done": [
+      "{thing} stands, built by all of us. Well done.",
+      "It is finished. {thing}, raised together. I am proud of us."
     ]
   }
 }

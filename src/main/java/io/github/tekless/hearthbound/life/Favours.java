@@ -64,7 +64,7 @@ public final class Favours {
 	 * Maybe asks this player a favour. Only when the companion has something fair to give, the player hasn't been
 	 * asked by anyone today, and there's no favour already open.
 	 */
-	static boolean maybeAsk(CompanionEntity companion, ServerPlayer player, long now) {
+	public static boolean maybeAsk(CompanionEntity companion, ServerPlayer player, long now) {
 		Favour open = ACTIVE.get(companion.getUUID());
 		if (open != null && now < open.until()) {
 			return false;

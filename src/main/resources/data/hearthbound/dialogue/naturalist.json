@@ -932,6 +932,186 @@
     "combat.spar_over": [
       "That's enough. {mob} is down.",
       "{mob} has had enough. We're done."
+    ],
+    "life.wake": [
+      "Good morning! Did you hear the birds? I counted four kinds!",
+      "Up already! The dew's still on everything, isn't it lovely?",
+      "Morning! I dreamt about mushrooms. Is that normal? I hope it's normal."
+    ],
+    "life.work": [
+      "Right, work! There's so much to do and so much to look at.",
+      "Off to work. I'll try not to stop at every flower. I'll fail, but I'll try.",
+      "Back to it! I love a good morning's work."
+    ],
+    "life.meal": [
+      "Lunch! I've been thinking about it since breakfast.",
+      "Mealtime! Did you know bread is basically grass, fire and patience?",
+      "Food! Shall we eat outside? Everything tastes better outside."
+    ],
+    "life.leisure": [
+      "Afternoon off! I'm going to sketch the oak by the path.",
+      "A free afternoon. I might press some flowers. Or read. Or both!",
+      "Taking it easy. Well, easy for me means looking at beetles."
+    ],
+    "life.social": [
+      "Evening! Let's go and find the others.",
+      "Off to the meeting spot! I've got so much to tell everyone.",
+      "Gathering time. I love this part of the day."
+    ],
+    "life.sleep": [
+      "Bedtime. I'll dream about moss, probably.",
+      "Goodnight! The crickets are singing, listen.",
+      "Off to bed. Wake me if a firefly comes by!"
+    ],
+    "life.shelter": [
+      "Rain! The plants will be thrilled. I'm going in, though.",
+      "Raining! Lovely for the garden, less lovely for my notes.",
+      "Indoors till it passes. Did you know rain smells of soil because of tiny little microbes?"
+    ],
+    "life.fire": [
+      "There, the fire's going! Come and sit.",
+      "Fire's lit. Look how the sparks float up!"
+    ],
+    "life.bed_taken": [
+      "Oh, someone's in my bed. That's fine, I'll curl up somewhere.",
+      "My bed's taken! I'll sleep under the stars. Research purposes."
+    ],
+    "life.need": [
+      "We could really do with {thing} round here, you know.",
+      "If anyone's wondering what we're missing, it's {thing}.",
+      "I keep thinking how nice {thing} would be."
+    ],
+    "life.self.shelter": [
+      "Nobody here has a roof! I'll build us a little shelter.",
+      "We need somewhere dry. I'm going to put up a shelter, it'll be fun!"
+    ],
+    "life.self.farm": [
+      "There's water and I've got seeds. A little farm! I'm so excited.",
+      "I'm starting a farm by the water. Did you know wheat loves wet feet?"
+    ],
+    "life.self.tools": [
+      "I need a hoe first. Off to find a couple of logs!",
+      "No hoe yet. A couple of logs and I can make one."
+    ],
+    "life.stored": [
+      "Put {count} in the store. It's all labelled. In my head.",
+      "{count} more in storage. Isn't harvest wonderful?"
+    ],
+    "life.project.progress": [
+      "My flower bed's coming along! {count} of {max} planted.",
+      "Another flower in! {count} of {max}. The bees have noticed already."
+    ],
+    "life.project.done": [
+      "My flower bed's finished, all {max} flowers! Come and look!",
+      "Done! {max} flowers. The bees and I are very happy."
+    ],
+    "life.favour.ask": [
+      "Oh, could you bring me {count} {item}? I'll give you {reward} for them, promise!",
+      "I'm after {count} {item} for a little project. I can give you {reward}. Deal?"
+    ],
+    "life.favour.partial": [
+      "Thank you! Just {count} more {item} now.",
+      "Lovely! {count} more {item} and we're done."
+    ],
+    "life.favour.thanks": [
+      "That's all of them, thank you! Here's {reward}, as promised.",
+      "Perfect! {reward} for you. You're a star."
+    ],
+    "life.favour.cant_pay": [
+      "Oh no, I've nothing left to give you. I owe you, honestly I do.",
+      "I'm so sorry, my pack's empty. I'll make it up to you!"
+    ],
+    "status.life": [
+      "Me? I'm {thing}! Feeling {mood}, thanks for asking.",
+      "I'm {thing}. And feeling {mood}, mostly."
+    ],
+    "status.favour": [
+      "I'm {thing}. Oh, and I'm still after {favour}, if you can help!",
+      "I'm {thing}! And if you've a moment, I'd love {favour}."
+    ],
+    "exchange.meal.open": [
+      "{other}, try this, it's got herbs in!",
+      "Isn't this lovely, {other}? Everyone round one table."
+    ],
+    "exchange.meal.reply": [
+      "Herbs! You put herbs in everything.",
+      "It is. Pass the salt?"
+    ],
+    "exchange.meal.close": [
+      "Herbs make everything better. That's science.",
+      "Here. And the bread's still warm!"
+    ],
+    "exchange.story.open": [
+      "{other}, shall I tell the one about the glowing caves?",
+      "I've got a story, {other}! It's about a very brave snail."
+    ],
+    "exchange.story.reply": [
+      "The glowing caves! Yes, please.",
+      "A brave snail? Go on then."
+    ],
+    "exchange.story.close": [
+      "And the snail made it to the top, in the end. Slowly.",
+      "And that's why you should always look under rocks!"
+    ],
+    "exchange.festival.open": [
+      "Full moon, {other}! Look how bright it is!",
+      "{other}! The moon's full! Dance with me!"
+    ],
+    "exchange.festival.reply": [
+      "It's beautiful. Even the owls are out.",
+      "Oh, go on then. One dance."
+    ],
+    "exchange.festival.close": [
+      "Moths everywhere! Best night of the month.",
+      "Wheee! I'll be dizzy for a week."
+    ],
+    "exchange.friends.open": [
+      "{other}, I'm really glad you live here.",
+      "You know, {other}, you're one of my favourite people."
+    ],
+    "exchange.friends.reply": [
+      "Aw. I'm glad you're here too.",
+      "Only one of? I'll take it."
+    ],
+    "exchange.friends.close": [
+      "Friends are like moss. They make everything softer.",
+      "Best neighbours in the world."
+    ],
+    "exchange.rivals.open": [
+      "Oh. Hello, {other}.",
+      "{other}. You stepped on my seedlings again."
+    ],
+    "exchange.rivals.reply": [
+      "It was an accident. Mostly.",
+      "They were in the way."
+    ],
+    "exchange.rivals.close": [
+      "Well. Try to look down.",
+      "Hmph. I'm writing that down."
+    ],
+    "exchange.people.open": [
+      "Have you seen {thing} lately, {other}?",
+      "{thing} came by today. So nice!"
+    ],
+    "exchange.people.reply": [
+      "Oh, {thing}! Always up to something interesting.",
+      "They brought me a flower once. I pressed it."
+    ],
+    "exchange.people.close": [
+      "I do hope they come back soon.",
+      "Lovely person. Very muddy boots."
+    ],
+    "team.plan": [
+      "Right! {plan}. This is going to be brilliant.",
+      "Here's the plan: {plan}. Let's go!"
+    ],
+    "team.progress": [
+      "Halfway on {thing}! {count} of {max} blocks in.",
+      "{count} of {max} done. It's really taking shape!"
+    ],
+    "team.done": [
+      "That's {thing} built! We did that, all of us!",
+      "Finished! {thing}, all done, and nobody fell off the roof!"
     ]
   }
 }

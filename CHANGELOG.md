@@ -1,5 +1,58 @@
 # Changelog
 
+## 0.6.0 - lives of their own (2026-10-22)
+
+The companions you aren't travelling with used to stand around waiting for you. Now they get on with
+their lives, in any world, with nothing to set up.
+
+**A day of their own**
+- Anyone who lives somewhere (hub residents, companions you dismissed, wanderers) follows the clock: up at
+  dawn (one at a time, not all at once), work by role in the morning, a meal at noon, an afternoon of work or
+  time off, the evening together at a bell or campfire (lit at dusk, put out in the morning), and bed at night,
+  lying down in a bed of their own like villagers do. When it rains they head indoors.
+- Personalities change the shape of it. Farmhands are up with the hens, mystics stay up late, rogues take most
+  afternoons off. Hunger, tiredness and loneliness steer the day too, and make them more or less chatty.
+- Talking to someone in bed gets them up. Any order still comes first, and they go back to their day after.
+- `/companion autonomy on` lets their work change the world: farmers harvest and replant, collectors gather,
+  builders light dark corners. With it off they still keep their day, they just don't touch anything.
+
+**Works in a brand-new world**
+- Places are found on their own near each home: beds (one each), a bell or campfire to meet at, a furnace or
+  smoker beside a chest for a kitchen, farmland. They look again every couple of minutes, so a bed you place
+  or a farm you till gets noticed.
+- With autonomy on, a builder with no roof over home puts up a small shelter (chopping wood for it if they
+  have to), and a farmer with seeds starts a plot by the nearest water (making a hoe first if they can).
+- When something's missing they say what they need, once a day, and get on with something else.
+- `/companion places` shows what a home has and what everyone's up to. `/companion setplace
+  <bed|commons|kitchen|farm|storage|patrol> [name|role]` marks the spot you're standing on.
+- Servers can list a hub's places in `server.hub.places` (see `docs/examples/skyhaven-places.json`).
+
+**Catching up**
+- Each home remembers when someone there was last loaded. When you come back after a while, the time
+  that passed is worked out honestly: crops in the farm grow, farmers harvest and replant, and the harvest goes
+  into the storage chest and nowhere else. Capped at a week and a few hundred crops.
+- You get one short "While you were away" line, and a page goes into a diary on a lectern at the meeting spot,
+  if there's an empty one.
+
+**Together**
+- Shared meals, stories by the fire after dark, and a festival at every full moon.
+- Friendships grow from time spent together, and a few personalities clash. It shows in their chats about each
+  other and about the players they know.
+- A small project of their own over several days: a flower bed, a flower a day (with autonomy on).
+- Now and then someone asks a passing player for a favour ("bring me 16 logs") and pays from their own pack.
+
+**Plain requests for whoever's around**
+- "Build a house", "let's build a house", "we need a farm", "can someone get wood", "let's set up camp here",
+  with nobody named, reach the companions within about 32 blocks who take your orders. One of them says the plan,
+  builders share one blueprint, collectors bring the wood, guardians keep watch, and they report progress and
+  what's stopping them. "I built a house yesterday" starts nothing.
+
+**Control**
+- Obey mode is for the single-player host and server operators only, and now reaches every companion, including
+  ones travelling with other players (they don't change sides). Others are refused.
+- `/companion partylimit [player] <number|unlimited>` for the host or operators. 0 or "unlimited" lifts the limit.
+- Storehouse chests are remembered after a restart.
+
 ## 0.5.0 - talking to groups, obey mode, and big projects that really happen (2026-10-21)
 
 Playtesting showed that "all my builders, ..." was ignored when it was typed without an @, and that

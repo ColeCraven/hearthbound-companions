@@ -932,6 +932,186 @@
     "combat.spar_over": [
       "That's enough. {mob} is down.",
       "{mob} has had enough. We're done."
+    ],
+    "life.wake": [
+      "Morning! Oh, I love mornings. Gran says the early bird gets the eggs.",
+      "I'm up! The cows would be up by now. If we had cows.",
+      "Morning! Was that a rooster? Oh, it was just me yawning."
+    ],
+    "life.work": [
+      "Right! Work! I know how to do work!",
+      "Off to work. Honest, mucky, lovely work.",
+      "Back to it. Gran always said idle hands get splinters. Or something."
+    ],
+    "life.meal": [
+      "Lunch! Oh, thank goodness, I was getting wobbly.",
+      "Food time! Is there bread? Please say there's bread.",
+      "Mealtime! Gran's rule: you always eat together."
+    ],
+    "life.leisure": [
+      "An afternoon off? Ooh. I don't know what to do with myself!",
+      "I'm taking it easy. I might look at some clouds.",
+      "Free afternoon! I'll go and say hello to the sheep. Or a chicken. Anyone, really."
+    ],
+    "life.social": [
+      "Evening! Time to see everyone!",
+      "Off to the meeting spot! I hope someone tells a story.",
+      "Oh, it's evening. I'll go and sit with the others. It's less dark with others."
+    ],
+    "life.sleep": [
+      "Bed! Night night! Nobody let the monsters in, please!",
+      "Off to sleep. I'll count sheep. Real ones would be nicer.",
+      "Goodnight! Wake me if there's breakfast."
+    ],
+    "life.shelter": [
+      "Rain! Lovely for the crops, horrible for my hair! Inside!",
+      "Oh crumbs, it's pouring. I'm going in.",
+      "Raining! Gran says never stand under a tree in a storm. I'll find a roof."
+    ],
+    "life.fire": [
+      "The fire's going! Oh, it's so cosy.",
+      "There! Fire's lit. Nobody be scared of the dark now."
+    ],
+    "life.bed_taken": [
+      "Oh! Someone's in my bed! That's all right, I'll curl up somewhere.",
+      "My bed's taken. I'll sleep in the hay. If there's hay. Is there hay?"
+    ],
+    "life.need": [
+      "We could really do with {thing}. Just a thought! Sorry!",
+      "Oh, it'd be ever so nice to have {thing}.",
+      "If anyone's asking, I'd love {thing}. Nobody's asking. That's fine."
+    ],
+    "life.self.shelter": [
+      "Nobody's got a roof! I'll build one. I think I can. I'll try!",
+      "We need somewhere dry. I'll put up a little shelter!"
+    ],
+    "life.self.farm": [
+      "There's water, I've got seeds, I'm starting a farm! Oh, this is my favourite thing!",
+      "A farm by the water! Gran would be so proud."
+    ],
+    "life.self.tools": [
+      "I need a hoe first. A couple of logs should do it!",
+      "No hoe! Right, off to get some wood. I can do this."
+    ],
+    "life.stored": [
+      "Put {count} in the store! We won't go hungry!",
+      "{count} more in storage. Gran would approve."
+    ],
+    "life.project.progress": [
+      "My flower bed's coming on! {count} of {max} planted!",
+      "Another flower in! {count} of {max}! The bees are going to love it."
+    ],
+    "life.project.done": [
+      "My flower bed's done! All {max}! Come and see, come and see!",
+      "Finished! {max} flowers! I might cry. Happy crying."
+    ],
+    "life.favour.ask": [
+      "Um, could you bring me {count} {item}? I'll give you {reward}! If that's all right!",
+      "Would you mind getting me {count} {item}? I've got {reward} for you."
+    ],
+    "life.favour.partial": [
+      "Oh, thank you! Just {count} more {item}!",
+      "Lovely! {count} more {item} and we're done!"
+    ],
+    "life.favour.thanks": [
+      "That's all of them! Thank you so much! Here's {reward}!",
+      "You're a treasure. {reward}, as promised!"
+    ],
+    "life.favour.cant_pay": [
+      "Oh no, I've got nothing left to give you! I'm so sorry! I owe you!",
+      "My pack's empty! Oh crumbs. I'll make it up to you, honest."
+    ],
+    "status.life": [
+      "Me? I'm {thing}! Feeling {mood}, I think.",
+      "I'm {thing}. And feeling {mood}! Mostly!"
+    ],
+    "status.favour": [
+      "I'm {thing}! Oh, and I'm still after {favour}, if you can!",
+      "I'm {thing}. And, um, if you've got a minute: {favour}?"
+    ],
+    "exchange.meal.open": [
+      "{other}, isn't this lovely? Everyone eating together!",
+      "Try the bread, {other}! I didn't burn it this time!"
+    ],
+    "exchange.meal.reply": [
+      "It's the best part of the day.",
+      "Not burnt at all! Well, a bit."
+    ],
+    "exchange.meal.close": [
+      "Gran always said that. Food tastes better shared.",
+      "A bit is fine! Crunchy is fine!"
+    ],
+    "exchange.story.open": [
+      "{other}, do you want to hear about the time Gran fought a fox?",
+      "I've got a story, {other}! It's not scary. Well, it's a bit scary."
+    ],
+    "exchange.story.reply": [
+      "Your gran fought a fox?",
+      "Not too scary, I hope."
+    ],
+    "exchange.story.close": [
+      "With a rolling pin! And the fox apologised! Sort of.",
+      "And then the noise was just a cow. It's always just a cow."
+    ],
+    "exchange.festival.open": [
+      "It's a full moon, {other}! Will you dance with me?",
+      "{other}! The festival! I've been waiting all month!"
+    ],
+    "exchange.festival.reply": [
+      "I'd love to. Mind my feet.",
+      "Me too! Come on!"
+    ],
+    "exchange.festival.close": [
+      "Wheee! I'm so dizzy!",
+      "Best night ever! Again!"
+    ],
+    "exchange.friends.open": [
+      "{other}, you're my best friend here. I just wanted to say.",
+      "I'm so glad you live here, {other}."
+    ],
+    "exchange.friends.reply": [
+      "Aw. You're mine too.",
+      "Where else would I be?"
+    ],
+    "exchange.friends.close": [
+      "I'm going to bake you something.",
+      "That's what Gran says about good neighbours!"
+    ],
+    "exchange.rivals.open": [
+      "Oh. Hello, {other}.",
+      "{other}, you took the last bread roll. Again."
+    ],
+    "exchange.rivals.reply": [
+      "I was hungry.",
+      "It had my name on it."
+    ],
+    "exchange.rivals.close": [
+      "Well. Next time ask.",
+      "It did not! Hmph."
+    ],
+    "exchange.people.open": [
+      "{other}, have you seen {thing}?",
+      "{thing} came by! They waved at me!"
+    ],
+    "exchange.people.reply": [
+      "{thing}? Oh, they're nice. Brave, too.",
+      "They wave at everyone. Still nice, though."
+    ],
+    "exchange.people.close": [
+      "I hope they're eating properly out there.",
+      "I'm going to wave back next time. Big wave."
+    ],
+    "team.plan": [
+      "Okay! Plan! {plan}. We can do this!",
+      "Here's the plan, everyone: {plan}. Oh, this is exciting!"
+    ],
+    "team.progress": [
+      "We're halfway on {thing}! {count} of {max} blocks!",
+      "{count} of {max}! It actually looks like {thing} now!"
+    ],
+    "team.done": [
+      "That's {thing} built! We did it! All of us!",
+      "Finished! {thing}! Oh, I want to cry. Good crying."
     ]
   }
 }

@@ -13,7 +13,7 @@ public final class Bonds {
 	public static final int RIVALS = -10;
 
 	/** Pairs that clash: a rogue and a guardian, a sellsword and a naturalist, a mystic and a farmhand. */
-	private static final Set<String> CLASHES = Set.of("rogue|guardian", "naturalist|sellsword", "farmhand|mystic");
+	private static final Set<String> CLASHES = Set.of("guardian|rogue", "naturalist|sellsword", "farmhand|mystic");
 
 	private Bonds() {
 	}

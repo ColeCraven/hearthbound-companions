@@ -1,0 +1,57 @@
+{
+  "_readme": "Part of config/hearthbound.json: the hub of a sky island, with its places listed by hand. Copy the server.hub block into your own config and change the numbers to fit your build. Anything you leave out is found on its own near the hub (beds, a bell or campfire, a furnace or smoker beside a chest, farmland). Points are [x, y, z]; boxes are {\"from\": [x, y, z], \"to\": [x, y, z]}. Beds are listed by companion name, at the bed's head.",
+  "server": {
+    "hub": {
+      "enabled": true,
+      "dimension": "minecraft:overworld",
+      "x": -400,
+      "y": 301,
+      "z": 305,
+      "wanderRadius": 12,
+      "protectRadius": 64,
+      "residents": [
+        "all"
+      ],
+      "welcomeTip": true,
+      "places": {
+        "commons": [-400, 301, 300],
+        "kitchen": {
+          "from": [-427, 300, 293],
+          "to": [-416, 304, 307]
+        },
+        "farm": {
+          "from": [-388, 300, 291],
+          "to": [-374, 302, 309]
+        },
+        "storage": {
+          "from": [-386, 300, 280],
+          "to": [-379, 304, 287]
+        },
+        "beds": {
+          "dasha": [-409, 301, 279],
+          "charlie": [-406, 301, 279],
+          "hazel": [-403, 301, 279],
+          "birintan": [-400, 301, 279],
+          "maddie": [-397, 301, 279],
+          "aj": [-394, 301, 279],
+          "daisy": [-391, 301, 279],
+          "cole": [-409, 301, 287],
+          "samuel": [-406, 301, 287],
+          "honey": [-403, 301, 287],
+          "luna": [-397, 301, 287],
+          "luke": [-394, 301, 287]
+        },
+        "patrol": [
+          [-418, 301, 305],
+          [-412, 301, 291],
+          [-400, 301, 323],
+          [-386, 301, 318]
+        ],
+        "spots": {
+          "star tower": [-420, 301, 312],
+          "arrivals": [-400, 301, 319]
+        }
+      }
+    }
+  }
+}

@@ -922,6 +922,186 @@
     "combat.spar_over": [
       "That's enough. {mob} is down.",
       "{mob} has had enough. We're done."
+    ],
+    "life.wake": [
+      "Morning. Too early. Always too early.",
+      "Up. Under protest.",
+      "Awake. Somebody owes me a breakfast."
+    ],
+    "life.work": [
+      "Right, to work. Honest work. Don't faint.",
+      "Clocking on, boss. Metaphorically.",
+      "Work time. I'll look busy, you look impressed."
+    ],
+    "life.meal": [
+      "Lunch! Best part of the job.",
+      "Food. Finally, something worth turning up for.",
+      "Mealtime. I call dibs on the crust."
+    ],
+    "life.leisure": [
+      "Afternoon off. I've earned it. Probably.",
+      "Taking it easy. I'm very good at it.",
+      "Free time. I'll practise my card tricks."
+    ],
+    "life.social": [
+      "Evening! Off to see who's got gossip.",
+      "Time to sit by the fire and win at cards.",
+      "Off to the others. Somebody's bound to owe me money."
+    ],
+    "life.sleep": [
+      "Bed. Don't steal anything while I'm out. That's my job.",
+      "Night, all. Lock your boxes.",
+      "Turning in. Wake me if there's treasure."
+    ],
+    "life.shelter": [
+      "Rain. Nope. Indoors.",
+      "It's pouring. I'm going somewhere with a roof and snacks.",
+      "Wet hair is not part of my look. Inside."
+    ],
+    "life.fire": [
+      "Fire's lit. Who brought the cards?",
+      "There. Fire, warmth, and nobody can see my hand."
+    ],
+    "life.bed_taken": [
+      "Somebody's in my bed. Bold. I respect it.",
+      "Bed's taken. I'll find a nice corner. I always do."
+    ],
+    "life.need": [
+      "We could do with {thing} round here, boss. Just saying.",
+      "You know what this place needs? {thing}.",
+      "We're still without {thing}. Not complaining. Noting it. Loudly."
+    ],
+    "life.self.shelter": [
+      "Nobody's got a roof? Fine. I'll build one. Watch and learn.",
+      "No shelter? I'll put one up. Don't expect turrets."
+    ],
+    "life.self.farm": [
+      "Water, seeds, me. Let's farm. Honest work, who knew.",
+      "Starting a farm. Free food is the best food."
+    ],
+    "life.self.tools": [
+      "Need a hoe. Borrowing a couple of logs from that tree.",
+      "No hoe yet. Off to chop some wood. Legally."
+    ],
+    "life.stored": [
+      "{count} in the store. All accounted for. For once.",
+      "Stashed {count}. Proper stash, not my kind."
+    ],
+    "life.project.progress": [
+      "My flower bed: {count} of {max}. It's for the look of the place.",
+      "Another one in. {count} of {max}. Very classy."
+    ],
+    "life.project.done": [
+      "Flower bed's done. All {max}. Classy, right?",
+      "Finished. {max} flowers. I'm basically a gardener now."
+    ],
+    "life.favour.ask": [
+      "Hey, partner. Bring me {count} {item} and {reward} is yours.",
+      "I need {count} {item}. I'll trade you {reward}. Fair and square, for once."
+    ],
+    "life.favour.partial": [
+      "Nice. {count} more {item} and we're square.",
+      "Good start. Still {count} {item} short, though."
+    ],
+    "life.favour.thanks": [
+      "Pleasure doing business. Here's {reward}.",
+      "That's the lot. {reward}, as promised. I keep my word. Sometimes."
+    ],
+    "life.favour.cant_pay": [
+      "Awkward. My pack's empty. I owe you one, really.",
+      "I'm out of goods. Put it on my tab. I'm good for it."
+    ],
+    "status.life": [
+      "Me? {thing}. Feeling {mood}.",
+      "I'm {thing}. Mood: {mood}. Thanks for asking, boss."
+    ],
+    "status.favour": [
+      "I'm {thing}. Still looking for {favour}, if you're buying.",
+      "{thing}. And there's a deal on the table: {favour}."
+    ],
+    "exchange.meal.open": [
+      "{other}, you going to finish that?",
+      "Not bad, {other}. Who cooked?"
+    ],
+    "exchange.meal.reply": [
+      "Yes. Hands off.",
+      "I did. Say something nice."
+    ],
+    "exchange.meal.close": [
+      "Worth a try.",
+      "Fine. It's very nice. Can I have seconds?"
+    ],
+    "exchange.story.open": [
+      "{other}, did I ever tell you about the time I stole a goat?",
+      "Story time, {other}. This one's mostly true."
+    ],
+    "exchange.story.reply": [
+      "The goat again? Go on.",
+      "Mostly true. Right."
+    ],
+    "exchange.story.close": [
+      "And the goat still follows me about sometimes. Grudge, I think.",
+      "And that's how I learned to run."
+    ],
+    "exchange.festival.open": [
+      "Full moon, {other}! Time to dance and pick pockets. Just dance.",
+      "{other}! It's the festival! Fancy a dance?"
+    ],
+    "exchange.festival.reply": [
+      "Keep your hands where I can see them.",
+      "Only if you don't step on me."
+    ],
+    "exchange.festival.close": [
+      "No promises. Ha! Come on.",
+      "Deal. Mostly."
+    ],
+    "exchange.friends.open": [
+      "{other}, you're one of the good ones.",
+      "Nobody I'd rather split loot with, {other}."
+    ],
+    "exchange.friends.reply": [
+      "You'd still take the bigger half.",
+      "That almost sounded sincere."
+    ],
+    "exchange.friends.close": [
+      "Course I would. With love.",
+      "It was. Don't tell anyone."
+    ],
+    "exchange.rivals.open": [
+      "{other}. Counting your coins again?",
+      "Oh, it's {other}. Hide the valuables."
+    ],
+    "exchange.rivals.reply": [
+      "Counting yours, actually.",
+      "Very funny."
+    ],
+    "exchange.rivals.close": [
+      "Watch it.",
+      "I'm hilarious, ask anyone."
+    ],
+    "exchange.people.open": [
+      "{other}, seen {thing} around?",
+      "{thing} was here earlier. Good tipper."
+    ],
+    "exchange.people.reply": [
+      "{thing}? Always in a hurry. I like that.",
+      "Gave me a job once. Paid on time, too."
+    ],
+    "exchange.people.close": [
+      "Keep them sweet. Good for business.",
+      "Proper sort. Rare these days."
+    ],
+    "team.plan": [
+      "Right, team. {plan}. Easy money.",
+      "Here's how we do it: {plan}. Any questions? No? Good."
+    ],
+    "team.progress": [
+      "Halfway on {thing}. {count} of {max}. Looking sharp.",
+      "{count} of {max} in. Not bad for amateurs."
+    ],
+    "team.done": [
+      "That's {thing} built. Take a bow, everyone.",
+      "Done! {thing}, all ours. Who wants to sign it?"
     ]
   }
 }

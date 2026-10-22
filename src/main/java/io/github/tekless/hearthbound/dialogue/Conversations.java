@@ -12,6 +12,7 @@ import io.github.tekless.hearthbound.core.intent.NameMatch;
 import io.github.tekless.hearthbound.core.intent.ParseResult;
 import io.github.tekless.hearthbound.core.intent.QuestionKind;
 import io.github.tekless.hearthbound.core.intent.TalkTopic;
+import io.github.tekless.hearthbound.core.intent.TeamRequest;
 import io.github.tekless.hearthbound.core.memory.PlayerFacts;
 import io.github.tekless.hearthbound.core.persona.Role;
 import io.github.tekless.hearthbound.entity.CompanionEntity;
@@ -174,6 +175,9 @@ public final class Conversations {
 				if (text.contains("@")) {
 					return false; // talking to (or about) someone else
 				}
+				if (teamRequest(player, text)) {
+					return true;
+				}
 				CompanionEntity partner = conversationPartner(player, text);
 				if (partner == null) {
 					return false;
@@ -209,6 +213,108 @@ public final class Conversations {
 			report(player, targets, List.of());
 		}
 		return true;
+	}
+
+	// ------------------------------------------------------------------ plain requests for whoever is around
+
+	/** How far companions hear a plain request ("build a house", "we need a farm") with nobody named. */
+	private static final double TEAM_RANGE = 32;
+
+	/**
+	 * "Build a house", "let's build a house", "we need a farm", "can someone get wood", "let's set up camp here":
+	 * plain chat with nobody named, read as a job for the companions within earshot who take this player's orders.
+	 * One of them alone just does it; several make it a team job with one of them saying the plan. Statements
+	 * ("I built a house yesterday") and anything vague are left for the normal one-to-one path.
+	 *
+	 * @return true if it was a request and someone took it on (or said why not)
+	 */
+	private static boolean teamRequest(ServerPlayer player, String text) {
+		Optional<TeamRequest.Job> parsed = TeamRequest.parse(text, PARSER);
+		if (parsed.isEmpty()) {
+			return false;
+		}
+		TeamRequest.Job job = parsed.get();
+		List<CompanionEntity> crew = new ArrayList<>(CompanionTracker.near(player, TEAM_RANGE).stream()
+				.filter(c -> !c.isDowned() && listens(player, c)).sorted(Comparator.comparingDouble(c -> c.distanceToSqr(player))).toList());
+		if (crew.isEmpty()) {
+			return false;
+		}
+		if (crew.size() > MAX_GROUP) {
+			crew = new ArrayList<>(crew.subList(0, MAX_GROUP));
+		}
+		// With other players around, "we need a farm" may be for them: only if the player is facing one of us.
+		if (!aloneWithCompanions(player) && crew.stream().noneMatch(c -> isFacing(player, c))) {
+			return false;
+		}
+		CompanionEntity lead = lead(player, crew, job);
+		beginChat(player, lead);
+		lead.noteSpeaker(player);
+		lead.memory().talkingWith(player.getUUID().toString());
+		lead.memory().addPlayerLine(text);
+		switch (job.kind()) {
+			case GATHER -> {
+				// "Can someone get wood": one of them goes, the best suited.
+				orderFromChat(player, lead, Intent.gather(job.item(), job.count()));
+				return true;
+			}
+			case BRIDGE, CAMP -> {
+				orderFromChat(player, lead, Intent.build(job.item()));
+				return true;
+			}
+			case FARM, STOREHOUSE -> {
+				ProjectParser.Plan plan = new ProjectParser.Plan(false, job.kind() == TeamRequest.Kind.FARM, job.kind() == TeamRequest.Kind.STOREHOUSE,
+						false, false, false);
+				List<CompanionEntity> doers = crew.stream().filter(c -> c.role() == (plan.farm() ? Role.FARMER : Role.BUILDER)).toList();
+				if (doers.isEmpty()) {
+					doers = List.of(lead);
+				}
+				if (plan.storehouse() && doers.size() > 1) {
+					break; // several builders share the storehouse, below
+				}
+				Projects.Launch launch = Projects.launch(player, doers, List.of(), List.of(), plan);
+				if (!launch.involved().isEmpty()) {
+					launch.involved().get(0).say("project.ack.group", Map.of("plan", launch.plan()));
+					report(player, launch.involved(), List.of());
+				}
+				return true;
+			}
+			default -> {
+			}
+		}
+		if (crew.size() == 1) {
+			orderFromChat(player, lead, Intent.build(job.item()));
+			return true;
+		}
+		Blueprint.Kind kind = switch (job.kind()) {
+			case WALL -> Blueprint.Kind.WALL;
+			case SHELTER -> Blueprint.Kind.SHELTER;
+			case STOREHOUSE -> Blueprint.Kind.STOREHOUSE;
+			default -> Blueprint.Kind.HOUSE;
+		};
+		io.github.tekless.hearthbound.entity.order.TeamJob.Launch launch = io.github.tekless.hearthbound.entity.order.TeamJob.start(player, crew, lead, kind);
+		if (launch != null) {
+			launch.speaker().say("team.plan", Map.of("plan", launch.plan(), "thing", kind.label()));
+			report(player, launch.involved(), List.of());
+		}
+		return true;
+	}
+
+	/** Who answers a plain request: the one the player is talking to or looking at, else the nearest who suits the job. */
+	private static CompanionEntity lead(ServerPlayer player, List<CompanionEntity> crew, TeamRequest.Job job) {
+		Chat chat = CHATS.get(player.getUUID());
+		if (chat != null && crew.contains(chat.companion())) {
+			return chat.companion();
+		}
+		CompanionEntity looked = lookedAt(player, LOOK_RANGE);
+		if (looked != null && crew.contains(looked)) {
+			return looked;
+		}
+		Role suited = switch (job.kind()) {
+			case GATHER -> Role.COLLECTOR;
+			case FARM -> Role.FARMER;
+			default -> Role.BUILDER;
+		};
+		return crew.stream().filter(c -> c.role() == suited).findFirst().orElse(crew.get(0));
 	}
 
 	// ------------------------------------------------------------------ groups without an @name
@@ -1334,7 +1440,9 @@ public final class Conversations {
 			}
 			case MINE -> Outcome.yes("status.mine", Map.of("count", Integer.toString(((MineOrder) order).stepsDone())));
 			case BUILD -> Outcome.yes("status.build", Map.of("thing", ((BuildOrder) order).blueprint().kind().label()));
-			case PROJECT -> Outcome.yes("status.build", Map.of("thing", order instanceof ProjectOrder project ? project.label() : "a farm"));
+			case PROJECT -> Outcome.yes("status.build", Map.of("thing", order instanceof ProjectOrder project ? project.label()
+					: order instanceof io.github.tekless.hearthbound.entity.order.TeamJob.Builder part ? part.job().label()
+					: order instanceof io.github.tekless.hearthbound.entity.order.TeamJob.Watch watch ? watch.job().label() : "a farm"));
 			case HOME -> {
 				if (order instanceof io.github.tekless.hearthbound.entity.order.HomeOrder home && home.activity() != null) {
 					// Their day at home: what they're up to, and a favour they're after, if any.

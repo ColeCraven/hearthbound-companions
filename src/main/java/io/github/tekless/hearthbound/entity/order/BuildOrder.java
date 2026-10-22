@@ -106,7 +106,7 @@ public final class BuildOrder implements CompanionOrder {
 		if (next == null) {
 			if (!finishing) {
 				finishing = true;
-				finishTouches(level);
+				finishTouches(level, blueprint, workSpot, facing, c);
 			}
 			status = TaskStatus.SUCCEEDED;
 			c.say("done.build", Map.of("thing", blueprint.kind().label()));
@@ -137,7 +137,7 @@ public final class BuildOrder implements CompanionOrder {
 			}
 			return;
 		}
-		ItemStack material = pickMaterial();
+		ItemStack material = pickMaterial(companion);
 		if (material == null) {
 			status = TaskStatus.FAILED;
 			c.say("fail.build_materials", Map.of("thing", blueprint.kind().label(), "need", Integer.toString(queue.size()), "have", "0"));
@@ -153,7 +153,7 @@ public final class BuildOrder implements CompanionOrder {
 	}
 
 	/** The kind of block the companion has most of, so the build is one material where possible. */
-	private ItemStack pickMaterial() {
+	static ItemStack pickMaterial(CompanionEntity companion) {
 		Map<net.minecraft.world.item.Item, Integer> totals = new HashMap<>();
 		for (ItemStack stack : companion.inventory().getItems()) {
 			if (isBuildingBlock(stack)) {
@@ -185,10 +185,10 @@ public final class BuildOrder implements CompanionOrder {
 	}
 
 	/** A door in a shelter's doorway and a torch inside, if the companion has them. */
-	private void finishTouches(ServerLevel level) {
+	static void finishTouches(ServerLevel level, Blueprint blueprint, BlockPos workSpot, Direction facing, CompanionEntity companion) {
 		if (blueprint.kind() == Blueprint.Kind.CAMP) {
 			BlockPos fire = blueprint.centre();
-			ItemStack campfire = take(stack -> stack.is(Items.CAMPFIRE) || stack.is(Items.SOUL_CAMPFIRE));
+			ItemStack campfire = take(companion, stack -> stack.is(Items.CAMPFIRE) || stack.is(Items.SOUL_CAMPFIRE));
 			if (fire != null && campfire != null && Blueprint.isOpen(level.getBlockState(fire))) {
 				Block block = campfire.is(Items.SOUL_CAMPFIRE) ? Blocks.SOUL_CAMPFIRE : Blocks.CAMPFIRE;
 				level.setBlockAndUpdate(fire, block.defaultBlockState());
@@ -201,7 +201,7 @@ public final class BuildOrder implements CompanionOrder {
 		}
 		List<BlockPos> doorway = blueprint.spots().stream().filter(Blueprint.Spot::doorway).map(Blueprint.Spot::pos)
 				.sorted(Comparator.comparingInt(BlockPos::getY)).toList();
-		ItemStack door = take(stack -> stack.getItem() instanceof BlockItem item && item.getBlock() instanceof DoorBlock);
+		ItemStack door = take(companion, stack -> stack.getItem() instanceof BlockItem item && item.getBlock() instanceof DoorBlock);
 		if (door != null && doorway.size() == 2 && Blueprint.isOpen(level.getBlockState(doorway.get(0))) && Blueprint.isOpen(level.getBlockState(doorway.get(1)))) {
 			Block block = ((BlockItem) door.getItem()).getBlock();
 			BlockState lower = block.defaultBlockState().setValue(DoorBlock.FACING, facing.getOpposite()).setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER);
@@ -210,11 +210,11 @@ public final class BuildOrder implements CompanionOrder {
 			door.shrink(1);
 		}
 		if (blueprint.kind() == Blueprint.Kind.STOREHOUSE) {
-			furnishStorehouse(level);
+			furnishStorehouse(level, workSpot, facing, companion);
 		}
 		BlockPos inside = workSpot.relative(facing, 2);
 		if (level.getBlockState(inside).isAir() && Blocks.TORCH.defaultBlockState().canSurvive(level, inside)) {
-			ItemStack torch = take(stack -> stack.is(Items.TORCH));
+			ItemStack torch = take(companion, stack -> stack.is(Items.TORCH));
 			if (torch != null) {
 				level.setBlockAndUpdate(inside, Blocks.TORCH.defaultBlockState());
 				torch.shrink(1);
@@ -223,21 +223,21 @@ public final class BuildOrder implements CompanionOrder {
 	}
 
 	/** A chest and a furnace (or smoker) against the back wall, from what the builder carries. The chest is remembered as the store. */
-	private void furnishStorehouse(ServerLevel level) {
+	private static void furnishStorehouse(ServerLevel level, BlockPos workSpot, Direction facing, CompanionEntity companion) {
 		Direction right = facing.getClockWise();
 		BlockPos back = workSpot.relative(facing, 3);
 		BlockPos chestPos = back.relative(right, -1);
 		BlockPos cookPos = back.relative(right, 1);
-		ItemStack chest = take(stack -> stack.is(Items.CHEST));
+		ItemStack chest = take(companion, stack -> stack.is(Items.CHEST));
 		if (chest != null && level.getBlockState(chestPos).isAir()) {
 			level.setBlockAndUpdate(chestPos, Blocks.CHEST.defaultBlockState().setValue(net.minecraft.world.level.block.ChestBlock.FACING, facing.getOpposite()));
 			chest.shrink(1);
 			io.github.tekless.hearthbound.world.Storehouses.register(level, chestPos);
 		}
-		ItemStack cooker = take(stack -> stack.is(Items.SMOKER));
+		ItemStack cooker = take(companion, stack -> stack.is(Items.SMOKER));
 		boolean smoker = cooker != null;
 		if (cooker == null) {
-			cooker = take(stack -> stack.is(Items.FURNACE));
+			cooker = take(companion, stack -> stack.is(Items.FURNACE));
 		}
 		if (cooker != null && level.getBlockState(cookPos).isAir()) {
 			Block block = smoker ? Blocks.SMOKER : Blocks.FURNACE;
@@ -251,7 +251,7 @@ public final class BuildOrder implements CompanionOrder {
 		return status == TaskStatus.SUCCEEDED;
 	}
 
-	private ItemStack take(java.util.function.Predicate<ItemStack> filter) {
+	private static ItemStack take(CompanionEntity companion, java.util.function.Predicate<ItemStack> filter) {
 		for (ItemStack stack : companion.inventory().getItems()) {
 			if (!stack.isEmpty() && filter.test(stack)) {
 				return stack;

@@ -928,6 +928,186 @@
     "combat.spar_over": [
       "That's enough. {mob} is down.",
       "{mob} has had enough. We're done."
+    ],
+    "life.wake": [
+      "Morning. Too bright.",
+      "I'm up. The stars went home, so I may as well.",
+      "Dawn. The sky is very loud today."
+    ],
+    "life.work": [
+      "Work. As the moon commands. Or the clock.",
+      "To work. Quietly.",
+      "Back to the work. It doesn't do itself."
+    ],
+    "life.meal": [
+      "Food. Even I must eat.",
+      "Midday. Bread, and silence, please.",
+      "A meal. The body insists."
+    ],
+    "life.leisure": [
+      "A free afternoon. I'll read the clouds.",
+      "Resting. Thinking about the void. It's relaxing.",
+      "Leisure. I shall sit very still and judge the weather."
+    ],
+    "life.social": [
+      "Evening. The good part of the day begins.",
+      "To the fire. The night opens up.",
+      "Dusk. I'll sit with the others and watch the stars arrive."
+    ],
+    "life.sleep": [
+      "Bed. The stars can manage without me.",
+      "Night. I'll dream of strange places.",
+      "Sleep. Do not wake me unless the moon falls."
+    ],
+    "life.shelter": [
+      "Rain. Even I won't stand in that.",
+      "The sky is weeping. I'll be inside.",
+      "Storm. I prefer to watch from under a roof."
+    ],
+    "life.fire": [
+      "The fire is lit. Sit. Look into it.",
+      "Flame, at last. The night is welcome now."
+    ],
+    "life.bed_taken": [
+      "My bed is occupied. I'll sleep under the stars. I prefer it.",
+      "Someone's in my bed. Curious. I'll manage."
+    ],
+    "life.need": [
+      "This place lacks {thing}. I mention it.",
+      "We could do with {thing}. The stars agree.",
+      "Still without {thing}. Interesting. Inconvenient."
+    ],
+    "life.self.shelter": [
+      "No roof here. I'll raise one. Don't expect a tower.",
+      "A shelter, then. Even mystics get wet."
+    ],
+    "life.self.farm": [
+      "Water, seed, soil. I'll start a farm. The moon likes a planted field.",
+      "A plot by the water. Growth is a kind of magic."
+    ],
+    "life.self.tools": [
+      "I need a hoe. Wood first.",
+      "No hoe. A couple of logs will fix that."
+    ],
+    "life.stored": [
+      "{count} more in the store.",
+      "The store holds {count} more. Abundance."
+    ],
+    "life.project.progress": [
+      "My flower bed. {count} of {max}. Night-blooming, mostly.",
+      "Another flower. {count} of {max}."
+    ],
+    "life.project.done": [
+      "My flower bed is done. {max} of them. They glow, a little, if you squint.",
+      "Finished. {max} flowers. Beauty is patient."
+    ],
+    "life.favour.ask": [
+      "I need {count} {item}. Bring them, and {reward} is yours.",
+      "A favour: {count} {item}. I'll trade {reward}."
+    ],
+    "life.favour.partial": [
+      "Good. {count} more {item}.",
+      "Some. {count} {item} still missing."
+    ],
+    "life.favour.thanks": [
+      "It is done. {reward}, as promised.",
+      "Thank you. Here: {reward}."
+    ],
+    "life.favour.cant_pay": [
+      "My pack is empty. I owe you. I remember debts.",
+      "Nothing left to give. The debt stands."
+    ],
+    "status.life": [
+      "{thing}. Mood: {mood}.",
+      "I'm {thing}. {mood}, if you must know."
+    ],
+    "status.favour": [
+      "{thing}. Still waiting on {favour}.",
+      "I'm {thing}. Our bargain stands: {favour}."
+    ],
+    "exchange.meal.open": [
+      "{other}. The soup is acceptable.",
+      "Pass the salt, {other}. Please."
+    ],
+    "exchange.meal.reply": [
+      "High praise, from you.",
+      "Here. Don't use it all."
+    ],
+    "exchange.meal.close": [
+      "I'm feeling generous.",
+      "No promises."
+    ],
+    "exchange.story.open": [
+      "{other}. Shall I tell you about the thing that lives in the end of the world?",
+      "A story, {other}. It's about a door that wasn't there."
+    ],
+    "exchange.story.reply": [
+      "Is it a scary one?",
+      "Go on. I'm listening."
+    ],
+    "exchange.story.close": [
+      "It's still there. Waiting. Sleep well.",
+      "And the door is still not there. Goodnight."
+    ],
+    "exchange.festival.open": [
+      "The moon is full, {other}. Everything is louder.",
+      "{other}. The festival. I suppose I'll dance."
+    ],
+    "exchange.festival.reply": [
+      "You? Dance? I must see this.",
+      "Finally. Come on."
+    ],
+    "exchange.festival.close": [
+      "Once. Under protest.",
+      "The moon made me do it."
+    ],
+    "exchange.friends.open": [
+      "{other}. You're tolerable. More than tolerable.",
+      "I don't say this often, {other}. I'm glad you're here."
+    ],
+    "exchange.friends.reply": [
+      "From you, that's a poem.",
+      "I'll treasure it."
+    ],
+    "exchange.friends.close": [
+      "Don't tell the others.",
+      "Hm. Good."
+    ],
+    "exchange.rivals.open": [
+      "{other}. Your aura is very loud today.",
+      "You again, {other}."
+    ],
+    "exchange.rivals.reply": [
+      "My aura is fine.",
+      "Me again."
+    ],
+    "exchange.rivals.close": [
+      "It isn't.",
+      "Sigh."
+    ],
+    "exchange.people.open": [
+      "{other}. Have you seen {thing}?",
+      "{thing} came by today."
+    ],
+    "exchange.people.reply": [
+      "{thing}. Interesting person. Restless.",
+      "They always look at the sky. I like that."
+    ],
+    "exchange.people.close": [
+      "They'll be back. They always come back.",
+      "Hm. A good omen."
+    ],
+    "team.plan": [
+      "Listen. {plan}. Begin.",
+      "The plan: {plan}. Simple enough."
+    ],
+    "team.progress": [
+      "Halfway on {thing}. {count} of {max}.",
+      "{count} of {max} in. It's taking shape."
+    ],
+    "team.done": [
+      "{thing}, built. Together. Remarkable.",
+      "Done. {thing} stands. As foretold."
     ]
   }
 }
