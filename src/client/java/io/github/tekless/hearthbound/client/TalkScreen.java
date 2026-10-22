@@ -23,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  */
 public final class TalkScreen extends Screen {
 	private static final int PANEL_WIDTH = 340;
-	private static @Nullable TalkPayloads.State latest;
+	private static TalkPayloads.@Nullable State latest;
 
 	private int entityId;
 	private @Nullable EditBox input;
@@ -44,7 +44,7 @@ public final class TalkScreen extends Screen {
 		}
 	}
 
-	private @Nullable TalkPayloads.State state() {
+	private TalkPayloads.@Nullable State state() {
 		return latest != null && latest.header().entityId() == entityId ? latest : null;
 	}
 
