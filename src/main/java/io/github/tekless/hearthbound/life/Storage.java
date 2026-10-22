@@ -39,6 +39,22 @@ public final class Storage {
 		return total;
 	}
 
+	/** How many items like this are in these chests, counting only the loaded ones. */
+	static int countIn(ServerLevel level, List<BlockPos> chests, java.util.function.Predicate<net.minecraft.world.item.ItemStack> what) {
+		int total = 0;
+		for (BlockPos pos : chests) {
+			if (level.hasChunkAt(pos) && level.getBlockEntity(pos) instanceof Container container) {
+				for (int slot = 0; slot < container.getContainerSize(); slot++) {
+					net.minecraft.world.item.ItemStack stack = container.getItem(slot);
+					if (!stack.isEmpty() && what.test(stack)) {
+						total += stack.getCount();
+					}
+				}
+			}
+		}
+		return total;
+	}
+
 	/** How many of this item fit into the chest. */
 	static int room(Container chest, Item item) {
 		int room = 0;

@@ -1277,6 +1277,10 @@
     "status.task": [
       "I'm {task}.",
       "Busy. {task}."
+    ],
+    "life.self.stock": [
+      "Nothing in store. I'll fetch some {thing}.",
+      "We've no {thing} to speak of. Back soon."
     ]
   }
 }

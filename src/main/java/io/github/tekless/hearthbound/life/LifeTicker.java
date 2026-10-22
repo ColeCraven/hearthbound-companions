@@ -193,5 +193,6 @@ public final class LifeTicker {
 	public static void reset() {
 		LAST_MOMENT.clear();
 		LAST_BOND.clear();
+		Initiative.reset();
 	}
 }

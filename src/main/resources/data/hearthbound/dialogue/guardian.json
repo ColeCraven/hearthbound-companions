@@ -1230,6 +1230,10 @@
     "status.task": [
       "I am {task}.",
       "I am busy, {task}."
+    ],
+    "life.self.stock": [
+      "We have little {thing}. I will gather some.",
+      "A home needs {thing}. I will bring some back."
     ]
   }
 }

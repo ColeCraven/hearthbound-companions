@@ -24,11 +24,45 @@ import net.minecraft.world.item.Items;
  * What someone living in a brand-new world does about what isn't there yet, with autonomy on: a builder with no
  * roof over home puts up a small shelter (chopping wood for it if they must), and a farmer with seeds starts a small
  * plot by the nearest water (chopping a couple of logs for a hoe first, if they have to). Each is tried at most
- * every few days, so nobody keeps at something that can't work. When something can't be done, or autonomy is off,
- * they say what they'd need instead, at most once a day, and get on with something else.
+ * every few days, so nobody keeps at something that can't work. A collector fetches the first logs and stone for a
+ * home that has none. When something can't be done, or autonomy is off, they say what they'd need instead: once,
+ * then again after a day, two days, then every four at most, and get on with something else.
  */
 final class Initiative {
+	/** How much of each basic a new home wants before the collector stops fetching it. */
+	private static final int STOCK = 16;
+	/** How often each companion has mentioned each need, for the back-off. Forgotten on restart, which is fine. */
+	private static final Map<java.util.UUID, Map<String, Integer>> MENTIONED = new java.util.concurrent.ConcurrentHashMap<>();
+
 	private Initiative() {
+	}
+
+	static void reset() {
+		MENTIONED.clear();
+	}
+
+	/**
+	 * A collector in a home with hardly any logs or stone (in their pack and the storage chests together): fetch some,
+	 * logs first. At most once a day each, so a world with no trees nearby doesn't keep them at it.
+	 */
+	static boolean stock(CompanionEntity c, ServerLevel level, Places places, BlockPos home, long day) {
+		if (c.role() != Role.COLLECTOR || !Routines.enabled(c) || WorldRules.isProtected(level, home)) {
+			return false;
+		}
+		for (String basic : java.util.List.of("logs", "stone")) {
+			if (!(GatherCatalog.resolve(basic) instanceof GatherCatalog.Resolution.Gatherable gatherable)) {
+				continue;
+			}
+			java.util.function.Predicate<net.minecraft.world.item.ItemStack> counts = gatherable.spec().counts();
+			int have = c.countCarried(counts) + Storage.countIn(level, places.storage(), counts);
+			if (have >= STOCK || !c.tryEvery("stock:" + basic, day, 1)) {
+				continue;
+			}
+			c.sayMaybe("life.self.stock", Map.of("thing", gatherable.spec().displayName()), 1.0);
+			c.setOrder(new GatherOrder(c, gatherable.spec(), STOCK - have).keepForSelf());
+			return true;
+		}
+		return false;
 	}
 
 	/** A builder with nothing over their head and no beds around: a shelter of their own. True if they started one. */
@@ -106,11 +140,20 @@ final class Initiative {
 		}
 	}
 
-	/** Says what they need, once a day per need, and only when someone is close enough to hear. True if it was said. */
+	/**
+	 * Says what they need, only when someone is close enough to hear: the first time, then after a day, after two, then
+	 * every four days at most, so a need nobody can meet yet doesn't become nagging. True if it was said.
+	 */
 	static boolean mention(CompanionEntity c, ServerLevel level, long day, String thing) {
-		if (level.getNearestPlayer(c, 16.0) == null || !c.tryEvery("need:" + thing, day, 1)) {
+		if (level.getNearestPlayer(c, 16.0) == null) {
 			return false;
 		}
+		Map<String, Integer> said = MENTIONED.computeIfAbsent(c.getUUID(), id -> new java.util.concurrent.ConcurrentHashMap<>());
+		int times = said.getOrDefault(thing, 0);
+		if (!c.tryEvery("need:" + thing, day, 1 << Math.min(2, times))) {
+			return false;
+		}
+		said.put(thing, times + 1);
 		c.say("life.need", Map.of("thing", thing));
 		return true;
 	}

@@ -593,6 +593,12 @@ public final class HomeAreas {
 		return data.areas.values();
 	}
 
+	/** Look around this home again on the next visit (a bed or chest was just put down, or someone asked what's there). */
+	public void rescanSoon(Area area) {
+		area.scannedAt = -1;
+		area.placesAt = -1;
+	}
+
 	// ---------------------------------------------------------------- storage
 
 	static @Nullable BlockPos point(int @Nullable [] values) {

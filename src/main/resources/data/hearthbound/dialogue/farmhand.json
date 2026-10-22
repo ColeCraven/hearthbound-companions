@@ -1240,6 +1240,10 @@
     "status.task": [
       "I'm {task}!",
       "Just {task}."
+    ],
+    "life.self.stock": [
+      "We've barely any {thing}! I'll go and get some.",
+      "Gran always said keep {thing} in. Off I go!"
     ]
   }
 }

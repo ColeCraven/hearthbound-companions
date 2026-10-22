@@ -175,6 +175,7 @@ class LineBankTest {
 		REQUIRED.put("smelt.ack", plus(base, "count", "item", "thing"));
 		REQUIRED.put("craft.missing", plus(base, "item", "missing"));
 		REQUIRED.put("status.task", plus(base, "task"));
+		REQUIRED.put("life.self.stock", plus(base, "thing"));
 		for (String key : List.of("craft.no_table", "smelt.no_furnace", "smelt.no_fuel", "move.pillar", "move.bridge")) {
 			REQUIRED.put(key, base);
 		}

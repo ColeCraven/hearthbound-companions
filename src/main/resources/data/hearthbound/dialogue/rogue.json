@@ -1230,6 +1230,10 @@
     "status.task": [
       "I'm {task}.",
       "Busy, boss. {task}."
+    ],
+    "life.self.stock": [
+      "Our {thing} stash is empty. Leave it with me.",
+      "No {thing}? I'll go and liberate some from the wild."
     ]
   }
 }

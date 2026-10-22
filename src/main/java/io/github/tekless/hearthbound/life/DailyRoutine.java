@@ -411,8 +411,8 @@ public final class DailyRoutine {
 		jobCooldown = 60;
 		boolean autonomy = Routines.enabled(c);
 		long day = c.clockTime() / Schedule.DAY;
-		// What isn't there yet in a new world: a roof, a farm. Started at most every few days, or just mentioned.
-		if (Initiative.shelter(c, level, area, home, day) || Initiative.farm(c, level, places, home, day)) {
+		// What isn't there yet in a new world: a roof, a farm, logs and stone. Started at most every few days, or just mentioned.
+		if (Initiative.shelter(c, level, area, home, day) || Initiative.farm(c, level, places, home, day) || Initiative.stock(c, level, places, home, day)) {
 			return;
 		}
 		if (c.role() == Role.FARMER && places.farm() != null) {

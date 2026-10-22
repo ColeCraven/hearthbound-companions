@@ -1236,6 +1236,10 @@
     "status.task": [
       "{task}.",
       "I am {task}."
+    ],
+    "life.self.stock": [
+      "No {thing}. I will fetch some.",
+      "For the home: {thing}. I go."
     ]
   }
 }

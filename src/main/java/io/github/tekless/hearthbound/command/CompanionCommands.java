@@ -561,6 +561,7 @@ public final class CompanionCommands {
 	}
 
 	private static void listPlaces(CommandSourceStack source, HomeAreas areas, ServerLevel level, HomeAreas.Area area) {
+		areas.rescanSoon(area); // someone asked: look again, in case a bed or chest went down just now
 		Places places = areas.places(level, area);
 		List<String> lines = new java.util.ArrayList<>();
 		lines.add("Meeting spot: " + places.commons().toShortString() + (places.commonsFire() ? " (a campfire, lit at dusk)" : ""));
