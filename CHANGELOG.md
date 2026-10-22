@@ -45,7 +45,8 @@ their lives, in any world, with nothing to set up.
 - "Build a house", "let's build a house", "we need a farm", "can someone get wood", "let's set up camp here",
   with nobody named, reach the companions within about 32 blocks who take your orders. One of them says the plan,
   builders share one blueprint, collectors bring the wood, guardians keep watch, and they report progress and
-  what's stopping them. "I built a house yesterday" starts nothing.
+  what's stopping them. Wood a collector hands over goes up as planks, not as bits of tree. "I built a house
+  yesterday" starts nothing.
 
 **Control**
 - Obey mode is for the single-player host and server operators only, and now reaches every companion, including
